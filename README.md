@@ -2,8 +2,7 @@
 Dynace Object-Oriented Extension to C
 ===============================
 
-## Dynace is a portable, open-source extension to the C language that adds the following capabilities
-to standard C:
+### Dynace is a portable, open-source extension to the C language that adds the following capabilities to standard C:
 
 * multiple inheritance
 * strong encapsulation
@@ -16,7 +15,7 @@ to standard C:
 * interfaces with Java, ODBC, OLE
 * includes SQL interface / class library
 
-## Dynace:
+### Dynace:
 
 * written in standard C
 * includes a 350+ page user manual and reference
@@ -24,7 +23,7 @@ to standard C:
 * using classes involves no new syntax elements to standard C
 * easily added to existing C code
 
-## Dynace is portable across:
+### Dynace is portable across:
 
 * 16, 32 & 64 bit environments
 * Linux
