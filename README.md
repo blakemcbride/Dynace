@@ -4,8 +4,11 @@ Dynace Object-Oriented Extension to C
 
 ### Dynace is a portable, open-source extension to the C language that adds the following capabilities to standard C:
 
-* multiple inheritance
-* strong encapsulation
+* full object-oriented capabilities including
+  * classes, instances, methods, & generic functions
+  * encapsulation
+  * polymorphism
+  * (multiple) inheritance
 * fully meta-class based (like Smalltalk or CLOS)
 * dynamic binding and dispatching through generic functions (like CLOS)
 * garbage collection
