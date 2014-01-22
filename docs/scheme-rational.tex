@@ -1,0 +1,81 @@
+\nopagenumbers
+
+\font\bf=cmbx10
+\font\header=cmbx12
+
+\def\section#1{\bigskip  \leftline{\bf #1.} \medskip}
+
+\centerline{\header Scheme Rational}
+\bigskip
+
+\section{Language power}
+
+We required a robust, expressive, and full featured language to use as
+an extension language.  Unlike many scripting languages, such as pearl
+or bash, which have strong facilities in a few domains but fall short
+in many other domains, scheme, a dialect of lisp, is a general purpose
+language with facilities which arguably surpass languages such as C.
+
+We required the ability to execute programs on the fly without having
+to compile or link anything.  Additionally, when the program doesn't
+change very often we'd like it to be compiled, without requiring any
+development environment, to run fast.  We'd also like the ability to
+distribute compiled modules when we want to protect the source code of
+those modules.  Scheme provides all of these facilities.
+
+
+\section{Ease of language}
+
+The purpose of using an extension language is to allow application
+extension without requiring all the tools, as well as knowledge to use
+such tools, required to augment an application.  For this reason
+providing customers with a C development environment, our development
+tools, as well as the application modules, would not be practical.
+Therefore, C could not be used as the extension language.  If C, a
+very well known language, could not be used then some other, less
+popular, language must be chosen.  Almost any language chosen as the
+extension language would require a learning curve so it would be best
+to choose a language that is easy to learn.  Scheme (or lisp) has the
+simplest syntax of any language.  The Scheme standard is about 50
+pages long while the C standard is 220 pages, and BASIC is 360 pages.
+
+It was never our intent to have end-users use whatever extension
+language we chose.  Extensions would predominantly be done in-house on
+a consulting basis or by programmers employed by our clients.  Any
+competent programmer can learn Scheme in very short order.  We provide
+other, simpler to use, facilities to perform functions, such as the
+definition of calculations, which end-users may require access to.
+
+
+\section{Source code availability}
+
+There are many scripting languages choices available.  It is important
+to us that we not use something which we cannot control.  Using a
+language without the source code leaves us exposed to not being able
+to fix bugs on our schedule and relying on the vendor.  We would also
+be subject to radical changes made by the vendor or their sale or lack
+of support of a future environment.  The Scheme we are using is
+written in portable C, and comes with full source code which we are
+fully able to support in-house.
+
+\section{Restrictive licensing}
+
+Many languages come with highly costly or restrictive licensing
+requirements.  The Scheme we have chosen does not carry any of
+that baggage.
+
+
+\section{Linking with our development tools}
+
+We required a language which would easily link with our existing
+development environment.  The Scheme we have chosen was specifically
+designed to link with C and act as an embedded extension language.  We
+have been able to fully link this Scheme with our development
+environment such that we can just as easily write our entire
+application in Scheme as we could in C.  All the Windows
+functionality, which is accessed through our development tools, is
+fully available from within Scheme.  Additionally, this Scheme makes
+it trivial to make C application functions directly available from
+within Scheme or Scheme functions available from within C.
+
+\bye

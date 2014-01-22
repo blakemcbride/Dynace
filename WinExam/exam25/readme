@@ -1,0 +1,14 @@
+
+This example illustrates the use of toolbars and status bars.
+
+The actual bitmaps are defined in MAIN.RC by use of the resource
+editor which comes with your compiler (App Studio for Microsoft).
+(See the documentation included with that utility.)
+
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

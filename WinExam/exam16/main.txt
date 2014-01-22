@@ -1,0 +1,114 @@
+
+
+#include "generics.h"
+#include "resource.h"
+
+static	long	file_message(object wind, unsigned id);
+static	long	file_dialog(object wind, unsigned id);
+static	long	file_exit(object wind, unsigned id);
+
+int	start()
+{
+	object	win;
+	char	title[80];
+
+	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	win = vNew(MainWindow, title);
+
+	mLoadIcon(win, ALGOCORP_ICON);
+
+	mLoadMenu(win, IDR_MENU1);
+	mAssociate(win, ID_FILE_MESSAGE, file_message);
+	mAssociate(win, ID_FILE_DIALOG, file_dialog);
+	mAssociate(win, ID_FILE_EXIT, file_exit);
+
+	return gProcessMessages(win);
+}
+
+static	long	file_message(object wind, unsigned id)
+{
+	gMessage(wind, "File Message");
+	return 0L;
+}
+
+static	void	init_controls(object dlg)
+{
+	object	ctl;
+	
+	ctl = mAddControl(dlg, TextControl, FIELD_FIRST_NAME);
+	gTextRange(ctl, 0, 10);
+
+	ctl = mAddControl(dlg, TextControl, FIELD_LAST_NAME);
+	gTextRange(ctl, 1, 30);
+	gCapitalize(ctl);
+}
+
+/*  This function now has different arguments and a return value.  */
+
+static	int	displayValues(object dlg, int res)
+{
+	char	*val;
+	object	wind;
+	
+	/*  We are only interested in the dialog results if the user accepted
+	    it - not if they canceled it.  */
+
+	if (res == TRUE)  {
+
+		/*  Since the main window object is not passed to this function
+		    we'll have to obtain it through the dialog object.  */
+
+		wind = gGetParent(dlg);
+
+		/*  The remainder of the processing is as in example 4  */
+
+		val = mCtlStringValue(dlg, FIELD_FIRST_NAME);
+		vPrintf(wind, "First Name = %s\n", val);
+
+		val = mCtlStringValue(dlg, FIELD_LAST_NAME);
+		vPrintf(wind, "Last Name = %s\n\n", val);
+	}
+
+	/*  propagate the dialog return value  */
+
+	return res;
+}
+
+static	long	file_dialog(object wind, unsigned id)
+{
+	object	dlg;
+	
+	/*  Create the modeless dialog object.  Same syntax as before.  */
+
+	dlg = mNewDialog(ModelessDialog, DL1, wind);
+
+	/*  Same initialazation procedure as before.  */
+
+	init_controls(dlg);
+
+	/*  Since modeless dialogs typically get disposed automatically
+	    when the user completes the dialog,  we'll have to capture
+	    those results prior to the auto disposal with a completion
+	    function.  This will perform the same function as the
+	    displayValues() function in example 4  */
+
+	gCompletionFunction(dlg, displayValues);
+
+	/*  Perform the dialog as before.  */
+
+	gPerform(dlg);
+
+	/*  Notice the lack of any post-dialog processing.  gPerform
+	    return prior to the dialog being completed so your app may
+	    continue.  displayValues() will be executed and the dialog
+	    object disposed automatically when the user accepts or
+	    cancels the dialog.   */
+
+	return 0L;
+}
+
+static	long	file_exit(object wind, unsigned id)
+{
+	gQuitApplication(Application, 0);
+	return 0L;
+}

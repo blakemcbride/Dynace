@@ -1,0 +1,97 @@
+;	Dynace jumpto function for Turbo C++ 1.00 - huge memory model
+;
+	ifndef	??version
+?debug	macro
+	endm
+$comm	macro	name,dist,size,count
+	comm	dist name:BYTE:count*size
+	endm
+	else
+$comm	macro	name,dist,size,count
+	comm	dist name[size]:BYTE:count
+	endm
+	endif
+	?debug	S "jumpto.c"
+	?debug	C E9ED960415086A756D70746F2E63
+	?debug	C E9B7460715056F69632E68
+	?debug	C E9014D07150A6F69636F6E6669672E68
+	?debug	C E90008A41416663A5C54435C494E434C5544455C7374646465662E+
+	?debug	C 68
+	?debug	C E90008A41416663A5C54435C494E434C5544455C7374646172672E+
+	?debug	C 68
+	?debug	C E90E5A07150A67656E65726963732E68
+	?debug	C E9C09C0515076572726F722E68
+	?debug	C E9C09C05150A65786373746174652E68
+	?debug	C E90008A41416663A5C54435C494E434C5544455C7365746A6D702E+
+	?debug	C 68
+JUMPTO_TEXT	segment byte public 'CODE'
+JUMPTO_TEXT	ends
+	assume	cs:JUMPTO_TEXT,ds:JUMPTO_DATA
+JUMPTO_DATA	segment word public 'DATA'
+d@	label	byte
+d@w	label	word
+b@	label	byte
+b@w	label	word
+JUMPTO_DATA	ends
+JUMPTO_TEXT	segment byte public 'CODE'
+   ;	
+   ;	void	_jumpToMethod(func)
+   ;	
+	assume	cs:JUMPTO_TEXT
+__jumpToMethod	proc	far
+	push	bp
+	mov	bp,sp
+;	push	ds
+;	mov	ax,JUMPTO_DATA
+;	mov	ds,ax
+   ;	
+   ;	void	(*func)();
+   ;	 {
+   ;	
+   ;	/* 	pop_this_stack_frame;	*/
+   ;	
+   ;	/* 	pop previous (generics) stack frame  */
+   ;	
+   ;	 	(*func)();	/*  must be changed to jump instruction   */
+   ;	
+;	call	dword ptr [bp+6]
+   ;	
+   ;	 }
+   ;	
+;	pop	ds
+;	pop	bp
+;	ret	
+;
+;	NEW CODE:
+;
+;	save jump address
+;
+	mov	ax, word ptr [bp+6]
+	mov	dx, word ptr [bp+8]
+;
+;	restore current state
+;
+;	pop	ds
+	pop	bp
+;
+;	restore previous state
+;
+	add	sp,8
+	pop	ds
+	pop	bp
+;
+;	perform jump
+;
+	push	dx
+	push	ax
+	ret
+__jumpToMethod	endp
+	?debug	C E9
+JUMPTO_TEXT	ends
+JUMPTO_DATA	segment word public 'DATA'
+s@	label	byte
+JUMPTO_DATA	ends
+JUMPTO_TEXT	segment byte public 'CODE'
+JUMPTO_TEXT	ends
+	public	__jumpToMethod
+	end

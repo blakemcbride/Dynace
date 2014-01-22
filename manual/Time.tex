@@ -1,0 +1,942 @@
+@page
+
+@section Time Class
+@pdfsection{Time Class}
+The @code{Time} class uses the same set of instance and class
+methods as the @code{LongInteger} class.  The equivalent C language
+representation would be a long integer in the form @code{HHMMSSLLL}
+so 1:23:45.678 pm would be represented as 132345678L.
+
+
+
+
+
+@subsection Time Class Methods
+@pdfsubsection{Time Class Methods}
+The @code{Time} class has two class methods to create instances.
+
+
+
+
+
+
+@pdfsubsubsection {NewWithLong}
+@deffn {NewWithLong} NewWithLong::Time
+@sp 2
+@example
+@group
+i = gNewWithLong(Time, tm);
+
+long    tm;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{Time} class.  @code{tm}
+represents the initial time value represented.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithLong(Time, 132345678L);  /* x = 1:23:45.678 pm  */
+@end group
+@end example
+@sp 1
+See also:  @code{Now::Time, FormatTime::Time, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Now}
+@deffn {Now} Now::Time
+@sp 2
+@example
+@group
+i = gNow(Time);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{Time} class which
+represents the current time contained within the system.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNow(Time);   /*  x = the current time  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithLong::Time, FormatTime::Time, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@subsection Time Instance Methods
+@pdfsubsection{Time Instance Methods}
+A portion of the @code{Time} class's functionality is identical to
+the functionality of the @code{LongInteger} class.  The remaining
+functionality is defined by the following specific methods.
+
+
+
+
+
+
+
+@pdfsubsubsection {AddHours}
+@deffn {AddHours} AddHours::Time
+@sp 2
+@example
+@group
+i = gAddHours(i, hours);
+
+object  i;
+long    hours;
+@end group
+@end example
+This method is used to add an arbitrary number of hours (@code{hours}) to
+time @code{i}.  Adding an hour that goes past midnight will cause the time
+to cycle around to morning.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gNewWithLong(Time, 234500000L);
+gAddHours(tm, 2L);  /* tm = 14500000L (1:45:00.000 am) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddMilliseconds::Time, AddMinutes::Time, AddSeconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddMilliseconds}
+@deffn {AddMilliseconds} AddMilliseconds::Time
+@sp 2
+@example
+@group
+i = gAddMilliseconds(i, m);
+
+object  i;
+long    m;
+@end group
+@end example
+This method is used to add an arbitrary number of milliseconds (@code{m}) to
+time @code{i}.  Adding a millisecond that goes past midnight will cause the time
+to cycle around to morning.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gNewWithLong(Time, 234500000L);
+gAddMilliseconds(tm, 20L);
+    /* tm = 500020L (11:45:00.020 pm) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::Time, AddMinutes::Time, AddSeconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddMinutes}
+@deffn {AddMinutes} AddMinutes::Time
+@sp 2
+@example
+@group
+i = gAddMinutes(i, m);
+
+object  i;
+long    m;
+@end group
+@end example
+This method is used to add an arbitrary number of minutes (@code{m}) to
+time @code{i}.  Adding a minute that goes past midnight will cause the time
+to cycle around to morning.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gNewWithLong(Time, 234500000L);
+gAddMinutes(tm, 20L);  /* tm = 500000L (1:05:00.000 am) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::Time, AddMilliseconds::Time, AddSeconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddSeconds}
+@deffn {AddSeconds} AddSeconds::Time
+@sp 2
+@example
+@group
+i = gAddSeconds(i, s);
+
+object  i;
+long    s;
+@end group
+@end example
+This method is used to add an arbitrary number of seconds (@code{s}) to
+time @code{i}.  Adding a second that goes past midnight will cause the time
+to cycle around to morning.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  dt;
+
+tm = gNewWithLong(Time, 234500000L);
+gAddSeconds(tm, 20L);  /* tm = 520000L (11:45:20.000 pm) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::Time, AddMilliseconds::Time, AddMinutes::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeLongValue}
+@deffn {ChangeLongValue} ChangeLongValue::Time
+@sp 2
+@example
+@group
+i = gChangeLongValue(i, val);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to change the time value associated with an 
+instance of the @code{Time} class.  Notice that this method
+returns the instance being passed.  @code{val} is the new time value.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gNewWithLong(Time, 234500000L);
+gChangeLongValue(tm, 44500000L);   /*  tm = 4:45:00.000 am  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeTimeValue::Time, NewWithLong::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeTimeValue}
+@deffn {ChangeTimeValue} ChangeTimeValue::Time
+@sp 2
+@example
+@group
+i = gChangeTimeValue(i, val);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to change the time value associated with an 
+instance of the @code{Time} class.  Notice that this method
+returns the instance being passed.  @code{val} is the new time value.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gNewWithLong(Time, 234500000L);
+gChangeTimeValue(tm, 44500000L);   /*  tm = 4:45:00.000 am  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeLongValue::Time, NewWithLong::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::Time
+@sp 2
+@example
+@group
+i = gChangeValue(i, v);
+
+object  i;
+object  v;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+the @code{Time} class.  Notice that this method returns the instance
+being passed.  @code{v} is an object which represents the new time value.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithLong(Time, 234500000L);
+y = gNewWithLong(Time, 44500000L);
+gChangeValue(x, y);    /*  x is changed to 4:45:00.000 am  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeLongValue::Time, ChangeTimeValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::Time
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;
+int     r;
+@end group
+@end example
+This method is used by the generic container classes to determine
+the relationship of the values represented by @code{i} and @code{obj}. 
+@code{r} is -1 if the time represented by @code{i} is less than
+the time represented by @code{obj}, 1 if the time value of @code{i}
+is greater than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hash::Time}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Difference}
+@deffn {Difference} Difference::Time
+@sp 2
+@example
+@group
+r = gDifference(i, tm);
+
+object  i;
+object  tm;
+long    r;
+@end group
+@end example
+This method is used to obtain the difference, in milliseconds,
+between two time objects.  
+@example
+@group
+@exdent Example:
+
+object  tm1, tm2;
+long    r;
+
+tm1 = gNewWithLong(Time, 234515023L);
+tm2 = gNewWithLong(Time, 234515000L);
+r = gDifference(dt2, dt1);    /*  r = 23L  */
+@end group
+@end example
+@c @sp 1
+See also:  @code{TimeDifference::Time}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {FormatTime}
+@deffn {FormatTime} FormatTime::Time
+@sp 2
+@example
+@group
+s = gFormatTime(i, fmt);
+
+object  i;
+char    *fmt;
+object  s;
+@end group
+@end example
+This method returns an instance of the @code{String} class which is a
+formatted representation of the time associated with instance @code{i}.
+@code{fmt} is the format specification used to determine the resulting
+@code{String} object.  Each character in @code{fmt} is sequentially
+processed and except for the character `%', they are simply copied to
+the resulting @code{String} object.  Whenever this method encounters
+the `%' character, the character following is used to determine what
+aspect and format of the time represented by @code{i} should be added to
+the resultant @code{String} object.  It works much like the standard C
+@code{printf}.  The following table indicates the available formatting option
+characters:
+@example
+@group
+%       the % character
+g       hour in military (government) time.
+        Eleven o'clock is 23:00 (5)
+G       the hour to two places in military (government)
+        time (05)
+h       hour (5)
+H       the hour to two places (05)
+m       minutes (5)
+M       the minutes to two places (05)
+s       seconds (5)
+S       the seconds to two places (05)
+l       milliseconds (20)
+L       the milliseconds to three places (020)
+p       the am / pm flag in lower case (pm)
+p       the am / pm flag in upper case (PM)
+@end group
+@end example
+@example
+@group
+@exdent Example:
+
+object  s, tm;
+
+tm = gNow(Time);
+s = gFormatTime(tm, "%h:%M:%S.%L %p");
+/*  s contains "5:45:23.678 pm" (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{StringRepValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::Time
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This method is used by the generic container classes to obtain hash values
+for the time object.  @code{val} is a hash value between 0 and a large
+integer value.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hours}
+@deffn {Hours} Hours::Time
+@sp 2
+@example
+@group
+h = gHours(i);
+
+object  i;
+int     h;
+@end group
+@end example
+This method returns the number of hours associated with an
+instance of the @code{Time} class.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gToday(Time);
+h = gHours(tm);   /*  h contains 14 (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{Milliseconds::Time, Minutes::Time, Seconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {LongValue}
+@deffn {LongValue} LongValue::Time
+@sp 2
+@example
+@group
+val = gLongValue(i);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to obtain the @code{long} value that represents
+the time associated with an instance the @code{Time} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns a @code{long}.
+@example
+@group
+@exdent Example:
+
+object  x;
+long    val;
+
+x = gNewWithLong(LongInteger, 234500000L);
+val = gLongValue(x);    /*  val = 234500000L  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithLong::Time, ChangeLongValue::Time, TimeValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Milliseconds}
+@deffn {Milliseconds} Milliseconds::Time
+@sp 2
+@example
+@group
+m = gMilliseconds(i);
+
+object  i;
+int     m;
+@end group
+@end example
+This method returns the number of milliseconds associated with an
+instance of the @code{Time} class.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gToday(Time);
+m = gMilliseconds(tm);   /*  m contains 154 (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{Hours::Time, Minutes::Time, Seconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Minutes}
+@deffn {Minutes} Minutes::Time
+@sp 2
+@example
+@group
+m = gMinutes(i);
+
+object  i;
+int     m;
+@end group
+@end example
+This method returns the number of minutes associated with an
+instance of the @code{Time} class.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gToday(Time);
+m = gMinutes(tm);   /*  h contains 55 (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{Hours::Time, Milliseconds::Time, Seconds::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Seconds}
+@deffn {Seconds} Seconds::Time
+@sp 2
+@example
+@group
+m = gSeconds(i);
+
+object  i;
+int     s;
+@end group
+@end example
+This method returns the number of seconds associated with an
+instance of the @code{Time} class.
+@example
+@group
+@exdent Example:
+
+object  tm;
+
+tm = gToday(Time);
+s = gSeconds(tm);   /*  s contains 30 (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{Hours::Time, Milliseconds::Time, Minutes::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Time
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the time associated with @code{i}.  This is often
+used to print or display the time.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithLong(Time, 234500000L);
+s = gStringRepValue(x);
+   /*  s represents "11:45:00.000 pm"  */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
+@hfil @break @hglue .64in      @code{TimeStringRepValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {TimeDifference}
+@deffn {TimeDifference} TimeDifference::Time
+@sp 2
+@example
+@group
+r = gTmieDifference(i, tm);
+
+object  i;
+object  tm;
+long    r;
+@end group
+@end example
+This method is used to obtain the difference, in milliseconds,
+between two time objects.  
+@example
+@group
+@exdent Example:
+
+object  tm1, tm2;
+long    r;
+
+tm1 = gNewWithLong(Time, 234515023L);
+tm2 = gNewWithLong(Time, 234515000L);
+r = gTimeDifference(dt2, dt1);    /*  r = 23L  */
+@end group
+@end example
+@c @sp 1
+See also:  @code{Difference::Time}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {TimeStringRepValue}
+@deffn {TimeStringRepValue} TimeStringRepValue::Time
+@sp 2
+@example
+@group
+s = gTimeStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the time associated with @code{i}.  This is often
+used to print or display the time.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithLong(Time, 234500000L);
+s = gTimeStringRepValue(x);
+    /* s represents "11:45:00.000 pm"  */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
+@hfil @break @hglue .64in      @code{StringRepValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {TimeValue}
+@deffn {TimeValue} TimeValue::Time
+@sp 2
+@example
+@group
+val = gTimeValue(i);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to obtain the @code{long} value that represents
+the time associated with an instance the @code{Time} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns a @code{long}.
+@example
+@group
+@exdent Example:
+
+object  x;
+long    val;
+
+x = gNewWithLong(LongInteger, 234500000L);
+val = gTimeValue(x);    /*  val = 234500000L  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithLong::Time, ChangeLongValue::Time, LongValue::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ValidTime}
+@deffn {ValidTime} ValidTime::Time
+@sp 2
+@example
+@group
+r = gValidTime(i);
+
+object  i;
+int     r;
+@end group
+@end example
+This method is used to determine the validity of a time.  If @code{i}
+is a valid time 1 is returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  tm;
+int     r;
+
+tm = gNewWithLong(Time, 234515899L);
+r = gValidTime(tm);   /*  r = 1  */
+tm = gNewWithLong(Time, 254500899L);
+r = gValidTime(tm);   /*  r = 0  */
+tm = gNewWithLong(Time, 114567000L);
+r = gValidTime(tm);   /*  r = 0  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+

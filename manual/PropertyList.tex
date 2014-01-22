@@ -1,0 +1,175 @@
+@page
+
+@section PropertyList Class
+@pdfsection{PropertyList Class}
+Property lists allow arbitrary string name / Dynace object pairs to
+be associated with any Dynace object.  The Dynace objects being associated
+are associated and retrieved via a unique string name.  Any number of these
+associations may be applied to an instance of a class with this capability.
+
+This class is used as a mixin class.  A mixin class is one which is
+sub-classed with another class (multiple inheritance) in order to give
+additional functionality to the first class.  This class gives any class
+which inherits from it the ability to set and retrieve arbitrary Dynace
+objects which are accessed by string names (properties).
+
+For example, if you had a class called @code{MyClass} and wanted to give it
+the ability to have property lists you would create a new class called
+@code{MyClassWithProperties} (for example) which would inherit from
+@code{MyClass} and @code{PropertyList}.  The new class (@code{MyClassWithProperties})
+would contain all the functionality of @code{MyClass} plus it would be able
+to handle property lists.
+
+
+@subsection PropertyList Class Methods
+@pdfsubsection{PropertyList Class Methods}
+There are no class methods implemented by this class.
+
+
+@subsection PropertyList Instance Methods
+@pdfsubsection{PropertyList Instance Methods}
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposePropertyList}
+@deffn {DisposePropertyList} DisposePropertyList::PropertyList
+@sp 2
+@example
+@group
+r = gDisposePropertyList(ins);
+
+object  ins;   /*  the instance */
+object  r;     /*  ins  */
+@end group
+@end example
+This method is used to remove all properties previously associated with an
+object.  The properties will either be deep disposed or simply disassociated
+depending on how they were added (see @code{PropertyPut}).  The instance
+passed is returned.
+@example
+@group
+@exdent Example:
+
+gDisposePropertyList(ins); 
+@end group
+@end example
+@sp 1
+See also:  @code{PropertyRemove::PropertyList}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {PropertyGet}
+@deffn {PropertyGet} PropertyGet::PropertyList
+@sp 2
+@example
+@group
+r = gPropertyGet(ins, pr);
+
+object  ins;   /*  the instance */
+char   *pr;    /*  the property name  */
+object  r;     /*  value  */
+@end group
+@end example
+This method is used to retrieve a property previously associated with an
+object.  The property is returned otherwise, if no property with that name
+was added, then @code{NULL} is returned.
+@example
+@group
+@exdent Example:
+
+object  val;
+val = gPropertyGet(ins, "Color"); 
+@end group
+@end example
+@sp 1
+See also:  @code{PropertyPut::PropertyList, PropertyRemove::PropertyList}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {PropertyPut}
+@deffn {PropertyPut} PropertyPut::PropertyList
+@sp 2
+@example
+@group
+r = gPropertyPut(ins, pr, ad, val);
+
+object  ins;   /*  the instance */
+char   *pr;    /*  the property name  */
+int     ad;    /*  auto dispose flag  */
+object  val;   /*  value to be associated  */
+object  r;     /*  val  */
+@end group
+@end example
+This method is used to associate an object (@code{val}) to instance
+@code{ins} under the property name given by @code{pr}.  If the given
+property has already been used it will be overwritten by @code{val}.
+
+@code{ad} is a flag used to determine what happens to @code{val} once
+@code{ins} is disposed or if the property is overwritten.  If @code{ad}
+is 1 the object will be deep disposed otherwise (if it's zero) it will
+be simply disassociated with the object and not disposed.
+@example
+@group
+@exdent Example:
+
+object  ins = gNew(MyClass);
+gPropertyPut(ins, "Color", 1, gNewWithStr(String, "Red")); 
+@end group
+@end example
+@sp 1
+See also:  @code{PropertyGet::PropertyList, PropertyRemove::PropertyList}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {PropertyRemove}
+@deffn {PropertyRemove} PropertyRemove::PropertyList
+@sp 2
+@example
+@group
+r = gPropertyRemove(ins, pr);
+
+object  ins;   /*  the instance */
+char   *pr;    /*  the property name  */
+object  r;     /*  ins  */
+@end group
+@end example
+This method is used to remove a property previously associated with an
+object.  The property will either be deep disposed or simply disassociated
+depending on how it was added (see @code{PropertyPut}).  The instance
+passed is returned.
+@example
+@group
+@exdent Example:
+
+gPropertyRemove(ins, "Color"); 
+@end group
+@end example
+@sp 1
+See also:  @code{DisposePropertyList::PropertyList, PropertyRemove::PropertyList}
+@end deffn
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+REGEDIT
+HKEY_CLASSES_ROOT\Interface\{ccbe60a1-01a9-11d0-bc41-004005185208} = IBlake
+HKEY_CLASSES_ROOT\Interface\{ccbe60a1-01a9-11d0-bc41-004005185208}\ProxyStubClsid32 = {ccbe60a1-01a9-11d0-bc41-004005185208}
+HKEY_CLASSES_ROOT\Interface\{ccbe60a1-01a9-11d0-bc41-004005185208}\NumMethods = 2
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a1-01a9-11d0-bc41-004005185208} = IBlake Proxy/Stub Factory
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a1-01a9-11d0-bc41-004005185208}\InprocServer32 = d:\Dynace.401\ole\idl\interface.dll

@@ -1,0 +1,434 @@
+@page
+
+@section IntegerDictionary Class
+@pdfsection{IntegerDictionary Class}
+This class combines the functionality of the @code{Set}
+and @code{IntegerAssociation} classes in order to store a collection of
+arbitrary key/value pairs.
+
+The difference between this class and the @code{Dictionary} class is
+that this class only accepts C language @code{int} values as keys.
+This class provides an efficient and simple to use means of representing
+a commonly needed collection.
+
+This class is a subclass of the @code{Set} class and therefore inherits
+all of its functionality.
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+@subsection IntegerDictionary Class Methods
+@pdfsubsection{IntegerDictionary Class Methods}
+There are no class methods for this class.  It inherits the ability
+to create instances of itself through its superclass, @code{Set}.
+
+
+
+@subsection IntegerDictionary Instance Methods
+@pdfsubsection{IntegerDictionary Instance Methods}
+The instance methods associated with this class are used to add, retrieve
+and remove key/value pairs from the @code{Dictionary}.  Note that additional
+functionality may be obtained through its superclass, @code{Set}.
+
+
+
+
+
+
+@pdfsubsubsection {AddInt}
+@deffn {AddInt} AddInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gAddInt(i, key, value);
+
+object  i;
+int     key
+object  value;
+object  r;
+@end group
+@end example
+This method is used to add a new key/value pair to the @code{Dictionary}
+instance (@code{i}).  If an object with the same key already exists in
+the @code{Dictionary} it will be left as is and @code{AddInt} will return
+@code{NULL}.  If the key/value objects are added @code{AddInt} will
+return the @code{IntegerAssociation} instance created to represent the
+key/value pair passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{ChangeValueWithInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{RemoveInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValueWithInt}
+@deffn {ChangeValueWithInt} ChangeValueWithInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gChangeValueWithInt(i, key, value);
+
+object  i;
+int     key
+object  value;
+object  r;
+@end group
+@end example
+This method is used to change the value associated with an existing
+key/value pair to the @code{IntegerDictionary} instance (@code{i}).
+@code{key} represents the identity of the pre-existing key/value
+pair and @code{value} represents the new value to be associated with
+the key.
+
+Normally, this method changes the value part of the association
+and returns the previous value which is not disposed.  If
+@code{key} doesn't identify a pre-existing association, this method
+simply returns @code{NULL}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{RemoveInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeInt}
+@deffn {DeepDisposeInt} DeepDisposeInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gDeepDisposeInt(i, key);
+
+object  i;
+int     key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The value and @code{IntegerAssociation} used to bind the two are all deep
+disposed.
+
+This method is the same as @code{DisposeInt::IntegerDictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::IntegerDictionary
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an entire @code{Dictionary}.  It does not
+dispose of any of the values but does dispose of all the associations
+used to represent the pair.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveInt::IntegerDictionary, DeepDispose::Set,}
+@hfil @break @hglue .64in      @code{DisposeAllNodes::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::IntegerDictionary
+@sp 2
+@example
+@group
+i = gDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in an @code{IntegerDictionary}
+instance without disposing of the instance itself.  The objects in the
+@code{IntegerDictionary} are simply disassociated from the
+@code{IntegerDictionary} instance and are not disposed.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeAllNodes::Set, Dispose::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeInt}
+@deffn {DisposeInt} DisposeInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gDisposeInt(i, key);
+
+object  i;
+int     key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The value and @code{IntegerAssociation} used to bind the two are all deep
+disposed.
+
+This method is the same as @code{DeepDisposeInt::IntegerDictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindInt}
+@deffn {FindInt} FindInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gFindInt(i, key);
+
+object  i;
+int     key;
+object  r;
+@end group
+@end example
+This method is used to find the instance of the @code{IntegerAssociation}
+class which is used to represent the key/value pair stored under
+@code{key} in @code{Dictionary} @code{i}.  If @code{key} is not found
+@code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindValueInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindAddInt}
+@deffn {FindAddInt} FindAddInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gFindAddInt(i, key, value);
+
+object  i;
+int     key;
+object  value;
+object  r;
+@end group
+@end example
+This method is used to find and return the instance of the
+@code{IntegerAssociation} class used to represent the key/value pair
+stored under the key @code{key}.  If it is not found a new
+@code{IntegerAssociation} will be added and returned which represent the
+key/value pair representing @code{key} and @code{value}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindInt::IntegerDictionary,}
+@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindValueInt}
+@deffn {FindValueInt} FindValueInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gFindValueInt(i, key);
+
+object  i;
+int     key;
+object  r;
+@end group
+@end example
+This method is used to find the value stored under @code{key} in
+@code{Dictionary} @code{i}.  If @code{key} is not found @code{NULL} is
+returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindInt::IntegerDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveInt}
+@deffn {RemoveInt} RemoveInt::IntegerDictionary
+@sp 2
+@example
+@group
+r = gRemoveInt(i, key);
+
+object  i;
+int     key;
+object  r;
+@end group
+@end example
+This method is used to remove a key/value pair from a @code{Dictionary}.
+If found and removed @code{i} is returned.  If @code{key} is not found
+@code{NULL} is returned.
+
+The value is not disposed, however, the @code{IntegerAssociation} used to
+bind the two is.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeInt::IntegerDictionary}
+@end deffn
+
+
+
+
+

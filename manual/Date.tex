@@ -1,0 +1,648 @@
+@page
+
+@section Date Class
+@pdfsection{Date Class}
+The @code{Date} class is a subclass of the @code{LongInteger}
+class and used to represent dates.  The equivalent C language
+representation would be a long integer in the form @code{YYYYMMDD}
+so July 23, 1993 would be represented as 19930723L.
+
+
+
+
+
+@subsection Date Class Methods
+@pdfsubsection{Date Class Methods}
+The @code{Date} class has only one class method.  The @code{New}
+method is inherited from the @code{LongInteger} class.
+
+
+
+
+
+
+@pdfsubsubsection {CalToJul}
+@deffn {CalToJul} CalToJul::Date
+@sp 2
+@example
+@group
+i = gCalToJul(Date, dt);
+
+long  i;
+long  dt;
+@end group
+@end example
+This class method returns a julian date calculated from the
+input calendar date.
+@example
+@group
+@exdent Example:
+
+long  x;
+
+x = gCalToJul(Date, 20000605L);  /* x = julian date 730276L */
+@end group
+@end example
+@sp 1
+See also:  @code{JulToCal::Date, Julian::Date}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {FixInvalidDate}
+@deffn {FixInvalidDate} FixInvalidDate::Date
+@sp 2
+@example
+@group
+i = gFixInvalidDate(Date, mode);
+
+int  i;
+int  mode;
+@end group
+@end example
+This class method sets the method of handling invalid dates.  The
+previous mode is returned.
+
+The list of valid modes is as follows:
+@example
+@group
+0   Does nothing.  Leaves the date invalid.
+1   Changes the date to be the last day of the month.
+2   Changes the date to be the corresponding day of the
+    next month.
+@end group
+@end example
+
+@example
+@group
+@exdent Example:
+
+int  x;
+
+x = gFixInvalidDate(Date, 1);   /*  x = the previous mode */
+@end group
+@end example
+@sp 1
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {JulToCal}
+@deffn {JulToCal} JulToCal::Date
+@sp 2
+@example
+@group
+i = gJulToCal(Date, jdt);
+
+long  i;
+long  jdt;
+@end group
+@end example
+This class method returns a calendar date calculated from the
+input julian date.
+@example
+@group
+@exdent Example:
+
+long  x;
+
+x = gCalToJul(Date, 730276L);
+    /*  x = calendar date 20000605L */
+@end group
+@end example
+@sp 1
+See also:  @code{CalToJul::Date, Julian::Date}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {Today}
+@deffn {Today} Today::Date
+@sp 2
+@example
+@group
+i = gToday(Date);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{Date} class which
+represents the current date contained within the system.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gToday(Date);   /*  x = the current date  */
+@end group
+@end example
+@sp 1
+See also:  @code{FormatDate::Date, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@subsection Date Instance Methods
+@pdfsubsection{Date Instance Methods}
+A portion of the @code{Date} class's functionality is obtained through
+its inheritance of the @code{LongInteger} class.  The remaining
+functionality is defined by the following specific methods.
+
+
+
+
+
+
+
+@pdfsubsubsection {AddDays}
+@deffn {AddDays} AddDays::Date
+@sp 2
+@example
+@group
+i = gAddDays(i, days);
+
+object  i;
+long    days;
+@end group
+@end example
+This method is used to add an arbitrary number of days (@code{days}) to
+date @code{i}.  Leap years and the correct number of days in each month
+are accounted for.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  dt;
+
+dt = gNewWithLong(Date, 19940130L);
+gAddDays(dt, 2L);   /*  dt contains 19940201  */
+@end group
+@end example
+@sp 1
+See also:  @code{AddMonths::Date, AddYears::Date}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddMonths}
+@deffn {AddMonths} AddMonths::Date
+@sp 2
+@example
+@group
+i = gAddMonths(i, m);
+
+object  i;
+int     m;
+@end group
+@end example
+This method is used to add an arbitrary number of months (@code{m}) to
+date @code{i}.  The correct number of months in each year
+is accounted for.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  dt;
+
+dt = gNewWithLong(Date, 19940104L);
+gAddMonths(dt, 2);   /*  dt contains 19940304  */
+@end group
+@end example
+@sp 1
+See also:  @code{AddDays::Date, AddYears::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddYears}
+@deffn {AddYears} AddYears::Date
+@sp 2
+@example
+@group
+i = gAddYears(i, y);
+
+object  i;
+int     y;
+@end group
+@end example
+This method is used to add an arbitrary number of years (@code{y}) to
+date @code{i}.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  dt;
+
+dt = gNewWithLong(Date, 19940104L);
+gAddYears(dt, 2);   /*  dt contains 19960104  */
+@end group
+@end example
+@sp 1
+See also:  @code{AddDays::Date, AddMonths::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeDateValue}
+@deffn {ChangeDateValue} ChangeDateValue::Date
+@sp 2
+@example
+@group
+i = gChangeDateValue(i, dt);
+
+object  i;
+long    dt;
+@end group
+@end example
+This method is used to change the date associated with an instance of
+the @code{Date} class.  Notice that this method returns the instance
+being passed.  @code{dt} is the new date.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithLong(Date, 20000101L);
+gChangeLongValue(x, 20000605L);
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeLongValue::Number}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DateValue}
+@deffn {DateValue} DateValue::Date
+@sp 2
+@example
+@group
+dt = gDateValue(i);
+
+object  i;
+long    dt;
+@end group
+@end example
+This method is used to obtain the @code{long} value that represents
+the date associated with an instance the @code{Date} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns a @code{long}.
+@example
+@group
+@exdent Example:
+
+object  x;
+long    dt;
+
+x = gNewWithLong(LongInteger, 20000605L);
+dt = gDateValue(x);    /*  dt = 20000605L  */
+@end group
+@end example
+@sp 1
+See also:  @code{LongValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DayName}
+@deffn {DayName} DayName::Date
+@sp 2
+@example
+@group
+s = gDayName(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method returns an instance of the @code{String} class which represents
+the day of the week associated with instance @code{i}.
+@example
+@group
+@exdent Example:
+
+object  s, dt;
+
+dt = gToday(Date);
+s = gDayName(dt);   /*  s contains "Monday" (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{FormatDate::Date, MonthName::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Difference}
+@deffn {Difference} Difference::Date
+@sp 2
+@example
+@group
+r = gDifference(i, dt);
+
+object  i;
+object  dt;
+long    r;
+@end group
+@end example
+This method is used to obtain the difference, in days, between two
+date objects.  Leap years and the correct number of days per month
+is accounted for.
+@example
+@group
+@exdent Example:
+
+object  dt1, dt2;
+long    r;
+
+dt1 = gNewWithLong(Date, 19940104L);
+dt2 = gNewWithLong(Date, 19940204L);
+r = gDifference(dt2, dt1);    /*  r = 31L  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {FormatDate}
+@deffn {FormatDate} FormatDate::Date
+@sp 2
+@example
+@group
+s = gFormatDate(i, fmt);
+
+object  i;
+char    *fmt;
+object  s;
+@end group
+@end example
+This method returns an instance of the @code{String} class which is a
+formatted representation of the date associated with instance @code{i}.
+@code{fmt} is the format specification used to determine the resulting
+@code{String} object.  Each character in @code{fmt} is sequentially
+processed and except for the character `%', they are simply copied to
+the resulting @code{String} object.  Whenever this method encounters
+the `%' character, the character following is used to determine what
+aspect and format of the date represented by @code{i} should be added to
+the resultant @code{String} object.  It works much like the standard C
+@code{printf}.  The following table indicates the available formatting option
+characters:
+@example
+@group
+%       the % character
+w       the day of the week (Friday)
+M       the month name (June)
+m       short month name (Feb)
+d       day (8)
+D       day to two places (08)
+y       short year to two places (04)
+Y       full year (1994)
+s       day suffix (th)
+n       month number (6)
+N       month number to two places (06)
+t       current system time (10:05 AM)
+@end group
+@end example
+@example
+@group
+@exdent Example:
+
+object  s, dt;
+
+dt = gToday(Date);
+s = gFormatDate(dt, "%w the %d%s of %M");
+/*  s contains "Monday the 1st of March" (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{MonthName::Date, DayName::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Julian}
+@deffn {Julian} Julian::Date
+@sp 2
+@example
+@group
+jdt = gJulian(i);
+
+object  i;
+object  jdt;
+@end group
+@end example
+This method returns a Julian date representation of the date
+associated with instance @code{i}.
+@example
+@group
+@exdent Example:
+
+object  jdt, dt;
+
+dt = gToday(Date);
+jdt = gMonthName(dt);   /*  s contains a Julian Date  */
+@end group
+@end example
+@sp 1
+See also:  @code{CalToJul::Date, JulToCal::Date}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MonthName}
+@deffn {MonthName} MonthName::Date
+@sp 2
+@example
+@group
+s = gMonthName(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method returns an instance of the @code{String} class which represents
+the month of the year associated with instance @code{i}.
+@example
+@group
+@exdent Example:
+
+object  s, dt;
+
+dt = gToday(Date);
+s = gMonthName(dt);   /*  s contains "June" (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{FormatDate::Date, DayName::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Date
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithLong(Date, 20000605L);
+s = gStringRepValue(x);      /*  s represents "6/05/00"   */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, FormatDate::Date}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ValidDate}
+@deffn {ValidDate} ValidDate::Date
+@sp 2
+@example
+@group
+r = gValidDate(i);
+
+object  i;
+int     r;
+@end group
+@end example
+This method is used to determine the validity of a date.  If @code{i}
+is a valid date 1 is returned and 0 otherwise.   Leap years and the
+number of days in each month are all accounted for.
+@example
+@group
+@exdent Example:
+
+object  dt;
+int     r;
+
+dt = gNewWithLong(Date, 19940104L);
+r = gValidDate(dt);   /*  r = 1  */
+dt = gNewWithLong(Date, 19941404L);
+r = gValidDate(dt);   /*  r = 0  */
+dt = gNewWithLong(Date, 19940230L);
+r = gValidDate(dt);   /*  r = 0  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+

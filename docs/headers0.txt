@@ -1,0 +1,59 @@
+
+Greetings everyone,
+
+I am writing this Part 0 in response to Robert's request for a summary
+of the Dynace preprocessor (called dpp).  For the most part dpp
+reads in Dynace class definition files (which have a .d file extension)
+and the pre-existing Dynace class header file (generics.h) or files
+(xxxx.h) if you have one header file per class.  It may then perform
+the following functions:
+
+D1.  It checks and reports any argument inconsistencies between methods
+and generics (or more precisely it checks method arguments which are
+associated with the same generics).  This is something the C compiler
+can't do because C doesn't understand dynamic dispatching.
+
+D2.  It preprocesses class definition files (*.d) and produces C
+source files (*.c) which can be compiled by the C compiler.
+
+D3.  Based on the information it reads in, dpp produces the correct
+header file (generics.h) with the necessary declarations (classes and
+generics) for other modules to be able to access defined classes.
+
+D4.  Based on the information it reads in, dpp also produces a single
+main generics.c file which contains the actual generic functions as
+well as a bit of initialization code.
+
+
+Dpp has many options and several other functions, however, those are
+of much less importance and of no value to our current discussion.
+
+Given dpp's flexibility there are many ways in which it may be used.
+In fact dpp already supports all the methods of operation described
+in Part I of this discussion.  The procedure which I use and recommend
+is as follows:
+
+S1.  When building the system for the first time or building it from
+scratch, dpp is evoked to read in all the class definition files
+(*.d) and perform the functions described in steps D1, D2, and D3.
+
+S2.  Dpp is evoked to read in the recently generated generics.h
+file and produce the necessary generics.c file (step D4).
+
+S3.  The entire system is compiled and linked as a normal C application.
+
+Once the system is built the first time, the following occurs whenever
+a new class is added or a pre-existing class is modified.
+
+T1.  Dpp is evoked to read in the pre-existing generics.h file
+and then only the new or modified class definition files (*.d).
+It then performs the functions described in D1 and D2.  In addition,
+and only if it is necessary, dpp creates a new generics.h file
+as described in D3.
+
+T2.  If the generics.h file changes then the process described in
+S2 is performed.
+
+T3.  New and changed class definition resultant .c files are compiled
+and the entire system is relinked.
+

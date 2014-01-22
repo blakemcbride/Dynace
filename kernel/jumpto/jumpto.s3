@@ -1,0 +1,16 @@
+//  Dynace jumpto.s for GNU C compiler (gcc) on 386 machines
+	.file	"jumpto.c"
+gcc2_compiled.:
+.text
+	.align 2
+.globl __jumpToMethod
+__jumpToMethod:
+	pushl %ebp
+	movl %esp,%ebp
+	movl 8(%ebp),%eax
+/	call *%eax
+/	leave
+/	ret
+	leave
+	leave
+	jmp *%eax

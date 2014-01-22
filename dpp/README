@@ -1,0 +1,47 @@
+
+Currently dpp is only setup to be built with 32 bit compilers or a
+unix/linux compiler.  There is a problem with building dpp in a 16 bit
+environment because dpp uses a lot of memory.  The dpp.exe program
+shipped (which is compiled with WATCOM 32 bit under DOS mode) will run
+and has been tested under DOS and DOS box under Windows 3.1/NT/95.
+There shouldn't be any problem compiling it with other 32 bit
+compilers, except that the executable will be less portable.
+
+To rebuild the libraries use:
+
+dmake -d MAKEFILE.DM
+
+where MAKEFILE.DM is one of:
+
+W32.DM		WATCOM 32 bit
+M32.DM		Microsoft C 2.x 32 bit
+S32.DM		Symantec C 32 bit
+
+Or use the following for Linux/unix
+
+make -f makefile.unx
+
+The BORLAND_HOME path needs to be edited in B16.DM or B32.DM prior to use.
+
+The generated dpp executable will default to generating code for the
+strategy it was compiled for.
+
+If you want to build for a different dpp Strategy use (like S1):
+
+dmake -f MAKEFILE.DM  STRAT=-S1 newgens  (regenerates the .c files)
+dmake -f MAKEFILE.DM  STRAT=-S1
+
+You must, however, rebuild ../kernel with the selected strategy first!
+
+
+Debug libraries may be produced as follows:
+
+dmake -d MAKEFILE.DM  DEBUG=1
+
+
+There is also a clean.bat batch file which will clean all the garbage files
+or you can use:
+
+dmake -f MAKEFILE.DM  clean
+
+

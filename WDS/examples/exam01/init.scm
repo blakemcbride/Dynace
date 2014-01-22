@@ -1,0 +1,3 @@
+
+(load "../init.scm")
+

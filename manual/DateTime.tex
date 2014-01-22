@@ -1,0 +1,620 @@
+@page
+
+@section DateTime Class
+@pdfsection{DateTime Class}
+The @code{DateTime} class uses multiple inheritance to inherit
+from both the @code{Date} and the @code{Time} classes and is
+used to represent precise moments in time.
+
+
+
+
+
+@subsection DateTime Class Methods
+@pdfsubsection{DateTime Class Methods}
+The @code{DateTime} class has two class methods to create instances.
+
+
+
+
+
+
+@pdfsubsubsection {NewDateTime}
+@deffn {NewDateTime} NewDateTime::DateTime
+@sp 2
+@example
+@group
+i = gNewDateTime(Time, dt, tm);
+
+long    dt, tm;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{DateTime} class.  @code{dt}
+represents the initial date value represented and @code{tm} represents
+the initial time value.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithLong(DateTime, 19990402L, 132345678L);
+/*  x = 4/02/1999 1:23:45.678 pm  */
+@end group
+@end example
+@sp 1
+See also:  @code{Now::DateTime, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Now}
+@deffn {Now} Now::DateTime
+@sp 2
+@example
+@group
+i = gNow(DateTime);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{DateTime} class which
+represents the current time contained within the system.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNow(DateTime);   /*  x = the current date and time  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewDateTime::DateTime, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@subsection DateTime Instance Methods
+@pdfsubsection{DateTime Instance Methods}
+A portion of the @code{DateTime} class's functionality is obtained through
+its inheritance of the @code{Date} class and of the @code{Time}.  The
+remaining functionality is defined by the following specific methods.
+
+
+
+
+
+
+
+@pdfsubsubsection {AddHours}
+@deffn {AddHours} AddHours::DateTime
+@sp 2
+@example
+@group
+i = gAddHours(i, hours);
+
+object  i;
+long    hours;
+@end group
+@end example
+This method is used to add an arbitrary number of hours (@code{hours}) to
+date and time @code{i}.  Adding an hour that goes past midnight will cause the time
+to cycle around to morning and add a day.  Leap years and the correct number of
+days in each month are accounted for.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gAddHours(d, 2L);
+/*  d contains 19990403L, 14500000L
+    (4/03/1999 1:45:00.000 am) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddMilliseconds::DateTime, AddMinutes::DateTime,}
+@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddMilliseconds}
+@deffn {AddMilliseconds} AddMilliseconds::DateTime
+@sp 2
+@example
+@group
+i = gAddMilliseconds(i, m);
+
+object  i;
+long    m;
+@end group
+@end example
+This method is used to add an arbitrary number of milliseconds (@code{m}) to
+date and time @code{i}.  Adding a millisecond that goes past midnight will cause
+the time to cycle around to morning and add a day.  Leap years and the correct
+number of days in each month are accounted for.  The value returned is the
+object passed.
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gAddMilliseconds(d, 20L);
+/*  d contains 19990402L, 234500000L
+    (4/02/1999 11:45:00.020 pm) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::DateTime, AddMinutes::DateTime,}
+@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddMinutes}
+@deffn {AddMinutes} AddMinutes::DateTime
+@sp 2
+@example
+@group
+i = gAddMinutes(i, m);
+
+object  i;
+long    m;
+@end group
+@end example
+This method is used to add an arbitrary number of minutes (@code{m}) to
+date and time @code{i}.  Adding a minute that goes past midnight will cause the time
+to cycle around to morning and add a day.  Leap years and the correct number of
+days in each month are accounted for.  The value returned is the object passed.
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gAddMinutes(d, 20L);
+/*  d contains 19990403L, 500000L
+    (4/03/1999 1:05:00.000 am) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
+@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddSeconds}
+@deffn {AddSeconds} AddSeconds::DateTime
+@sp 2
+@example
+@group
+i = gAddSeconds(i, s);
+
+object  i;
+long    s;
+@end group
+@end example
+This method is used to add an arbitrary number of seconds (@code{s}) to
+date and time @code{i}.  Adding a second that goes past midnight will cause
+the time to cycle around to morning and add a day.  Leap years and the correct
+number of days in each month are accounted for.  The value returned is the
+object passed.
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gAddSeconds(d, 20L);
+/*  d contains 19990402L, 234520000L
+    (4/02/1999 11:45:20.000 pm) */
+@end group
+@end example
+@sp 1
+See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
+@hfil @break @hglue .64in      @code{AddMinutes::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeDateTimeValues}
+@deffn {ChangeDateTimeValues} ChangeDateTimeValues::DateTime
+@sp 2
+@example
+@group
+i = gChangeDateTimeValues(i, dt, tm);
+
+object  i;
+long    dt, tm;
+@end group
+@end example
+This method is used to change the date and time values associated
+with an instance of the @code{DateTime} class.  Notice that this method
+returns the instance being passed.  @code{dt} is the new date value and
+@code{tm} is the new time value and.
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gChangeDateTimeValues(d, 19981231L, 44500000L);
+/*  d contains 12/31/1998 4:45:00.000 am  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeLongValue::DateTime, NewDateTime::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeLongValue}
+@deffn {ChangeLongValue} ChangeLongValue::DateTime
+@sp 2
+@example
+@group
+i = gChangeLongValue(i, val);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to change the date value associated with an 
+instance of the @code{DateTime} class.  Notice that this method
+returns the instance being passed.  @code{val} is the new date value.
+The time value associated with the instance of the @code{DateTime}
+class is reset to 0L (midnight).
+@example
+@group
+@exdent Example:
+
+object  d;
+
+d = gNewDateTime(DateTime, 19990402L, 234500000L);
+gChangeLongValue(tm, 19991231L);
+/*  d contains 12/31/1999 12:00:00.000 am  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeDateTimeValues::DateTime, NewDateTime::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::DateTime
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;
+int     r;
+@end group
+@end example
+This method is used by the generic container classes to determine
+the relationship of the values represented by @code{i} and @code{obj}. 
+@code{r} is -1 if the date / time represented by @code{i} is less than
+the date / time represented by @code{obj}, 1 if the date / time value of
+@code{i} is greater than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hash::DateTime}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DateTimeDifference}
+@deffn {DateTimeDifference} DateTimeDifference::DateTime
+@sp 2
+@example
+@group
+i = gDateTimeDifference(i, d, dd, td);
+
+object  i, d;
+long    *dd, *td;
+@end group
+@end example
+This method is used to obtain the difference, in days and milliseconds,
+between two time objects.  dd is loaded with the difference in days
+and td is loaded with the difference in milliseconds.  Notice that this
+method returns the instance being passed.  
+@example
+@group
+@exdent Example:
+
+object  d1, d2;
+long    dd, td;
+
+d1 = gNewDateTime(DateTime, 19990402L, 234500000L);
+d2 = gNewDateTime(DateTime, 19990403L, 234500111L);
+gDateTimeDifference(d2, d1, &dd, &td);
+/*  dd = 1L, td = 111L  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DateTimeValues}
+@deffn {DateTimeValues} DateTimeValues::DateTime
+@sp 2
+@example
+@group
+i = gDateTimeValues(i, dt, tm);
+
+object  i;
+long    *dt, *tm;
+@end group
+@end example
+This method is used to obtain the @code{long} values that represent
+the date and time associated with an instance the @code{DateTime} class.
+Notice that this method returns the instance being passed.  
+@example
+@group
+@exdent Example:
+
+object  x;
+long    dt, tm;
+
+x = gNewDateTime(DateTime, 19990402L, 234500000L);
+gDateTimeValues(x, &dt, &tm);
+/*  dt = 19990402L and tm = 234500000L  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewDateTime::DateTime, ChangeDateTimeValues::Time}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FormatDateTime}
+@deffn {FormatDateTime} FormatDateTime::DateTime
+@sp 2
+@example
+@group
+s = gFormatDateTime(i, dtFmt, tmFmt);
+
+object  i;
+char    *dtFmt;
+char    *tmFmt;
+object  s;
+@end group
+@end example
+This method returns an instance of the @code{String} class which is a
+formatted representation of the date and time associated with instance
+@code{i}.  @code{dtFmt} is the format specification (see @code{FormatDate::Date})
+used to determine the date portion of the resulting @code{String} object.
+@code{tmFmt} is the format specification (see @code{FormatTime::Time})
+used to determine the time portion of the resulting @code{String} object.
+@example
+@group
+@exdent Example:
+
+object  s, dt;
+
+dt = gNow(DateTime);
+s = gFormatDateTime(dt, "%w the %d%s of %M at ", "%h:%M %p");
+/*  s = "Monday the 1st of March at 9:45 am" (or whatever)  */
+@end group
+@end example
+@sp 1
+See also:  @code{FormatDate::Date, FormatTime::Time}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::DateTime
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This method is used by the generic container classes to obtain hash values
+for the date / time object.  @code{val} is a hash value between 0 and a large
+integer value.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::DateTime}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::DateTime
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the time associated with @code{i}.  This is often
+used to print or display the date and time.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewDateTime(DateTime, 19991231L, 234500000L);
+s = gStringRepValue(x);
+/*  s represents "1999-12-31 11:45:00.000 pm"   */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ValidDateTime}
+@deffn {ValidDateTime} ValidDateTime::DateTime
+@sp 2
+@example
+@group
+r = gValidDateTime(i);
+
+object  i;
+int     r;
+@end group
+@end example
+This method is used to determine the validity of a date / time.
+If @code{i} is a valid date / time 1 is returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  d;
+int     r;
+
+d = gNewDateTime(DateTime, 19991231L, 234500000L);
+r = gValidDateTime(tm);   /*  r = 1  */
+d = gNewDateTime(DateTime, 19941404L, 234500000L);
+r = gValidDateTime(tm);   /*  r = 0  */
+d = gNewDateTime(DateTime, 19991231L, 254500899L);
+r = gValidDateTime(tm);   /*  r = 0  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+

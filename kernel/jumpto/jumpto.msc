@@ -1,0 +1,33 @@
+;  Dynace jumpto code for Microsoft C large memory model
+;
+;	Static Name Aliases
+;
+	TITLE   jumpto.c
+	NAME    jumpto
+
+	.8087
+JUMPTO_TEXT	SEGMENT  WORD PUBLIC 'CODE'
+JUMPTO_TEXT	ENDS
+_DATA	SEGMENT  WORD PUBLIC 'DATA'
+_DATA	ENDS
+CONST	SEGMENT  WORD PUBLIC 'CONST'
+CONST	ENDS
+_BSS	SEGMENT  WORD PUBLIC 'BSS'
+_BSS	ENDS
+DGROUP	GROUP	CONST, _BSS, _DATA
+	ASSUME  CS: JUMPTO_TEXT, DS: DGROUP, SS: DGROUP
+EXTRN	__acrtused:ABS
+JUMPTO_TEXT      SEGMENT
+	ASSUME	CS: JUMPTO_TEXT
+
+	PUBLIC	__jumpToMethod
+__jumpToMethod	PROC FAR
+	mov	sp,bp
+	pop	bp
+	push	dx
+	push	ax
+	ret
+
+__jumpToMethod	ENDP
+JUMPTO_TEXT	ENDS
+END

@@ -1,0 +1,7 @@
+
+
+This example illustrates the independence one instance has from another
+by creating two instances of the same class and makeing each contain
+different values.  The only file modified is main.c.
+
+(To build see the readme file in the first example.)

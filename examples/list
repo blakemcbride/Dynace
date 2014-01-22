@@ -1,0 +1,90 @@
+EXAM01
+Illustrates the steps necessary to compile and link a program which
+incorporates and correctly initializes Dynace.
+
+EXAM02
+Illustrates the creation, use and disposal of a simple object.
+
+EXAM03
+Illustrates the creation, use and disposal of more simple objects.
+
+EXAM04
+Illustrates the creation, use and disposal of an instance of the
+LinkObject class.
+
+EXAM05
+Illustrates the use of the LinkObjectSequence class to enumerate through
+the elements of a linked list.
+
+EXAM06
+Illustrates the creation, use and disposal of an instance of the
+StringDictionary class.
+
+EXAM07
+Illustrates the process of enumerating through the elements of a
+set or dictionary using the SetSequence class.
+
+EXAM08
+Illustrates how Dynace handles errors.
+
+EXAM09
+Illustrates the value of and initialization procedure for the automatic
+garbage collector.
+
+EXAM10
+Illustrates the creation and initialization of a new class.
+
+EXAM11
+Illustrates the creation of a new method and generic function.
+
+EXAM12
+Illustrates additional points about methods and generics.
+
+EXAM13
+Illustrates the independence one instance has from another
+
+EXAM14
+Class variables/methods using gNew/gDispose
+
+EXAM15
+Initializing instance variables with gNew
+
+EXAM16
+Initializing instance variables with gNew #2
+
+EXAM17
+Creating a subclass
+
+EXAM20
+Illustrates the use of threads.
+
+EXAM21
+Illustrates the use of the BTree class
+
+EXAM30
+Illustrates the process of getting information from the system.
+
+EXAM31
+Illustrates how generic functions are first class C objects.
+
+EXAM32
+Illustrates how to locally cache a method lookup and avoid the
+runtime cost.
+
+EXAM33
+Illustrates most of the methods associated with the String class.
+
+EXAM34
+Illustrates some of the numeric and date formatting abilities.
+
+EXAM35
+Illustrates an array class.
+
+EXAM36
+Illustrates stack based objects.
+
+EXAM37
+Illustrates the use of sockets.
+
+EXAM38
+Illustrates the use of the exception handling system.

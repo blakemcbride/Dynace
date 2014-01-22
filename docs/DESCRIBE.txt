@@ -1,0 +1,66 @@
+
+There are two major components associated with this system, the Dynace
+Object Oriented Extension to C (Dynace) and the Dynace Windows Development
+System (WDS).  Dynace will be described first and WDS will be subsequently
+described.
+
+
+Dynace
+------
+Dynace is a preprocessor, include files and a library which extends the
+C or C++ languages with advanced object oriented capabilities, automatic
+garbage collection and multiple threads.  Dynace is designed to solve
+many of the problems associated with C++ while being easier to learn and
+containing more flexible object oriented facilities.  Dynace is able to
+add facilities previously only available in languages such as Smalltalk
+and CLOS without all the overhead normally associated with those
+environments.
+
+Dynace comes with full C source and is portable to 16 & 32 bit DOS, 32
+bit Windows, Linux, SunOS and many other unix, Macintosh and VMS.
+Dynace can link with pre-existing C/C++ libraries and can be easily
+added to pre-existing C/C++ code in order to incrementally add
+Dynace's features.
+
+The benefits of Dynace are 1) it is much easier to manage large projects
+with then C++, 2) it offers much more powerful OO facilities (such as
+metaclass based from the ground up, garbage collection, etc) then C++,
+3) it adds little to the C syntax and is therefore easier to learn then C++.
+
+
+WDS
+---
+The Dynace Windows Development System (WDS) is a Dynace class library
+which enables a C programmer with no knowledge of C++, Dynace, the
+Windows API or message-driven architecture to write real Windows
+applications with an absolute minimum learning curve and number of
+lines of code.  In fact, it is possible to become familiar enough with
+windows, menus, dialogs and controls using WDS to write a Windows
+application after just one day!
+
+The programmer is able to write the application using familiar C in a
+familiar procedural fashion.  Instead of taking the usual fifty plus
+lines of code necessary to implement a typical ``Hello World'' program,
+with WDS it takes four lines of code!  Fully functional menus and
+dialogs can be implemented with WDS in a handful of lines instead of the
+hundreds it takes using the Windows API or other available tools.
+
+WDS applications are portable across Windows 3.1 (Win16), Win32s,
+Windows (Win32), and Linux / WINE.  (Win16 hasn't been tested in many
+years.)
+
+The benefits of WDS are 1) the learning curve associated with Windows
+development is drastically reduced, 2) the development time is drastically
+reduced, and 3) the ability to debug, enhance and hand the code off to
+a new programmer is drastically increased.
+
+Other elements
+--------------
+
+There is an interface to ODBC and OLE.
+
+There is also a close linkage between Dynace, Java and MzScheme.  The
+linkage is with MzScheme 103 but could probably be updated pretty
+easily.  This system has been tested and used a lot.
+
+

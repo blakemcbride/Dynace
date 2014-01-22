@@ -1,0 +1,354 @@
+@page
+
+@section Semaphore Class
+@pdfsection{Semaphore Class}
+This class provides a mechanism to coordinate the activity of multiple
+threads.  It provides counting, named and unnamed semaphores.
+ See the manual for a detailed description of semaphores.
+
+
+See the examples included with the Dynace system for an illustration of the
+use of the thread / pipe / semaphore related classes.
+
+
+@subsection Semaphore Class Methods
+@pdfsubsection{Semaphore Class Methods}
+The only two class methods associated with this class provide a
+means to create new semaphore instances and to find existing
+semaphores by name.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindStr}
+@deffn {FindStr} FindStr::Semaphore
+@sp 2
+@example
+@group
+s = gFindStr(Semaphore, name)
+
+char    *name;
+object  s;
+@end group
+@end example
+This method is used to obtain a semaphore object from its associated name.
+If found it is returned, otherwise @code{NULL} is returned.  
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{New::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::Semaphore
+@sp 2
+@example
+@group
+s = gNew(Semaphore)
+
+object  s;
+@end group
+@end example
+This class method is used to create and initialize a new unnamed semaphore
+with an initial and maximum count of 1.
+
+The value returned (@code{s}) is the semaphore object created.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
+@hfil @break @hglue .64in      @code{Dispose::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NewSemaphore}
+@deffn {NewSemaphore} NewSemaphore::Semaphore
+@sp 2
+@example
+@group
+s = gNewSemaphore(Semaphore, name, cnt, max)
+
+char    *name;
+int     cnt, max;
+object  s;
+@end group
+@end example
+This class method is used to create and initialize a new semaphore.
+
+@code{name} is the name of the new semaphore and may be @code{NULL} if
+no name is to be associated with the semaphore.
+
+@code{cnt} is the initial count associated with the counting semaphore
+and is used to indicate the maximum number of threads which may hold
+this semaphore at one time.  A typical value would be 1 and indicates
+that only a single thread may hold it at a time.
+
+@code{max} is the maximum value the count of the semaphore is allowed to
+achieve.  If set higher (with @code{Release}) it will be reset to
+@code{max}.  This is typically set to the same value as @code{cnt}.
+
+The value returned (@code{s}) is the semaphore object created.  If not
+kept it may be obtained later by the use of the @code{FindStr::Semaphore}
+method.  
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
+@hfil @break @hglue .64in      @code{Dispose::Semaphore}
+@end deffn
+
+
+
+
+
+@subsection Semaphore Instance Methods
+@pdfsubsection{Semaphore Instance Methods}
+The instance methods associated with this class provide a means
+for locking, releasing, disposing and getting information about
+semaphore instances.
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Count}
+@deffn {Count} Count::Semaphore
+@sp 2
+@example
+@group
+cnt = gCount(s)
+
+object  s;
+int     cnt;
+@end group
+@end example
+This method is used to obtain the current lock count associated with
+semaphore @code{s}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{New::Semaphore, Name::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Semaphore
+@sp 2
+@example
+@group
+r = gDeepDispose(s)
+
+object  s;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of a semaphore.  All locks will be released
+and the semaphore is disposed.  This method is the same as
+@code{Dispose::Semaphore}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Release::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Semaphore
+@sp 2
+@example
+@group
+r = gDispose(s)
+
+object  s;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of a semaphore.  All locks will be released
+and the semaphore is disposed.  This method is the same as
+@code{DeepDispose::Semaphore}.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Release::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::Semaphore
+@sp 2
+@example
+@group
+nam = gName(s)
+
+object  s;
+char    *nam;
+@end group
+@end example
+This method is used to obtain the name of semaphore @code{s}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{New::Semaphore, Count::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Release}
+@deffn {Release} Release::Semaphore
+@sp 2
+@example
+@group
+s = gRelease(s, cnt)
+
+object  s;
+int     cnt;
+@end group
+@end example
+This method is used to release a lock on a semaphore.  The semaphore
+lock count will be incremented by @code{cnt}, which is normally 1.
+As soon as a semaphore's lock count goes above 0 any threads which
+are waiting for the semaphore will be taken off hold and receive
+the lock (limited to the number of locks available).  This method
+returns the semaphore instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{WaitFor::Semaphore}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {WaitFor}
+@deffn {WaitFor} WaitFor::Semaphore
+@sp 2
+@example
+@group
+r = gWaitFor(s)
+
+object  s;
+int     r;
+@end group
+@end example
+This method is used to obtain a lock on semaphore @code{s}.  If the
+semaphore has already exceeded its lock count the current thread
+will be placed on hold until the semaphore is available.  Each call
+to @code{WaitFor} uses up a single count associated with semaphore
+@code{s}.  This method always returns 0.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Release::Semaphore}
+@end deffn
+
+
+
+
+

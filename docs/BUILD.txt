@@ -1,0 +1,409 @@
+
+Please note that Dynace comes with extensive documentation.  Once you
+have the system built (following instructions in this file), see:
+
+	manual/Dynace.pdf - 300+ pages of documentation on the language
+
+	manual/WDS.pdf - 300+ pages of documentation on the Windows
+	                 development system
+
+	manual/odbcusr.pdf - documentation on the SQL interface
+
+The system also comes with a language tutorial.  See:
+
+	examples/exam01/readme
+
+Then there is a Windows development system tutorial at:
+
+	winexam/exam01/readme
+
+(The Windows development System uses the WIN32 API.  It operates under
+Windows but also operates under Mac and Linux using Wine (the Win32
+API for Unix))
+
+
+----------------------------------------
+
+
+Build instructions:
+
+There are four sections labeled:
+     Windows
+    Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
+    Plan 9
+    Minix
+
+The DOS port should still work but is no longer tested.
+
+The system runs fine under 32 and 64 bit Linux as well as 64 bit Mac.
+While the system has been tested under 32 bit Windows, 64 bit Windows
+has not been tested.  It should run fine with possible minor tweaks to
+the makefiles.
+
+Assuming DR is your Dynace root directory such as  c:\dynace
+
+Go to the appropriate section.
+
+
+================================================================================
+
+Windows
+-------
+
+If you are operating With Cygwin under Windows, use the Linux build
+docs below rather than this secion.
+
+Dynace is build from the command line using the included DMAKE
+program.  DMAKE is just an enhanced nmake or make program.
+
+First make sure that your command line compiler is set up correctly.
+You can do this by using the "Visual Studio Command Prompt" that comes
+with Visual Studio and is located under "Visual Studio Tools".  I
+suggest that you create a "Hello, World" program and compile and link
+it from the command line to be sure it's all set up correctly.
+
+1.  Make sure you copy the exe files from bin\win32 to the bin directory:
+
+	copy  bin\win32\*  bin  
+
+2.  Next, goto the DR (Remember DR is the location where you unzipped
+Dynace) directory and if you are operating under the DOS or Windows
+3.1 OS you should edit the file named 16bit.bat.  Otherwise, edit
+32bit.bat.  The file will tell you what to do.
+
+IMPORTANT!: Make sure you edit the 32bit.bat file as described in the
+previous paragraph.  If you don't have the MAKESTARTUP environment
+variable setup the system won't build.
+
+3.  Next execute the file you just edited by typing:
+
+	16bit
+	 or
+	32bit
+
+4.  Build the system
+
+The following table indicates the correct makefile for each supported
+environment: (note:  only M32.DM is really tested or used anymore)
+If you are using one of the other compilers, substitute the m32.dm
+shown throughout with the makefile appropriate to your environment.
+
+M32.DM		Microsoft C 32 bit
+M16.DM		Microsoft C 16 bit
+B16.DM		Borland C 16 bit  (requires tasm.exe - their assembler)
+B32.DM		Borland C 32 bit  (requires tasm32.exe - their assembler)
+W32.DM		Watcom C 32 bit
+S32.DM		Symantec C 32 bit (not tested recently)
+
+M32.dm can be substitutied with the above if necessary, type:
+(Note: the case does matter.)
+
+	dmake -f m32.dm all-scratch
+
+The system is now built.
+
+The system has two major parts; the language, and the windows
+development system.  At this point the language portion of the system
+is built in the portable mode.  You can test it by going into
+examples\exam03, building and running the example using the following
+commands:
+
+	cd examples\exam03
+	dmake -f m32.dm
+	main
+
+
+--------------------
+
+Building in the faster mode for 32 bit Windows.
+
+Under 32 bit Windows the system includes an assembler dispatcher that
+will speed things up.  This does not work on 64 bit builds, but the
+system operates fine with or without this step.
+
+If you are performing a 32 bit build you could follow the following
+steps to enable the assembler dispatcher.  The system works equally
+well with or without this code.
+
+	dmake -f m32.dm STRAT=-S1 newgens
+	dmake -f m32.dm realclean
+	dmake -f m32.dm all-scratch
+
+--------------------
+
+Building the Windows Development System
+
+This step is only necessary if you want to use the Windows Development
+System portion of the system.  The language portion is independent of
+this.
+
+If you now want to build the GUI library use the following.  This can
+only be done after the above steps were followed (although switching
+to STRAT=-S1, the fater mode doesn't matter.  It works either way.)
+
+	dmake -f m32.dm wds-makegens
+	dmake -f m32.dm wds-all-scratch
+	cd WinExam\setup
+	m32dm
+
+You can test the GUI system as follows:
+
+	cd WinExam\exam10
+	dmake -f m32.dm
+	main
+
+--------------------
+
+Learning the system
+
+After you have everything built and setup you may want to go to
+examples\exam01 through examples\exam38 (in order) and see the readme
+file for the Dynace language examples and tutorial.
+
+You can also go to
+WinExam\exam01 through WinExam\exam25 (in order) and see the readme
+file for the GUI Development System / ODBC examples and tutorial.
+
+
+The complete manuals in PDF format are in the "manual" directory.
+
+--------------------
+
+Resource Editor
+
+The cld directory contains a GUI dialog designer which produces a
+custom resource editor which is loaded at runtime by this system.  To
+build use:
+
+	cd cld
+	dmake -f m32.dm
+
+--------------------
+
+
+Setup for normal, day-to-day use of the system
+
+You may want to do the following:
+
+Add DR\include to your compiler's include search path
+Add DR\lib to your linker's library search path
+
+
+
+================================================================================
+
+Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
+------------------------------------------------------------
+
+GNU-make, bash and gcc are assumed.
+
+1.  You can type the following lines in order to remove the .unx file
+extension from all makefiles and negate the need for "-f makefile.unx"
+This only need be done once.
+
+	chmod 755 dropunx.sh
+	./dropunx.sh
+
+2.  Then, build the system as follows:
+
+	make
+
+	(use the following under Cygwin instead)
+		make CYGWIN=1
+
+At this point the language portion of the system is built in the
+portable mode.  You can test it by going into examples/exam03,
+building and running the example using the following commands:
+
+	cd examples/exam03
+	make
+	./main
+
+--------------------
+
+Building in the faster mode (for 32 bit Linux only)
+
+If you are operating under a 32 bit Linux/Unix you should be able to
+rebuild using the faster mode which relies on an assembler piece.
+This does not work on 64 bit builds, but the system operates fine
+in 32 or 64 bit mode without this step.
+
+If you have any trouble with this step, you should erase everything,
+re unpack the distribution, rebuild, and skip this step.  It is not
+needed.
+
+If you are performing a 32 bit build you could follow the following
+steps to enable the assembler dispatcher. 
+
+To do this just type the following commands (after the above build):
+
+(Cygwin: all make commands, add CYGWIN=1 to the make command line
+     Also:  use jumpto.s5 instead of jumpto.s4 below)
+
+	cd back to the root of the Dynace tree
+	make STRAT=-S1 newgens
+	make realclean
+	Edit kernel/makefile to enable the inclusion of JUMPTO
+	  (uncomment by removing the # before JUMPTO)
+
+At this point you must copy the appropriate assembler code for your
+architecture.  From within the kernel/jumpto directory you must copy
+one of the jumpto.* files into jumpto.s It remains in the same
+directory.  Choose one of the following:
+
+	jumpto.s6	32 bit Linux using GCC 4.7
+	
+Now go back to the root of the Dynace tree and type:
+
+	make
+
+
+You should then clean and re-run the example program as follows:
+
+	cd examples/exam03
+	make clean
+	make
+	./main
+
+If you have any trouble linking it may be due to a different version of
+GCC.  You may want to try a different jumpto assembler piece.  See
+kernel/makefile.unx  and  kernel/jumpto/*
+That directory contains jumpto assembler routines for several machines.
+
+--------------------
+
+Language Tutorial
+
+After you have everything built and setup you may want to go to
+examples/exam01 through examples/exam38 (in order) and see the readme
+file for the Dynace language examples and tutorial.
+
+
+The complete manuals in PDF format are in the "manual" directory.
+See manual/Dynace.pdf
+
+--------------------
+
+Building the Windows Development System (utilizing Wine - the Win32
+API for Linux / Unix / Mac)
+
+Naturally, you should have Wine installed on the system first.  You
+will want the development libraries portion too.
+
+If you now want to build the GUI library under WINE use the following.
+This can only be done after the above steps were followed (although
+switching to STRAT=-S1 doesn't matter.  It works either way.)
+
+Make sure the WINEINCPATH is setup correctly in makefile.inc
+
+	cd back to the root of the Dynace tree
+	make WINE=1 newgens
+	make WINE=1
+
+You can test the GUI system as follows:
+
+	cd WinExam/exam10
+	make
+	./main
+
+--------------------
+
+Windows Development System tutorial
+
+After you have everything built and setup you may want to go to
+WinExam/exam01 through WinExam/exam25 (in order) and see the readme
+file for the GUI Development System / ODBC examples and tutorial.
+
+
+The complete manuals in PDF format are in the "manual" directory.
+See manual/WDS.pdf
+
+--------------------
+
+Dialog editor
+
+The cld directory contains a GUI dialog designer which produces a
+custom resource editor which is loaded at runtime by this system.  To
+build use:
+
+	make
+
+--------------------
+
+Documentation
+
+The complete manuals in PDF format are in the "manual" directory.
+
+See the section above labeled Language Tutorial
+
+================================================================================
+
+Plan 9
+-----
+
+Just go into the main directory and type:
+
+	mk
+
+This will build the entire system.  You can check it by typing:
+
+	cd examples/exam03
+	mk
+	main
+
+
+The complete manuals in PDF format are in the "manual" directory.
+
+See the section above labeled Language Tutorial
+
+
+
+================================================================================
+
+Minix
+
+This was done on Minix 3.2.1
+
+To build under Minix you should follow the same instructions listed
+under the section labeled Linux, Apple Mac, etc. except for what
+follows in this section.
+
+gmake is required.  Use gmake in all places where make is shown.
+
+The system works with GCC or CLANG.  The system is setup to build
+with gcc by default.  You must change makefile.inc (not makefile)
+at the top level to switch from gcc to cc.  So, to change from gcc
+to clang, change makefile.inc from:
+
+    CC = gcc
+
+to:
+
+    CC = cc
+
+
+Lastly, all of the makefiles for the example programs (under the
+examples directory) use gcc by default.  You would have to change
+each one as you use them (from gcc to cc) if you want to use clang.
+
+
+
+================================================================================
+
+Valid Targets
+--------------------------------------
+all			builds changes
+all-scratch		builds everything from scratch
+clean			removes intermediate and garbage files
+realclean		removes target files too (causes a total rebuild)
+dist
+makegens		builds generics.h from scratch without pre-processing
+newgens			builds generics.h from scratch while pre-processing
+
+
+wds-all
+wds-all-scratch
+wds-clean
+wds-realclean
+wds-makegens
+wds-newgens

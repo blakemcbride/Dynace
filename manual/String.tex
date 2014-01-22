@@ -1,0 +1,1973 @@
+@page
+
+@section String Class
+@pdfsection{String Class}
+The @code{String} class is used to represent the C language
+@code{char *} data type as a Dynace object.  It is a subclass
+of the @code{Stream} class and it provides an array of methods
+to operate on the string objects.  Unlike C strings this class will
+dynamically expand a string buffer as needed so you should never have to
+worry about the buffer size.  You can also use the @code{MA_compact}
+function to compact the string memory and reduce memory fragmentation.
+
+Most of the @code{String} methods which take string arguments (except
+the first argument) will accept a C language string (@code{char *}) or
+an instance of the @code{String} class arbitrarily.  The system can tell
+the difference between them at runtime.  If it is a valid Dynace object 
+the system will assure that it is a kind of @code{String}, otherwise
+it is assumed to be a C string.
+
+Instances of this class will also operate like other subclasses of
+@code{Stream}.  That is you can write (append), read (copy and remove),
+advance (remove leading characters) and obtain its length.  This
+comes in handy when you wish to keep a small (and fast) sequential
+file in memory.
+
+
+@subsection String Class Methods
+@pdfsubsection{String Class Methods}
+The String class has several class methods which create new @code{String}
+instances.  They are provided to lend various levels of flexibility.
+
+
+
+
+
+
+
+@pdfsubsubsection {Build}
+@deffn {Build} Build::String
+@sp 2
+@example
+@group
+i = vBuild(String, ...);
+
+object  i;
+@end group
+@end example
+This class method creates a new instance of the String class.
+The initial value of the new instance will be the concatenation
+of all the @code{String} or @code{char *} arguments up to an @code{END}.
+
+Each argument may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+Note that the variable argument list @emph{MUST} end with an @code{END}.
+There is no other way in C to tell when the last argument has been reached.
+If you forget the @code{END} the system will probably hang!  (If you
+have a problem with the system hanging you might want to check all the
+@code{vBuild} generic calls.)
+
+The value returned is the new @code{String} instance.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, " World");
+y = vBuild(String, "Hello", x, "!", END);
+/*  y = "Hello World!"  */
+@end group
+@end example
+@sp 1
+See also:  @code{StringValue::String, Dispose::String,}
+There is also an instance method @code{Build::String}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {MaskFunction}
+@deffn {MaskFunction} MaskFunction::String
+@sp 2
+@example
+@group
+fun = gMaskFunction(String, ch);
+
+char    ch;
+int     (*fun)();
+@end group
+@end example
+This method is used to return the masking function associated with
+the mask character @code{ch}.
+
+Currently there are only two masking characters used in the system,
+@code{`#'} (numbers) and @code{`@@'} (letters).  The @code{`#'}
+character's associated function is @code{isdigit} while the @code{`@@'}
+character's associated function is @code{isalpha}.
+
+The masking function associated with a masking character takes a
+character as its only parameter and returns non-zero if the character
+is the masking character associated with the function and returns zero
+if it is not.
+
+@example
+@group
+@exdent Example:
+
+int     (*fun)();
+char    *str = "A1";
+int     r;
+
+fun = gMaskFunction(String, '#');       /*  Uses isdigit  */
+r = fun(str[0]);                        /*  r == 0        */
+r = fun(str[1]);                        /*  r == 1        */
+@end group
+@end example
+@sp 1
+See also:  @code{gSetMaskFiller::String, gApplyMask::String,}
+@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::String
+@sp 2
+@example
+@group
+i = gNew(String);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the String class.  The returned
+String object is initialized to @code{""}.
+
+The value returned is a Dynace instance object which represents a null string.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNew(String);
+@end group
+@end example
+@sp 2
+See also:  @code{Copy::String, StringValue::String, Dispose::String,}
+@hfil @break @hglue .64in      @code{NewWithStr::String, NewWithObj::String}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NewWithStr}
+@deffn {NewWithStr} NewWithStr::String
+@sp 2
+@example
+@group
+i = gNewWithStr(String, val);
+
+char *val;  /*  or object  */
+object  i;
+@end group
+@end example
+This class method creates instances of the String class.  @code{val}
+is the initial value of the string being represented.  
+
+@code{val} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+The value returned is a Dynace instance object which represents the string
+passed.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World!");
+y = gNewWithStr(String, (char *) x);
+@end group
+@end example
+See also:  @code{Copy::String, StringValue::String, Dispose::String}
+@hfil @break @hglue .64in     @code{New::String, NewWithObj::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NewWithObj}
+@deffn {NewWithObj} NewWithObj::String
+@sp 2
+@example
+@group
+i = gNewWithObj(String, val);
+
+object  val;  /*  or char *  */
+object  i;
+@end group
+@end example
+This class method creates instances of the String class.  @code{val}
+is the initial value of the string being represented.  
+
+@code{val} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+The value returned is a Dynace instance object which represents the string
+passed.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithObj(String, (object) "Hello World!");
+y = gNewWithObj(String, x);
+@end group
+@end example
+See also:  @code{Copy::String, StringValue::String, Dispose::String}
+@hfil @break @hglue .64in      @code{NewWithStr::String, New::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Sprintf}
+@deffn {Sprintf} Sprintf::String
+@sp 2
+@example
+@group
+i = vSprintf(String, fmt, ...);
+
+char    *fmt;
+object  i;
+@end group
+@end example
+This class method creates a new instances of the String class.  Except
+for the first argument and return value, this method takes the same
+arguments and performs the same function as the normal @code{sprintf}
+contained in your C library.  See that documentation.
+
+Note that except for the first argument, this method does not take
+Dynace objects.
+
+The value returned is a Dynace instance object which represents the result
+of the operation.
+
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = vSprintf(String, "%s is %d years old", "John", 66);
+@end group
+@end example
+@sp 1
+See also:  @code{StringValue::String, Dispose::String}
+@end deffn
+
+
+
+
+
+@subsection String Instance Methods
+@pdfsubsection{String Instance Methods}
+The instance methods associated with the String class provide a
+means of changing and obtaining the value associated with an instance of
+the String class.  Methods are also included to help the generic
+container classes to quickly access members of this class.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Append}
+@deffn {Append} Append::String
+@sp 2
+@example
+@group
+i = gAppend(i, str);
+
+object  i;
+char    *str;  /*  or object  */
+@end group
+@end example
+This method is used to append the string represented by @code{str}
+to the end of the string represented by @code{i}.
+
+@code{str} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+The value returned is the @code{String} instance passed (@code{i}).
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello");
+gAppend(x, " World!");
+/*  x = "Hello World!"  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::String, Build::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ApplyMask}
+@deffn {ApplyMask} ApplyMask::String
+@sp 2
+@example
+@group
+i = gApplyMask(i, mask, text);
+
+object  i;
+char    *mask;
+char    *text;
+@end group
+@end example
+This method is used to apply @code{mask} to @code{text} and set the
+resulting value to @code{i}.  If @code{NULL} or an empty string
+(@code{""}) is passed in to @code{mask} then @code{i} has its string
+value changed to @code{text}.  If @code{NULL} or an empty string
+(@code{""}) is passed in to @code{text} then @code{mask} is applied
+directly to the current string value in @code{i}.
+
+Mask definitions contain any combination of mask characters and literal
+characters.  The first character of a mask can optionally be either `>'
+or `<' indicating the direction which the mask is applied to the string.
+If the first character is `<' then the mask is applied from right to
+left.  If the first character is `>' or is neither of the directional
+characters, then the mask is applied from left to right.  The mask
+character `#' indicates that the character in this position must be a
+number while the mask character `@@' indicates that the character in
+this position must be a letter.  Any other character in the mask is a
+literal character and is left in the resulting string in its position
+unchanged.
+
+The value returned is the @code{String} instance passed (@code{i}).
+@example
+@group
+@exdent Example:
+
+object  x;
+char    mask = "<(###) ###-####";
+
+x = gNewWithStr(String, "1234567890");
+gApplyMask(x, mask, NULL);         /* x = "(123) 456-7890" */
+gApplyMask(x, mask, "9876543210"); /* x = "(987) 654-3210" */
+gApplyMask(x, NULL, "1234567890"); /* x = "1234567890"     */
+@end group
+@end example
+@sp 1
+See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
+@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Build}
+@deffn {Build} Build::String
+@sp 2
+@example
+@group
+i = vBuild(str, first, ...);
+
+object  str;
+char    *first;  /*  or object  */
+object  i;
+@end group
+@end example
+This method is used to modify the string associated with instance @code{str}
+by optionally overwriting and optionally appending a group of C strings or
+@code{String} objects.
+
+@code{first} may be an instance of the @code{String} class, a C string
+@code{char *} or a @code{NULL}.  If @code{first} is @code{NULL} the initial
+value of @code{str} will remain intact, otherwise, it will be replaced
+with the string represented by @code{first}.
+
+After the @code{first} argument has been processed the remaining
+@code{String} or @code{char *} arguments, up to an @code{END}, 
+will be concatenated to the end of @code{str}.
+
+Each argument may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+Note that the variable argument list @emph{MUST} end with an @code{END}.
+There is no other way in C to tell when the last argument has been reached.
+If you forget the @code{END} the system will probably hang!  (If you
+have a problem with the system hanging you might want to check all the
+@code{vBuild} generic calls.)
+
+The value returned is the @code{String} instance passed (@code{str}).
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello");
+vBuild(x, NULL, " World", gNewWithStr(String, "!"), END);
+/*  x = "Hello World!"  */
+
+vBuild(x, "Goodbye", " World", "!", END);
+/*  x = "Goodbye World!"  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::String, Append::String,}
+There is also a class method @code{Build::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeCharAt}
+@deffn {ChangeCharAt} ChangeCharAt::String
+@sp 2
+@example
+@group
+i = gChangeCharAt(i, n, c);
+
+object  i;
+int     n;
+int     c;
+@end group
+@end example
+This method is used to change the character at position @code{n} within
+@code{String} instance @code{i} to character @code{c}.  The index origin
+is zero.
+
+If @code{n} is equal to the number of characters in instance @code{i}
+(that is one greater than the number of indexable characters), string
+@code{i} will be extended by one character (@code{c}).  However, if any
+larger index is used Dynace will issue an error message and abort the
+program.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello");
+gChangeCharAt(x, 1, 'E');
+/*  x = "HEllo"  */
+@end group
+@end example
+@sp 1
+See also:  @code{CharValueAt::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeStrValue}
+@deffn {ChangeStrValue} ChangeStrValue::String
+@sp 2
+@example
+@group
+i = gChangeStrValue(i, val);
+
+object  i;
+char   *val;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+the String class.  The new value may be of any length.
+
+The value returned is the instance @code{i}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World");
+gChangeStrValue(x, "Are you all using Dynace?");
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::String, Append::String, Build::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::String
+@sp 2
+@example
+@group
+i = gChangeValue(i, val);
+
+object  i;
+object  val;  /*  or char *  */
+@end group
+@end example
+This method is used to change the value associated with an instance of
+the String class.  The new value may be of any length.
+
+@code{val} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+The value returned is the instance @code{i}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World");
+y = gNewWithStr(String, "Are you all using Dynace?");
+gChangeValue(x, y);
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeStrValue::String, Append::String, Build::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {CharValueAt}
+@deffn {CharValueAt} CharValueAt::String
+@sp 2
+@example
+@group
+c = gCharValueAt(i, n);
+
+object  i;
+int     n;
+char    c;
+@end group
+@end example
+This method is used to obtain character @code{n} from @code{String} instance
+@code{i}.  The index origin is zero.  If an index greater than the available
+characters is used Dynace will issue an error message and abort the program.
+@example
+@group
+@exdent Example:
+
+object  x;
+char    c;
+
+x = gNewWithStr(String, "Hello");
+c = gCharValueAt(x, 1);
+/*  c = 'e'  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeCharAt::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::String
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;  /*  or char *  */
+int     r;
+@end group
+@end example
+This method is used to determine the equality of the values represented
+by @code{i} and @code{obj}.
+
+@code{obj} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+@code{r} is -1 if the value represented by @code{i} is less than the
+value represented by @code{obj}, 1 if the value of @code{i} is greater
+than @code{obj}, and 0 if they are equal.
+
+This method is also used by the generic container classes to determine
+object relationships.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Equal::String, CompareI::String, CompareN::String}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {CompareI}
+@deffn {CompareI} CompareI::String
+@sp 2
+@example
+@group
+r = gCompareI(i, obj);
+
+object  i;
+object  obj;  /*  or char *  */
+int     r;
+@end group
+@end example
+This method is used to determine the equality of the values represented
+by @code{i} and @code{obj} without regard for the case of the letters.
+Therefore, strings such as ``abc'' and ``ABC'' will be considered equal.
+
+@code{obj} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+@code{r} is -1 if the value represented by @code{i} is less than the
+value represented by @code{obj}, 1 if the value of @code{i} is greater
+than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::String, CompareN::String}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {CompareN}
+@deffn {CompareN} CompareN::String
+@sp 2
+@example
+@group
+r = gCompareN(i, obj, n);
+
+object  i;
+object  obj;  /*  or char *  */
+int     n;    /*  max number of characters to compare  */
+int     r;
+@end group
+@end example
+This method is used to determine the equality of the values represented
+by @code{i} and @code{obj}.  No more than @code{n} characters will be
+compared. If the two strings only differ past @code{n} characters they
+will be considered equal.
+
+
+@code{obj} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+@code{r} is -1 if the value represented by @code{i} is less than the
+value represented by @code{obj}, 1 if the value of @code{i} is greater
+than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::String, CompareNI::String}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {CompareNI}
+@deffn {CompareNI} CompareNI::String
+@sp 2
+@example
+@group
+r = gCompareNI(i, obj, n);
+
+object  i;
+object  obj;  /*  or char *  */
+int     n;    /*  max number of characters to compare  */
+int     r;
+@end group
+@end example
+This method is used to determine the equality of the values represented
+by @code{i} and @code{obj} without regard for the case of the letters.
+Therefore, strings such as ``abc'' and ``ABC'' will be considered equal.
+No more than @code{n} characters will be compared.  If the two strings
+only differ past @code{n} characters they will be considered equal.
+
+@code{obj} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+
+@code{r} is -1 if the value represented by @code{i} is less than the
+value represented by @code{obj}, 1 if the value of @code{i} is greater
+than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{CompareI::String, CompareN::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::String
+@sp 2
+@example
+@group
+so = gCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the @code{String} class
+with the same string value as string @code{i}.  Or put more simply,
+it makes a copy.  The new @code{String} instance is returned.
+
+This method performs the same function as @code{DeepCopy::String}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello");
+y = gCopy(x);
+/*  x = "Hello"  */
+@end group
+@end example
+@sp 1
+See also:  @code{New::String, DeepCopy::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::String
+@sp 2
+@example
+@group
+so = gDeepCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the @code{String} class
+with the same string value as string @code{i}.  Or put more simply,
+it makes a copy.  The new @code{String} instance is returned.
+
+This method performs the same function as @code{Copy::String}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello");
+y = gDeepCopy(x);
+/*  x = "Hello"  */
+@end group
+@end example
+@sp 1
+See also:  @code{New::String, Copy::String}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::String
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an instance of the String class.
+It performs the same operation as @code{Dispose}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello World");
+gDeepDispose(x);
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::String
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an instance of the String class.
+It performs the same operation as @code{DeepDispose}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello World");
+gDispose(x);
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Drop}
+@deffn {Drop} Drop::String
+@sp 2
+@example
+@group
+i = gDrop(i, num);
+
+object  i;
+int     num;
+@end group
+@end example
+This method is used to drop @code{num} characters from string @code{i}.
+If @code{num} is positive characters will be dropped from the beginning
+of the string, otherwise, characters will be dropped from the end of the
+string.  An attempt to drop more characters than exist will lead to a
+zero length string.
+
+The modified @code{String} instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World");
+gDrop(x, 4);   /*  x = "o World"    */
+x = gNewWithStr(String, "Hello World");
+gDrop(x, -4);   /*  x = "Hello W"    */
+x = gNewWithStr(String, "ABC");
+gDrop(x, 5);   /*  x = ""    */
+@end group
+@end example
+@sp 1
+See also:  @code{Take::String, SubString::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Equal}
+@deffn {Equal} Equal::String
+@sp 2
+@example
+@group
+r = gEqual(i, obj);
+
+object  i;
+object  obj;  /*  or char *  */
+int     r;
+@end group
+@end example
+This method is used to determine the equality of the values represented
+by @code{i} and @code{obj}.  If they contain the same string values a
+1 is returned and 0 otherwise.
+
+@code{obj} may be a C language @code{char *} or an instance of the
+@code{String} class.  Dynace can tell the difference between them at
+runtime.  If it is a valid Dynace object the system will assure that it is
+a kind of @code{String}, otherwise it is assumed to be a C string.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     r;
+
+x = gNewWithStr(String, "Hello");
+r = gEqual(x, "Hello");                /*  r = 1  */
+r = gEqual(x, gNewWithStr(String, "Hello"));  /*  r = 1  */
+r = gEqual(x, "World");                /*  r = 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{Compare::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::String
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This method is used by the generic container classes to obtain hash
+values for the object.  @code{val} is a hash value between 0 and a large
+integer value.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::String}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {JustifyCenter}
+@deffn {JustifyCenter} JustifyCenter::String
+@sp 2
+@example
+@group
+i = gJustifyCenter(i);
+
+object  i;
+@end group
+@end example
+This method is used to center justify the text within a string.  The length
+of the string is not modified, only the position of the characters within
+the string.  It is often used in conjunction with @code{Take::String} in
+order to format text.
+
+The modified @code{String} instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "ABD  DEF  DD      ");
+gJustifyCenter(x);   /*  x = "   ABD  DEF  DD   "    */
+x = gNewWithStr(String, "ABD  DEF");
+gJustifyCenter(gTake(x, 14));   /*  x = "   ABD  DEF   "    */
+@end group
+@end example
+@sp 1
+See also:  @code{Take::String, JustifyRight::String,}
+@hfil @break @hglue .64in       @code{JustifyLeft::String}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {JustifyLeft}
+@deffn {JustifyLeft} JustifyLeft::String
+@sp 2
+@example
+@group
+i = gJustifyLeft(i);
+
+object  i;
+@end group
+@end example
+This method is used to left justify the text within a string.  The length
+of the string is not modified, only the position of the characters within
+the string.  It is often used in conjunction with @code{Take::String} in
+order to format text.
+
+The modified @code{String} instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "    ABD  DEF  DD");
+gJustifyLeft(x);   /*  x = "ABD  DEF  DD    "    */
+x = gNewWithStr(String, "ABD  DEF");
+gJustifyLeft(gTake(x, 10));   /*  x = "ABD  DEF  "    */
+@end group
+@end example
+@sp 1
+See also:  @code{Take::String, JustifyCenter::String,}
+@hfil @break @hglue .64in       @code{JustifyRight::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {JustifyRight}
+@deffn {JustifyRight} JustifyRight::String
+@sp 2
+@example
+@group
+i = gJustifyRight(i);
+
+object  i;
+@end group
+@end example
+This method is used to right justify the text within a string.  The length
+of the string is not modified, only the position of the characters within
+the string.  It is often used in conjunction with @code{Take::String} in
+order to format text.
+
+The modified @code{String} instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "ABD  DEF  DD    ");
+gJustifyRight(x);   /*  x = "    ABD  DEF  DD"    */
+x = gNewWithStr(String, "ABD  DEF");
+gJustifyRight(gTake(x, 10));   /*  x = "  ABD  DEF"    */
+@end group
+@end example
+@sp 1
+See also:  @code{Take::String, JustifyCenter::String,}
+@hfil @break @hglue .64in       @code{JustifyLeft::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NumbPieces}
+@deffn {NumbPieces} NumbPieces::String
+@sp 2
+@example
+@group
+n = gNumbPieces(i, d);
+
+object  i;
+char    d;  /*  delimiter         */
+int     n;  /*  number of pieces  */
+@end group
+@end example
+This method is used to determine the number of sub-strings located in
+@code{i}.  It is assumed that @code{i} is a string which contains the
+delimiter character @code{d}.  That delimiter character is used to
+logically split string @code{i} into several sub-strings.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     n;
+
+x = gNewWithStr(String, "ABD,DEF,DD");
+n = gNumbPieces(x, ',');  /*  n = 3  */
+@end group
+@end example
+@sp 1
+See also:  @code{Piece::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Piece}
+@deffn {Piece} Piece::String
+@sp 2
+@example
+@group
+r = gPiece(i, d, n);
+
+object  i;
+char    d;  /*  delimiter     */
+int     n;  /*  piece wanted  */
+object  r;  /*  sub-string    */
+@end group
+@end example
+This method is used to create a new string object which will contain a
+copy of a sub-string of @code{i}.  It is assumed that @code{i} is a
+string which contains the delimiter character @code{d}.  That delimiter
+character is used to logically split string @code{i} into several
+sub-strings.  @code{n} is used to specify which sub-string is desired.
+
+This method returns a new string object which will contain a copy of the
+desired sub-string.  A @code{NULL} is returned if @code{n} is greater
+than the number of sub-strings in @code{i}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "ABD,DEF,DD");
+y = gPiece(x, ',', 0);  /*  y="ABD"  */
+y = gPiece(x, ',', 1);  /*  y="DEF"  */
+y = gPiece(x, ',', 2);  /*  y="DD"   */
+@end group
+@end example
+@sp 1
+See also:  @code{NumbPieces::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {PrintLength}
+@deffn {PrintLength} PrintLength::String
+@sp 2
+@example
+@group
+sz = gPrintLength(i, ts);
+
+object  i;
+int     ts;
+int     sz;
+@end group
+@end example
+This method is used to obtain the length of the string associated with
+the instance of the String class passed when it is printed.  This
+method takes into account tabs, backspaces and return characters in
+its calculations.
+
+@code{ts} is the tab stop size that the method should use.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns an integer.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     sz;
+
+x = gNewWithStr(String, "Hello\tWorld\bx");
+sz = gPrintLength(x, 8);
+/*  sz = 13   */
+@end group
+@end example
+@sp 1
+See also:  @code{Size::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Process}
+@deffn {Process} Process::String
+@sp 2
+@example
+@group
+i = gProcess(i);
+
+object  i;
+@end group
+@end example
+This method is used to process a string with embedded escape sequences.
+The escape sequences will be processed and converted into the appropriate
+control characters.  For example @code{"\r"} will be converted in to a return
+control character.  All the ANSI standard escape sequences are supported.
+In addition, @code{"\e"} gets converted into the escape character.
+@code{"\^L"} (where L may be any letter - upper or lower case) gets
+converted into the corresponding control character, for example
+@code{"\^G"} will get converted to the control-G character.
+@code{"\dnnn"} works like @code{"\xnnn"} except that @code{nnn} is
+treated as a decimal number.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello\\tWorld\\bx");
+gProcess(x);
+/*  x will now contain the real control characters  */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintLength::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveMask}
+@deffn {RemoveMask} RemoveMask::String
+@sp 2
+@example
+@group
+i = gRemoveMask(i, mask, text);
+
+object  i;
+char    *mask;
+char    *text;
+@end group
+@end example
+This method is used to remove @code{mask} from @code{text} and set the
+resulting value to @code{i}.  If @code{NULL} or an empty string
+(@code{""}) is passed in to @code{mask} then @code{i} has its string
+value changed to @code{text}.  If @code{NULL} or an empty string
+(@code{""}) is passed in to @code{text} then @code{mask} is removed from
+the current string value in @code{i}.
+
+The value returned is the @code{String} instance passed (@code{i}).
+@example
+@group
+@exdent Example:
+
+object  x;
+char    mask = "<(###) ###-####";
+
+x = gNewWithStr(String, "(123) 456-7890");
+gRemoveMask(x, mask, NULL);            /*x="1234567890"    */
+gRemoveMask(x, mask, "(987)654-3210"); /*x="9876543210"    */
+gRemoveMask(x, NULL, "(123) 456-7890");/*x="(123) 456-7890"*/
+@end group
+@end example
+@sp 1
+See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
+@hfil @break @hglue .64in      @code{gApplyMask::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SetMaskFiller}
+@deffn {SetMaskFiller} SetMaskFiller::String
+@sp 2
+@example
+@group
+r = gSetMaskFiller(i, ch);
+
+object  i;
+char    ch;
+char    r;
+@end group
+@end example
+This method is used to set the character to be used to fill the unused
+space in a masked string.  This character defaults to be a space but is
+frequently set to be the underscore @code{(`_')} character.  This method
+returns the previous mask filler character.
+
+@example
+@group
+@exdent Example:
+
+object  x;
+char    r;
+
+x = gNewWithStr(String, "1234567");
+gApplyMask(x, "<(###) ###-####", NULL);
+      /* x = "(   ) 123-4567" */
+r = gSetMaskFiller(x, '_');
+      /* r = ' ' (space)      */
+gApplyMask(x, "<(###) ###-####", NULL);
+      /* x = "(___) 123-4567" */
+@end group
+@end example
+@sp 1
+See also:  @code{gMaskFunction::String, gApplyMask::String,}
+@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::String
+@sp 2
+@example
+@group
+sz = gSize(i);
+
+object  i;
+int     sz;
+@end group
+@end example
+This method is used to obtain the length of the string associated with
+the instance of the String class passed.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns an integer.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     sz;
+
+x = gNewWithStr(String, "Hello World");
+sz = gSize(x);
+/*  sz = 11   */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintLength::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::String
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithStr(String, "Hello");
+s = gStringRepValue(x);
+  /* s represents "Hello" (with quotes)  */
+@end group
+@end example
+@sp 1
+See also:  @code{StringValue::String, PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringValue}
+@deffn {StringValue} StringValue::String
+@sp 2
+@example
+@group
+val = gStringValue(i);
+
+object  i;
+char    *val;
+@end group
+@end example
+This method is used to obtain the @code{char *} value associated with an
+instance of the String class.  Note that this is one of the few
+generics which doesn't return a Dynace object.  It returns a char * string.
+@example
+@group
+@exdent Example:
+
+object  x;
+char    *val;
+
+x = gNewWithStr(String, "Hello World");
+val = gStringValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{New::String, ChangeValue::String}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {StripCenter}
+@deffn {StripCenter} StripCenter::String
+@sp 2
+@example
+@group
+i = gStripCenter(i);
+
+object  i;
+@end group
+@end example
+This method is used to strip off blank characters (space, tab, new line,
+carriage return) from both sides of a string.  The return value is the
+modified @code{String} instance passed.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "    ABD  DEF  DD    ");
+gStripCenter(x);   /*  x = "ABD  DEF  DD"    */
+@end group
+@end example
+@sp 1
+See also:  @code{StripRight::String, StripLeft::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StripLeft}
+@deffn {StripLeft} StripLeft::String
+@sp 2
+@example
+@group
+i = gStripLeft(i);
+
+object  i;
+@end group
+@end example
+This method is used to strip off blank characters (space, tab, new line,
+carriage return) from the left side of a string.  The return value is the
+modified @code{String} instance passed.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "    ABD  DEF  DD    ");
+gStripLeft(x);   /*  x = "ABD  DEF  DD    "    */
+@end group
+@end example
+@sp 1
+See also:  @code{StripRight::String, StripCenter::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StripRight}
+@deffn {StripRight} StripRight::String
+@sp 2
+@example
+@group
+i = gStripRight(i);
+
+object  i;
+@end group
+@end example
+This method is used to strip off blank characters (space, tab, new line,
+carriage return) from the right side of a string.  The return value is the
+modified @code{String} instance passed.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "    ABD  DEF  DD    ");
+gStripRight(x);   /*  x = "    ABD  DEF  DD"    */
+@end group
+@end example
+@sp 1
+See also:  @code{StripLeft::String, StripCenter::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SubString}
+@deffn {SubString} SubString::String
+@sp 2
+@example
+@group
+so = gSubString(i, beg, num);
+
+object  i;
+int     beg, num;
+object  so;
+@end group
+@end example
+This method is used to create a new instance of the @code{String} class
+which is initialized to a copy of a sub-string of instance @code{i}.
+@code{beg} indicates the beginning position number of the string to be copied,
+index origin zero.  @code{num} is the number of characters to copy.
+
+If @code{beg} is negative, @code{beg} will be converted to a beginning point
+relative to the end of the string.  Therefore, a @code{-1} would indicate
+a starting point of the last character in the string and @code{-2} would
+indicate a starting point of the second to the last character in the string.
+Zero indicates to start at the beginning of the string.
+
+If @code{num} is negative, @code{-num} characters @emph{before} @code{beg}
+will be taken.
+
+The new @code{String} instance is returned.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World");
+y = gSubString(x, 1, 3);   /*  y = "ell"    */
+y = gSubString(x, -5, 5);  /*  y = "World"  */
+@end group
+@end example
+@sp 1
+See also:  @code{Take::String, Drop::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Take}
+@deffn {Take} Take::String
+@sp 2
+@example
+@group
+i = gTake(i, num);
+
+object  i;
+int     num;
+@end group
+@end example
+This method is used to change the length of the string associated with
+the @code{String} instance @code{i}.  @code{num} is the new length of
+the string.  If @code{num} is less than the previous length of the
+string, the string will be terminated to the shorter length.  If
+@code{num} is greater than the previous length, the string will be padded
+with spaces until it is @code{num} characters long.
+
+If @code{num} is negative, characters will be taken from the end of the
+string and padding will be performed at the beginning of the string.
+
+The modified @code{String} instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithStr(String, "Hello World");
+gTake(x, 4);   /*  x = "Hello"    */
+x = gNewWithStr(String, "Hello World");
+gTake(x, -4);   /*  x = "orld"    */
+x = gNewWithStr(String, "ABC");
+gTake(x, 5);   /*  x = "ABC  "    */
+x = gNewWithStr(String, "ABC");
+gTake(x, -5);   /*  x = "  ABC"    */
+@end group
+@end example
+@sp 1
+See also:  @code{Drop::String, SubString::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ToLower}
+@deffn {ToLower} ToLower::String
+@sp 2
+@example
+@group
+i = gToLower(i);
+
+object  i;
+@end group
+@end example
+This method is used to convert all the characters in @code{String}
+instance @code{i} to lower case.  Non-alphabetic characters are left
+unchanged.  The instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello World");
+gToLower(x);
+/*  x = "hello world"  */
+@end group
+@end example
+@sp 1
+See also:  @code{ToUpper::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ToUpper}
+@deffn {ToUpper} ToUpper::String
+@sp 2
+@example
+@group
+i = gToUpper(i);
+
+object  i;
+@end group
+@end example
+This method is used to convert all the characters in @code{String}
+instance @code{i} to upper case.  Non-alphabetic characters are left
+unchanged.  The instance passed is returned.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithStr(String, "Hello World");
+gToUpper(x);
+/*  x = "HELLO WORLD"  */
+@end group
+@end example
+@sp 1
+See also:  @code{ToLower::String}
+@end deffn
+
+
+
+

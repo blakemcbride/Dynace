@@ -1,0 +1,147 @@
+@c -*-texinfo-*-
+
+@c  Copyright (c) 1996 Blake McBride
+@c  All rights reserved.
+@c
+@c  Redistribution and use in source and binary forms, with or without
+@c  modification, are permitted provided that the following conditions are
+@c  met:
+@c
+@c  1. Redistributions of source code must retain the above copyright
+@c  notice, this list of conditions and the following disclaimer.
+@c
+@c  2. Redistributions in binary form must reproduce the above copyright
+@c  notice, this list of conditions and the following disclaimer in the
+@c  documentation and/or other materials provided with the distribution.
+@c
+@c  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+@c  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+@c  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@c  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+@c  HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+@c  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+@c  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+@c  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+@c  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+@c  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+@c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+@chapter Class Library Reference
+@pdfchapter{Class Library Reference}
+The Dynace class library is built on top of the Dynace kernel.  It
+provides a library of facilities which make the Dynace system useful to
+an application programmer.  It provides various data representational
+type classes which represent the normal C language data types such as
+short, long, double, pointer, etc.  It also provides new data type
+classes such as date.
+
+The class library also provides generic container type classes such as
+dictionaries and linked lists.  It also provides classes which implement
+the ability for Dynace to run multiple threads and for those threads to
+communicate and control each other.
+
+This chapter will discuss the structure and various facilities available in
+the Dynace class library.
+
+Note that most of the Dynace kernel will run independently of the Dynace class
+library.  The value of this is that should a programmer desire to create
+his own class library (to replace the included class library) he may
+build on top of the Dynace kernel just as the included library does.
+
+Note that the first argument to all class methods is always the
+associated class object and the first argument to all instance methods
+is always an instance of the associated class.  Therefore, documentation
+for the first argument of generics is not always given -- it's redundant.
+
+There is a naming convention used with Dynace generics.  All generics
+start with either a lower case ``g'' or ``v'', and are always
+followed by an upper case letter.  The ones which start with ``g'' are
+normal generics and may be treated like normal C functions.  The ones
+which begin with ``v'' use the variable argument facilities of C and
+you should, therefore, take a bit extra care when using them since
+there is no compile time argument checking being done with these functions.
+
+Since all generics start with either ``g'' or ``v'' and in order to
+avoid the difficulty associated with grouping all the generics under
+two letters, the first letter is dropped for indexing or heading
+purposes.  Therefore if you are looking up a generic, it will always
+appear in the index or header with its first letter missing.  The syntax
+description and example code, however, will show the entire name.
+
+
+
+
+
+@section Class Library Hierarchy
+@pdfsection{Class Library Hierarchy}
+This Dynace class library contains the following class hierarchy (which of
+course includes the hierarchy described in the Kernel Reference):
+
+@c @example
+@c @group
+@iftex
+@break
+
+@input classes1.tex
+
+
+@end iftex
+@c @end group
+@c @end example
+
+
+@include Array.tex
+@include Association.tex
+@include BitArray.tex
+@include BTree.tex
+@include BTreeNode.tex
+@include Character.tex
+@include CharacterArray.tex
+@include Constant.tex
+@include Date.tex
+@include DateTime.tex
+@include Dictionary.tex
+@include DoubleFloat.tex
+@include DoubleFloatArray.tex
+@include File.tex
+@include FindFile.tex
+@include FloatArray.tex
+@include IntegerArray.tex
+@include IntegerAssociation.tex
+@include IntegerDictionary.tex
+@include Link.tex
+@include LinkList.tex
+@include LinkObject.tex
+@include LinkObjectSequence.tex
+@include LinkSequence.tex
+@include LinkValue.tex
+@include LongArray.tex
+@include LongInteger.tex
+@include LookupKey.tex
+@include LowFile.tex
+@include Number.tex
+@include NumberArray.tex
+@include ObjectArray.tex
+@include ObjectAssociation.tex
+@include ObjectPool.tex
+@include Pipe.tex
+@include Pointer.tex
+@include PointerArray.tex
+@include PropertyList.tex
+@include Semaphore.tex
+@include Sequence.tex
+@include Set.tex
+@include SetSequence.tex
+@include ShortArray.tex
+@include ShortInteger.tex
+@include Socket.tex
+@include Stream.tex
+@include String.tex
+@include StringAssociation.tex
+@include StringDictionary.tex
+@include Thread.tex
+@include Time.tex
+@include UnsignedShortArray.tex
+@include UnsignedShortInteger.tex
+
+

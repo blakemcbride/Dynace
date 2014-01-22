@@ -1,0 +1,70 @@
+
+The following gives a basic outline of the sub-directory structure associated
+with the Dynace system.
+
+Assuming you are at the root of the Dynace distribution you should have
+the following sub-directories:
+
+
+Development Time - directories needed when developing apps with Dynace
+---------------------------------------------------------------------------
+bin		various executables associated with the system (such as the
+		Dynace pre-processor (dpp), and utilities to simulate unix
+		functionality under DOS/Windows such as make, cp, etc.)
+
+include		various include files required by the whole system
+
+lib		Dynace libraries
+
+
+
+Source code
+---------------------------------------------------------------------
+kernel		source code to the Dynace kernel
+
+class		source code to the Dynace class library
+
+threads		source code to the Thread, Pipe & Semaphore classes
+
+dpp		source code to the Dynace preprocessor
+
+generics	source code to build procedures used to build the master
+		(initial) Dynace generics files
+
+utils		source code to various utility programs
+
+Windows		source code to the WIN32 GUI development system which
+                also works under Linux/WINE
+
+ODBC		source code to an ODBC library
+
+cld		source to a GUI resource editor
+
+Java		source to a Java / Dynace interface
+
+OLE		Create and use Dynace objects transparently through OLE
+
+scheme		Runtime source files for the MzScheme / Dynace interface
+
+WDS		Driver program which allows you to write complete applications
+		making use of Dynace classes, GUI library, and ODBC interface
+		through Java or MzScheme.
+
+
+Documentation
+----------------------------------------------------------------------
+docs		various readme files to help orient a new user
+
+manual		various formats of the Dynace & WDS manuals (600+ pages!)
+		along with source to them.
+		See the PDF files in that directory for pre-made manuals.
+
+
+Examples
+----------------------------------------------------------------------
+examples	Dynace language examples and tutorial
+
+WinExam		GUI examples and tutorial
+
+
+

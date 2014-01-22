@@ -1,0 +1,297 @@
+@page
+
+@section FindFile Class
+@pdfsection{FindFile Class}
+The @code{FindFile} class is designed to provide a portable means of
+enumerating over the file names contained within a particular file
+system directory.  Currently, this class has only been ported to the DOS
+and all Windows environments.  There is no current support for Unix or
+Macintosh environments.
+
+
+
+
+@subsection FindFile Class Methods
+@pdfsubsection{FindFile Class Methods}
+The only class method used in this class is one to create instances of itself.
+
+
+
+
+
+@pdfsubsubsection {NewFindFile}
+@deffn {NewFindFile} NewFindFile::FindFile
+@sp 2
+@example
+@group
+i = gNewFindFile(FindFile, name, attr);
+
+char    *name;
+int     attr;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{FindFile} class.  Each
+such instance is initialized to enable the instance to enumerate through
+all the file names which meet a particular set of parameters.
+
+The @code{name} parameter is used to specify the pattern of the file name
+to be searched for.  This pattern may or may not contain a relative or
+absolute directory path but @emph{must} contain some wildcard
+characters (such as ``?'' and ``*'').
+
+The @code{attr} parameter is used to narrow the search to file names
+which contain certain attributes.  The list of available attribute
+type (which should be or'ed together) is as follows:
+@example
+@group
+FF_FILE                 include regular files
+FF_DIRECTORY            include directories
+
+FF_READWRITE            include files or directories in which
+                        you have read/write permission
+FF_READONLY             include files or directories in which
+                        you only have read permission
+
+FF_ARCHIVE_ONLY         don't include files/directories which
+                        don't have their archive bit set
+FF_HIDDEN               include hidden files
+FF_SYSTEM               include system files
+@end group
+@end example
+
+The new instance is returned.  
+@example
+@group
+@exdent Example:
+object  ff;
+char    *file;
+
+ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
+while (file = gNextFile(ff))  {
+        do something with file
+}
+gDispose(ff);
+@end group
+@end example
+@sp 1
+See also:  @code{NextFile::FindFile}
+@end deffn
+
+
+
+
+
+@subsection FindFile Instance Methods
+@pdfsubsection{FindFile Instance Methods}
+The instance methods associated with this class provide a means for
+sequentially enumerating through the selected file names and obtaining
+some degree of information associated with each particular file.
+
+
+
+
+@pdfsubsubsection {Attributes}
+@deffn {Attributes} Attributes::FindFile
+@sp 2
+@example
+@group
+attr = gAttributes(ff);
+
+object       ff;
+unsigned     attr;
+@end group
+@end example
+This method is used to obtain attribute information relating to the last
+selected file returned from @code{NextFile}.  The attribute flags are those
+defined under @code{NewFindFile}.  If no valid file has been returned from
+@code{NextFile} this function simply returns 0.
+@example
+@group
+@exdent Example:
+object    ff;
+char     *file;
+unsigned  attr;
+
+ff = gNewFindFile(FindFile, "*.*",
+                  FF_FILE | FF_DIRECTORY | FF_READWRITE);
+while (file = gNextFile(ff))  {
+        attr = gAttributes(ff);
+        if (attr & FF_DIRECTORY)
+                handle a directory
+        else if (attr & FF_FILE)
+                handle a file
+}
+gDispose(ff);
+@end group
+@end example
+@sp 1
+See also:  @code{NewFindFile::FindFile, NextFile::FindFile,}
+@hfil @break @hglue .64in      @code{WriteTime::FindFile}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Length}
+@deffn {Length} Length::FindFile
+@sp 2
+@example
+@group
+len = gLength(ff);
+
+object  ff;
+long    len;
+@end group
+@end example
+This method is used to obtain the length or size (in bytes) of the file
+relating to the last selected file returned from @code{NextFile}.  If
+no valid file has been returned from @code{NextFile} this function
+simply returns -1.
+@example
+@group
+@exdent Example:
+object  ff;
+char    *file;
+long    len;
+
+ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
+while (file = gNextFile(ff))  {
+        len = gLength(ff);
+}
+gDispose(ff);
+@end group
+@end example
+@sp 1
+See also:  @code{Attributes::FindFile, NextFile::FindFile}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::FindFile
+@sp 2
+@example
+@group
+nam = gName(ff);
+
+object  ff;
+char    *nam;
+@end group
+@end example
+This method is used to obtain the name of the last file found via
+@code{NextFile}.  It will be the same name as returned from
+@code{NextFile}.  If no valid file has been returned from
+@code{NextFile} this function simply returns @code{NULL}.
+@example
+@group
+@exdent Example:
+object  ff;
+char   *file;
+
+ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
+while (gNextFile(ff))  {
+        file = gName(ff);
+}
+gDispose(ff);
+@end group
+@end example
+@sp 1
+See also:  @code{NextFile::FindFile}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NextFile}
+@deffn {NextFile} NextFile::FindFile
+@sp 2
+@example
+@group
+nam = gNextFile(ff);
+
+object  ff;
+char   *nam;
+@end group
+@end example
+This method is used to obtain the next file name in the sequential list
+specified when using @code{NewFindFile}.  It also changes the context
+associated with the object @code{ff} such that all other methods
+operated on @code{ff} will refer to the file returned in the last call
+to this method.  In spite of the name of this method, it is also used
+to obtain the first file name in the list, therefore, this method must
+be called prior to any other method on @code{ff} in order to obtain
+the first file context.
+
+This method returns the name of the file associated with the file
+context this method establishes.  If there is no first file or
+additional files this method returns @code{NULL}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewFindFirst::FindFile}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {WriteTime}
+@deffn {WriteTime} WriteTime::FindFile
+@sp 2
+@example
+@group
+tim = gWriteTime(ff);
+
+object  ff;
+long    tim;
+@end group
+@end example
+This method is used to obtain the date and time the file associated
+with the @code{ff} context was last written to.  The value returned
+can be typecast to the common @code{time_t} type and represents the
+number of seconds past some date like 1970.  If no valid file
+context was setup via @code{NextFile}, this method returns -1.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Attributes::FindFile, NextFile::FindFile}
+@end deffn
+
+
+
+
+
+
+

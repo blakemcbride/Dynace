@@ -1,0 +1,102 @@
+
+
+#include "generics.h"
+#include "resource.h"
+
+static	long	file_report(object wind, unsigned id);
+static	long	file_exit(object wind, unsigned id);
+
+int	start()
+{
+	object	win;
+	char	title[80];
+
+	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	win = vNew(MainWindow, title);
+
+	mLoadIcon(win, ALGOCORP_ICON);
+
+	mLoadMenu(win, IDR_MENU1);
+	mAssociate(win, ID_FILE_REPORT, file_report);
+	mAssociate(win, ID_FILE_EXIT, file_exit);
+
+	return gProcessMessages(win);
+}
+
+/*  This next function is used to hold all the ouput requests such that
+    if the report gets aborted everything will be handled correctly.
+    Notice how each output call is able to signal if the user has aborted
+    the report and the output is discontinued (via the return statement)  */
+
+static	void	report_output(object pntr)
+{
+	/*  First output a group of lines to demonstrate positioning.
+	    Note that the scaling factor may be changed via gSetScale::Printer
+	*/
+
+	if (!gTextOut(pntr, 0, 0, "Line 0"))
+		return;
+	if (!gTextOut(pntr, 1, 0, "Line 1"))
+		return;
+	if (!gTextOut(pntr, 2, 0, "Line 2"))
+		return;
+	if (!gTextOut(pntr, 64, 40, "Line 64"))
+		return;
+
+	/*  As demonstrated by the next two expressions, output does not have
+	    to be in any particular order.  */
+
+	if (!gTextOut(pntr, 66, 40, "Line 66"))
+		return;
+	if (!gTextOut(pntr, 65, 40, "Line 65"))
+		return;
+
+	/*  In addition to positioned output, WDS supports good old puts()
+	    and printf() type output.  Note that this type of output always
+	    starts at the top of the page and continues without regard for
+	    any positioned output.  */
+
+	if (-1 == gPuts(pntr, "\n\n\n\n\n\nThis is a gPuts line of output.\n"))
+		return;
+	if (-1 == vPrintf(pntr, "\nColby is %d years old.\n", 8))
+		return;
+
+	/*  This next call causes the current page to be marked as complete
+	    and a new page will be made available.  If there was no ouput
+	    performed on the page,  this call will do nothing.  This
+	    function is automatically called when the printer object is
+	    disposed,  so any output on the last page will never be lost.  */
+
+	if (!gNewPage(pntr))
+		return;
+
+	/*  Output to the next page.  */
+
+	if (!gTextOut(pntr, 33, 40, "Second Page of Output!"))
+		return;
+}
+
+static	long	file_report(object wind, unsigned id)
+{
+	object	pntr;
+
+	/*  We are going back to just using the default printer.  */
+
+	pntr = gOpenDefault(Printer, wind, "My Test Output");
+	if (!pntr)
+		return 0L;
+
+	/*  Group our output requests into a seperate function  */
+
+	report_output(pntr);
+
+	gDispose(pntr);
+
+	return 0L;
+}
+
+static	long	file_exit(object wind, unsigned id)
+{
+	gQuitApplication(Application, 0);
+	return 0L;
+}

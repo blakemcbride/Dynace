@@ -1,0 +1,115 @@
+@page
+
+@section LinkSequence Class
+@pdfsection{LinkSequence Class}
+This class is a subclass of @code{Sequence} and is used to provide a
+mechanism to enumerate through all the links in a linked list structure
+without effecting the structure.
+
+The linked list structure is usually represented by instances of the
+@code{LinkList} or @code{LinkObject} classes.  Typically, instance
+methods of these classes are used to create the instances of the
+@code{LinkSequence} class.  These methods have names which begin with
+@code{Sequence}.
+
+
+
+@subsection LinkSequence Class Methods
+@pdfsubsection{LinkSequence Class Methods}
+There is only one class method associated with this class.  It is used
+to create new instances of itself and is normally only called by
+sequence methods associated with the @code{LinkList} or @code{LinkObject}
+classes.
+
+
+
+
+
+@pdfsubsubsection {NewWithObj}
+@deffn {NewWithObj} NewWithObj::LinkSequence
+@sp 2
+@example
+@group
+i = gNewWithObj(LinkSequence, lnk);
+
+object  lnk;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{LinkSequence} class.
+It is normally only called by sequence methods associated with the
+@code{LinkList} or @code{LinkObject} classes.  @code{lnk} is the first
+link in the list, and @code{i} is the sequence instance.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Next::LinkSequence, Sequence::LinkList}
+@end deffn
+
+
+
+
+@subsection LinkSequence Instance Methods
+@pdfsubsection{LinkSequence Instance Methods}
+This class only has a single instance method which is used to enumerate
+through links on a list.
+
+
+
+
+
+
+@pdfsubsubsection {Next}
+@deffn {Next} Next::LinkSequence
+@sp 2
+@example
+@group
+lnk = gNext(i);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to enumerate through the links on a linked list.
+Each time @code{Next} is called the following link on the linked list
+is returned.  It does this in a non-destructive way so the associated
+linked list is not effected.
+
+When @code{Next} is called after the last link has been returned (or
+if there are no links on the list) it will return @code{NULL} and
+automatically dispose of the sequence object @code{i}.  Therefore,
+the only time @code{Dispose} would be needed (if the garbage collector
+weren't being used) would be if the entire list was not enumerated.
+@example
+@group
+@exdent Example:
+
+object  ll;  /*  linked list    */
+object  s;   /*  link sequence  */
+object  lnk; /*  one link       */
+
+/*  ll must be initialized previously  */
+
+for (s=gSequence(ll) ; lnk = gNext(s) ; )  @{
+        /*  do something with link lnk  */
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{Sequence::LinkList, SequenceLinks::LinkObject}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+

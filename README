@@ -1,0 +1,88 @@
+
+This is the Dynace Object Oriented Extension to C.
+
+It contains the following enhancements over the previous releases:
+
+	Changed the system to the FreeBSD license
+
+
+It contains the following enhancements over the previous releases:
+
+	The GUI and ODBC libraries have been released
+	The source code to the manuals has been released
+	The entire GUI system has been ported to Linux via WINE
+
+	Added support for Microsoft C 2003 (VC7, or ver 13)
+	Added support for Microsoft C 2005 (VC8, or ver 14)
+	Added support for Microsoft C 2008
+	Update support to latest GNU compiler under Linux
+	Added the following classes:
+
+		Exception handling classes
+			Abort
+			Condition
+			Error
+			Restart
+			SeriousCondition
+			SimpleRestart
+			SimpleWarning
+			Warning
+		XML DOM & XPath Support
+		WeakPointer
+		ObjectPool
+		Mime handling
+
+	Dynace also runs under Cygwin, VC 6.0, and many other
+	environments
+
+Although I don't believe it is documented, in addition to cooperative
+threads, Dynace supports native threads under Win32 and could easily
+be enhanced to support Posix threads.
+
+There are two shortcomings as we speak.  First, the manual was
+complete with the last release but hasn't been updated with the new
+classes yet, although there have been enhancements made to it.  The
+GUI library (WDS) has been out of date for years.
+
+Second, I have built Dynace under 64 bit Linux and ran several tests
+which ran fine (after I made a few changes).  So, the system builds
+and runs under 64 bit Linux but hasn't been well tested.  However,
+there are no known 64 bit bugs in it nor am I aware of the likelyhood
+of bugs.
+
+BTW, this system is very well tested and used in large development
+shops with many developers every day for the last ten years.  It is
+rock solid and, IMO, a valuable tool.
+
+Dynace is still open source.  I closed down my old Algorithms company
+so I changed the copyrights to my name.
+
+See docs\DESCRIBE.txt for a basic description of the system.
+
+See docs\INSTALL.txt for installation instructions.
+
+See docs\ORIENT.txt for a description of the components and their
+location.
+
+See docs\BUILD.txt for instructions on building the system.
+
+Please see docs\LICENSE.txt for licensing information.
+
+Once the system is installed see docs\INDEX.txt for a description of
+included documentation files.
+
+I am:
+
+	Blake McBride
+	4535 Scenic Hills Lane
+	Franklin, TN 37064
+	USA
+
+	e-mail:  blake@mcbride.name
+
+Software download area:
+
+	http://blake.mcbride.name
+
+
+

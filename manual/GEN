@@ -1,0 +1,15 @@
+
+dvips $1 -r -B
+gs2 $1
+mv $1.jep $1.1
+echo Side 1 done.
+
+dvips $1 -A
+gs2 $1
+hp-rotate <$1.jep >$1.2
+rm $1.jep
+echo Side 2 done.
+
+dvips $1
+echo Postscript file done.
+

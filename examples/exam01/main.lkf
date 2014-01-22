@@ -1,0 +1,16 @@
+#	LINK COMMAND FILE FOR DEMO PROGRAM for 68HC12A4
+#	Copyright (c) 1995 by COSMIC Software
+#
++seg .text -b 0xe000 -n.text	# program start address
++seg .const -a.text
++seg .bsct -b 0x0 	# zero page start address
++seg .data -b 0x2000	# data start address
+main.o
+d:/cx/dynace/lib/dynace.h11
+d:/cx/lib/libf.h11
+d:/cx/lib/libi.h11	# C library (if needed)
+d:/cx/lib/libm.h11	# machine library
+d:/cx/lib/crts.h11	# startup code
++def __idesc=@.text
++def __memory=@.bss	# symbol used by library
++def __stack=0x2FFE	# stack pointer value

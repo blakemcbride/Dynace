@@ -1,0 +1,857 @@
+@page
+
+@section BTree Class
+@pdfsection{BTree Class}
+The @code{BTree} class provides a means to hold a group of key / value
+pairs in a collection.  Objects in a @code{BTree} collection can then be
+rapidly accessed arbitrarily (as in hash tables) as well as retrieved in
+a specific sequence (as in an ordered linked lists).  Keys and values
+may be arbitrary Dynace objects.
+
+It is important that the key objects correctly respond to @code{gCopy}
+and @code{gDeepCopy} because copies of the keys are used within the key
+structure.
+
+@subsection BTree Class Methods
+@pdfsubsection{BTree Class Methods}
+The only class method used in this class is one to create instances of itself.
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::BTree
+@sp 2
+@example
+@group
+bt = gNew(BTree);
+
+object  bt;
+@end group
+@end example
+This class method creates instances of the @code{BTree} class. 
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+@subsection BTree Instance Methods
+@pdfsubsection{BTree Instance Methods}
+The instance methods associated with this class are used to add, remove,
+and retrieve key / value pairs.
+
+
+
+
+
+@pdfsubsubsection {AddValue}
+@deffn {AddValue} AddValue::BTree
+@sp 2
+@example
+@group
+old = gAddValue(bt, key, val);
+
+object  bt;
+object  key;
+object  val;
+object  old;
+@end group
+@end example
+This method is used to add an arbitrary key / value pair to BTree
+@code{bt}.  Both @code{key} and @code{val} may be arbitrary Dynace
+objects.
+
+By default the built in generic @code{gCompare} is used for all key comparisons.
+This may be over written via @code{gSetFunction::BTree}.
+
+Each key added to a particular @code{BTree} must be unique
+(i.e. duplicate keys are not allowed).
+
+@code{AddValue} normally returns @code{NULL}.  However, if @code{NULL}
+is not returned then it means that the key / value pair just added
+replaced a similar key / value pair.  In that case the old value
+associated with the key will be returned and the old key object will
+still be used.  This will normally mean you will have to dispose of
+the old value returned and your new key (since the old one was used).
+@example
+@group
+@exdent Example:
+
+object  key = gNewWithStr(String, "My Key");
+object  val = gNewWithStr(String, "My Value");
+object  old = gAddValue(bt, key, val);
+if (old) @{
+        gDispose(key);
+        gDispose(old);
+@}
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::BTree
+@sp 2
+@example
+@group
+r = gDeepDispose(bt);
+
+object  bt;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to @code{DeepDispose} all key / value pairs
+associated with the @code{BTree} and then dispose of @code{bt} itself.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::BTree, DeepDisposeAllNodes::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeAllNodes}
+@deffn {DeepDisposeAllNodes} DeepDisposeAllNodes::BTree
+@sp 2
+@example
+@group
+r = gDeepDisposeAllNodes(bt);
+
+object  bt;
+object  r;
+@end group
+@end example
+This method is used to @code{DeepDispose} all key / value pairs
+associated with the @code{BTree} without disposing of @code{bt} itself.
+The @code{BTree} object passed is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::BTree, DeepDispose::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeObj}
+@deffn {DeepDisposeObj} DeepDisposeObj::BTree
+@sp 2
+@example
+@group
+r = gDeepDisposeObj(bt, key);
+
+object  bt;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to @code{DeepDispose} a specific key / value pair
+associated with the @code{BTree}.  The key / value pair is determined by
+@code{key}.  If the key / value pair was found and removed,
+@code{gDeepDisposeObj} will return non-@code{NULL}.  If the key was not
+found then @code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeObj::BTree, DeepDisposeAllNodes::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::BTree
+@sp 2
+@example
+@group
+r = gDispose(bt);
+
+object  bt;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to @code{Dispose} of the @code{BTree} object without
+disposing of all of the key / value pairs.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::BTree, DisposeAllNodes::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::BTree
+@sp 2
+@example
+@group
+r = gDisposeAllNodes(bt);
+
+object  bt;
+object  r;
+@end group
+@end example
+This method is used to disassociate all key / value pairs from the given
+@code{BTree}.  Neither the keys, values, nor @code{bt} are disposed.  The
+@code{BTree} object passed is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::BTree, DisposeAllNodes::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeObj}
+@deffn {DisposeObj} DisposeObj::BTree
+@sp 2
+@example
+@group
+r = gDisposeObj(bt, key);
+
+object  bt;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to disassociate (not dispose) a specific key / value
+pair from the @code{BTree}.  The key / value pair is determined by
+@code{key}.  If the key / value pair was found and removed,
+@code{gDisposeObj} will return non-@code{NULL}.  If the key was not
+found then @code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeObj::BTree, DisposeAllNodes::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindEQ}
+@deffn {FindEQ} FindEQ::BTree
+@sp 2
+@example
+@group
+val = gFindEQ(bt, key, fkey);
+
+object  bt;
+object  key;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the value associated with a given key.
+The object associated with a key which compares equally with @code{key}
+is returned.  If none is found @code{NULL} is returned.
+
+@code{fkey} points to a location which will receive the actual key
+object found.  @code{fkey} may be @code{NULL} in which case that
+argument will not be used.
+@example
+@group
+@exdent Example:
+
+object  fkey;
+object  key = ...;
+object  val = gFindEQ(bt, key, &fkey);
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindNext::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindFirst}
+@deffn {FindFirst} FindFirst::BTree
+@sp 2
+@example
+@group
+val = gFindFirst(bt, fkey);
+
+object  bt;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the first key / value pair.  If no key
+value pairs exist @code{NULL} is returned.
+
+@code{fkey} will be updated to point to the key associated to the value
+returned.  It may be used on subsequent calls to @code{gFindNext}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddValue::BTree, FindNext::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindGE}
+@deffn {FindGE} FindGE::BTree
+@sp 2
+@example
+@group
+val = gFindGE(bt, key, fkey);
+
+object  bt;
+object  key;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the value associated with a given key.
+The object associated with a key which compares greater than or equal to
+@code{key} is returned.  If none is found @code{NULL} is returned.
+
+@code{fkey} points to a location which will receive the actual key
+object found.  @code{fkey} may be @code{NULL} in which case that
+argument will not be used.
+@example
+@group
+@exdent Example:
+
+object  fkey;
+object  key = ...;
+object  val = gFindGE(bt, key, &fkey);
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindNext::BTree}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {FindGT}
+@deffn {FindGT} FindGT::BTree
+@sp 2
+@example
+@group
+val = gFindGT(bt, key, fkey);
+
+object  bt;
+object  key;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the value associated with a given key.
+The object associated with a key which compares strictly greater than
+@code{key} is returned.  If none is found @code{NULL} is returned.
+
+@code{fkey} points to a location which will receive the actual key
+object found.  @code{fkey} may be @code{NULL} in which case that
+argument will not be used.
+@example
+@group
+@exdent Example:
+
+object  fkey;
+object  key = ...;
+object  val = gFindGT(bt, key, &fkey);
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindNext::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindLast}
+@deffn {FindLast} FindLast::BTree
+@sp 2
+@example
+@group
+val = gFindLast(bt, fkey);
+
+object  bt;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the last key / value pair.  If no key
+value pairs exist @code{NULL} is returned.
+
+@code{fkey} will be updated to point to the key associated to the value
+returned.  It may be used on subsequent calls to @code{gFindPrev}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddValue::BTree, FindPrev::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindLE}
+@deffn {FindLE} FindLE::BTree
+@sp 2
+@example
+@group
+val = gFindLE(bt, key, fkey);
+
+object  bt;
+object  key;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the value associated with a given key.
+The object associated with a key which compares less than or equal to
+@code{key} is returned.  If none is found @code{NULL} is returned.
+
+@code{fkey} points to a location which will receive the actual key
+object found.  @code{fkey} may be @code{NULL} in which case that
+argument will not be used.
+@example
+@group
+@exdent Example:
+
+object  fkey;
+object  key = ...;
+object  val = gFindLE(bt, key, &fkey);
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindPrev::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindLT}
+@deffn {FindLT} FindLT::BTree
+@sp 2
+@example
+@group
+val = gFindLT(bt, key, fkey);
+
+object  bt;
+object  key;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve the value associated with a given key.
+The object associated with a key which compares strictly less than
+@code{key} is returned.  If none is found @code{NULL} is returned.
+
+@code{fkey} points to a location which will receive the actual key
+object found.  @code{fkey} may be @code{NULL} in which case that
+argument will not be used.
+@example
+@group
+@exdent Example:
+
+object  fkey;
+object  key = ...;
+object  val = gFindLT(bt, key, &fkey);
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindPrev::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindNext}
+@deffn {FindNext} FindNext::BTree
+@sp 2
+@example
+@group
+val = gFindNext(bt, fkey);
+
+object  bt;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve a key / value pair which comes
+immediately after the key pointed to by @code{fkey}.  If @code{fkey}
+points to @code{NULL} than the first key / value pair is retrieved.  If
+none is found @code{NULL} is returned.
+
+@code{fkey} will be updated to point to the key associated to the value
+returned.  It may be used on subsequent calls to @code{gFindNext}.
+@example
+@group
+@exdent Example:
+
+object  fkey = NULL;
+object  val;
+
+while (val = gFindNext(bt, &fkey))
+     do whatever;
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindPrev::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindPrev}
+@deffn {FindPrev} FindPrev::BTree
+@sp 2
+@example
+@group
+val = gFindPrev(bt, fkey);
+
+object  bt;
+object  *fkey;
+object  val;
+@end group
+@end example
+This method is used to retrieve a key / value pair which comes
+immediately before the key pointed to by @code{fkey}.  If @code{fkey}
+points to @code{NULL} than the last key / value pair is retrieved.  If
+none is found @code{NULL} is returned.
+
+@code{fkey} will be updated to point to the key associated to the value
+returned.  It may be used on subsequent calls to @code{gFindPrev}.
+@example
+@group
+@exdent Example:
+
+object  fkey = NULL;
+object  val;
+
+while (val = gFindPrev(bt, &fkey))
+     do whatever;
+@end group
+@end example
+@sp 1
+See also:  @code{AddValue::BTree, FindNext::BTree}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SetFunction}
+@deffn {SetFunction} SetFunction::BTree
+@sp 2
+@example
+@group
+f = gSetFunction(bt, fun);
+
+object  bt;
+int     (*fun)(object, object);
+object  (*f)();
+@end group
+@end example
+Normally, the @code{BTree} class uses the generic function
+@code{gCompare} for all its key comparisons.  With @code{gSetFunction}
+you may override this behavior and specify an alternative generic (or
+regular C) function to call.  See @code{Compare::String} for details
+on the semantics of that function.
+
+@code{gSetFunction} returns the previous compare function set.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddValue::BTree, Compare::String}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::BTree
+@sp 2
+@example
+@group
+n = gSize(bt);
+
+object  bt;
+int     n;
+@end group
+@end example
+This method is used to obtain the number of key / value pairs associated
+with @code{bt}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

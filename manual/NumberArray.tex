@@ -1,0 +1,670 @@
+@page
+
+@section NumberArray Class
+@pdfsection{NumberArray Class}
+The @code{NumberArray} class, which is a subclass of @code{Array}, is an
+abstract class used to combine common functionality of numeric arrays.
+Although most of the functionality is actually implemented in the
+subclasses of the @code{NumberArray} class, they are documented here
+because of their common interface.
+
+
+@subsection NumberArray Class Methods
+@pdfsubsection{NumberArray Class Methods}
+The only class method associated with this class is the @code{New} method
+which is used to create new instances of numeric arrays.  This method
+is actually implemented by subclasses of @code{NumberArray}.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::NumberArray
+@sp 2
+@example
+@group
+ary = vNew(cls, rnk, ...)
+
+object    cls, ary;
+unsigned  rnk, ...
+@end group
+@end example
+This class method is used to create a new numeric array.  This method
+is actually implemented by and should only be used with subclasses of
+the @code{NumberArray} class.  It is documented here because it is the
+same for all subclasses of the @code{NumberArray} class.
+
+@code{cls} would be one of the subclasses of the @code{NumberArray}
+class (such as @hfil @break @code{CharacterArray} @code{ShortArray}
+@code{UnsignedShortArray} @code{LongArray} @code{FloatArray} or
+@code{DoubleFloatArray}).  This will indicate the type of array to be
+created.
+
+@code{rnk} is the number of dimensions the new array should have.
+The remaining arguments (each of type unsigned) indicates the size of
+each consecutive dimension.  Note that the number of arguments following
+@code{rnk} @emph{must} be the same as the value in @code{rnk}.
+
+@code{ary} is the new array object created and will be initialized to all
+zeros.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(DoubleFloatArray, 2, 5, 4);
+/*  ary is a 5x4 double matrix  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+@subsection NumberArray Instance Methods
+@pdfsubsection{NumberArray Instance Methods}
+The instance methods associated with this class are actually implemented
+by subclasses of @code{NumberArray}.  They are documented here because
+of their common interface with all subclasses of @code{NumberArray}.
+
+Regardless of the array type, each subclass of @code{NumberArray}
+implements a full complement of methods necessary to deal with all C
+language data types.  In all cases, if the value being stored into an
+array is not the same as the array, the value being stored will be
+converted to the correct type prior to the assignment.  Also, if the
+desired return type is not the same as the array type, the returned
+value will be converted.  The type of the array will remain unchanged.
+This naturally means that if you store the number 3.141 into an element
+of a @code{ShortArray} you will only get 3.0 when attempting to get
+back a @code{double} value.
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeCharValue}
+@deffn {ChangeCharValue} ChangeCharValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeCharValue(ary, val, ...);
+
+object    ary;
+int       val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+array @code{ary} which should be an instance of a subclass of
+@code{NumberArray}.
+
+@code{val} is the value which the element of the array should be changed
+to.  The reason it is of type @code{int} is because C promotes @code{char}
+to @code{int} when variable arguments are used.
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the type of @code{ary}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(CharacterArray, 2, 5, 4);
+vChangeCharValue(ary, 'C', 1, 2);
+/*  ary[1][2] <- 'C'  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
+@hfil @break @hglue .64in @code{ChangeCharValue::NumberArray}  ...
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeDoubleValue}
+@deffn {ChangeDoubleValue} ChangeDoubleValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeDoubleValue(ary, val, ...);
+
+object    ary;
+double    val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+array @code{ary} which should be an instance of a subclass of
+@code{NumberArray}.  This method should also be used for
+arrays of type @code{FloatArray}.
+
+@code{val} is the value which the element of the array should be changed
+to.  
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the type of @code{ary}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(DoubleFloatArray, 2, 5, 4);
+vChangeDoubleValue(ary, 3.141, 1, 2);
+/*  ary[1][2] <- 3.141  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ChangeCharValue::NumberArray,}
+@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeLongValue}
+@deffn {ChangeLongValue} ChangeLongValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeLongValue(ary, val, ...);
+
+object    ary;
+long      val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+array @code{ary} which should be an instance of a subclass of
+@code{NumberArray}.
+
+@code{val} is the value which the element of the array should be changed
+to.  
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the type of @code{ary}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(LongArray, 2, 5, 4);
+vChangeLongValue(ary, 27L, 1, 2);
+/*  ary[1][2] <- 27L  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
+@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeShortValue}
+@deffn {ChangeShortValue} ChangeShortValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeShortValue(ary, val, ...);
+
+object    ary;
+int       val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+array @code{ary} which should be an instance of a subclass of
+@code{NumberArray}.
+
+@code{val} is the value which the element of the array should be changed
+to.  The reason it is of type @code{int} is because C promotes @code{short}
+to @code{int} when variable arguments are used.
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the type of @code{ary}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(ShortArray, 2, 5, 4);
+vChangeShortValue(ary, 27, 1, 2);
+/*  ary[1][2] <- 27  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
+@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeUShortValue}
+@deffn {ChangeUShortValue} ChangeUShortValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeUShortValue(ary, val, ...);
+
+object    ary;
+unsigned  val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+array @code{ary} which should be an instance of a subclass of
+@code{NumberArray}.
+
+@code{val} is the value which the element of the array should be changed
+to.  The reason it is of type @code{unsigned} is because C promotes
+@code{unsigned short} to @code{unsigned} when variable arguments are used.
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the type of @code{ary}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(UnsignedShortArray, 2, 5, 4);
+vChangeUShortValue(ary, 27U, 1, 2);
+/*  ary[1][2] <- 27U  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
+@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::NumberArray
+@sp 2
+@example
+@group
+ary = vChangeValue(ary, val, ...);
+
+object    ary;
+object    val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of array @code{ary}
+which should be an instance of a subclass of @code{NumberArray}.
+
+@code{val} should be an instance of the @code{Number} class and is the
+value which the element of the array should be changed to.
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+If @code{ary} and @code{val} do not represent the same types, normal
+data type conversion will take place during the assignment without
+changing the types of @code{ary} or @code{val}.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+object  v;
+
+ary = vNew(DoubleFloatArray, 2, 5, 4);
+v = gNewWithDouble(Double, 3.141);
+vChangeValue(ary, v, 1, 2);
+/*  ary[1][2] <- 3.141  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeDoubleValue::NumberArray,}
+@hfil @break @hglue .64in      @code{ChangeCharValue::NumberArray  ...}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {CharValue}
+@deffn {CharValue} CharValue::NumberArray
+@sp 2
+@example
+@group
+v = vCharValue(ary, ...);
+
+object    ary;
+unsigned  ...
+char      v;
+@end group
+@end example
+This method is used to obtain the @code{char} value associated with a
+particular element of an instance of a subclass of the
+@code{NumberArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns a @code{char}.  If the instance does not represent
+an instance of the @code{CharacterArray} class, the returned value of
+whatever is represented will be converted to a @code{char}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+char    v;
+
+ary = vNew(CharacterArray, 2, 5, 4);
+v = vCharValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeCharValue::NumberArray}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DoubleValue}
+@deffn {DoubleValue} DoubleValue::NumberArray
+@sp 2
+@example
+@group
+v = vDoubleValue(ary, ...);
+
+object    ary;
+unsigned  ...
+double    v;
+@end group
+@end example
+This method is used to obtain the @code{double} value associated with a
+particular element of an instance of a subclass of the
+@code{NumberArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns a @code{double}.  If the instance does not represent
+an instance of the @code{DoubleFloatArray} class, the returned value of
+whatever is represented will be converted to a @code{double}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+double  v;
+
+ary = vNew(DoubleFloatArray, 2, 5, 4);
+v = vDoubleValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeDoubleValue::NumberArray}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {LongValue}
+@deffn {LongValue} LongValue::NumberArray
+@sp 2
+@example
+@group
+v = vLongValue(ary, ...);
+
+object    ary;
+unsigned  ...
+long      v;
+@end group
+@end example
+This method is used to obtain the @code{long} value associated with a
+particular element of an instance of a subclass of the
+@code{NumberArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns a @code{long}.  If the instance does not represent
+an instance of the @code{LongArray} class, the returned value of
+whatever is represented will be converted to a @code{long}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+long    v;
+
+ary = vNew(LongArray, 2, 5, 4);
+v = vLongValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeLongValue::NumberArray}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ShortValue}
+@deffn {ShortValue} ShortValue::NumberArray
+@sp 2
+@example
+@group
+v = vShortValue(ary, ...);
+
+object    ary;
+unsigned  ...
+short     v;
+@end group
+@end example
+This method is used to obtain the @code{short} value associated with a
+particular element of an instance of a subclass of the
+@code{NumberArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns a @code{short}.  If the instance does not represent
+an instance of the @code{ShortArray} class, the returned value of
+whatever is represented will be converted to a @code{short}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+short   v;
+
+ary = vNew(ShortArray, 2, 5, 4);
+v = vShortValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeShortValue::NumberArray}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {UnsignedShortValue}
+@deffn {UnsignedShortValue} UnsignedShortValue::NumberArray
+@sp 2
+@example
+@group
+v = vUnsignedShortValue(ary, ...);
+
+object    ary;
+unsigned  ...
+unsigned short     v;
+@end group
+@end example
+This method is used to obtain the @code{unsigned short} value associated with a
+particular element of an instance of a subclass of the
+@code{NumberArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns an @code{unsigned short}.  If the instance does not represent
+an instance of the @code{UnsignedShortArray} class, the returned value of
+whatever is represented will be converted to a @code{unsigned short}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+unsigned short   v;
+
+ary = vNew(UnsignedShortArray, 2, 5, 4);
+v = vUnsignedShortValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeUShortValue::NumberArray}
+@end deffn
+
+
+
+

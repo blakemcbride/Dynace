@@ -1,0 +1,10 @@
+//  Dynace jumpto.s for GNU C compiler (gcc) on sparc machines
+gcc2_compiled.:
+___gnu_compiled_c:
+.text
+	.align 4
+	.global __jumpToMethod
+	.proc	020
+__jumpToMethod:
+	jmp %o0
+	restore

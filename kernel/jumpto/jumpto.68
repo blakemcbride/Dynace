@@ -1,0 +1,13 @@
+//	Dynace jumpto.s for GNU C compiler (gcc) on 680x0
+//	by Mike Powell, Sony Electronics Inc.
+//	written to run on NEXT hardware but should be portable
+	.file	"jumpto.c"
+.text
+	.align 1
+.globl __jumpToMethod
+__jumpToMethod:
+	movel sp@(4),d0
+	unlk a6
+	movel d0,sp@-
+	rts
+

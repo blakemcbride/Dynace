@@ -1,0 +1,10 @@
+
+
+This example demonstrates the creation, use and disposal of aditional
+simple objects.
+
+Notice how the same local variable can be used to represent arbitrary
+objects.  Also note how all the basic classes have similar interfaces.
+
+
+(To build see the readme file in the first example.)

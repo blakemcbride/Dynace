@@ -1,0 +1,2 @@
+(read-case-sensitive #t)
+

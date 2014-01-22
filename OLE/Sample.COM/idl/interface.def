@@ -1,0 +1,11 @@
+
+LIBRARY		interface
+DESCRIPTION	'IBlake interface'
+
+CODE		PRELOAD DISCARDABLE
+DATA		PRELOAD SINGLE
+
+EXPORTS
+		DllGetClassObject	@2
+		DllCanUnloadNow		@3
+		GetProxyDllInfo		@4

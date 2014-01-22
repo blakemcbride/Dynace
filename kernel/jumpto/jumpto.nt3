@@ -1,0 +1,19 @@
+/*
+	jumpto for the following environment
+	
+	OS:  NT 3.5 SP 2
+	Compiler: Microsoft Visual C++ 2.1
+	Copmiler options:  /YX /Od /Gfs
+	                   /YX /Od /Gf
+	                   
+*/
+
+__declspec(naked) void	_jumpToMethod(void (*function) (/* ??? */))
+{
+	__asm  {
+		mov	esp,ebp
+		pop	ebp
+		jmp	dword ptr [esp-20]
+	}
+ }
+ 

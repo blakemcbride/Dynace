@@ -1,0 +1,145 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+ID_MAIN_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Tables"
+    BEGIN
+        MENUITEM "&Create Table",               ID_TAB_CREATE
+        MENUITEM "&Delete Table",               ID_TAB_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "List All Tables",             ID_LIST_TABLES
+        MENUITEM SEPARATOR
+        MENUITEM "&Exit",                       ID_EXIT
+    END
+    POPUP "&Records"
+    BEGIN
+        MENUITEM "&Add",                        ID_REC_ADD
+        MENUITEM "&List",                       ID_REC_LIST
+        MENUITEM "&Change",                     ID_REC_CHANGE
+        MENUITEM "Delete &One",                 ID_REC_DELONE
+        MENUITEM "Dialog",                      ID_REC_DIALOG
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ALGOCORP_ICON           ICON    DISCARDABLE     "algocorp.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG DIALOG DISCARDABLE  0, 0, 267, 160
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,105,133,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,27,133,50,14
+    EDITTEXT        IDC_FNAME,121,22,116,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LNAME,121,49,116,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_AGE,121,76,116,15,ES_AUTOHSCROLL
+    RTEXT           "First Name",IDC_STATIC,51,24,58,10
+    RTEXT           "Last Name",IDC_STATIC,51,51,58,10
+    RTEXT           "Age",IDC_STATIC,51,79,58,10
+    EDITTEXT        IDC_STREET,121,101,116,15,ES_AUTOHSCROLL
+    RTEXT           "Street",IDC_STATIC,51,104,58,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 260
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 154
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

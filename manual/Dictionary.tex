@@ -1,0 +1,460 @@
+@page
+
+@section Dictionary Class
+@pdfsection{Dictionary Class}
+The @code{Dictionary} class combines the functionality of the @code{Set}
+and @code{ObjectAssociation} classes in order to store a collection of
+arbitrary key/value pairs.  The key may be any unique Dynace object.
+The @code{gHash} and @code{gCompare} generics are used in order to
+access and compare the objects.
+
+This class is a subclass of the @code{Set} class and therefore inherits
+all of its functionality.
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+@subsection Dictionary Class Methods
+@pdfsubsection{Dictionary Class Methods}
+There are no class methods for this class.  It inherits the ability
+to create instances of itself through its superclass, @code{Set}.
+
+
+
+@subsection Dictionary Instance Methods
+@pdfsubsection{Dictionary Instance Methods}
+The instance methods associated with this class are used to add, retrieve
+and remove key/value pairs from the @code{Dictionary}.  Note that additional
+functionality may be obtained through its superclass, @code{Set}.
+
+
+
+
+
+
+@pdfsubsubsection {AddValue}
+@deffn {AddValue} AddValue::Dictionary
+@sp 2
+@example
+@group
+r = gAddValue(i, key, value);
+
+object  i;
+object  key
+object  value;    /*  or NULL   */
+object  r;
+@end group
+@end example
+This method is used to add a new key/value pair to the @code{Dictionary}
+instance (@code{i}).  If an object with the same key already exists in
+the @code{Dictionary} it will be left as is and @code{AddValue} will return
+@code{NULL}.  If the key/value objects are added @code{AddValue} will
+return the @code{ObjectAssociation} instance created to represent the
+key/value pair passed.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Find::Dictionary, FindValue::Dictionary,}
+@hfil @break @hglue .64in      @code{RemoveObj::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValueWithObj}
+@deffn {ChangeValueWithObj} ChangeValueWithObj::Dictionary
+@sp 2
+@example
+@group
+r = gChangeValueWithObj(i, key, value);
+
+object  i;
+object  key;
+object  value;    /*  or NULL   */
+object  r;
+@end group
+@end example
+This method is used to change the value associated with an existing
+key/value pair to the @code{Dictionary} instance (@code{i}).
+@code{key} represents the identity of the pre-existing key/value
+pair and @code{value} represents the new value to be associated with
+the key.
+
+Normally, this method changes the value part of the association
+and returns the previous value which is not disposed.  If
+@code{key} doesn't identify a pre-existing association, this method
+simply returns @code{NULL}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Find::Dictionary, FindValue::Dictionary,}
+@hfil @break @hglue .64in      @code{RemoveObj::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeObj}
+@deffn {DeepDisposeObj} DeepDisposeObj::Dictionary
+@sp 2
+@example
+@group
+r = gDeepDisposeObj(i, key);
+
+object  i;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The key, value and @code{ObjectAssociation} used to bind the two are all deep
+disposed.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+
+This method is the same as @code{DisposeObj::Dictionary}.
+
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Dictionary
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an entire @code{Dictionary}.  It does not
+dispose of any of the keys or values but does dispose of all the
+associations used to represent the pair.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Dictionary, DeepDispose::Set,}
+@hfil @break @hglue .64in      @code{DisposeAllNodes::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::Dictionary
+@sp 2
+@example
+@group
+i = gDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in a @code{Dictionary}
+instance without disposing of the instance itself.  The objects in the
+@code{Dictionary} are simply disassociated from the @code{Dictionary}
+instance and are not disposed.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeAllNodes::Set, Dispose::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeObj}
+@deffn {DisposeObj} DisposeObj::Dictionary
+@sp 2
+@example
+@group
+r = gDisposeObj(i, key);
+
+object  i;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The key, value and @code{ObjectAssociation} used to bind the two are all deep
+disposed.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+
+This method is the same as @code{DeepDisposeObj::Dictionary}.
+
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Find}
+@deffn {Find} Find::Dictionary
+@sp 2
+@example
+@group
+r = gFind(i, key);
+
+object  i;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to find the instance of the @code{ObjectAssociation} class
+which is used to represent the key/value pair stored under @code{key} in
+@code{Dictionary} @code{i}.  If @code{key} is not found @code{NULL} is returned.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindValue::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindAddValue}
+@deffn {FindAddValue} FindAddValue::Dictionary
+@sp 2
+@example
+@group
+r = gFindAddValue(i, key, value);
+
+object  i;
+object  key;
+object  value;    /*  or NULL   */
+object  r;
+@end group
+@end example
+This method is used to find and return the instance of the
+@code{ObjectAssociation} class used to represent the key/value pair stored
+under the key @code{key}.  If it is not found a new @code{ObjectAssociation} will be
+added and returned which represent the key/value pair representing
+@code{key} and @code{value}.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Find::Dictionary, FindValue::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindValue}
+@deffn {FindValue} FindValue::Dictionary
+@sp 2
+@example
+@group
+r = gFindValue(i, key);
+
+object  i;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to find the value stored under @code{key} in
+@code{Dictionary} @code{i}.  If @code{key} is not found @code{NULL} is
+returned.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Find::Dictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveObj}
+@deffn {RemoveObj} RemoveObj::Dictionary
+@sp 2
+@example
+@group
+r = gRemoveObj(i, key);
+
+object  i;
+object  key;
+object  r;
+@end group
+@end example
+This method is used to remove a key/value pair from a @code{Dictionary}.
+If found and removed @code{i} is returned.  If @code{key} is not found
+@code{NULL} is returned.
+
+The key and value are not disposed, however, the @code{ObjectAssociation} used
+to bind the two is.
+
+@code{key} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Dictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeObj::Dictionary}
+@end deffn
+
+
+
+
+
+

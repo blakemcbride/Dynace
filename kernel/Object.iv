@@ -1,0 +1,15 @@
+
+#ifndef	_OBJECT_IV
+#define	_OBJECT_IV
+
+
+typedef struct  _Object_iv_t  {
+	object cls;
+	unsigned short tag;
+	unsigned short siz;
+	unsigned long sn;
+}	Object_iv_t;
+
+#endif	/*  _OBJECT_IV  */
+
+

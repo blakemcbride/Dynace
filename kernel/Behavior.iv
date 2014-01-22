@@ -1,0 +1,35 @@
+
+#ifndef	_BEHAVIOR_IV
+#define	_BEHAVIOR_IV
+
+
+typedef struct  _Behavior_iv_t  {
+	int id;
+	char * name;
+	CRITICALSECTION cs;
+	object * direct_superclasses;
+	int n_direct_superclasses;
+	object_list * direct_subclasses;
+	object_list * direct_methods;
+	object next;
+	int cache_idx;
+	unsigned direct_iv_size;
+	unsigned effective_iv_size;
+	int direct_iv_offset;
+	iv_offset_def_list * all_superclasses;
+	long sig1;
+	long sig2;
+	instance_block * ib;
+	free_list * fl;
+	int nipib;
+	int nib;
+	long ni;
+	long nai;
+	int ncg;
+	int trace;
+	ofun markfun;
+}	Behavior_iv_t;
+
+#endif	/*  _BEHAVIOR_IV  */
+
+

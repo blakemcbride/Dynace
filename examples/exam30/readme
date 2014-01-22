@@ -1,0 +1,8 @@
+
+
+This example demonstrates some of the reflective features of Dynace
+whereby a program can, at runtime, query the attributes of various
+Dynace objects.
+
+
+(To build see the readme file in the first example.)

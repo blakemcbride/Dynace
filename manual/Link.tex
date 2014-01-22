@@ -1,0 +1,789 @@
+@page
+
+@section Link Class
+@pdfsection{Link Class}
+The @code{Link} class is used to represent a single link in a doubly
+linked list.  It is normally used in conjunction with the
+@code{LinkList} class in order to manage arbitrary objects on a doubly
+linked list data structure.
+
+Since instances of the @code{Link} class only contain enough information
+to describe the link, the @code{Link} class can be thought of as an
+abstract class.  It is never used by itself (instances of it are never
+created).  Instead a new class would be created which would have the
+@code{Link} class as a superclass.  This new class would describe
+the data items which would be stored at each link.  The @code{Link}
+class would keep track of its place in the linked list.
+
+The @code{Link} class also has a subclass called @code{LinkValue} which
+allows a single arbitrary object to be stored at each link.
+
+See the examples included with the Dynace system for an illustration of the
+use of the doubly linked list related classes.
+
+
+@subsection Link Class Methods
+@pdfsubsection{Link Class Methods}
+The @code{Link} class has only a single class method.  That method is used
+to create and initialize new instances of itself.
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::Link
+@sp 2
+@example
+@group
+i = gNew(Link);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the Link class.  It is usually
+only used by subclasses of the @code{Link} class.  The new link
+will not point to anything.  It will just be an empty link.
+
+This method is actually just inherited from @code{Object} in order
+to create a null link.
+
+The value returned is the instance object created (the new link).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Link}
+@end deffn
+
+
+
+
+
+@subsection Link Instance Methods
+@pdfsubsection{Link Instance Methods}
+The instances methods associated with the @code{Link} class are used to
+link, unlink, move and dispose of particular instances of the
+@code{Link} class or (more often) one of its subclasses.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddAfter}
+@deffn {AddAfter} AddAfter::Link
+@sp 2
+@example
+@group
+i = gAddAfter(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to insert a new link (@code{lnk}) after another
+link (@code{i}) on the linked list which link @code{i} is on.  In order
+to accomplish this it modifies pointers in link @code{i}, link
+@code{lnk} and the link (if any) which is after link @code{i} in
+the associated linked list structure.
+
+Link @code{lnk} must not already be a member of another list.
+
+This method returns its first argument.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddBefore::Link}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {AddBefore}
+@deffn {AddBefore} AddBefore::Link
+@sp 2
+@example
+@group
+i = gAddBefore(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to insert a new link (@code{lnk}) before another
+link (@code{i}) on the linked list which link @code{i} is on.  In order
+to accomplish this it modifies pointers in link @code{i}, link
+@code{lnk} and the link (if any) which is prior to link @code{i} in
+the associated linked list structure.
+
+Link @code{lnk} must not already be a member of another list.
+
+This method returns its first argument.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddAfter::Link, ChangeNext::Link,}
+@hfil @break @hglue .64in      @code{ChangePrevious::Link}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeNext}
+@deffn {ChangeNext} ChangeNext::Link
+@sp 2
+@example
+@group
+i = gChangeNext(i, nxt);
+
+object  i;
+object  nxt;
+@end group
+@end example
+This method is used to change the next pointer of a particular link
+represented by instance @code{i}.  @code{nxt} is the link to be pointed
+to or @code{NULL}.  This method does not effect the instance pointed to
+by @code{nxt}.
+
+This method returns the link passed in its first argument.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangePrevious::Link, Next::Link}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {ChangePrevious}
+@deffn {ChangePrevious} ChangePrevious::Link
+@sp 2
+@example
+@group
+i = gChangePrevious(i, prev);
+
+object  i;
+object  prev;
+@end group
+@end example
+This method is used to change the previous link pointer of a particular
+link represented by instance @code{i}.  @code{prev} is the link to be
+pointed to or @code{NULL}.  This method does not effect the instance
+pointed to by @code{prev}.
+
+This method returns the link passed in its first argument.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeNext::Link, Previous::Link}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::Link
+@sp 2
+@example
+@group
+c = gCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new object which is of the same type as
+its argument.  However, the new link will not point to the same links.
+It will be uninitialized.
+
+The new object is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x, y;
+@c 
+@c x = gNew(LinkList, 101);
+@c y = gCopy(x);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepCopy::Link, Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::Link
+@sp 2
+This method performs the same function as @code{Copy::Link}.
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Link
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to unlink and dispose of a link object.
+It performs the same function as the @code{Dispose} method.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Link, Remove::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Link
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to unlink and dispose of a link object.
+It performs the same function as the @code{DeepDispose} method.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::Link, Remove::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {InitLink}
+@deffn {InitLink} InitLink::Link
+@sp 2
+@example
+@group
+lnk = gInitLink(lnk, lst, prev, nxt);
+
+object  lnk;
+object  lst;
+object  prev;
+object  nxt;
+@end group
+@end example
+This method is used to initialize a link.  @code{lst} is the list it will
+be associated with and @code{prev} and @code{nxt} are used to initialize
+the link pointers.  Each argument must either be a link or @code{NULL}.
+
+The link passed is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Previous::Link, Next::Link}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {List}
+@deffn {List} List::Link
+@sp 2
+@example
+@group
+lst = gList(i);
+
+object  i;
+object  lst;
+@end group
+@end example
+This method is used to obtain the list object which link @code{i}
+is on.  @code{NULL} will be returned if the link is not on a list.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Previous::Link, Next::Link, InitLink::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MoveAfter}
+@deffn {MoveAfter} MoveAfter::Link
+@sp 2
+@example
+@group
+i = gMoveAfter(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to unlink an arbitrary (located anywhere on the
+list) link (@code{i}) from any list and relink it immediately after link
+@code{lnk} which may be on the same or a different list.  If link
+@code{i} wasn't originally on a list, it will simply be added after
+link @code{lnk}.
+
+Link @code{i} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MoveBefore::Link, MoveBeginning::Link}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {MoveBefore}
+@deffn {MoveBefore} MoveBefore::Link
+@sp 2
+@example
+@group
+i = gMoveBefore(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to unlink an arbitrary (located anywhere on the
+list) link (@code{i}) from any list and relink it immediately before link
+@code{lnk} which may be on the same or a different list.  If link
+@code{i} wasn't originally on a list, it will simply be added before
+link @code{lnk}.
+
+Link @code{i} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MoveAfter::Link, MoveEnd::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MoveBeginning}
+@deffn {MoveBeginning} MoveBeginning::Link
+@sp 2
+@example
+@group
+i = gMoveBeginning(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink an arbitrary (located anywhere on the
+list) link and relink it at the beginning of the linked list it's
+associated with.  
+
+The object passed is returned unless the link was not on a list.  In
+that case @code{NULL} will be returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MoveEnd::Link, MoveAfter::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MoveEnd}
+@deffn {MoveEnd} MoveEnd::Link
+@sp 2
+@example
+@group
+i = gMoveEnd(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink an arbitrary (located anywhere on the
+list) link and relink it at the end of the linked list it's
+associated with.  
+
+The object passed is returned unless the link was not on a list.  In
+that case @code{NULL} will be returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MoveBeginning::Link, MoveBefore::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Next}
+@deffn {Next} Next::Link
+@sp 2
+@example
+@group
+nxt = gNext(i);
+
+object  i;
+object  nxt;
+@end group
+@end example
+This method is used to obtain the link following the link represented by
+@code{i}.   If no next link exists, @code{NULL} will be returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Previous::Link, Nth::Link, List::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Nth}
+@deffn {Nth} Nth::Link
+@anchor{Nth}
+@sp 2
+@example
+@group
+nxt = gNth(lnk, idx);
+
+object  lnk;
+int     idx;
+object  nxt;
+@end group
+@end example
+This method is used to provide a mechanism to index into a linked list
+in a manner similar to an array.  If @code{idx} is positive this method
+returns the link which is @code{idx} links after @code{lnk}.  If @code{idx}
+is negative this method returns the link which is @code{idx} links prior to
+@code{lnk}.  If @code{idx} is zero @code{lnk} is returned, and if @code{idx}
+represents a position beyond the end of the list @code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Previous::Link, Next::Link, List::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Previous}
+@deffn {Previous} Previous::Link
+@sp 2
+@example
+@group
+prev = gPrevious(i);
+
+object  i;
+object  prev;
+@end group
+@end example
+This method is used to obtain the link prior to the link represented by
+@code{i}.  If no such link exists, @code{NULL} will be returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Next::Link, Nth::Link, List::Link}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Remove}
+@deffn {Remove} Remove::Link
+@sp 2
+@example
+@group
+i = gRemove(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove a link (@code{i}) from a linked list.  In
+addition to effecting link @code{i}, it also effects the pointers
+associated with the links which link @code{i} points to in its next and
+previous pointers (which may be NULL) to make the removal complete.
+
+This method should have no effect on a link which is not on a list.
+
+This method returns the link passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeNext::Link, ChangePrevious::Link}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::Link
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the object @code{i} and its value.  This is often used
+to print or display a representation of an object.  It is also used by
+by @code{Print::Object} (a method useful during the debugging phase of
+a project) in order to directly print an object to a stream.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Link
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNew(Link);
+s = gStringRepValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+

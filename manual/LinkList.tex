@@ -1,0 +1,838 @@
+@page
+
+@section LinkList Class
+@pdfsection{LinkList Class}
+Instances of this class are used to coordinate and handle doubly linked
+lists as a whole.  It is used with instances of the @code{Link} class
+(or one of its subclasses) which represent the individual links of
+the list.
+
+The @code{Link} class is a superclass of this class.  See that class
+for functionality which is inherited by this class.
+
+See the examples included with the Dynace system for an illustration of the
+use of the doubly linked list related classes.
+
+
+@subsection LinkList Class Methods
+@pdfsubsection{LinkList Class Methods}
+There is only one class method associated with this class and it is used
+to create new instances of the class.
+
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::LinkList
+@sp 2
+@example
+@group
+i = gNew(LinkList);
+
+object  i;
+@end group
+@end example
+This class method creates a new and empty linked list object.
+
+The value returned is the instance object created (the new LinkList).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x;
+@c 
+@c x = gNew(LinkList);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::LinkList}
+@end deffn
+
+
+
+
+
+
+@subsection LinkList Instance Methods
+@pdfsubsection{LinkList Instance Methods}
+The instance methods associated with this class perform functions to
+add, change, inquire, enumerate and dispose of links associated with the
+linked list.  They also provide information such as how many links are
+on the list.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddFirst}
+@deffn {AddFirst} AddFirst::LinkList
+@sp 2
+@example
+@group
+i = gAddFirst(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to add a new link to the beginning of the linked list.
+@code{i} is the linked list, @code{lnk} is the new link (an instance of
+the @code{Link} class or one of its subclasses).
+
+The value returned is the linked list passed (@code{i}).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddLast::LinkList, DisposeFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {AddLast}
+@deffn {AddLast} AddLast::LinkList
+@sp 2
+@example
+@group
+i = gAddLast(i, lnk);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to add a new link to the end of the linked list.
+@code{i} is the linked list, @code{lnk} is the new link (an instance of
+the @code{Link} class or one of its subclasses).
+
+The value returned is the linked list passed (@code{i}).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{AddFirst::LinkList, DisposeLast::LinkList}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::LinkList
+@sp 2
+@example
+@group
+c = gCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new instance of the @code{LinkList} class
+with copies of all the links which were on @code{i}.  These copies
+are made via @code{Copy} so any values associated with the link are
+the same objects as those on @code{i}.
+
+The new @code{LinkList} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepCopy::LinkList, Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::LinkList
+@sp 2
+@example
+@group
+c = gDeepCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new instance of the @code{LinkList}
+class with copies of all the links and their associated values which
+were on @code{i}.  These copies are made via @code{DeepCopy} so
+the values associated with the links are also copied.
+
+The new @code{LinkList} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::LinkList, Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::LinkList
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of the linked list and all its associated
+links.  The @code{DeepDispose} method is used to dispose of each link
+on the linked list.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::LinkList, Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeAllNodes}
+@deffn {DeepDisposeAllNodes} DeepDisposeAllNodes::LinkList
+@sp 2
+@example
+@group
+i = gDeepDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to dispose of all the links on a linked list without
+disposing of the linked list object itself.  The @code{DeepDispose}
+method is used to dispose of the links so all the objects contained on
+the links will be deep disposed as well.
+
+This method returns the object passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::LinkList, DisposeAllNodes::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeFirst}
+@deffn {DeepDisposeFirst} DeepDisposeFirst::LinkList
+@sp 2
+@example
+@group
+i = gDeepDisposeFirst(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink and dispose of the first link in the
+linked list @code{i}.  If there is no first link this method simply
+returns.
+
+The first link is disposed of by executing the @code{DeepDispose}
+method on it.
+
+This method returns the linked list passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeLast::LinkList, DisposeFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeLast}
+@deffn {DeepDisposeLast} DeepDisposeLast::LinkList
+@sp 2
+@example
+@group
+i = gDeepDisposeLast(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink and dispose of the last link in the
+linked list @code{i}.  If there are no links this method simply
+returns.
+
+The last link is disposed of by executing the @code{DeepDispose}
+method on it.
+
+This method returns the linked list passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeFirst::LinkList, DisposeLast::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::LinkList
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of the linked list and all its associated
+links.  The @code{Dispose} method is used to dispose of the links
+without disposing of the objects contained on the links.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::LinkList, DisposeAllNodes::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::LinkList
+@sp 2
+@example
+@group
+i = gDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to dispose of all the links on a linked list without
+disposing of the linked list object itself.  The @code{Dispose} method
+is used to dispose of the links without disposing of the objects
+contained on the links.
+
+This method returns the object passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::LinkList, DeepDisposeAllNodes::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeFirst}
+@deffn {DisposeFirst} DisposeFirst::LinkList
+@sp 2
+@example
+@group
+i = gDisposeFirst(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink and dispose of the first link in the
+linked list @code{i}.  If there is no first link this method simply
+returns.
+
+The first link is disposed of by executing the @code{Dispose}
+method on it.
+
+This method returns the linked list passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeLast::LinkList, DeepDispose::LinkList,}
+@hfil @break @hglue .64in      @code{RemoveFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeLast}
+@deffn {DisposeLast} DisposeLast::LinkList
+@sp 2
+@example
+@group
+i = gDisposeLast(i);
+
+object  i;
+@end group
+@end example
+This method is used to unlink and dispose of the last link in the
+linked list @code{i}.  If there are no links this method simply
+returns.
+
+The last link is disposed of by executing the @code{Dispose}
+method on it.
+
+This method returns the linked list passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeFirst::LinkList, DeepDispose::LinkList,}
+@hfil @break @hglue .64in      @code{RemoveLast::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {First}
+@deffn {First} First::LinkList
+@sp 2
+@example
+@group
+lnk = gFirst(i);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to obtain the first link on linked list @code{i}.
+If there are no links, this method returns @code{NULL}.
+
+This method does not modify the linked list or the link returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Last::LinkList, RemoveFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {IncNelm}
+@deffn {IncNelm} IncNelm::LinkList
+@sp 2
+@example
+@group
+i = gIncNelm(i, inc);
+
+object  i;
+int     lnc;
+@end group
+@end example
+Each linked list automatically keeps track of the number of links on it.
+This method is used to change that value by @code{inc}.  It is mainly
+used internally to keep the number accurate and would not normally be
+used externally.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Last}
+@deffn {Last} Last::LinkList
+@sp 2
+@example
+@group
+lnk = gLast(i);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to obtain the last link on linked list @code{i}.
+If there are no links, this method returns @code{NULL}.
+
+This method does not modify the linked list or the link returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{First::LinkList, RemoveLast::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Remove}
+@deffn {Remove} Remove::LinkList
+@sp 2
+This method has been superseded by @code{Remove::Link}.
+@sp 1
+See also:  @code{Dispose::Link, RemoveFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveFirst}
+@deffn {RemoveFirst} RemoveFirst::LinkList
+@sp 2
+@example
+@group
+lnk = gRemoveFirst(i);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to unlink the first link from the linked list
+@code{i} and return it.  The link will no longer be linked on the list.
+However, the link is not disposed.  If there are no links this method
+simply returns @code{NULL}.
+
+This method returns the link removed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveLast::LinkList, DisposeFirst::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveLast}
+@deffn {RemoveLast} RemoveLast::LinkList
+@sp 2
+@example
+@group
+lnk = gRemoveLast(i);
+
+object  i;
+object  lnk;
+@end group
+@end example
+This method is used to unlink the last link from the linked list
+@code{i} and return it.  The link will no longer be linked on the list.
+However, the link is not disposed.  If there are no links this method
+simply returns @code{NULL}.
+
+This method returns the link removed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveFirst::LinkList, DisposeLast::LinkList}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Sequence}
+@deffn {Sequence} Sequence::LinkList
+@sp 2
+@example
+@group
+s = gSequence(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method takes an instance of the @code{LinkList} class (@code{i})
+and returns an instance of the @code{LinkSequence} class (@code{s}).
+The link list represented by @code{i} is not effected by this operation.
+The link sequence item, @code{s}, is used to enumerate through all the
+links in link list @code{i}.  See the @code{LinkSequence} class for
+documentation of other methods needed to use @code{s}.
+@example
+@group
+@exdent Example:
+
+object  ll;  /*  linked list    */
+object  s;   /*  link sequence  */
+object  lnk; /*  one link       */
+
+/*  ll must be initialized previously  */
+
+for (s=gSequence(ll) ; lnk = gNext(s) ; )  @{
+        /*  do something with link lnk  */
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{Next::LinkSequence}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::LinkList
+@sp 2
+@example
+@group
+sz = gSize(i);
+
+object  i;
+int     sz;
+@end group
+@end example
+This method is used to obtain the number of links on the linked list.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::LinkList
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the object @code{i} and its value.  This is often used
+to print or display a representation of an object.  It is also used by
+by @code{Print::Object} (a method useful during the debugging phase of
+a project) in order to directly print an object to a stream.
+
+
+This method obtains the values of each link by calling @code{StringRepValue}
+on each link.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+

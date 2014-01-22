@@ -1,0 +1,23 @@
+
+
+create table phone (
+	fname	char(20),
+	lname	char(20) not null,
+	street	char(30),
+	age	smallint,
+	id	integer,
+	constraint namekey primary key (lname, fname)
+);
+
+
+{     anything between braces gets ignored
+
+So the following table is ignored
+
+create table vendors (
+	id	integer primary key,
+	name	char(30)
+);
+
+
+}

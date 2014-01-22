@@ -1,0 +1,29 @@
+
+CFLAGS =	/opt /warn=(disable=implicitfunc)
+CPPFLAGS =	/inc=([],[-.include])
+
+LIBOBJS =	kernel.obj	\
+		object.obj	\
+		behavior.obj	\
+		class.obj	\
+		metaclas.obj	\
+		genfun.obj	\
+		method.obj	\
+		dynace.obj	\
+		jumpto.obj
+
+[-.lib]dynace.olb: $(LIBOBJS)
+	lib /repl $@ $?
+
+jumpto.obj: jumpto.m64
+	macro /alph $^
+
+kernel.obj : kernels.h object.iv behavior.iv method.iv genfun.iv
+
+object.obj : object.iv
+
+behavior.obj : kernels.h behavior.iv
+
+genfun.obj : kernels.h genfun.iv
+
+method.obj : method.iv

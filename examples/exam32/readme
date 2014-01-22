@@ -1,0 +1,15 @@
+
+
+This example demonstrates how to locally cache a method lookup so
+as to totally avoid the runtime overhead of future multiple lookups.
+
+Note that the reason that it's ok to use it here is that since it's
+being used with the exact same object over and over the method would
+not change.  If print_method is used on an object which is not an
+instance of the same class as myObj unpredictable results will happen
+because print_method may not be the method which is associated with
+the new object and the gPrint generic.  There is no lookup when using
+print_method.
+
+
+(To build see the readme file in the first example.)

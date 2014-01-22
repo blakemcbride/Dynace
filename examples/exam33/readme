@@ -1,0 +1,12 @@
+
+
+This example demonstrates most of the methods associated with the String
+class.
+
+This is also a good example of why a garbage collector is needed.  If none
+was available all the intermediate or temporary string objects would
+have to be accounted for and manually disposed.  This would be a real
+pain!
+
+
+(To build see the readme file in the first example.)

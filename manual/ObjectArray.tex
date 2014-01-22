@@ -1,0 +1,165 @@
+@page
+
+@section  ObjectArray Class
+@pdfsection{ObjectArray Class}
+This class, which is a subclass of @code{Array}, is used to represent
+arbitrary shaped arrays of Dynace objects in an efficient manner.  By
+using @code{ObjectArray}s it is possible to have arrays where each
+element contains an arbitrary object including another arrays.
+Therefore it is possible to create nested or general arrays which are
+nested to arbitrary levels.
+
+
+Much of the functionality of this class is implemented and documented in
+the @code{Array} class.  Differences are documented in this section.
+
+
+
+@subsection ObjectArray Class Methods
+@pdfsubsection{ObjectArray Class Methods}
+The only class method implemented by this class is one used to create
+new @code{ObjectArray} instances.
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::ObjectArray
+@sp 2
+@example
+@group
+ary = vNew(ObjectArray, rnk, ...)
+
+unsigned  rnk, ...
+object    ary;
+@end group
+@end example
+This class method is used to create a new instance of @code{ObjectArray}.
+
+@code{rnk} is the number of dimensions the new array should have.
+The remaining arguments (each of type unsigned) indicates the size of
+each consecutive dimension.  Note that the number of arguments following
+@code{rnk} @emph{must} be the same as the value in @code{rnk}.
+
+@code{ary} is the new array object created and will be initialized to all
+@code{NULL}'s.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(ObjectArray, 2, 5, 4);
+/*  ary is a 5x4 matrix  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+@subsection ObjectArray Instance Methods
+@pdfsubsection{ObjectArray Instance Methods}
+Most instance functionality is obtained and documented in the @code{Array}
+class, however, functionality which is particular to this class is documented
+in this section.
+
+
+
+
+
+@pdfsubsubsection {Value}
+@deffn {Value} Value::ObjectArray
+@sp 2
+@example
+@group
+v = vValue(ary, ...);
+
+object    ary;
+unsigned  ...
+object    v;
+@end group
+@end example
+This method is used to obtain the object (or NULL) value associated with a
+particular element of an instance of the @code{ObjectArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+@example
+@group
+@exdent Example:
+
+object  ary;
+object  v;
+
+ary = vNew(ObjectArray, 2, 5, 4);
+v = vValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeValue::ObjectArray}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::ObjectArray
+@sp 2
+@example
+@group
+ary = vChangeValue(ary, val, ...);
+
+object    ary;
+object    val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+@code{ObjectArray} @code{ary}.
+
+@code{val} is the value which the element of the array should be changed
+to (or NULL).
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary, v;
+
+ary = vNew(ObjectArray, 2, 5, 4);
+v = gNewWithInt(ShortInteger, 6);
+vChangeValue(ary, v, 1, 2);
+/*  ary[1][2] <- v  */
+@end group
+@end example
+@sp 1
+See also:  @code{Value::ObjectArray}
+@end deffn
+
+
+
+
+
+
+
+
+

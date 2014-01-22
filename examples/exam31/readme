@@ -1,0 +1,9 @@
+
+
+This example demonstrates how generic functions are first class objects.
+First class objects may be assigned to and made local to a block of
+code just like C language variables.  Unlike C functions, Dynace generic
+functions are first class objects.
+
+
+(To build see the readme file in the first example.)

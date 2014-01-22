@@ -1,0 +1,9 @@
+
+
+This example demonstrates the creation, use and disposal of
+the LinkObject class.
+
+Notice how the linked list can store any type of object.
+
+
+(To build see the readme file in the first example.)

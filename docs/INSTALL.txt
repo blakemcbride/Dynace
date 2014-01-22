@@ -1,0 +1,65 @@
+
+
+All packages associated with this system have one of the following
+file extensions:
+
+.zip		pkzip format
+
+.tar.gz		unix tar / GNU gzip format
+
+.tgz		unix tar / GNU gzip format
+
+For those who don't currently have GNU gzip it can be obtained at:
+ftp://prep.ai.mit.edu/pub/gnu/gzip-1.2.4.tar
+This utility has a much better compression ratio then "compress",
+is very portable and doesn't suffer from the patent problems associated
+with "compress".
+
+All archive formats include directory paths relative to wherever your
+Dynace root is contained.  You should, therefore, change to wherever
+your Dynace root is and then unpack it, including directories.
+
+After unpacking the stuff you'll want to see the README.txt or
+docs/README.txt file for further information.
+
+The following gives unpacking examples for the various formats.
+It is assumed that your Dynace root is /dynace.  This can be changed to
+whatever you like.
+
+DOS/Windows with pkunzip
+------------------------
+
+	md \dynace
+	cd \dynace
+
+	pkunzip -d file.zip   (repeat this line for each .zip file - be sure
+	                       to always start from \dynace)
+
+See BUILD.txt for instructions on building the system
+
+
+DOS/Windows with unzip
+----------------------
+
+	md \dynace
+	cd \dynace
+
+	unzip file.zip        (repeat this line for each .zip file - be sure
+	                       to always start from \dynace)
+
+See BUILD.txt for instructions on building the system
+
+
+Linux/Unix
+----------
+
+	mkdir /dynace
+	cd /dynace
+
+	gzip -dc file.tar.gz |tar xvf -    (repeat this line for each file -
+	                                    be sure to always start from
+	                                    /dynace)
+
+
+See BUILD.txt for instructions on building the system
+

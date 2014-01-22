@@ -1,0 +1,500 @@
+@c -*-texinfo-*-
+
+@chapter ODBC Tutorial
+@pdfchapter{ODBC Tutorial}
+
+@section Opening and Closing a Database
+@pdfsection{Opening and Closing a Database}
+
+Prior to any use of a database, it must be opened.  Two functions are
+available to accommodate the function as follows:
+
+@deffn {OpenDatabase} OpenDatabase::Database
+@sp 2
+@example
+@group
+DB = gOpenDatabase(Database, source, id, pw)
+
+object  DB;             /*  database object  */
+char    *source;        /*  data source name as defined with
+                            the ODBC administrator  */
+char    *id;            /*  the user id to log into the
+                            database with  */
+char    *pw;            /*  the password associated with
+                            the user id   */
+@end group
+@end example
+This will open the specified database using the specified user id and password.
+@code{NULL} is returned of the database cannot be opened.
+@end deffn
+
+@deffn {QueryDatabase} QueryDatabase::Database
+@sp 2
+@example
+@group
+DB = gQueryDatabase(Database, wind)
+
+object  DB;             /*  database object  */
+object  wind;           /*  parent window object or NULL  */
+@end group
+@end example
+This will query the user to select a database and then open the specified database
+using the user ID and password entered using the ones configured with the ODBC administrator.
+@end deffn
+
+The following method is used to close a database.
+
+@deffn {Dispose}  Dispose::Database
+@sp 2
+@example
+@group
+DB = gDispose(DB)
+
+object  DB;             /*  database object  */
+@end group
+@end example
+This procedure will close the database and @code{NULL} out the @code{DB} variable.
+@end deffn
+
+
+
+
+@section Statements
+@pdfsection{Statements}
+
+@subsection Introduction
+@pdfsubsection{Introduction}
+
+One concept which is important to fully understand is the
+@emph{Statement} object.  A Statement object allows the program a means
+to execute an SQL command and then have access to the data returned by
+that particular command.  Once a command's data is no longer needed, the
+Statement object may be re-used for other (and arbitrary) SQL commands.
+A single database may have numerous Statement objects associated with it
+at any given point.  This number is only limited by the particular
+database vendor.
+
+@subsection Creating and Disposing of Statement Objects
+@pdfsubsection{Creating and Disposing of Statement Objects}
+
+
+@deffn {NewStatement}  NewStatement::Database
+@sp 2
+@example
+@group
+stmt = gNewStatement(DB);
+
+object  DB;     /*  the database object      */
+object  stmt;   /*  a new statement object   */
+@end group
+@end example
+This will create a new statement object;
+@end deffn
+
+
+
+@deffn {Dispose}  Dispose::Statement
+@sp 2
+@example
+@group
+gDispose(stmt);
+
+object  stmt;   /*  the statement object   */
+@end group
+@end example
+This will dispose of the statement object;
+@end deffn
+
+
+
+@section Adding Records
+@pdfsection{Adding Records}
+
+@subsection Overview
+@pdfsubsection{Overview}
+
+Adding of records is accomplished in three steps as follows.
+
+{@leftskip .5in
+@enumerate
+@item
+Select the file or table in which records are to be added.  This only
+needs to be done once even if multiple records are to be added.
+
+@item
+Assign the data to the fields.
+
+@item
+Add the record.
+@end enumerate
+}
+
+Once a record is added, additional records may be added by looping through
+steps 2 and 3.  Data assigned to a field which is invariant need not be
+re-assigned.
+
+@subsection Selecting the Table
+@pdfsubsection{Selecting the Table}
+
+Selecting the table can be accomplished in two ways.  The most common way would be
+via the @code{gInsert} method.  Alternatively, if you are already in the middle of a select
+command in which all the fields are selected in the desired table and there are no
+joins, as follows:
+
+@example
+gDBSelect(stmt, "select * from mytable");
+@end example
+
+you need not perform any additional function.  The table is already selected.
+
+@deffn {Insert}  Insert::Statement
+@sp 2
+@example
+@group
+r = gInsert(stmt, table);
+
+object  stmt;   /*  the statement object  */
+char    *table; /*  the table to use      */
+int     r;      /*  0 on success          */
+@end group
+@end example
+This method selects a table for subsequent record adds.
+@end deffn
+
+
+@subsection Assigning Field Data
+@pdfsubsection{Assigning Field Data}
+
+Once the desired table is selected, field data may be assigned using the
+following methods.
+
+@example
+@group
+stmt = gFldSetString(stmt, fld, str);
+
+stmt = gFldSetChar(stmt, fld, ival);
+
+stmt = gFldSetShort(stmt, fld, ival);
+
+stmt = gFldSetUnsignedShort(stmt, fld, uival);
+
+stmt = gFldSetLong(stmt, fld, lval);
+
+stmt = gFldSetDouble(stmt, fld, dval);
+
+
+object  stmt;   /*  the statement to operate on  */
+char    *fld;   /*  the field name               */
+int     ival;   /*  an integer value             */
+unsigned int uival;  /*  unsigned value          */
+long    lval;   /*  long value                   */
+double  dval;   /*  double value                 */
+@end group
+@end example
+
+The object returned is simply the statement object passed.  Any attempt
+to use a non-existing field will cause an error in which the application
+will be terminated.  If you assign a value of the wrong type, the system
+will convert it for you.  Date fields are simply converted to @code{long}'s
+of the form @code{YYYYMMDD}.
+
+@subsection Adding The Record
+@pdfsubsection{Adding The Record}
+
+Once the data has been assigned the record may be added as follows.
+
+@deffn {AddRecord}  AddRecord::Statement
+@sp 2
+@example
+@group
+r = gAddRecord(stmt);
+
+object  stmt;   /*  the statement object  */
+int     r;      /*  result                */
+@end group
+@end example
+This will cause the data to be added to the table.  Zero is returned
+upon success, other values indicate an error.  Most errors are trapped
+and cause the application to abort, however.
+@end deffn
+
+@section Reading Records
+@pdfsection{Reading Records}
+
+@subsection Overview
+@pdfsubsection{Overview}
+
+Reading records is accomplished in three steps as follows.
+
+{@leftskip .5in
+@enumerate
+@item
+Select a set of records from which to access data.
+
+@item
+Select a particular record.
+
+@item
+Access the field data.
+@end enumerate
+}
+
+@subsection Selecting a Record Set
+@pdfsubsection{Selecting a Record Set}
+
+Selecting a record set is accomplished by executing a normal SQL
+@code{select} command as follows.
+
+@deffn {DBSelect}  DBSelect::Statement
+@sp 2
+@example
+@group
+r = gDBSelect(stmt, cmd);
+
+object  stmt;   /*  the statement object    */
+char    *cmd;   /*  the SQL select command  */
+int     r;      /*  result                  */
+@end group
+@end example
+This method will execute an arbitrary SQL select command given in @code{cmd}.  This command may contain joins,
+order by, and where clauses as well as any other legal SQL select command. zero is returned upon success.  For example:  
+@example
+gDBSelect(stmt, "select * from myfile");
+@end example
+@end deffn
+
+@deffn {DBSelectOne}  DBSelectOne::Statement
+@sp 2
+@example
+@group
+r = gDBSelectOne(stmt, cmd);
+
+object  stmt;   /*  the statement object    */
+char    *cmd;   /*  the SQL select command  */
+int     r;      /*  result                  */
+@end group
+@end example
+This method is a convenience for the case when a single specific record
+is desired.  When this method is used there is no need to also select a
+specific record.  Data fields may be accessed immediately.  zero is
+returned upon success.  
+@end deffn
+
+
+@subsection Selecting a Record
+@pdfsubsection{Selecting a Record}
+
+The following functions allow the selection of a specific record within a
+selected set.  Note that if @code{gDBSelectOne} is used, none of these
+functions should be used.
+
+@example
+@group
+r = gFirstRecord(stmt);
+
+r = gLastRecord(stmt);
+
+r = gNextRecord(stmt);
+
+r = gPrevRecord(stmt);
+
+r = gSetAbsPos(stmt, pos);
+
+r = gSetRelPos(stmt, pos);
+
+object  stmt;   /*  the statement object           */
+long    pos;    /*  relative or absolute position  */
+int     r;      /*  0=success                      */
+@end group
+@end example
+
+
+@subsection Accessing Field Data
+@pdfsubsection{Accessing Field Data}
+
+The following functions are used to access field data.
+
+@example
+@group
+sval = gFldGetString(stmt, fld);
+
+cval = gFldGetChar(stmt, fld);
+
+sval = gFldGetShort(stmt, fld);
+
+uval = gFldGetUnsignedShort(stmt, fld);
+
+lval = gFldGetLong(stmt, fld);
+
+dval = gFldGetDouble(stmt, fld);
+
+oval = gFldGetValue(stmt, fld);
+
+object  stmt;   /*  the statement object  */
+char    *fld;   /*  the field name        */
+short   sval;   /*  return values         */
+char    cval;
+unsigned short uval;
+long    lval;
+double  dval;
+object  oval;
+@end group
+@end example
+
+If the field type is not the same as that requested, the system will
+convert it for you.
+
+
+@section Changing and Deleting Records
+@pdfsection{Changing and Deleting Records}
+
+The procedure for changing or deleting records is similar to that of
+reading records.  Steps 1 and 2 are the same.  In addition, once a
+record had been read it may be immediately changed or deleted without the
+need to re-execute the first two steps.  Step 3 is as follows.
+
+@deffn {UpdateRecord}  UpdateRecord::Statement
+@sp 2
+@example
+@group
+r = gUpdateRecord(stmt);
+        or
+r = gDeleteRecord(stmt);
+
+object  stmt;   /*  the statement object  */
+int     r;      /*  result (0=success)    */
+@end group
+@end example
+This method will either update or delete the last selected record.
+@end deffn
+
+
+@section Executing SQL Commands
+@pdfsection{Executing SQL Commands}
+
+The following methods allow the execution of arbitrary SQL commands.
+
+@deffn {Execute}  Execute
+@sp 2
+@example
+@group
+r = gExecute(DB, cmd);
+     or
+r = gExecute(stmt, cmd);
+
+object  DB;     /*  database object    */
+object  stmt;   /*  statement object   */
+char    *cmd;   /*  SQL command        */
+int     r;      /*  result (0=success) */
+@end group
+@end example
+These methods allow for the execution of arbitrary SQL command when no
+specific data access is required (you aren't trying to access field
+values).
+@end deffn
+
+
+@deffn {ExecuteFile}  ExecuteFile
+@sp 2
+@example
+@group
+r = gExecuteFile(DB, file);
+       or
+r = gExecuteFile(stmt, file);
+
+object  DB;     /*  database object    */
+object  stmt;   /*  statement object   */
+char    *file;  /*  file name          */
+int     r;      /*  result (0=success) */
+@end group
+@end example
+The method will cause all the SQL commands in a file to be executed against database @code{DB}.
+A file extension of @code{.sql} is assumed.
+@end deffn
+
+
+@section Dropping Tables
+@pdfsection{Dropping Tables}
+
+
+
+@deffn {DropTable}  DropTable::Database
+@sp 2
+@example
+@group
+r = gDropTable(DB, tbl);
+
+object  DB;     /*  database object    */
+char    *tbl ;  /*  table              */
+int     r;      /*  result (0=success) */
+@end group
+@end example
+The method will drop table @code{tbl}.  If the table didn't already
+exist this command will be ignored.
+@end deffn
+
+
+
+@section Clearing Fields
+@pdfsection{Clearing Fields}
+
+
+@deffn {Clear}  Clear::Statement
+@sp 2
+@example
+@group
+r = gClear(stmt);
+
+object  stmt;   /*  statement object   */
+int     r;      /*  result (0=success) */
+@end group
+@end example
+This method will clear (zero out) all the fields.  It may only be used
+after a select command.  It is often used after some records have been
+read and a new record is to be added without an intervening record set
+selection.
+@end deffn
+
+
+@section WDS Interface
+@pdfsection{WDS Interface}
+
+The following methods are used to associate ODBC data fields to dialog controls.
+
+
+@deffn {AttachDialog}  AttachDialog::Statement
+@sp 2
+@example
+@group
+stmt = gAttachDialog(stmt, dlg);
+
+object  stmt;   /*  statement object   */
+object  dlg;    /*  a dialog object    */
+@end group
+@end example
+This method is used to associate all controls within a dialog to fields
+associated with a statement in which the fields and controls have the
+same name.  Once this association is formed subsequent use of the dialog
+will cause the data to be entered into the associated data fields.
+This method should only be used subsequent to a @code{gDBSelect}, @code{gDBSelectOne}, or
+a @code{gInsert}.
+@end deffn
+
+
+@deffn {AssociateCtl}  AssociateCtl::Statement
+@sp 2
+@example
+@group
+stmt = gAssociateCtl(stmt, fld, ctl);
+
+object  stmt;   /*  statement object   */
+char    *fld;   /*  a database field   */
+object  ctl;    /*  a control object   */
+@end group
+@end example
+This method is used to associate control @code{ctl} with database field @code{fld}.
+Once this association is formed subsequent use of the control
+will cause the data to be entered into the associated data field.
+This method should only be used subsequent to a @code{gDBSelect}, @code{gDBSelectOne}, or
+a @code{gInsert}.
+@end deffn

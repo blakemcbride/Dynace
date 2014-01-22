@@ -1,0 +1,588 @@
+@page
+
+@section Stream Class
+@pdfsection{Stream Class}
+The @code{Stream} class is an abstract class used to group other classes
+which poses the ability to read and write characters sequentially.
+Although much of the actual functionality is implemented by its
+subclasses, the methods are documented here because of their common
+interface.
+
+@subsection Stream Class Methods
+@pdfsubsection{Stream Class Methods}
+There are no class methods associated with this class.
+
+
+@subsection Stream Instance Methods
+@pdfsubsection{Stream Instance Methods}
+Although most of the following methods are actually implemented in the
+subclasses of @code{Stream}, they are documented here because of their
+common interface.  Note that some methods are not available for all
+subclasses of the @code{Stream} class.  This would occur if the method
+is inappropriate for a particular @code{Stream} subclass (such as
+seeking backward on a @code{String}).
+
+
+
+
+
+@pdfsubsubsection {Advance}
+@deffn {Advance} Advance::Stream
+@sp 2
+@example
+@group
+r = gAdvance(i, n);
+
+object  i;
+long    n;
+long    r;
+@end group
+@end example
+This method is used to advance the position of the next
+read of @code{Stream} @code{i} forward by @code{n} bytes.
+The value returned is the actual number of bytes advanced or
+0 on error.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Seek::Stream, Retreat::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {EndOfStream}
+@deffn {EndOfStream} EndOfStream::Stream
+@sp 2
+@example
+@group
+r = gEndOfStream(i);
+
+object  i;
+int     r;
+@end group
+@end example
+This method returns 1 if @code{Stream} @code{i} is at the end of available
+characters and 0 otherwise.
+by @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Length::Stream, Position::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Gets}
+@deffn {Gets} Gets::Stream
+@sp 2
+@example
+@group
+r = gGets(i, buf, sz);
+
+object  i;
+char    *buf;
+int     sz;
+char    *r;
+@end group
+@end example
+This method is used to read a new-line terminated string from
+@code{Stream} @code{i} into @code{buf}.  It will read no more than
+@code{sz-1} bytes, but room permitting, the new-line will be included.
+@code{r} will be the same as @code{buf} unless there is an error, in
+which case @code{r} will be @code{NULL}.
+@example
+@group
+@exdent Example:
+  
+char    buf[80];
+
+gGets(stdinStream, buf, sizeof buf);
+@end group
+@end example
+@sp 1
+See also:  @code{Read::Stream, Puts::Stream}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Length}
+@deffn {Length} Length::Stream
+@sp 2
+@example
+@group
+r = gLength(i);
+
+object  i;
+long    r;
+@end group
+@end example
+This method is used obtain the total length of the @code{Stream} represented
+by @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Seek::Stream, Position::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Position}
+@deffn {Position} Position::Stream
+@sp 2
+@example
+@group
+r = gPosition(i);
+
+object  i;
+long    r;
+@end group
+@end example
+This method is used obtain the current position in the stream
+relative to its beginning.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Seek::Stream, Length::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Printf}
+@deffn {Printf} Printf::Stream
+@sp 2
+@example
+@group
+r = vPrintf(i, fmt, ...);
+
+object  i;
+char    *fmt;
+int     r;
+@end group
+@end example
+This method is used to write a formatted string to stream @code{i}.
+@code{fmt} specifies the format of the output as well as the types and
+number of remaining arguments.  Since this method is implemented by the
+use of the @code{vsprintf} function supplied by the host system you may
+find more detailed description of the arguments to this method in the
+manual supplied by your host compiler (under @code{fprintf}).  The only
+difference would be the first argument which would now be a @code{Stream}
+instance.
+
+The value returned is the number of bytes actually written to the stream.
+@example
+@group
+@exdent Example:
+ 
+vPrintf(stdoutStream, "I am %d years old.\n", 10);
+@end group
+@end example
+@sp 1
+See also:  @code{Puts::Stream}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Putc}
+@deffn {Putc} Putc::Stream
+@sp 2
+@example
+@group
+r = gPutc(i, ch);
+
+object  i;
+char    ch;
+int     r;
+@end group
+@end example
+This method is used to write a character (@code{ch}) to stream @code{i}.
+The value returned is the character written or @code{EOF} if error.
+@example
+@group
+@exdent Example:
+ 
+gPutc(stdoutStream, 'x');
+@end group
+@end example
+@sp 1
+See also:  @code{Puts::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Puts}
+@deffn {Puts} Puts::Stream
+@sp 2
+@example
+@group
+r = gPuts(i, str);
+
+object  i;
+char    *str;  /*  or:  object str;  */
+int     r;
+@end group
+@end example
+This method is used to write a string (@code{str}) to stream @code{i}.
+@code{str} may also be an instance of the @code{String} class in which
+case the associated string will be written.  All the characters up to
+the first null byte will be written.  The value returned is the number
+of bytes written to the stream.
+@example
+@group
+@exdent Example:
+ 
+gPuts(stdoutStream, "Hello\n");
+@end group
+@end example
+@sp 1
+See also:  @code{Putc::Stream, Printf::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Read}
+@deffn {Read} Read::Stream
+@sp 2
+@example
+@group
+r = gRead(i, buf, n);
+
+object  i;
+char    *buf;
+unsigned n;
+int     r;
+@end group
+@end example
+This method is used to read @code{n} bytes into @code{buf} from
+@code{Stream} @code{i}.  The value returned is the actual number
+of bytes read or -1 on error.
+@example
+@group
+@exdent Example:
+ 
+char    buf[80];
+
+gRead(stdinStream, buf, 10);
+@end group
+@end example
+@sp 1
+See also:  @code{Gets::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Retreat}
+@deffn {Retreat} Retreat::Stream
+@sp 2
+@example
+@group
+r = gRetreat(i, n);
+
+object  i;
+long    n;
+long    r;
+@end group
+@end example
+This method is used to retreat the position of the next
+read of @code{Stream} @code{i} by @code{n} bytes.
+The value returned is the actual number of bytes retreated or
+0 on error.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Seek::Stream, Advance::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Seek}
+@deffn {Seek} Seek::Stream
+@sp 2
+@example
+@group
+r = gSeek(i, n);
+
+object  i;
+long    n;
+long    r;
+@end group
+@end example
+This method is used to seek to position @code{n} of @code{Stream}
+@code{i} relative to the beginning of the stream.
+The value returned is the actual position seeked to or 0 on error.
+@c @example
+@c @group
+@c @exdent Example:
+@c  
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Retreat::Stream, Advance::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Write}
+@deffn {Write} Write::Stream
+@sp 2
+@example
+@group
+r = gWrite(i, buf, n);
+
+object  i;
+char    *buf;
+unsigned n;
+int     r;
+@end group
+@end example
+This method is used to write @code{n} bytes from @code{buf} into
+@code{Stream} @code{i}.  The value returned is the actual number
+of bytes written or -1 on error.
+@example
+@group
+@exdent Example:
+ 
+gWrite(stdoutStream, "Hello", 5);
+@end group
+@end example
+@sp 1
+See also:  @code{Puts::Stream, Read::Stream}
+@end deffn
+
+
+
+
+@subsection Stream Global Variables
+@pdfsubsection{Stream Global Variables}
+There are several global variables associated with the @code{Stream}
+class.  These variables represent standard streams used throughout
+Dynace.  They are used for diagnostic output as well as any other input
+or output which may be necessary on a global basis.  These variables may
+be assigned different streams in order to redirect the output.  The
+remainder of this section documents all the global stream variables.
+
+
+
+
+@pdfsubsubsection {stderrStream}
+@deffn {stderrStream} stderrStream::Stream
+@sp 2
+@example
+@group
+object  stderrStream;
+@end group
+@end example
+The @code{stderrStream} global variable is used to direct error
+messages to the correct output medium.  It is initialized to
+an instance of the @code{File} class using the C language
+@code{stderr} stream.  It may be set to any instance of a
+subclass of @code{Stream}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{stdoutStream::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {stdinStream}
+@deffn {stdinStream} stdinStream::Stream
+@sp 2
+@example
+@group
+object  stdinStream;
+@end group
+@end example
+The @code{stdinStream} global variable is used as a global mechanism for
+obtaining input.  It is initialized to an instance of the @code{File}
+class using the C language @code{stdin} stream.  It may be set to any
+instance of a subclass of @code{Stream}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{stdoutStream::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {stdoutStream}
+@deffn {stdoutStream} stdoutStream::Stream
+@sp 2
+@example
+@group
+object  stdoutStream;
+@end group
+@end example
+The @code{stdoutStream} global variable is used to direct normal
+output to the correct output medium.  It is initialized to
+an instance of the @code{File} class using the C language
+@code{stdout} stream.  It may be set to any instance of a
+subclass of @code{Stream}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{stderrStream::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {traceStream}
+@deffn {traceStream} traceStream::Stream
+@sp 2
+@example
+@group
+object  traceStream;
+@end group
+@end example
+The @code{traceStream} global variable is used to direct Dynace
+trace output to the correct output medium.  It is initialized to
+an instance of the @code{File} class using the C language
+@code{stdout} stream.  It may be set to any instance of a
+subclass of @code{Stream}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{stderrStream::Stream}
+@end deffn
+
+
+
+
+
+
+
+
+

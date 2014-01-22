@@ -1,0 +1,24 @@
+
+Process needed to generate the documentation.
+
+From DOS -	Spell check files after date of spell file (ispell) 
+		Remove tabs  (rt.bat)
+		touch spell file
+		
+From UNIX -	Delete carage returns (delcr *.tex)
+		Run TeX (tex-all)
+		Generate .1 and .2 files (gen)
+		Create misc files (make-rest)
+		Delete unnecessary files (c)
+
+		Check overfull boxes
+		touch spell file
+
+
+Programs
+--------
+tex-all		create .dvi files from .tex files
+tex-finish	create .dvi files form .tex files - final pass
+gen		create .1, .2 and .ps files from .dvi file
+make-rest	create misc .ps .1 and .2 files
+c		clear - remove junk files

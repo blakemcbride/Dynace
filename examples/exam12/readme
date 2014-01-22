@@ -1,0 +1,22 @@
+
+
+This example builds on the previous example with the addition of two
+methods/generics and modifies the main program to use them.
+
+All external access to a class's methods is done through generic functions
+(or generics for short).  Generics are shared among all classes who associate
+methods to similar generics.  However, methods are unique to the classes
+which define them,  except that their functionality may be inherited by
+subclassing.
+
+When a generic is evoked, the generic determines the class of the
+first argument and then executes the method which is associated with
+a particular generic/class combination.  If an association is not found,
+the superclasses of the class of the first argument are searched.
+
+Instance and class variables may only be directly accessed by methods
+defined in the same class as the variables.  Subclasses may not directly
+access class or instance variables which have been defined in a
+superclass.  This causes very tight encapsulation.
+
+(To build see the readme file in the first example.)

@@ -1,0 +1,5 @@
+# Makefile for Plan 9
+
+all :V:
+	echo Threads for Plan 9 have not been enabled because Plan 9 has native threads.
+	echo Threads could easily be ported, there is just no reason to.

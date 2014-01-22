@@ -1,0 +1,19 @@
+//  Dynace jumpto.s for GNU C compiler (gcc) on 386 machines
+//  This version was used with the Cygwin GCC compiler uner WIN32
+	.file	"jumpto.c"
+gcc2_compiled.:
+___gnu_compiled_c:
+.text
+	.align 4
+.globl __jumpToMethod
+	.def	__jumpToMethod;	.scl	2;	.type	32;	.endef
+__jumpToMethod:
+	pushl %ebp
+	movl %esp,%ebp
+	movl 8(%ebp),%eax
+/	call *%eax
+/	leave
+/	ret
+	leave
+	leave
+	jmp *%eax

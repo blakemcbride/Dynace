@@ -1,0 +1,18 @@
+//  32 bit Linux with -fomit-frame-pointer (or -O) on generics.c
+//  This does not work with -O2 or -O3 on generics.c
+	.file	"jumpto.c"
+	.text
+	.p2align 4,,15
+	.globl	_jumpToMethod
+	.type	_jumpToMethod, @function
+_jumpToMethod:
+.LFB0:
+	.cfi_startproc
+	movl	4(%esp), %eax
+	addl	$32, %esp
+	jmp	*%eax
+	.cfi_endproc
+.LFE0:
+	.size	_jumpToMethod, .-_jumpToMethod
+	.ident	"GCC: (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2"
+	.section	.note.GNU-stack,"",@progbits

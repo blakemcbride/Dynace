@@ -1,0 +1,32 @@
+
+This example builds on the previous example by correctly initializing
+and using a check box and radio button controls within the modal
+dialog.  Note that the remaining controls will remain minimally
+functional until later examples.
+
+Note that this example only utilizes the first of two check boxes located
+in the dialog and the first of two sets of radio controls in the dialog.
+
+Radio buttons and check boxes are treated very similar.  The main
+difference between the two is that check boxes are not mutually
+exclusive and radio buttons (within groups) are.  That is with radio
+buttons the user may only select one of a group.
+
+Radio buttons and check boxes are defined by the resource editor as
+normal radio button and check box controls.  You can control the
+grouping of radio buttons when defining them with the resource editor.
+The first button of each group should have its group flag enabled.
+
+Be sure to see example 04.  It documents the basic use and structure
+of the init_controls(), and displayValues() functions.
+
+Note that this example only illustrates a fraction of the many flexable
+things which may be done with these controls.
+
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

@@ -1,0 +1,231 @@
+@page
+
+@section ObjectAssociation Class
+@pdfsection{ObjectAssociation Class}
+This class is a subclass of the @code{LookupKey} class.  It is used to
+associate a value (an arbitrary object) with a key.  The documentation
+on the @code{LookupKey} should be consulted since much of this class's
+functionality is inherited from it.
+
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+@subsection ObjectAssociation Class Methods
+@pdfsubsection{ObjectAssociation Class Methods}
+The only class method associated with this class is the one used to
+create instances of the @code{ObjectAssociation} class.
+
+
+
+
+
+@pdfsubsubsection {NewWithObjObj}
+@deffn {NewWithObjObj} NewWithObjObj::ObjectAssociation
+@sp 2
+@example
+@group
+i = gNewWithObjObj(ObjectAssociation, key, val);
+
+object  key;    /*  or NULL   */
+object  val;    /*  or NULL   */
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{ObjectAssociation} class.
+@code{key} is used to initialize the key associated with the instance
+created and @code{val} is used to initialize its associated value.  The
+new instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+@subsection ObjectAssociation Instance Methods
+@pdfsubsection{ObjectAssociation Instance Methods}
+The instance methods associated with this class are used to obtain,
+change and print the value associated with its instances.  Much
+additional functionality is achieved through its superclass,
+@code{LookupKey}.
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::ObjectAssociation
+@sp 2
+@example
+@group
+old = gChangeValue(i, val);
+
+object  i;
+object  val;    /*  or NULL   */
+object  old;
+@end group
+@end example
+This method is used to change the value associated with @code{ObjectAssociation}
+@code{i} to a value, @code{val}.  The old value is simply no longer
+associated with the instance.  It is not disposed.  This method
+returns the old value being replaced.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Value::ObjectAssociation, ChangeKey::LookupKey}
+@end deffn
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::ObjectAssociation
+@sp 2
+@example
+@group
+c = gDeepCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new instance of the
+@code{ObjectAssociation} class which contains a @emph{copy} of the key
+and value from @code{i}.  @code{DeepCopy}
+is used to create the copy of the key and value.  The new
+@code{ObjectAssociation} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::ObjectAssociation
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of the instance passed as well as
+associated key and value.  The key and value are disposed of by using
+the @code{DeepDispose} method.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::LookupKey}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::ObjectAssociation
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x;
+@c object  s;
+@c 
+@c x = gNewWithPtr(Pointer, NULL);
+@c s = gStringRepValue(x);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Value}
+@deffn {Value} Value::ObjectAssociation
+@sp 2
+@example
+@group
+val = gValue(i);
+
+object  i;
+object  val;
+@end group
+@end example
+This method is used to obtain the value associated with
+@code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeValue::ObjectAssociation, Key::LookupKey}
+@end deffn
+
+
+
+

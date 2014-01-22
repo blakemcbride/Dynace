@@ -1,0 +1,33 @@
+
+
+Major enhancements since 4.00 release
+-------------------------------------
+
+Major enhancements to the basic WDS functionality
+
+Support for tool bars and status lines
+
+Auto support for 3D controls
+
+Support for ODBC
+
+Support for OLE/COM
+
+Support for the Bohem GC
+
+Native multi-threading support
+
+Software protection library
+
+Created classes to support installation programs
+
+Added a BTree class
+
+
+
+Major deficiencies
+------------------
+
+Although the Dynace manual is fairly up-to-date, the WDS manual is very
+far from up-to-date.
+

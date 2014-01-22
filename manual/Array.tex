@@ -1,0 +1,507 @@
+@page
+
+@section Array Class
+@pdfsection{Array Class}
+The @code{Array} class is used to represent heterogeneous and
+non-heterogeneous indexable collections of arbitrary dimensions.  These
+arrays are designed to be flexible -- they have the ability to be
+dynamically re-dimensioned or reshaped -- and space and speed efficient.
+Although most of the actual functionality contained in subclasses of the
+@code{Array} class are implemented in the @code{Array} class, most users
+will find the subclasses more useful.  The documentation associated with
+this class serves to document the functionality which is common to all
+its subclasses.
+
+
+
+@subsection Array Class Methods
+@pdfsubsection{Array Class Methods}
+The majority of class methods associated with this class are mainly used
+by and documented in subclasses of the @code{Array} class.
+
+
+
+
+
+@pdfsubsubsection {IndexOrigin}
+@deffn {IndexOrigin} IndexOrigin::Array
+@sp 2
+@example
+@group
+s = gIndexOrigin(s, n)
+
+object  s;
+int     n;
+@end group
+@end example
+This method is used to set the index origin associated with @emph{all}
+array indexing.  The default is 0.  This means that a 4 element, 1
+dimension array would be indexed by 0, 1, 2, 3.  If the index origin
+is set to one that same array would be indexed by 1, 2, 3, 4.
+
+The index origin may be changed any number of times and has no actual effect
+on any arrays (either created previously or subsequently).  It only
+effects how indexing works.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+@subsection Array Instance Methods
+@pdfsubsection{Array Instance Methods}
+Instance methods associated with this class provide functionality which
+is common to all subclasses of the @code{Array} class.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ArrayPointer}
+@deffn {ArrayPointer} ArrayPointer::Array
+@sp 2
+@example
+@group
+p = gArrayPointer(s)
+
+object  s;
+void    *p;
+@end group
+@end example
+This method returns a pointer to the first element of an array represented
+be @code{s}.  The return type will be a pointer to the type of array it
+is.  For example a @code{ShorArray} will return a pointer to a @code{short}
+and a @code{DoubleFloatArray} will return a pointer to a @code{double}.
+Consecutive elements may be accessed by incrementing the pointer (although
+this is not the preferred way of going through an array).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::Array
+@sp 2
+@example
+@group
+r = gCopy(i);
+
+object  i;
+object  r;
+@end group
+@end example
+This method is used to create a new array object which is an exact copy,
+including type, rank, shape and values, of @code{i}.  The value returned
+is the new array object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepCopy::Array}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::Array
+@sp 2
+@example
+@group
+r = gDeepCopy(i);
+
+object  i;
+object  r;
+@end group
+@end example
+This method is used to create a new array object which is an exact copy,
+including type, rank, shape and values, of @code{i}.  The value returned
+is the new array object.
+
+The difference between this method and @code{Copy::Array} is that if the
+array being copied is an @code{ObjectArray}, @code{DeepCopy} will also
+make copies of the elements.  @code{Copy} will not.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::Array}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Array
+@sp 2
+@example
+@group
+r = gDeepDispose(s)
+
+object  s;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method disposes and frees all memory associated with an @code{Array}
+object.  If it is an instance of the @code{ObjectArray} class each
+non-NULL element will also be @code{DeepDispose}'d.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Array
+@sp 2
+@example
+@group
+r = gDispose(s)
+
+object  s;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method disposes and frees all memory associated with an @code{Array}
+object.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {Equal}
+@deffn {Equal} Equal::Array
+@sp 2
+@example
+@group
+r = gEqual(i, a)
+
+object  i, a;
+int     r;
+@end group
+@end example
+This method is used to determine the equality of two arrays.  If they
+(@code{i} and @code{a}) are instances of the same class, same rank,
+same shape and same values than @code{Equal} returns a 1.  @code{Equal}
+returns 0 otherwise.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{EQ}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Index}
+@deffn {Index} Index::Array
+@sp 2
+@example
+@group
+p = gIndex(i, idx)
+
+object     i;
+va_list  idx;
+@end group
+@end example
+This method is used to obtain a pointer to a single element of an array.
+It is only intended to be used internally by the subclasses of
+@code{Array}.  @code{i} is the array to be indexed and @code{idx} is a
+va_list where each element indicates successive indices into the
+array.  The number of elements in @code{idx} @emph{must} equal the rank
+of the array.  The pointer returned may be typecast to the appropriate
+type.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeValue::NumberArray, ShortValue::NumberArray}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Rank}
+@deffn {Rank} Rank::Array
+@sp 2
+@example
+@group
+r = gRank(i)
+
+object    i;
+unsigned  r;
+@end group
+@end example
+This method is used to obtain the number of dimensions a particular
+array (@code{i}) has.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Shape::Array, Size::Array, Reshape::Array}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Reshape}
+@deffn {Reshape} Reshape::Array
+@sp 2
+@example
+@group
+i = vReshape(i, r, ...)
+
+object     i;
+unsigned   r;
+@end group
+@end example
+This method is used to change the rank and shape of an array (@code{i}).
+@code{r} is the new rank (number of dimensions) of the array and
+the remaining arguments (type @code{unsigned}) indicate the size of
+each consecutive dimension.  Not that the number of arguments after
+@code{r} @emph{must} be equal to the number @code{r}.
+
+If the new shape has fewer elements than the original, the remaining
+elements are discarded.  If, however, the new shape has more elements,
+the elements in the original array will be reused (from the beginning)
+over and over until the new array is filled.
+
+The value returned is the modified array passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Shape::Array, Rank::Array}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Shape}
+@deffn {Shape} Shape::Array
+@sp 2
+@example
+@group
+s = gShape(i)
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to obtain the shape (or dimensions) of a particular
+array (@code{i}).  The value returned (@code{s}) is an instance of the
+@code{ShortArray} class, each element of which contains a consecutive
+dimension.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Reshape::Array, Rank::Array, Size::Array}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::Array
+@sp 2
+@example
+@group
+s = gSize(i)
+
+object  i;
+int     s;
+@end group
+@end example
+This method is used to obtain the total number of elements in array @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Rank::Array, Shape::Array}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::Array
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the type, rank, shape and values associated with
+@code{i}.  This is often used to print or display the value.  It is also
+used by @code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project) in order to
+directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, StringRepValue::Array}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Array
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the values associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, StringRep::Array}
+@end deffn
+
+
+
+
+
+
+

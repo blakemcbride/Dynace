@@ -1,0 +1,12 @@
+
+
+This example demonstrates the value and correct initialization procedure
+for the automatic garbage collector.
+
+The first time it is run the system will run out of memory because a
+large number of objects are created but never disposed.
+
+After the first run you need to un-comment the line indicated in main.c
+and re-compile and link to see what happens when the GC is turned on.
+
+(To build see the readme file in the first example.)

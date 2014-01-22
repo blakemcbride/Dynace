@@ -1,0 +1,19 @@
+
+#  Batch file used to create (from scratch) the base generics.h file
+#  included with Dynace for C++ inlines
+
+cd ../kernel
+rm -f generics.*
+../bin/dpp -C -S4 -h -i -s *.d
+mv generics.h ../include
+
+cd ../class
+../bin/dpp -C -S4 -h -i -g ../include/generics.h -s *.d
+mv generics.h ../include
+
+cd ../threads
+../bin/dpp -C -S4 -h -i -g ../include/generics.h -s *.d
+mv generics.h ../include
+
+cd ../generics
+

@@ -1,0 +1,12 @@
+
+This example illustrates the method of printing a report to a printer
+which is selected and configured by the user.
+
+
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

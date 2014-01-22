@@ -1,0 +1,14 @@
+
+[
+  object,
+  uuid(ccbe60a1-01a9-11d0-bc41-004005185208),
+  pointer_default(unique)
+] 
+
+interface IBlake : IUnknown {
+	import "unknwn.idl";
+	HRESULT SetValue ([in] short n, [in, size_is(n)] byte d[]);
+	HRESULT GetValue ([in] short buffer_size, [out, size_is(buffer_size)] byte d[], [out] short *bytes_returned);
+}
+
+

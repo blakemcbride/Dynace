@@ -1,0 +1,10 @@
+
+
+This example demonstrates the error messages printed when an error
+occurs.
+
+After the first run you need to comment out the first error line
+and re-compile and link to cause the second error.  Thereafter,
+you must comment out the first two errors to evoke the third error.
+
+(To build see the readme file in the first example.)

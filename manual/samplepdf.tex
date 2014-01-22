@@ -1,0 +1,120 @@
+% $Header: /home/cvs1/Dynace/manual/samplepdf.tex,v 1.1.1.1 2002/02/20 17:06:06 Blake Exp $
+% \special{ pdf: pagesize width 8.5truein height 11.0truein}
+\special{  pdf:  docview <</PageMode /UseOutlines>>}%
+\catcode`\ =11\def\space{ }\catcode`\ =10
+%
+%
+% Some color definitions
+% 
+\def\begincolor#1{\special{pdf:bc #1}}%
+\def\endcolor{\special{pdf:ec}}%
+\def\colored#1#2{%
+  \begincolor{#1}#2\endcolor}
+\def\red{[0.8 0.5 0]}%
+\def\green{[0 1 0]}%
+\def\blue{[0 0.4 0.8]}%
+\def\yellow{[0.8 0.9 0.1]}%
+\def\linkcolor{[0.5 0.0 0.7]}%
+%
+% Some font definitions
+%
+\font\maintitlefont=cmti12 at 20.74pt
+\font\headingfont=cmss12 at 14.4pt
+\font\subheadingfont=cmss12 at 12pt
+%
+% Counters for section levels
+%
+\newcount\sectioncount\newcount\ssectioncount\newcount\sssectioncount
+\sectioncount0\ssectioncount0\sssectioncount0
+%
+\newskip\indentlevel\indentlevel=\parindent
+\newskip\secskip\secskip=24pt plus 1pt minus 2pt
+\newskip\subsecskip\subsecskip=16pt plus 1pt minus 2pt
+%
+%
+
+\def\setlink#1{\colored{\linkcolor}{#1}}%
+%  
+\def\setheading#1{%
+  {\headingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 1 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\def\setsubheading#1{%
+  {\subheadingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 2 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\def\link#1#2{\setbox0\hbox{\setlink{#1}}%
+   \leavevmode\special{pdf: ann width \the\wd0\space height \the\ht0\space depth \the\dp0
+     << /Type /Annot /Subtype /Link /Border [ 0 0 0 ] /A << /S /GoTo
+     /D (#2) >> >>}\box0\relax}%
+%
+\def\dest#1{\hbox{\raise14pt\hbox{\special{pdf:dest (#1) [ @thispage /FitH
+@ypos ]}}}}%
+%
+\def\section#1{\advance\sectioncount by 1\ssectioncount0
+\vskip-\lastskip\vskip\secskip\goodbreak
+\noindent\setheading{\the\sectioncount. #1}\medskip\nobreak}%
+\def\subsection#1{\vskip-\lastskip\advance\ssectioncount by 1%
+\vskip\subsecskip\noindent
+\setsubheading{\the\sectioncount.\the\ssectioncount\
+          #1}\par\nobreak\smallskip}%
+%
+%
+\def\newpage{\vfill\eject}
+%
+
+\special {pdf:  docinfo << /Title (Sample PDF Document) >>}
+\special {pdf:  docinfo << /Author (Jim Boatwright) >>}
+
+\dest{index}
+\section{Index++}
+\link{hyperlink \#1} {link1}
+
+\link{go to section 2.1} {sect2.1}
+
+\link{go to section 2.2} {sect2.2}
+
+\link{hyperlink \#2} {link2}
+
+\link{go to section 3.1} {sect3.1}
+
+\link{go to section 3.2} {sect3.2}
+
+\newpage
+\dest{link1}
+\section{Link 1}
+This is the first link
+
+\link{back to index} {index}
+
+\newpage
+\dest{sect2.1}
+\subsection{Section 2, part 1}
+\link{back to index} {index}
+
+\newpage
+\dest{sect2.2}
+\subsection{Section 2, part 2}
+\link{back to index} {index}
+
+
+\newpage
+\dest{link2}
+\section{Link 2}
+This is the second link
+
+\link{back to index} {index}
+
+\newpage
+\dest{sect3.1}
+\subsection{Section 3, part 1}
+\link{back to index} {index}
+
+\newpage
+\dest{sect3.2}
+\subsection{Section 3, part 2}
+\link{back to index} {index}
+
+\bye

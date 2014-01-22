@@ -1,0 +1,667 @@
+@page
+
+@section Number Class
+@pdfsection{Number Class}
+The @code{Number} class is an abstract class used to combine common
+functionality of the primitive C numeric data types.  Although most of the
+functionality is actually implemented in the subclasses of the @code{Number}
+class, they are documented here because of their common interface.
+
+
+@subsection Number Class Methods
+@pdfsubsection{Number Class Methods}
+The @code{Number} class has no specific class methods.
+
+
+@subsection Number Instance Methods
+@pdfsubsection{Number Instance Methods}
+Although most of the instance methods are actually implemented in the
+subclasses of the @code{Number} class, they are documented here because
+of their common interface.  Regardless of the numeric type being
+represented there has been every effort made to make a standard set of
+interfaces to these data elements.  Therefore, you are able to change
+the value associated with an instance of the @code{ShortInteger} class
+to a @code{double} value of 3.141, however, when you retrieve the
+@code{double} value you will only get back 3.0.  (Of course you
+wouldn't loose the fractional part if you were dealing with an instance
+of the @code{DoubleFloat} class.)
+
+
+
+
+
+@pdfsubsubsection {ChangeCharValue}
+@deffn {ChangeCharValue} ChangeCharValue::Number
+@sp 2
+@example
+@group
+i = gChangeCharValue(i, c);
+
+object  i;
+int     c;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+a subclass of the @code{Number} class.  Notice that this method
+returns the instance being passed.  @code{c} is the new value.
+If it is not the same type as @code{i} it will be converted.
+
+Note that @code{c} is of type @code{int}.  That is because if you pass a
+character to a generic function (which uses a variable argument
+declaration) the C language will automatically promote it to an
+@code{int}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithChar(Character, 'a');
+gChangeCharValue(x, 'b');
+@end group
+@end example
+@sp 1
+See also:  @code{CharValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeDoubleValue}
+@deffn {ChangeDoubleValue} ChangeDoubleValue::Number
+@sp 2
+@example
+@group
+i = gChangeDoubleValue(i, val);
+
+object  i;
+double  val;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+a subclass of the @code{Number} class.  Notice that this method
+returns the instance being passed.  @code{val} is the new value.
+If it is not the same type as @code{i} it will be converted.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithDouble(DoubleFloat, 3.14);
+gChangeDoubleValue(x, 7.56);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithDouble::DoubleFloat, DoubleValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeLongValue}
+@deffn {ChangeLongValue} ChangeLongValue::Number
+@sp 2
+@example
+@group
+i = gChangeLongValue(i, val);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+a subclass of the @code{Number} class.  Notice that this method
+returns the instance being passed.  @code{val} is the new value.
+If it is not the same type as @code{i} it will be converted.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithLong(LongInteger, 55L);
+gChangeLongValue(x, 66L);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithLong::LongInteger, LongValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeShortValue}
+@deffn {ChangeShortValue} ChangeShortValue::Number
+@sp 2
+@example
+@group
+i = gChangeShortValue(i, s);
+
+object  i;
+int     s;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+a subclass of the @code{Number} class.  Notice that this method
+returns the instance being passed.  @code{s} is the new value.
+If it is not the same type as @code{i} it will be converted.
+
+Note that @code{s} is of type @code{int}.  That is because if you pass a
+@code{short} to a generic function (which uses a variable argument
+declaration) the C language will automatically promote it to an
+@code{int}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithInt(ShortInteger, 55);
+gChangeShortValue(x, 66);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithInt::ShortInteger, ShortValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeUShortValue}
+@deffn {ChangeUShortValue} ChangeUShortValue::Number
+@sp 2
+@example
+@group
+i = gChangeUShortValue(i, s);
+
+object  i;
+unsigned  s;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+a subclass of the @code{Number} class.  Notice that this method
+returns the instance being passed.  @code{s} is the new value.
+If it is not the same type as @code{i} it will be converted.
+
+Note that @code{s} is of type @code{unsigned}.  That is because if you pass a
+@code{short} to a generic function (which uses a variable argument
+declaration) the C language will automatically promote it to an
+@code{unsigned}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithUnsigned(UnsignedShortInteger, 55);
+gChangeUShortValue(x, 66);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithUnsigned::UnsignedShortInteger}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::Number
+@sp 2
+@example
+@group
+i = gChangeValue(i, v);
+
+object  i;
+object  v;
+@end group
+@end example
+This method is used to change the value associated with an instance of a
+subclass of the @code{Number} class.  Notice that this method returns
+the instance being passed.  @code{v} is an object which represents the
+new value.  If it is not the same type as @code{i} it will be converted.
+Note that this conversion does not effect the object @code{v}, just
+the value changed in @code{i}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithInt(ShortInteger, 88);
+y = gNewWithDouble(DoubleFloat, 3.141);
+gChangeValue(x, y);    /*  x is changed to 3  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeCharValue::Number, ChangeShortValue::Number, etc.}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {CharValue}
+@deffn {CharValue} CharValue::Number
+@sp 2
+@example
+@group
+c = gCharValue(i);
+
+object  i;
+char    c;
+@end group
+@end example
+This method is used to obtain the @code{char} value associated with an
+instance of a subclass of the @code{Number} class.  Note that this is
+one of the few generics which doesn't return a Dynace object.  It
+returns a @code{char}.  If the instance does not represent an instance
+of the @code{Character} class, the returned value of whatever is
+represented will be converted to a @code{char}.
+@example
+@group
+@exdent Example:
+
+object  x;
+char    c;
+
+x = gNewWithChar(Character, 'a');
+c = gCharValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithChar::Character, ChangeValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::Number
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;
+int     r;
+@end group
+@end example
+This method is used by the generic container classes to determine
+the relationship of the values represented by @code{i} and @code{obj}. 
+@code{r} is -1 if the value represented by @code{i} is less than
+the value represented by @code{obj}, 1 if the value of @code{i}
+is greater than @code{obj}, and 0 if they are equal.  @code{obj}
+may be any type of object.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hash::Number}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DoubleValue}
+@deffn {DoubleValue} DoubleValue::Number
+@sp 2
+@example
+@group
+val = gDoubleValue(i);
+
+object  i;
+double  val;
+@end group
+@end example
+This method is used to obtain the @code{double} value associated
+with an instance of a subclass of the @code{Number} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns a @code{double}.  If the instance does not represent
+an instance of the @code{DoubleFloat} class, the returned value
+of whatever is represented will be converted to a @code{double}.
+@example
+@group
+@exdent Example:
+
+object  x;
+double  val;
+
+x = gNewWithDouble(DoubleFloat, 7.62);
+val = gDoubleValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithDouble::DoubleFloat, ChangeValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FormatNumber}
+@deffn {FormatNumber} FormatNumber::Number
+@sp 2
+@example
+@group
+val = gFormatNumber(i, msk, wth, dp);
+
+object  i;      /*  object to be formatted      */
+char    *msk;   /*  format mask                 */
+int     wth;    /*  field width                 */
+int     dp;     /*  number of decimal places    */
+object  val;    /*  String value                */
+@end group
+@end example
+This method is used to convert a number into a nicely formatted string.
+@code{i} is the numeric object to be formatted.
+
+@code{msk} is a character string which tells the formatter specific
+which formatting options to use.  Each character in the string
+represents a different option.  The order is not significant.  The
+following table lists the available options:
+@example
+@group
+B   blank if zero
+C   add commas every 3 digits to the left of the decimal point
+L   left justify
+P   put parentheses around negative numbers
+Z   zero fill
+D   floating dollar sign
+U   upper-case letters in conversion (used in bases greater
+    than 10)
+R   add a percent sign to the end of the number
+@end group
+@end example
+@code{wth} indicates the width of the field and hence the length of the
+resultant @code{String} object.  If @code{wth} <= 0 @code{FormatNumber} will
+calculate and use the minimum width which will represent @code{i}.
+
+@code{dp} indicates the number of decimal places that should appear in
+the string.  If @code{dp} is less than the number of decimal places in
+@code{i} rounding will occur.  However if @code{dp} < 0 Nfmt will
+calculate and use the minimum number of decimal places required to fully
+represent @code{i}.
+
+The value returned by this method is an instance of the @code{String} class.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithDouble(DoubleFloat, 1234567.127);
+y = gFormatNumber(x, "C", 0, 2);    /*  y = "1,234,567.13"  */
+@end group
+@end example
+@sp 1
+See also:  @code{StringRepValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::Number
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This method is used by the generic container classes to obtain hash values
+for the object.  @code{val} is a hash value between 0 and a large integer
+value.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {LongValue}
+@deffn {LongValue} LongValue::Number
+@sp 2
+@example
+@group
+val = gLongValue(i);
+
+object  i;
+long    val;
+@end group
+@end example
+This method is used to obtain the @code{long} value associated
+with an instance of a subclass of the @code{Number} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns a @code{long}.  If the instance does not represent
+an instance of the @code{LongInteger} class, the returned value
+of whatever is represented will be converted to a @code{long}.
+@example
+@group
+@exdent Example:
+
+object  x;
+long    val;
+
+x = gNewWithLong(LongInteger, 55L);
+val = gLongValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithLong::LongInteger, ChangeLongValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ShortValue}
+@deffn {ShortValue} ShortValue::Number
+@sp 2
+@example
+@group
+s = gShortValue(i);
+
+object  i;
+short   s;
+@end group
+@end example
+This method is used to obtain the @code{short} value associated with an
+instance of a subclass of the @code{Number} class.  Note that this is
+one of the few generics which doesn't return a Dynace object.  It
+returns a @code{short}.  If the instance does not represent an instance
+of the @code{ShortInteger} class, the returned value of whatever is
+represented will be converted to a @code{short}.
+@example
+@group
+@exdent Example:
+
+object  x;
+short   s;
+
+x = gNewWithInt(ShortInteger, 55);
+s = gShortValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithInt::ShortInteger, ChangeShortValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Number
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithInt(ShortInteger, 55);
+s = gStringRepValue(x);      /*  s represents "55"   */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object, FormatNumber::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {UnsignedShortValue}
+@deffn {UnsignedShortValue} UnsignedShortValue::Number
+@sp 2
+@example
+@group
+s = gUnsignedShortValue(i);
+
+object  i;
+unsigned short  s;
+@end group
+@end example
+This method is used to obtain the @code{unsigned short} value associated
+with an instance of a subclass of the @code{Number} class.  Note that
+this is one of the few generics which doesn't return a Dynace object.
+It returns an @code{unsigned short}.  If the instance does not represent
+an instance of the @code{UnsignedShortInteger} class, the returned value
+of whatever is represented will be converted to an @code{unsigned short}.
+@example
+@group
+@exdent Example:
+
+object  x;
+unsigned short  s;
+
+x = gNewWithUnsigned(UnsignedShortInteger, 55);
+s = gUnsignedShortValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithUnsigned::UnsignedShortInteger,}
+@hfil @break @hglue .64in      @code{ChangeUShortValue::Number}
+@end deffn
+
+
+
+
+
+
+
+
+
+

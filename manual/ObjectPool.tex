@@ -1,0 +1,48 @@
+
+@page
+@section ObjectPool Class
+@pdfsection{ObjectPool Class}
+The @code{ObjectPool} class provides a means to group arbitrary objects in a pool.
+This pool may later be disposed causing all the objects contained in the pool to
+be disposed as well.  This is useful when running a particular functional module.
+All the new objects can be added to a pool and then disposed en-mass when the functional
+unit is complete.  This makes object disposal a little easier to organize.
+
+This class can maintain numerous pools as well as global pools.
+
+@subsection ObjectPool Class Methods
+@pdfsubsection{ObjectPool Class Methods}
+Class methods for this class are used to create new pools as well as manage global pools.
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::ObjectPool
+@sp 2
+@example
+@group
+i = gNew(ObjectPool);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the ObjectPool class.  It is usually
+only used by subclasses of the @code{ObjectPool} class.  The new link
+will not point to anything.  It will just be an empty link.
+
+This method is actually just inherited from @code{Object} in order
+to create a null link.
+
+The value returned is the instance object created (the new link).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::ObjectPool}
+@end deffn
+

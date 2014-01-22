@@ -1,0 +1,431 @@
+@page
+
+@section StringDictionary Class
+@pdfsection{StringDictionary Class}
+This class combines the functionality of the @code{Set}
+and @code{StringAssociation} classes in order to store a collection of
+arbitrary key/value pairs.
+
+The difference between this class and the @code{Dictionary} class is
+that this class only accepts C language strings as keys.  This class
+provides an efficient and simple to use means of representing a
+commonly needed collection.
+
+This class is a subclass of the @code{Set} class and therefore inherits
+all of its functionality.
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+@subsection StringDictionary Class Methods
+@pdfsubsection{StringDictionary Class Methods}
+There are no class methods for this class.  It inherits the ability
+to create instances of itself through its superclass, @code{Set}.
+
+
+
+@subsection StringDictionary Instance Methods
+@pdfsubsection{StringDictionary Instance Methods}
+The instance methods associated with this class are used to add, retrieve
+and remove key/value pairs from the @code{Dictionary}.  Note that additional
+functionality may be obtained through its superclass, @code{Set}.
+
+
+
+
+
+
+@pdfsubsubsection {AddStr}
+@deffn {AddStr} AddStr::StringDictionary
+@sp 2
+@example
+@group
+r = gAddStr(i, key, value);
+
+object  i;
+char    *key
+object  value;
+object  r;
+@end group
+@end example
+This method is used to add a new key/value pair to the @code{StringDictionary}
+instance (@code{i}).  If an object with the same key already exists in
+the @code{Dictionary} it will be left as is and @code{AddStr} will return
+@code{NULL}.  If the key/value objects are added @code{AddStr} will
+return the @code{StringAssociation} instance created to represent the
+key/value pair passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfil}
+@hfil @break @hglue .64in      @code{ChangeValueWithStr::StringDictionary,}
+@hfil @break @hglue .64in      @code{RemoveStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValueWithStr}
+@deffn {ChangeValueWithStr} ChangeValueWithStr::StringDictionary
+@sp 2
+@example
+@group
+r = gChangeValueWithStr(i, key, value);
+
+object  i;
+char    *key
+object  value;
+object  r;
+@end group
+@end example
+This method is used to change the value associated with an existing
+key/value pair to the @code{StringDictionary} instance (@code{i}).
+@code{key} represents the identity of the pre-existing key/value
+pair and @code{value} represents the new value to be associated with
+the key.
+
+Normally, this method changes the value part of the association
+and returns the previous value which is not disposed.  If
+@code{key} doesn't identify a pre-existing association, this method
+simply returns @code{NULL}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfil}
+@hfil @break @hglue .64in      @code{RemoveStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeStr}
+@deffn {DeepDisposeStr} DeepDisposeStr::StringDictionary
+@sp 2
+@example
+@group
+r = gDeepDisposeStr(i, key);
+
+object  i;
+char    *key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The value and @code{StringAssociation} used to bind the two are all deep
+disposed.
+
+This method is the same as @code{DisposeStr::StringDictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::StringDictionary
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an entire @code{Dictionary}.  It does not
+dispose of any of the values but does dispose of all the associations
+used to represent the pair.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveStr::StringDictionary, DeepDispose::Set,}
+@hfil @break @hglue .64in      @code{DisposeAllNodes::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::StringDictionary
+@sp 2
+@example
+@group
+i = gDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in a @code{StringDictionary}
+instance without disposing of the instance itself.  The objects in the
+@code{StringDictionary} are simply disassociated from the
+@code{StringDictionary} instance and are not disposed.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeAllNodes::Set, Dispose::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeStr}
+@deffn {DisposeStr} DisposeStr::StringDictionary
+@sp 2
+@example
+@group
+r = gDisposeStr(i, key);
+
+object  i;
+char    *key;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of a key/value pair from a
+@code{Dictionary}.  If found and removed @code{i} is returned.  If @code{key}
+is not found @code{NULL} is returned.
+
+The value and @code{StringAssociation} used to bind the two are all deep
+disposed.
+
+This method is the same as @code{DeepDisposeStr::StringDictionary}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindStr}
+@deffn {FindStr} FindStr::StringDictionary
+@sp 2
+@example
+@group
+r = gFindStr(i, key);
+
+object  i;
+char    *key;
+object  r;
+@end group
+@end example
+This method is used to find the instance of the @code{StringAssociation}
+class which is used to represent the key/value pair stored under
+@code{key} in @code{Dictionary} @code{i}.  If @code{key} is not found
+@code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindValueStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindAddStr}
+@deffn {FindAddStr} FindAddStr::StringDictionary
+@sp 2
+@example
+@group
+r = gFindAddStr(i, key, value);
+
+object  i;
+char    *key;
+object  value;
+object  r;
+@end group
+@end example
+This method is used to find and return the instance of the
+@code{StringAssociation} class used to represent the key/value pair
+stored under the key @code{key}.  If it is not found a new
+@code{StringAssociation} will be added and returned which represent the
+key/value pair representing @code{key} and @code{value}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindValueStr}
+@deffn {FindValueStr} FindValueStr::StringDictionary
+@sp 2
+@example
+@group
+r = gFindValueStr(i, key);
+
+object  i;
+char    *key;
+object  r;
+@end group
+@end example
+This method is used to find the value stored under @code{key} in
+@code{Dictionary} @code{i}.  If @code{key} is not found @code{NULL} is
+returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveStr}
+@deffn {RemoveStr} RemoveStr::StringDictionary
+@sp 2
+@example
+@group
+r = gRemoveStr(i, key);
+
+object  i;
+char    *key;
+object  r;
+@end group
+@end example
+This method is used to remove a key/value pair from a @code{Dictionary}.
+If found and removed @code{i} is returned.  If @code{key} is not found
+@code{NULL} is returned.
+
+The value is not disposed, however, the @code{StringAssociation} used to
+bind the two is.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeStr::StringDictionary}
+@end deffn
+
+
+
+
+
+
+

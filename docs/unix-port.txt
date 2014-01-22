@@ -1,0 +1,11 @@
+
+Since I do most of my development on Windows there are some steps I've
+found which make it easier to port to unix as follows:
+
+delcr makefile.unx makfile.inc dropunx.sh mkfile.inc mkfile
+delcr bin/delcr.c
+dmake -f m32.dm realclean
+dmake -f m32.dm all-scratch
+dmake -f m32.dm STRAT=-S2 newgens
+dmake -f m32.dm realclean
+delete all .exe files

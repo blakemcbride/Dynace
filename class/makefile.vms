@@ -1,0 +1,29 @@
+
+CFLAGS =	/opt /warn=(disable=implicitfunc)
+CPPFLAGS =	/inc=([],[-.include])
+
+CLASSES =	linklist.d link.d linkval.d linkobj.d shortint.d assoc.d \
+		lookupky.d set.d dict.d string.d longint.d double.d \
+		char.d setseq.d loseq.d strassoc.d strdict.d linkseq.d ushrtint.d \
+		date.d pointer.d number.d objassoc.d \
+		sequence.d stream.d file.d array.d charary.d \
+		const.d shortary.d ushrtary.d intary.d longary.d floatary.d \
+		dblary.d bitary.d objary.d pntrary.d numbary.d intassoc.d \
+		intdict.d btree.d btreenod.d
+
+LIBOBJS =	$(CLASSES:.d=.obj) memalloc.obj
+
+[-.lib]dynace.olb: $(LIBOBJS)
+	lib /repl $@ $?
+
+dict.obj set.obj setseq.obj shrtdict.obj strdict.obj intdict.obj : set1.h
+
+string.obj array.obj : memalloc.h
+
+array.obj : array2.h
+
+array.obj charary.obj shortary.obj ushrtary.obj longary.obj floatary.obj \
+	dblary.obj bitary.obj objary.obj pntrary.obj : array1.h
+
+memalloc.c : memalloc.d
+	copy memalloc.d memalloc.c

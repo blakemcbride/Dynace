@@ -1,0 +1,28 @@
+
+This example takes example 04 and adds the help facility.  This example
+has a help subdirectory which contains the help text and build procedure.
+See the readme file in that directory and build the compiled help file
+prior to attempting to run this example.
+
+
+Note that this example adds the Help option to the menu in order to
+illustrate a method of accessing help through a Help menu option.
+Notice also that the Help option has an underline under the H.  This
+allows the user to access a menu option via the control-H.  This is
+done when in the resource editor by putting an & before the key
+letter.  The user may the access that option by typing control and
+whatever letter was underlined.
+
+Help is normally accessed via the F1 key at any point or via a help
+menu option.  This example illustrates context sensitive help via
+global F1 key, menu option, dialog specific and finally control
+specific.  The WDS help system has additional capabilities.  See the
+manual.
+
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

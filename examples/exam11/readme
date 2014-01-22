@@ -1,0 +1,10 @@
+
+
+This example builds on the previous example by the addition of instance
+variable declarations to the new class.  The main program has also been
+changed to create an instance of the new class.
+
+Instance variables are uniquely allocated as part of each instance
+of a class.
+
+(To build see the readme file in the first example.)

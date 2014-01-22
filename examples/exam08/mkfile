@@ -1,0 +1,26 @@
+# Makefile for Plan 9
+
+</$objtype/mkfile
+
+DYNACE_PATH = ../..
+
+BINDIR = $DYNACE_PATH/bin
+LIBDIR = $DYNACE_PATH/lib
+INCDIR = $DYNACE_PATH/include
+
+TARGET = main
+
+CFILES = main.c
+
+OBJS = ${CFILES:%.c=%.$O}
+
+CFLAGS = -DPLAN9 -I$INCDIR -p
+
+%.$O : %.c
+	$CC $CFLAGS $stem.c
+
+$TARGET : $OBJS
+	$LD -o $target $prereq $LIBDIR/Dynace.a
+
+clean realclean:VQ:
+	rm -f main.$O main

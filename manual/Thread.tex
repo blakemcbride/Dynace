@@ -1,0 +1,831 @@
+@page
+
+@section Thread Class
+@pdfsection{Thread Class}
+The @code{Thread} class gives Dynace the ability to create, manage and
+execute multiple threads of execution in a timesharing fashion.  See the
+manual for a detailed description of threads.
+
+
+See the examples included with the Dynace system for an illustration of the
+use of the thread / pipe / semaphore related classes.
+
+
+@subsection Thread Class Methods
+@pdfsubsection{Thread Class Methods}
+The class methods associated with the @code{Thread} class provide a means
+to create new instances of the @code{Thread} class.  Each instance
+represents a unique thread of execution.  The class methods also provide
+other functionality which is not related to any particular thread, such
+as the ability to initialize the threading system.
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {BlockingGetkey}
+@deffn {BlockingGetkey} BlockingGetkey::Thread
+@sp 2
+@example
+@group
+c = gBlockingGetkey(Thread)
+
+int     c;
+@end group
+@end example
+This method is used to get a key from the keyboard.  It does it in a way
+that allows other threads to continue if there is no key ready.  This
+allows the system to continue to operate while waiting for a user entry.
+
+The thread which calls this method will be placed on hold until a key
+has been hit.  At that time the thread will be enabled and the method
+will return the key hit.
+
+Only one thread may use this method at a time.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{StartThreader}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindStr}
+@deffn {FindStr} FindStr::Thread
+@sp 2
+@example
+@group
+t = gFindStr(Thread, name)
+
+char    *name;
+object  t;
+@end group
+@end example
+This method is used to obtain a thread object from its associated name.
+If found it is returned, otherwise @code{NULL} is returned.  Note
+that the name of the thread which started the thread system is ``main''.
+If @code{name} is @code{NULL} @code{Find} returns the currently running
+thread object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewThread::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NewThread}
+@deffn {NewThread} NewThread::Thread
+@sp 2
+@example
+@group
+t = gNewThread(Thread, name, fun, priority, arg, run,
+               autoDispose)
+
+char    *name;
+int     (*fun)(void *);
+int     priority;
+void    *arg;
+int     run;
+int     autoDispose;
+object  t;
+@end group
+@end example
+This class method creates instances of the @code{Thread} class.  Each
+thread represents a unique thread of execution.
+
+@code{name} is the name of the thread.  This name may be used to access
+the thread object via its name at a future point.  @code{name} may
+be null if no particular name is desired.
+
+@code{fun} is the C language function which will implement the process
+to be run by the new thread.  When @code{fun} is first executed it is
+passed the pointer defined by @code{arg} as its only argument.  @code{fun}
+may return an integer result which may be accessed by other threads.
+
+@code{priority} sets the initial priority of the thread.  This is a number
+between 1 and 30000.  The higher the number the greater the priority.
+Threads of higher priority (which are ready to run) always run before
+any threads of lesser priority.  Only ready threads of the same priority
+share CPU time.  There is a macro named @code{DEFAULT_PRIORITY} which
+may be used to create threads which share resources equally.  Creating
+higher or lower priority threads may be accomplished relative to the
+@code{DEFAULT_PRIORITY} macro.  Note that @emph{all} ready threads of
+a higher priority must complete before threads of a lower priority will
+receive any CPU time.
+
+@code{arg} provides a simple mechanism to pass data to the thread when
+it starts.  When @code{fun} is started it is passed a single argument
+@code{arg}.
+
+@code{run} is a flag to tell the system how to initialize the thread.
+If @code{run} is 1 the new thread will be created in a ready-to-run
+state.  It will be placed on the queue of ready threads and will
+automatically start when it gets CPU time.  If the thread is started
+at a higher priority than the thread which created the new thread
+then the current thread will be timed-out and the new thread will
+immediately start.  If @code{run} is set to 0 the new thread will
+be created in a hold state and must be released from this state
+in order to start running.
+
+@code{autoDispose} is used to control what happens to the thread
+object once the thread completes.  If set to 1 the thread will be
+automatically disposed when it completes.  If set to 0 the thread
+will remain in the system until manually disposed.  This may
+be useful if the return value of the thread is desired after it
+has completed.  Note that the garbage collector never collects
+thread objects.  They must be handled manually.  Note also that
+the way the system was implemented completed threads and threads
+on hold take up 0 CPU resources.
+
+The value returned (@code{t}) is the thread object created.  If not
+kept it may be obtained later by the use of the @code{FindStr::Thread}
+method.  This thread object may be used for many purposes to control
+a thread.  You may hold, release, change priority, kill or otherwise
+query the state of the thread via this object.
+
+Note that the threader must be started prior to the creation of any new
+threads.  This may be accomplished by the use of the @code{StartThreader}
+method.  
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{StartThreader, FindStr::Thread}
+@end deffn
+
+
+
+@subsection Thread Instance Methods
+@pdfsubsection{Thread Instance Methods}
+The instance methods associated with this class are used to manage and
+query various aspects related to particular threads.  Each instance
+represents a single unique thread.
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Thread
+@sp 2
+@example
+@group
+r = gDeepDispose(t)
+
+object  t;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to permanently stop the execution of an arbitrary
+thread, @code{t} (if it is running) and dispose of it.  @code{t} may be
+the current thread, in which case the next thread on the queue will
+start.
+
+In order to give the thread a return value use @code{Kill::Thread}
+and then this method.
+
+This method is the same as @code{Dispose::Thread}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Kill::Thread, Hold::Thread}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Thread
+@sp 2
+@example
+@group
+r = gDispose(t)
+
+object  t;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to permanently stop the execution of an arbitrary
+thread, @code{t} (if it is running) and dispose of it.  @code{t} may be
+the current thread, in which case the next thread on the queue will
+start.
+
+In order to give the thread a return value use @code{Kill::Thread}
+and then this method.
+
+This method is the same as @code{DeepDispose::Thread}.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Kill::Thread, Hold::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangePriority}
+@deffn {ChangePriority} ChangePriority::Thread
+@sp 2
+@example
+@group
+t = gChangePriority(t, pri)
+
+object  t;
+int     pri;
+@end group
+@end example
+This method is used to change the priority of thread @code{t}.
+Thread @code{t} may be the currently running thread.  If thread
+@code{t} is changed to a higher priority than the currently running
+thread, the currently running will immediately release the CPU to thread
+@code{t}.
+
+The priority is a number between 1 and 30000.  The higher the number the
+greater the priority.  Threads of higher priority (which are ready to
+run) always run before any threads of lesser priority.  Only ready
+threads of the same priority share CPU time.  There is a macro named
+@code{DEFAULT_PRIORITY} which may be used to create threads which share
+resources equally.  Creating higher or lower priority threads may be
+accomplished relative to the @code{DEFAULT_PRIORITY} macro.  Note that
+@emph{all} ready threads of a higher priority must complete before
+threads of a lower priority will receive any CPU time.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Priority::Thread, NewThread::Thread, State::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Hold}
+@deffn {Hold} Hold::Thread
+@sp 2
+@example
+@group
+t = gHold(t)
+
+object  t;
+@end group
+@end example
+This method is used to place a temporary hold on a thread (@code{t}).
+The thread stops execution and waits until released.  Threads on hold
+take no CPU time.  Any number of threads may place any number of holds
+on any threads, however, an equal number of releases are required
+to release a thread which has been held multiple times.  A thread
+may put itself on hold.  The value returned is the thread passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Release::Thread, Kill::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {IntValue}
+@deffn {IntValue} IntValue::Thread
+@sp 2
+@example
+@group
+r = gIntValue(t)
+
+object  t;
+int     r;
+@end group
+@end example
+This method is used to obtain the return value of a thread (@code{t})
+which has completed or been killed.  If the thread is still running
+(or on hold) this method will just return 0.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{State::Thread, WaitFor::Thread, Kill::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Kill}
+@deffn {Kill} Kill::Thread
+@sp 2
+@example
+@group
+t = gKill(t, rtn)
+
+object  t;
+int     rtn;
+@end group
+@end example
+This method is used to permanently stop the execution of an arbitrary
+thread, @code{t}.  Once this method is called on a thread it cannot
+be run again.  @code{t} may be the current thread, in which case the
+next thread on the queue will start.  Thread @code{t} is not disposed.
+Attempting to @code{Kill} a thread which has already been killed or
+completed has no ill effect, @code{rtn} is just ignored.
+
+@code{rtn} represents the return value of the thread, which may be
+queried by other threads.  Any holds associated with the thread
+will be expunged.  Thread @code{t} is returned.
+
+Note that killed threads take up no CPU time.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Thread, Hold::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::Thread
+@sp 2
+@example
+@group
+nam = gName(t)
+
+object  t;
+char    *nam;
+@end group
+@end example
+This method is used to obtain the name of thread @code{t}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewThread::Thread, State::Thread, Priority::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Priority}
+@deffn {Priority} Priority::Thread
+@sp 2
+@example
+@group
+pri = gPriority(t)
+
+object  t;
+int     pri;
+@end group
+@end example
+This method is used to obtain the priority of thread @code{t}.
+
+The priority is a number between 1 and 30000.  The higher the number the
+greater the priority.  Threads of higher priority (which are ready to
+run) always run before any threads of lesser priority.  Only ready
+threads of the same priority share CPU time.  There is a macro named
+@code{DEFAULT_PRIORITY} which may be used to create threads which share
+resources equally.  Creating higher or lower priority threads may be
+accomplished relative to the @code{DEFAULT_PRIORITY} macro.  Note that
+@emph{all} ready threads of a higher priority must complete before
+threads of a lower priority will receive any CPU time.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangePriority::Thread, NewThread::Thread, State::Thread}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Release}
+@deffn {Release} Release::Thread
+@sp 2
+@example
+@group
+t = gRelease(t, yld)
+
+object  t;
+int     yld;
+@end group
+@end example
+This method is used to release a hold placed by the @code{Hold}
+method on a thread (@code{t}).  The thread will not really be released
+until the number of calls to @code{Release} is equal to the number
+of times @code{Hold} was called on thread @code{t}.
+
+@code{yld} is a flag.  It indicates whether the current thread should
+yield to the thread being released (if the thread being released has a
+higher priority).  If @code{yld} is 1 and the thread being released has
+a higher priority than the current thread the system will immediately
+transfer the CPU to the thread being released.  If @code{yld} is set to
+0 the current thread will be allowed to complete its time slice.  The
+value returned is the thread passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hold::Thread}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {State}
+@deffn {State} State::Thread
+@sp 2
+@example
+@group
+s = gState(t)
+
+object  t;
+int     s;
+@end group
+@end example
+This method is used to obtain the current state of a thread (@code{t}).
+The valid states are macros defined in @code{dynl.h} and are defined as
+follows:
+@example
+@group
+NEW_THREAD             New thread which hasn't started running
+                       yet
+RUNNING_THREAD         Thread ready to run
+HOLD_THREAD            Thread placed on hold
+DONE_THREAD            Thread has completed or been killed
+WAITING_FOR_THREAD     Thread waiting for another thread to
+                       complete
+WAITING_FOR_SEMAPHORE  Thread waiting for semaphore
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {WaitFor}
+@deffn {WaitFor} WaitFor::Thread
+@sp 2
+@example
+@group
+r = gWaitFor(t)
+
+object  t;
+int     r;
+@end group
+@end example
+This method is used to place the current thread on hold until thread
+@code{t} completes, gets killed or disposed.  At that point the thread
+gets released and @code{WaitFor} returns the return value from thread
+@code{t}.  Note that threads waiting for other threads take up no CPU time.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Kill::Thread, Dispose::Thread, Hold::Thread}
+@end deffn
+
+
+
+
+
+
+
+@subsection Thread Macros
+@pdfsubsection{Thread Macros}
+The thread system includes a few macros which are used to provide
+some additional functionality without incurring much system overhead.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ENABLE_THREADER}
+@deffn {ENABLE_THREADER} ENABLE_THREADER
+@sp 2
+@example
+@group
+ENABLE_THREADER;
+@end group
+@end example
+This macro is used to re-enable the threader after the
+@code{INHIBIT_THREADER} has been used.  Since consecutive calls to
+@code{INHIBIT_THREADER} stack, an equal number of @code{ENABLE_THREADER}
+calls must be used.
+
+The two macros, @code{INHIBIT_THREADER} and @code{ENABLE_THREADER},
+are used to surround code which you want to be absolutely certain
+that a context switch doesn't occur during.  Since these macros nest
+it is ok if between a pair a function is called which also uses these
+macros.
+
+Note that when the threader is enabled a context switch can only occur
+during a generic function call or by the use of the @code{YIELD}
+macro.
+@example
+@group
+@exdent Example:
+
+INHIBIT_THREADER;
+       .
+  (protected code)
+       .
+ENABLE_THREADER;
+@end group
+@end example
+@sp 1
+See also:  @code{INHIBIT_THREADER, StartThreader}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {INHIBIT_THREADER}
+@deffn {INHIBIT_THREADER} INHIBIT_THREADER
+@sp 2
+@example
+@group
+INHIBIT_THREADER;
+@end group
+@end example
+This macro is used to temporarily disable the threader.  Once disabled
+no context switches will occur until the threader is re-enabled by the
+use of the @code{ENABLE_THREADER} macro.  Consecutive calls to
+@code{INHIBIT_THREADER} stack, therefore, an equal number of
+@code{ENABLE_THREADER} calls must be used to re-enable the threader.
+
+The two macros, @code{INHIBIT_THREADER} and @code{ENABLE_THREADER},
+are used to surround code which you want to be absolutely certain
+that a context switch doesn't occur during.  Since these macros nest
+it is ok if between a pair a function is called which also uses these
+macros.
+
+Note that when the threader is enabled a context switch can only occur
+during a generic function call or by the use of the @code{YIELD}
+macro.
+@example
+@group
+@exdent Example:
+
+INHIBIT_THREADER;
+       .
+  (protected code)
+       .
+ENABLE_THREADER;
+@end group
+@end example
+@sp 1
+See also:  @code{ENABLE_THREADER, StartThreader}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StartThreader}
+@deffn {StartThreader} StartThreader
+@sp 2
+@example
+@group
+StartThreader(argc)
+
+int     argc;
+@end group
+@end example
+This macro is used to initialize the threading system.  It must be
+called before any other thread operations (except for initializing the
+thread class).  It @emph{must} be called from the C function called
+@code{main}, and should only be called once.  It is typically
+called immediately following the Dynace system initialization.
+
+Once this macro is called all execution is performed by threads.  The
+program (@code{main}) which called @code{StartThreader} becomes the
+single running thread with the name ``main''.  Any future threads
+created at the default priority will share CPU time equally with the
+main thread.  There is nothing special about the main thread.
+
+@code{argc} is simply the argument normally passed to C language
+@code{main} functions.  The value doesn't matter.  It is used to
+obtain the address of the stack.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewThread::Thread}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {YIELD}
+@deffn {YIELD} YIELD
+@sp 2
+@example
+@group
+YIELD;
+@end group
+@end example
+The @code{YIELD} macro is used to force a context switch (unless the
+threader has been disabled with the @code{INHIBIT_THREADER} macro).
+
+Since Dynace only provides automatic context switching during a generic
+function call, if a thread is running a long compute cycle without
+any generic function calls it will hog the system until a generic is
+called unless the @code{YIELD} macro is used.  This macro may be placed
+at regular intervals in the code to be sure that it shares the CPU
+time.  The @code{YIELD} macro will only cause an actual context
+switch when the threads time is complete, otherwise @code{YIELD}
+will do nothing.
+@example
+@group
+@exdent Example:
+
+while (some condition)  @{
+        do something;
+        YIELD;
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{StartThreader}
+@end deffn
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,252 @@
+
+Greetings everyone,
+
+I am writing this note in order to address what is becoming very
+controversial and heated topics - one header file per class vs.  one
+big, all inclusive, header file (generics.h) and the coupling vs.
+decoupling of Dynace header files from other source files (from a
+normal makefile perspective).
+
+I sure would appreciate you reading this and providing me with
+two things.  First, I'd like to know whether or not you agree
+with my approach and how strongly.  Second, if you disagree,
+I'd like to know why.  Your participation in this discussion
+is greatly appreciated and will only lead to a better Dynace.
+
+First of all I'd like to state two things.
+
+F1.  I understand that using one header per class and tight dependency
+coupling is more "conventional".  However, I ask that you view the
+remainder of this document in a "lets have an opened mind and find the
+best solution" as opposed to a "you don't mess with convention, I
+don't want to hear it" attitude.
+
+F2.  The way I designed and ship Dynace is with a single big
+"generics.h" file which is not coupled in the normal way, from a
+makefile dependency perspective, with other source files.  This was
+absolutely not done arbitrarily or because of laziness or convenience!
+There are specific and important problems that this approach solves.
+The remainder of this document will discuss these issues and goals.
+
+Relevant Dynace Goals
+---------------------
+
+G1.  One of principal design goals of Dynace was to minimize, to an
+absolute minimum, the compile/link time effect changes in one class
+has on all other modules.
+
+G2.  Another design goal of Dynace was to eliminate, as much as possible,
+all house cleaning type of chores which are not directly related to
+the problem domain which the programmer is addressing.
+
+Reasons for the goals
+---------------------
+
+R1.  Compile time associated with large programs is a significant
+problem.  At the last place I was employed it took 4 hours to compile
+the entire system.  We had about 10 programmers working on that
+project.  Given the size of the project and the number of programmers
+working on it, if the contents of all the header files contained
+prototypes and/or class definitions for each source file it reflected
+and each source file which used each class included and depended on
+those header files, then it would have been necessary to recompile
+the entire system more often then the time it took to actually
+compile the system.  This means that you quickly get into a situation
+where you are compiling and waiting on the system all the time.
+
+Minimizing the compile time effect on code changes is a big and
+important issue.  It has a major potential to have a large effect on
+development time associated with a project.  In addition, if you
+spend less time on compiles you have more time for testing, debugging,
+adding features and documentation.
+
+R2.  There are two benefits associated with reducing programming
+elements which are unrelated to the solution of a problem domain.
+First, it makes writing the solution easier since you spend more
+of your mental energies on the solution as opposed to superfluous
+things.  Second, the resulting program more closely represents
+the unique solution without the superfluous garbage.  This leads
+to programs which are easier to understand and enhance.
+
+
+Global Entities
+---------------
+
+In order to solve G1, Dynace attempts to keep all information
+associated with a class as static elements to the class module.  This
+includes class and instance variables, class and instance methods
+and the superclass list.  The only two things external to a class
+is the class object itself (a variable of type object) and the
+class initialization function.  Since there is a one to one
+correspondence between these two elements, I will treat them as
+one entity.
+
+There is also another thing which is externally available but it
+does not exist in the class module.  This would be the generic
+functions which exist in the generics.c file.  These provide
+the facility with which class users get access to methods.
+There are several global entities associated with generic functions
+including the generic functions themselves, generic objects and
+a typedef.  Since there is a one to one correspondence between
+each of these elements they, also, will be treated as a single entity.
+
+Now, therefore, we have two entities which must be placed into
+include files in order to be adequately declared, class and
+generic function declarations.  This, in fact, is all that
+goes into generics.h files.
+
+
+The problem
+-----------
+
+P1.  Under normal C development environments it is customary (not to
+mention a good idea) to associate various system dependencies using a
+utility such as make.  The value of this is to assure that changes in
+one aspect of the system correctly propagate themselves.
+
+The problem is that in spite of the fact that Dynace hides most
+dependency issues, it still requires header files which declare the
+two global elements, classes and generics.  The net effect of this
+fact is that Dynace applications, when used in conjunction with
+standard make utilities, and regardless of whether you use the
+one single header or one header per class approach, get compiled
+much more often than actually needed or required by Dynace.
+
+For example, one of the most common things you would do to a class is
+add a new method which gets associated with a corresponding generic
+function.  In this case the header file would get re-made by Dynace to
+include the new generic.  This would cause all modules which used that
+class (potentially all modules) to be recompiled (since they "depend"
+on that header).  However, in reality none of the modules need to be
+recompiled except possibly those few which use the new generic.  Since
+this is a new generic, any module which uses the new generic had to be
+edited to include a call to the new generic and therefore will get
+recompiled anyway.
+
+The problem is that given the strict make utilities and the structure
+of Dynace, it is much more often the case than not, that compiles are
+being performed needlessly.  You can easily see that given a huge
+application with a few large, central classes, the majority of the
+development work could be associated with those classes.  Since most
+other modules use that class, they'll have to be recompiled all the
+time (either in the single header file mode or one header file per
+class mode) - mostly needlessly.  Why spend 1.5 hours compiling a huge
+app when it is possible to be _sure_ that only 5 minutes is really
+needed?
+
+P2.  The second problem relates to constantly trying to figure out
+which header files to include (in the one header per class mode).
+As you create and edit a module, every time you use a class, you
+have to constantly check to make sure that the appropriate header
+file be included.  Then when you delete a line you wonder whether
+you can delete an include file or not - it's a maintenance nightmare.
+
+P3.  In addition, it becomes increasingly difficult to figure out
+which headers to read in order to build the required generics.c file.
+You have to somehow figure out exactly which classes are actually
+being used and where they are located in order to scan them
+individually.  Scanning individual headers is going to be much more
+expensive than one, all inclusive, header.
+
+P4.  In the end you are forced to build a single header anyway
+because there is no other way for Dynace to check the generic
+function consistencies.  Why just then throw this information away?
+
+
+The Solution
+------------
+
+First of all it is necessary to keep in mind that the Dynace generated
+header files (generics.h) are very well defined, understood and controlled
+such that the possible things that could go into them and their effect
+on other code can be reliably predicted.
+
+S1.  Decouple the strict make dependency between the Dynace generated
+header file(s) and handle the possible changes to those files in a
+reliable and automated fashion such that only the files which really
+have to be re-made get re-made.  IMO, given Dynace's other features, this
+can _drastically_ reduce the need for recompiles and be totally
+reliable.
+
+S2.  First of all Dynace only links in the minimum number of
+classes regardless of what's in the generics.c and generics.h files.
+Secondly, by using a single header file for all classes Dynace is
+maximally able to assure consistency between generic functions.
+Third of all, it is much easier to deal with a system which has
+all the class information located in one place as opposed to
+figuring out exactly which classes each module uses and finding
+and scanning just those headers in order to check for consistency
+and build the required generics.c file.  Given all these facts
+and the major convenience associated with being able to include
+a single header without constantly worrying about including
+all the correct ones, going to a single generics.h file is a
+_big_ win.
+
+If you choose to use the single header file approach you absolutely
+must use the decoupling approach otherwise you'll have to recompile
+the entire system all the time.  On the other hand, if you don't choose
+to use a single header file but retain tight makefile coupling, you'll
+still end up compiling the whole system every time an innocuous change
+is made to a common class.
+
+These two solutions create a system which _drastically_ and _reliably_
+reduce the need for recompiles and also allows the implementation of
+solutions while minimizing the programmers hassle with details not
+related to the problem domain.
+
+This approach also minimizes the need to re-generate and compile the
+generics.c file.
+
+
+Answers to some possible objections
+-----------------------------------
+
+O1.  The single class header files can act as documentation for the
+class.
+
+First of all Dynace strives to put the absolute minimum amount of
+information in those header files, therefore, there are several
+valuable pieces of information purposely missing (such as superclasses
+and inherited methods).
+
+Second of all, those header files are not meant as documentation.
+They, therefore, contain a lot of information, needed by the system,
+with no documentation value which tend to reduce the readability of
+those files.
+
+A better, more informative and easier to read, yet just as accurate
+method would be to have the Dynace preprocessor automatically generate
+a nicely formatted and informative documentation file at the same time
+as it generates generics.h.  This documentation file could be created
+one per class if desired.
+
+
+O2.  Programmers are used to and feel comfortable with the standard
+makefile methods.
+
+People used to walk until they discovered how to tame a horse.  They
+then felt comfortable with horses until cars were invented.  Now we
+have planes, etc.  There is a major difference between the distances
+one can travel in a day with those various modes of transportation.
+The particular mode an individual chooses is often chosen more by the
+dictates of life and the available options then their particular
+comfort level.
+
+Bottom line, IMO, is that the decoupling of a single header file
+approach has major advantages over a tight dependency coupling or
+multiple header file methods.
+
+
+O3.  Programmers must be able to rely on the accuracy of the build process.
+
+I couldn't agree more.  This is the most important part.  If the
+methods I propose are not at least as reliable as any other method,
+they should not be used.
+
+
+Part 2
+------
+
+Part 2 of this note will detail all the possible changes which can occur
+in generics.h, what effect it has on pre-existing code and how to deal
+with it.

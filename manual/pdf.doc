@@ -1,0 +1,8 @@
+
+To convert the .DVI files into PDF files do the following:
+
+path e:\miktex\miktex\bin;%path%
+
+dvipdfm  man
+
+

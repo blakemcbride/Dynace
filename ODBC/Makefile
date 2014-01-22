@@ -1,0 +1,37 @@
+
+YACC = bison
+LEX = flex
+CC = cl -nologo
+
+.IF	$(YDEBUG)
+CFLAGS = -I../include -Zi -Od -DSTANDALONE -DY_DEBUG
+YFLAGS = -tvd
+.ELSE
+CFLAGS = -I../include -Zi -Od -DSTANDALONE
+YFLAGS = -vd
+.END
+LIBS = ../lib/dynlcm.lib /debug
+
+# SQL Stuff
+sql1.exe:	 sql1.obj sqlparse.obj
+	link /nologo /out:$@ /subsystem:console $< $(LIBS)
+
+sql1.c sql1.h:	sql1.y sql_fix.h
+	${YACC} $(YFLAGS) sql1.y
+	mv sql1.tab.h sql1.h
+	mv sql1.tab.c sql1.c
+	mv sql1.output sql1.out
+
+sqlparse.obj : sqlparse.c scn1.c sql_fix.h
+
+scn1.c:	scn1.l
+	${LEX} -i scn1.l
+	mv lex.yy.c scn1.c
+
+scn1.obj:	sql1.h scn1.c
+
+clean:
+	rm -zq *.obj *.bak *~ sql1.exe sql1.c *.out sql1.h *.ilk *.pdb scn1.c 
+
+
+

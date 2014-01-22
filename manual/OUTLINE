@@ -1,0 +1,96 @@
+
+
+Dynace Outline
+	Features / Benefits
+
+Concepts
+	Object Oriented
+		Encapsulation / Data Abstraction / Data hiding / Lose Coupling
+		Dynamic Binding / Polymorphism
+			Early vs. Late Binding
+		Inheritance / Software Reuse
+	Dynace
+		Object
+		Class
+		Meta Classes
+		Instance
+			Instance Variables
+			Class Variables
+		Method
+			Instance Methods
+			Class Methods
+		Generic Function / Messages
+			Method Look-up
+				Selector
+		Garbage Collection
+		Strong vs. Weak Typing
+		Dynace vs. C++
+
+Dynace Kernel User Guide
+
+	Using Dynace Classes
+		Class Hierarchy
+		Include file
+		Initialization
+		Declarations
+		Creating Objects
+		Using Objects
+		Disposing of Objects
+		Generics Files
+
+	Defining Dynace Classes
+		Header Information
+		Declaring Instance Variables
+		Declaring Class Variables
+		Defining Methods
+			Function Headers
+			Accessing Instance Variables
+			Accessing Class Varaibles
+			Sending Super Messages
+		Class Initialization
+			Initialization Function Header
+			Creating a New Class
+			Setup of Method / Generic Relationship
+		Class Documentation
+		Creating the Generic Files
+
+	Customization
+		Object Checking
+		Garbage Collection
+
+
+Dynace Kernel Reference Guide
+  	Object
+	Class
+	MetaClass
+	Behavior
+
+Dynace Class Library User Guide
+
+Dynace Class Library Reference Guide
+	Character
+	ShortInteger
+	UnsignedShortInteger
+	LongInteger
+		Date
+	DoubleFloat
+	String
+
+	BitVector
+
+	Link
+		LinkItem
+	LinkList
+		LinkObject
+	LinkSequence
+	LinkObjectSequence
+
+	LookupKey
+		Association
+	StringAssociation
+	ShortAssociation
+	Set
+		Dictionary
+		StringDictionary
+		ShortDictionary
+	SetSequence

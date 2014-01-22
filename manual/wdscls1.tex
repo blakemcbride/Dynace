@@ -1,0 +1,95 @@
+
+@vbox to @vsize {
+@catcode`@#=6
+@def@x#1{@vglue .15in @hglue .4in #1}
+@def@y#1{@hglue .4in #1}
+@def@xx#1{@hglue .8in #1}
+@def@xxx#1{@hglue 1.2in #1}
+@def@xxxx#1{@hglue 1.5in #1}
+@def@xxxxx#1{@hglue 1.7in #1}
+@font@normfont = cmr12
+@font@bigfont = cmr17
+@normfont
+@centerline{@bigfont@underbar{Dynace Windows Development System Class Hierarchy}}
+@vskip .5in
+@hbox{@obeylines @parskip=0in  @vtop{@hsize 3.2 true in 
+     (Object)
+@x{Application}
+@x{(Stream)}
+@xx{Window}
+@xxx{MainWindow}
+@xxx{PopupWindow}
+@xxxx{DisplayWindow}
+@xxxx{StatusWindow}
+@xxxx{SplashWindow}
+@xxx{ChildWindow}
+@xxxx{ToolBar}
+@xxxx{StatusBar}
+@xxx{ButtonWindow}
+@xxx{Control}
+@xxxx{SpinControl}
+@xxxxx{TextControl}
+@xxxxx{NumericControl}
+@xxxxx{DateControl}
+@xxxx{PushButton}
+@xxxx{CheckBox}
+@xxxx{RadioButton}
+@xxxx{ListBox}
+@xxxxx{DirListBox}
+@xxxx{ComboBox}
+@xxxx{ScrollBar}
+@xxxx{StaticControl}
+@xxxx{CustomControl}
+@xx{Printer}
+@x{Menu}
+@xx{ExternalMenu}
+@xx{InternalMenu}
+@x{PopupMenu}
+@x{Dialog}
+@xx{ModalDialog}
+@xx{ModelessDialog}
+@x{HelpSystem}
+@x{Cursor}
+@xx{SystemCursor}
+@xx{ExternalCursor}
+}
+@kern .25 true in @vtop{@hsize 3.5 true in
+@vskip @lineskip
+@x{TaskList}
+@x{Task}
+@xx{DialogTask}
+@x{Icon}
+@xx{SystemIcon}
+@xx{ExternalIcon}
+@x{Font}
+@xx{SystemFont}
+@xx{ExternalFont}
+@x{Brush}
+@xx{StockBrush}
+@xx{SolidBrush}
+@xxx{SystemBrush}
+@xx{HatchBrush}
+@x{Pen}
+@xx{StockPen}
+@xx{CustomPen}
+@x{CommonDialog}
+@xx{FileDialog}
+@xx{PrintDialog}
+@xx{ColorDialog}
+@xx{FontDialog}
+@x{DynamicLibrary}
+@x{Database (ODBC)}
+@y{Statement}
+@y{StatementInfo}
+@y{TableInfo}
+@y{ColumnInfo}
+@y{TableListbox}
+@y{VirtualListbox}
+@x{ComClient (COM/DCOM/OLE)}
+@y{ComInstance}
+@y{ComInterface}
+@y{ComServer}
+@y{OLEDispatch}
+}}
+@vfill}
+

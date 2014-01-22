@@ -1,0 +1,176 @@
+
+The following text is an enhanced version of what appears in the Dynace
+language manual.
+
+
+Makefile / Generics.h File Dependencies
+---------------------------------------
+
+All source files are technically dependent upon the application specific
+generics.h file.  However, it is important that the make utility
+not be made aware of this fact.  This is important because one of the main
+goals and advantages of Dynace is the fact that rarely do changes to a class
+require other modules to have to be recompiled - even when the changes
+cause changes to the generics.h file.  If the makefile were
+made aware of this dependency, there would be many, many totally
+unnecessary compiles performed.
+
+Most changes to a class definition file, including changes in the
+instances or class variables associated with the class, changes in the
+class hierarchy or algorithmic changes, have no effect on the
+generics.h file.  The only things which could potentially cause a
+change to the generics.h file are the addition or removal of an
+entire class, the addition or removal of a generic, or the changing of
+the argument list or return type associated with a generic.
+
+With a the appropriate tools and the disassociation (for make
+utility purposes) of the generics.h file from other source
+modules the need for re-compiles can be very drastically reduced.  The
+make utility DMAKE and the example programs (the ones which create
+classes) were designed with these concepts in mind.  Emulation of
+these approaches is highly advised.
+
+New Dynace utility
+------------------
+
+I am proposing that dpp be modified as described below and a new
+utility be written.  The result of these two operations will be
+a Dynace system which uses a single, make decoupled generics.h file
+and is able to reliably and automatically rebuild (in concert with
+a standard make utility) a system with the _real_ minimum number
+of re-compiles.  It will also give all the other benefits described
+in Part I.
+
+Dpp will be enhanced to cause it to create a text file containing a
+list of all removed classes and removed or changed generics.  This
+file will then be read in by a new utility which will quickly scan
+source files and touch (update the last changed date) each file
+which contains one of the changed or removed elements.  This will
+cause make to attempt to make those files and the compiler to issue
+the appropriate error message.
+
+
+The following subsections detail all the things which could change
+a generics.h file and what effect it has on other modules.
+Advice on how to handle each situation will be discussed.
+
+Adding New Classes
+------------------
+
+The addition of a new class never requires automatic recompilation
+of any other modules.  Since the class was just added, the only modules
+which could even use the new class must have also been edited in
+order to reference the new class object.  In that case, those modules
+will already be automatically recompiled anyway.  Other modules
+don't directly reference the new class object and don't require
+recompilation.
+
+Remember that because of Dynace's design, any previously compiled code
+which doesn't explicitly access a class by name, may still process
+and use arbitrary objects without having knowledge of those objects
+prior to being compiled.
+
+Removal Of Classes
+------------------
+
+Again, the removal of a class should never cause the automatic
+recompilation of all modules.  For starters, any module which
+references that class object will have to be edited, causing it to
+be recompiled.  You can't possible forget to edit a file because
+the system won't link until all references to the removed class
+are eliminated.
+
+The above mentioned utility will correctly automate the necessary
+procedure to find all of these errors at compile time while only
+effecting the correct and minimum number of modules.
+
+Adding New Generics
+-------------------
+
+Adding new generics never causes the need for mass recompilation for the
+exact same reasons as the addition of new classes.  The only modules
+which could possible use it have to be edited to put the new generic in
+and that will cause only the appropriate modules to be recompiled.
+No other module is effected in any way.
+
+Generic Removal
+---------------
+
+The removal of generics is a little more complex.  First of all, if
+you remove a generic from a class definition file, Dynace doesn't
+automatically remove it from the generics.h file.  In fact, the
+removal of a generic from a class definition file has no effect at all
+on the generics.h file.  This is because without scanning all the
+class definition files and building the generics.h file from scratch,
+Dynace has no way of knowing whether or not any other class associates
+a method to the generic function.  Therefore, Dynace leaves it in.
+
+Keep in mind that Dynace shares generic functions among any number of
+classes.  This means that when a generic function is removed from one
+class it may still be needed because it may be associated to a method
+in another class.
+
+Because of the above, there is no advantage to associating the
+generics.h file to other code.  The bottom line is that
+if a generic is removed, you'll have to search the code for
+use of that generic and make appropriate changes.  This will
+cause the appropriate modules to be recompiled.
+
+Another interesting thing about these facts is that rebuilding
+generics.h from scratch on a periodic basis is a good idea in
+order to get rid of any unnecessary generics.
+
+Another possible approach is to rebuild the generics.h from scratch,
+building a list of the removed generic functions and then use the
+above described utility to touch files which use removed generic
+functions.  This method, however, is not fool proof since other
+classes may use a generic function which was removed from another
+class.  In this case the generic function will still exist and
+will require manual determination.
+
+Note that the problems listed in this section are still a problem
+whether you use a single or multiple Dynace header files _and_
+whether or not you use a strict makefile dependency.
+
+Generic Argument Or Return Type Changes
+---------------------------------------
+
+Of all the possible changes to a generics.h file this is the
+most troublesome.  It's also the change which is performed
+the least.  Once an application or class library reaches any level
+of maturity, the existing protocols tend to change little.  New
+features are implemented with new generics.
+
+It's also difficult to change generic arguments because of the fact that
+the person making the change must take into account the effect it will
+have on any other classes which use the same generic.  Generics with
+argument checking turned on must agree with all methods which they are
+associated with.  Generics with argument checking turned off are not
+effected with this issue.
+
+The best way to deal with the problem is to rebuild the generics.h
+file from scratch while building a list of the changed generic
+functions.  Then use the above described utility to touch all files
+which use the changed generic functions.  After that, attempting a
+compile will cause the compiler to issue the appropriate error
+messages.  This will cause only the effected files to be recompiled.
+
+This issue is not bad if you think about it.  What would you normally
+have to do if you change the arguments to a regular C function?  Answer -
+scan everything for uses of the changed function and fix them.
+
+
+Conclusion
+----------
+
+There are difficulties associated with the build process with
+Dynace, as well as C, C++, Objective-C, etc.  Using appropriate
+build utilities can assure code consistencies and reduce unnecessary
+and costly compiles.  Using "conventional" schemes such as one
+header file per class and strict dependencies are no more reliable
+then the proposed single header file with loose makefile dependencies
+(for generics.h only) and much more costly in terms of unnecessary
+compiles and higher programmer maintenance.
+
+
+Thanks for your time.  Your input is greatly appreciated.

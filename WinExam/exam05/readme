@@ -1,0 +1,22 @@
+
+This example builds on the previous example by correctly initializing
+and using the numeric and date controls (entry fields) within the
+modal dialog.  Note that the remaining controls will remain minimally
+functional until later examples.
+
+Numeric and date controls (entry fields) are defined by the resource
+editor as normal edit controls.
+
+Be sure to see example 04.  It documents the basic use and structure
+of the init_controls(), and displayValues() functions.
+
+Note that this example only illustrates a fraction of the many flexable
+things which may be done with these controls.
+
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

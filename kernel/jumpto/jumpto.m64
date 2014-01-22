@@ -1,0 +1,30 @@
+
+; jumpto code for DEC Alpha
+
+        $routine _jumpToMethod -
+                kind=stack
+
+        $code_section
+
+        $begin_epilogue                         ; We need our own epilogue
+        mov     r16,r27                         ; Set PDSC of jumpto routine
+        ldq     r0,8(r16)                       ; Get entry addr of jumto rtn
+
+        ldq     r1,^x10(fp)                     ; Get fp of previous routine
+        ldq     r25,^x28(r1)                    ; Restore arg count
+        ldq     r16,^x30(r1)                    ; Restore r16 - param 1
+        ldq     r17,^x38(r1)                    ; Restore r17 - param 2
+        ldq     r18,^x40(r1)                    ; Restore r18 - param 3
+        ldq     r19,^x48(r1)                    ; Restore r19 - param 4
+        ldq     r20,^x50(r1)                    ; Restore r20 - param 5
+        ldq     r21,^x58(r1)                    ; Restore r21 - param 6
+
+        ldq     r26,^x8(r1)                     ; Set rtn to callers caller
+        ldq     r2,^x10(r1)                     ; Restore r2
+        ldq     fp,^x18(r1)                     ; Restore fp
+        lda     sp,^x60(r1)                     ; Restore sp
+        ret     r31,(r0)                        ; Return to jumto function
+
+        $end_routine _jumpToMethod
+        .end
+

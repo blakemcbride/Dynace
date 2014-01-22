@@ -1,0 +1,148 @@
+@page
+
+@section DoubleFloat Class
+@pdfsection{DoubleFloat Class}
+The @code{DoubleFloat} class is used to represent the C language
+@code{double} data type as a Dynace object.  It is a subclass of the
+@code{Number} class.  Even though the @code{DoubleFloat} class
+implements most of its own functionality, it is documented as part of
+the @code{Number} class because most of the interface is the same for
+all subclasses of the @code{Number} class.  Differences are documented
+in this section.
+
+
+
+
+
+
+@subsection DoubleFloat Class Methods
+@pdfsubsection{DoubleFloat Class Methods}
+The @code{DoubleFloat} class has only one class method and it is used to
+create new instances of itself.
+
+
+
+@pdfsubsubsection {NewWithDouble}
+@deffn {NewWithDouble} NewWithDouble::DoubleFloat
+@sp 2
+@example
+@group
+i = gNewWithDouble(DoubleFloat, val);
+
+double  val;
+object  i;
+@end group
+@end example
+This class method creates instances of the DoubleFloat class.  @code{val}
+is the initial value of the number being represented.  
+
+The value returned is a Dynace instance object which represents the number
+passed.
+
+Note that the default disposal methods are used by this class since
+there are no special storage allocation requirements.
+@example
+@group
+@exdent Example:
+
+object  pi;
+
+pi = gNewWithDouble(DoubleFloat, 3.14159265358979);
+@end group
+@end example
+@sp 1
+See also:  @code{DoubleValue::Number, Dispose::Object}
+@end deffn
+
+
+
+
+
+@subsection DoubleFloat Instance Methods
+@pdfsubsection{DoubleFloat Instance Methods}
+The instance methods associated with the @code{DoubleFloat} class provide
+a means of changing and obtaining the value associated with an instance
+of the @code{DoubleFloat} class.  Most of the @code{DoubleFloat} class
+instance methods are documented in the @code{Number} class because of
+their common interface with all other subclasses of the @code{Number}
+class.  The remainder are documented in this section.
+
+
+
+
+ 
+@pdfsubsubsection {Round}
+@deffn {Round} Round::DoubleFloat
+@sp 2
+@example
+@group
+i = gRound(i, pl);
+
+object  i;
+int     pl;
+@end group
+@end example
+This method is used to round the value represented by @code{i} to
+@code{pl} decimal places.  The object returned is the rounded
+object passed.
+@example
+@group
+@exdent Example:
+
+object  pi;
+
+pi = gNewWithDouble(DoubleFloat, 3.14159265358979);
+gRound(pi, 4);     /*  pi = 3.1416  */
+@end group
+@end example
+@sp 1
+See also:  @code{DoubleValue::Number, Truncate::DoubleFloat}
+@end deffn
+
+
+
+
+
+
+
+ 
+@pdfsubsubsection {Truncate}
+@deffn {Truncate} Truncate::DoubleFloat
+@sp 2
+@example
+@group
+i = gTruncate(i, pl);
+
+object  i;
+int     pl;
+@end group
+@end example
+This method is used to truncate the value represented by @code{i} to
+@code{pl} decimal places.  The object returned is the truncated
+object passed.
+@example
+@group
+@exdent Example:
+
+object  pi;
+
+pi = gNewWithDouble(DoubleFloat, 3.14159265358979);
+gTruncate(pi, 4);     /*  pi = 3.1415  */
+@end group
+@end example
+@sp 1
+See also:  @code{DoubleValue::Number, Round::DoubleFloat}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+

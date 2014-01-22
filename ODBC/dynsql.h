@@ -1,0 +1,13 @@
+
+
+#define	TT_TABLE	1
+#define	TT_VIEW		2
+
+#define	QUERY_BUFFER_SIZE	32000
+
+#ifdef	WIN32
+#define	MAX_LONG_VARCHAR_LENGTH	262144
+#else
+#define	MAX_LONG_VARCHAR_LENGTH	16384
+#endif
+

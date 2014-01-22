@@ -1,0 +1,37 @@
+# Makefile for Plan 9
+
+<../mkfile.inc
+
+CLASSES = Object.d Behavior.d MetaClass.d Class.d Method.d GenericFunction.d Dynace.d
+
+OBJ = ${CLASSES:%.d=%.$O} kernel.$O plan9.$O
+
+LIB = $LIBDIR/Dynace.a
+$LIB(%):N: %
+$LIB: ${OBJ:%=$LIB(%)}
+	ar rv $LIB $OBJ
+
+#$LIBDIR/Dynace.a : $OBJ
+#	ar r $target $prereq
+
+kernel.$O : kernels.h Object.iv Behavior.iv Method.iv GenericFunction.iv
+
+Object.$O : Object.iv
+
+Behavior.$O : kernels.h Behavior.iv
+
+GenericFunction.$O : kernels.h GenericFunction.iv
+
+Method.$O : Method.iv
+
+
+newgens:
+	$DPP $DPPOPTS -g $INCDIR/generics.h -ni -p $CLASSES -h $INCDIR/generics.h
+
+reallynewgens:
+	$DPP $DPPOPTS -ni -p $CLASSES -h $INCDIR/generics.h
+
+
+clean:VQ:
+	rm -f *.obj *.exe generics.* *.$O core *~ *.pdb
+

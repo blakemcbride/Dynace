@@ -1,0 +1,331 @@
+@page
+
+@section File Class
+@pdfsection{File Class}
+This class is used to encapsulate the standard C stream IO facility.  It
+is a subclass of @code{Stream} and enables access to these routines
+through an interface which is common to all subclasses of @code{Stream}.
+
+Although this class implements most of its own functionality, it is
+documented as part of the @code{Stream} class because most of the
+interface is the same for all subclasses of @code{Stream}.  Differences
+are documented in this section.
+
+
+@subsection File Class Methods
+@pdfsubsection{File Class Methods}
+The class methods associated with this class are methods used to
+open or create files.
+
+
+
+
+@pdfsubsubsection {Flush}
+@deffn {Flush} Flush::File
+@sp 2
+@example
+@group
+i = gFlush(File);
+
+int  i;
+@end group
+@end example
+This class method is used to flush all files opened with the
+stream IO system to disk.  It returns the number of opened
+streams.
+@example
+@group
+@exdent Example:
+
+gFlush(File);
+@end group
+@end example
+@sp 1
+See also:  @code{instance Flush::File}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {OpenFile}
+@deffn {OpenFile} OpenFile::File
+@sp 2
+@example
+@group
+i = gOpenFile(File, name, mode);
+
+char    *name;  /*  file name  */
+char    *mode;  /*  file mode  */
+object  i;
+@end group
+@end example
+This class method is used to open or create a normal file using the
+C stream IO facility.  The @code{name} and @code{mode} parameters
+correspond to the local C library function @code{fopen}.  The
+local library manuals can more completely describe those arguments.
+The value returned is an object which refers to the opened file.
+If the file cannot be opened a @code{NULL} will be returned.
+@example
+@group
+@exdent Example:
+
+object  f;
+
+f = gOpenFile(File, "myfile", "r");
+@end group
+@end example
+@sp 1
+See also:  @code{OpenTempFile::File, Dispose::File, Read::Stream}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {OpenTempFile}
+@deffn {OpenTempFile} OpenTempFile::File
+@sp 2
+@example
+@group
+i = gOpenTempFile(File);
+
+object  i;
+@end group
+@end example
+This class method is used to create a tempoary file using the C stream
+IO facility.  The location of the file will be dictated by the
+@code{TMP} or @code{TEMP} environment variables (in that order).  If
+those variables are not defined then the current directory is used.  The
+file is created with the @code{"w+"} binary mode.
+
+The value returned is an object which refers to the opened file.  Since
+this is a temporary file, disposing of this object will also cause the
+file to be removed.  If the file cannot be opened a @code{NULL} will be
+returned.
+@example
+@group
+@exdent Example:
+
+object  f;
+
+f = gOpenTempFile(File);
+@end group
+@end example
+@sp 1
+See also:  @code{SetTempSubDir::File, OpenFile::File, Dispose::File, Read::Stream}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {SetTempSubDir}
+@deffn {SetTempSubDir} SetTempSubDir::File
+@sp 2
+@example
+@group
+i = gSetTempSubDir(File, dir);
+
+char  *dir;
+object  i;
+@end group
+@end example
+This class method is used to specify a path for the system to use to
+create temporary files (using @code{gOpenTempFile}.  The given directory
+is appended to the normal system temp path.  For example, if the system
+path is `@code{/tmp}' and @code{dir} is passed @code{"App"} then the
+path used will be `@code{/tmp/App}'.
+
+The value returned is @code{File}.
+@example
+@group
+@exdent Example:
+
+gSetTempSubDir(File, "Application");
+@end group
+@end example
+@sp 1
+See also:  @code{OpenTempFile::File}
+@end deffn
+
+
+
+
+
+@subsection File Instance Methods
+@pdfsubsection{File Instance Methods}
+The instance methods associated with this class are used to read and write
+data to the file represented by the instance.
+
+Although this class implements most of its own functionality, it is
+documented as part of the @code{Stream} class because most of the
+interface is the same for all subclasses of @code{Stream}.  Differences
+are documented in this section.
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::File
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to close the file associated with the instance and
+dispose of the instance.  It performs the same function as
+@code{Dispose::File}.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::File, OpenFile::File}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::File
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to close the file associated with the instance and
+dispose of the instance.  It performs the same function as
+@code{DeepDispose::File}.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::File, OpenFile::File}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {Flush}
+@deffn {Flush} Flush::File
+@sp 2
+@example
+@group
+i = gFlush(file);
+
+object file;
+int  i;
+@end group
+@end example
+This method is used to flush the stream associated with
+file to disk.  It returns zero on success.
+@example
+@group
+@exdent Example:
+
+gFlush(file);
+@end group
+@end example
+@sp 1
+See also:  @code{class Flush::File}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::File
+@sp 2
+@example
+@group
+n = gName(i);
+
+object  i;
+char    *n;  /*  the file name  */
+@end group
+@end example
+This method is used to obtain the name of the file represented by @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {PointerValue}
+@deffn {PointerValue} PointerValue::File
+@sp 2
+@example
+@group
+fp = gPointerValue(i);
+
+object  i;
+FILE    *fp;
+@end group
+@end example
+This method is used to obtain the file pointer associated with @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+

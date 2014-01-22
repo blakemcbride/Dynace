@@ -1,0 +1,5546 @@
+@c -*-texinfo-*-
+
+@c  Copyright (c) 1996 Blake McBride
+@c  All rights reserved.
+@c
+@c  Redistribution and use in source and binary forms, with or without
+@c  modification, are permitted provided that the following conditions are
+@c  met:
+@c
+@c  1. Redistributions of source code must retain the above copyright
+@c  notice, this list of conditions and the following disclaimer.
+@c
+@c  2. Redistributions in binary form must reproduce the above copyright
+@c  notice, this list of conditions and the following disclaimer in the
+@c  documentation and/or other materials provided with the distribution.
+@c
+@c  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+@c  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+@c  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@c  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+@c  HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+@c  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+@c  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+@c  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+@c  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+@c  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+@c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+@chapter Kernel Reference
+@pdfchapter{Kernel Reference}
+The Dynace kernel consists of the bare minimum of classes, methods, and generic
+functions needed to implement the object oriented concepts discussed herein.
+This chapter will discuss the structure and various facilities available in
+the Dynace kernel.
+
+Note that the first argument to all class methods is always the
+associated class object and the first argument to all instance methods
+is always an instance of the associated class.  Therefore, documentation
+for the first argument of generics is not always given -- it's redundant.
+
+A convention used throughout the Dynace system is for method names to start
+with a capital letter and for the associated generic to have the same
+name with a lower case ``g'' placed at the beginning.  Therefore, even
+though this manual documents the methods, the programmer would access
+the methods through their associated generics (add the ``g'').
+
+@page
+@section Kernel Class Hierarchy
+@pdfsection{Kernel Class Hierarchy}
+This Dynace kernel contains the following class hierarchy:
+@example
+@group
+     Object
+          Behavior
+               Class
+               MetaClass
+          Method
+          GenericFunction
+          Dynace
+@end group
+@end example
+
+@page
+@section Object Class
+@pdfsection{Object Class}
+The @code{Object} Class is the root of all objects in Dynace.  It is the
+last place searched when looking for a given method.  As such, the
+@code{Object} Class defines the default behavior for all objects in Dynace.
+
+@subsection Object Class Methods
+@pdfsubsection{Object Class Methods}
+There are no class methods defined for the @code{Object} class.
+
+@subsection Object Instance Methods
+@pdfsubsection{Object Instance Methods}
+@code{Object}'s instance methods define the default behavior for all objects
+in Dynace.
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {BasicSize}
+@deffn {BasicSize} BasicSize::Object
+@sp 2
+@example
+@group
+sz = gBasicSize(obj);
+
+object  obj;
+int     sz;
+@end group
+@end example
+This method is used to obtain the entire size of an object including
+all header information and instance variables.  The number returned
+does not include space allocated and pointed to by the object.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     sz;
+
+x = gNewWithInt(ShortInteger, 77);
+sz = gBasicSize(x);    /*  sz = 6  */
+@end group
+@end example
+@sp 1
+See also:  @code{Size::Object, InstanceSize::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::Object
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;
+int     r;
+@end group
+@end example
+This is the default method used by the generic container classes to
+determine the equality of the values represented by @code{i} and
+@code{obj}.  @code{r} is -1 if the value represented by @code{i} is less
+than the value represented by @code{obj}, 1 if the value of @code{i} is
+greater than @code{obj}, and 0 if they are equal.
+
+This method only compares the pointer values of the two objects and is,
+therefore, usually overridden in other classes.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hash::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::Object
+@sp 2
+@example
+@group
+new = gCopy(obj);
+
+object  obj;
+object  new;
+@end group
+@end example
+This method is used to make a copy of an object.  A new instance
+of the same class as @code{obj} is created.  Then the information
+contained in @code{obj} is copied to the new object created (@code{new}).
+The new object is returned.
+
+Any classes whose instance's allocate memory may need to override this method.
+
+This default method is the same as the @code{DeepCopy::Object} method and
+would need to be overridden if they need to be different.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithInt(ShortInteger, 77);
+y = gCopy(x);
+@end group
+@end example
+@sp 1
+See also:  @code{DeepCopy::Object, EQ, Equal::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::Object
+@sp 2
+@example
+@group
+new = gDeepCopy(obj);
+
+object  obj;
+object  new;
+@end group
+@end example
+This method is used to make a copy of an object.  A new instance
+of the same class as @code{obj} is created.  Then the information
+contained in @code{obj} is copied to the new object created (@code{new}).
+The new object is returned.
+
+Any classes whose instance's allocate memory may need to override this method.
+
+This default method is the same as the @code{Copy::Object} method and
+would need to be overridden if they need to be different.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithInt(ShortInteger, 77);
+y = gDeepCopy(x);
+@end group
+@end example
+@sp 1
+See also:  @code{Copy::Object, EQ, Equal::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Object
+@sp 2
+@example
+@group
+r = gDeepDispose(obj);
+
+object  obj;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to free the storage allocated when a new object is
+created.  Any class whose instances don't contain pointers to other
+allocated space or references to other objects may normally just default
+to this @code{DeepDispose}.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithInt(ShortInteger, 77);
+x = gDeepDispose(x);
+@end group
+@end example
+@sp 1
+See also:  @code{Dispose::Object, GCDispose::Object}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Object
+@sp 2
+@example
+@group
+r = gDispose(obj);
+
+object  obj;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to free the storage allocated when a new object is
+created.  Any class whose instances don't contain pointers to allocated
+space may normally just default to this @code{Dispose} for their
+disposal when no longer needed.  Note that when the garbage collector
+disposes of objects it calls the @code{GCDispose} method.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithInt(ShortInteger, 77);
+x = gDispose(x);
+@end group
+@end example
+@sp 1
+See also:  @code{DeepDispose::Object, GCDispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Equal}
+@deffn {Equal} Equal::Object
+@sp 2
+@example
+@group
+r = gEqual(obj1, obj2);
+
+object  obj1, obj2;
+int     r;
+@end group
+@end example
+This method is the default method used to check two objects for equality
+by comparing their contents.  1 is returned if they are of the same
+class and contain the same contents and 0 otherwise.
+
+This method should be overridden if the comparison should take
+into account storage other than the local instance storage.  The
+@code{String} class is a good example of this.
+@example
+@group
+@exdent Example:
+
+object  a, c, c, d, e;
+int     r;
+
+a = gNewWithInt(ShortInteger, 77);
+b = gNewWithInt(ShortInteger, 77);
+c = gNewWithInt(ShortInteger, 8);
+d = gNewWithInt(Dictionary, 99);
+e = gCopy(b);
+r = gEqual(a, a);   /*  r == 1  */
+r = gEqual(a, b);   /*  r == 1  */
+r = gEqual(a, c);   /*  r == 0  */
+r = gEqual(a, d);   /*  r == 0  */
+r = gEqual(a, e);   /*  r == 1  */
+@end group
+@end example
+@sp 1
+See also:  @code{EQ}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Error}
+@deffn {Error} Error::Object
+@sp 2
+@example
+@group
+gError(obj, msg)
+
+object  obj;
+char    *msg;  /*  Error message  */
+@end group
+@end example
+This method is used to display an error message (@code{msg} using
+@code{Puts::Stream} and @code{stderrStream}) and abort the
+program.  @code{msg} may also be an instance of @code{String}.
+@example
+@group
+@exdent Example:
+
+gError(Dynace, "Out of memory.\n");
+@end group
+@end example
+@sp 1
+See also:  @code{Puts::Stream, stderrStream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {GCDispose}
+@deffn {GCDispose} GCDispose::Object
+@sp 2
+@example
+@group
+r = gGCDispose(obj);
+
+object  obj;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to free the storage allocated when a new object is
+created.  This is a special type of dispose method which should only be
+called by the garbage collector in Dynace.  The @code{GCDispose} method
+must be defined for any class whose instances contain allocated space.
+It should unregister any registered memory associated with the object,
+free the allocated space and then call the super @code{GCDispose}.  It
+must not free any objects which are referenced, either directly or
+indirectly, by the object being disposed of.
+
+This default method simply disposes of the individual object.
+@sp 1
+See also:  @code{Dispose::Object, DeepDispose::Object}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::Object
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This is the default method used by the generic container classes to
+obtain hash values for the object.  @code{val} is a hash value between 0
+and a large integer value.
+
+This default method only hashes on the pointer value of the object,
+therefore, it is normally overridden in other classes.
+
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Init}
+@deffn {Init} Init::Object
+@sp 2
+@example
+@group
+r = gInit(obj);
+
+object  obj;
+object  r;
+@end group
+@end example
+This method is used as the default object initialization method for new
+objects when used in conjunction with @code{Alloc::Behavior}.  The
+default behavior is to do nothing, therefore, this method does nothing
+but return its argument.  Normally, classes would redefine this method
+to perform some class specific useful initialization.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gInit(gAlloc(MyClass));
+@end group
+@end example
+@sp 1
+See also:  @code{Alloc::Behavior, New::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {IsKindOf}
+@deffn {IsKindOf} IsKindOf::Object
+@sp 2
+@example
+@group
+r = gIsKindOf(obj, cls);
+
+object  obj;
+object  cls;
+int     r;
+@end group
+@end example
+This method is used to determine if class @code{cls} is the class of
+or a superclass of @code{obj}.  If so a 1 is returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  a, b;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+b = gNewWithInt(Dictionary, 101);
+c = gIsKindOf(a, ShortInteger);  /* c == 1  */
+c = gIsKindOf(a, LongInteger);   /* c == 0  */
+c = gIsKindOf(b, Dictionary);    /* c == 1  */
+c = gIsKindOf(b, Set);           /* c == 1  */
+c = gIsKindOf(b, LinkList);      /* c == 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsKindOf::Behavior, IsInstanceOf, ClassOf}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Print}
+@deffn {Print} Print::Object
+@sp 2
+@example
+@group
+ret = gPrint(obj, stm);
+
+object  obj;
+object  stm;
+object  ret;
+@end group
+@end example
+This method is used to print out a representation of an object
+and its value to stream @code{stm}.  It evokes @code{StringRep}
+on @code{obj} in order to obtain a printable representation of
+the object.
+
+The returned value is just @code{obj}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithInt(ShortInteger, 77);
+gPrint(x, stdoutStream);
+/* this would print something like:  
+      ShortInteger:<0x0034:4721> [ 77 ] */
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, StringRepValue::Object, stdoutStream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {PrintValue}
+@deffn {PrintValue} PrintValue::Object
+@sp 2
+@example
+@group
+ret = gPrintValue(obj, stm);
+
+object  obj;
+object  stm;
+object  ret;
+@end group
+@end example
+This method is used to print out a representation of an object's
+value to stream @code{stm}.  It evokes @code{StringRepValue}
+on @code{obj} in order to obtain a printable representation of
+the object.
+
+The returned value is just @code{obj}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithInt(ShortInteger, 77);
+gPrintValue(x, stdoutStream);
+/* this would print something like:  77  */
+@end group
+@end example
+@sp 1
+See also:  @code{Print::Object, StringRepValue::Object, stdoutStream}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ShouldNotImplement}
+@deffn {ShouldNotImplement} ShouldNotImplement::Object
+@sp 2
+@example
+@group
+gShouldNotImplement(obj, meth)
+
+object  obj;
+char    *meth;
+@end group
+@end example
+This method is used to display an error message indicating that the
+class of @code{obj} (or any of its subclasses) should not implement
+method @code{meth}.  @code{meth} is the name of the method.
+
+This method may be useful to help catch class misuse by users of a
+class.  It issues a helpful message when attempting to use a class
+inappropriately.
+
+The message is output via @code{Error::Object} which also aborts the
+program.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Error::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::Object
+@sp 2
+@example
+@group
+sz = gSize(obj);
+
+object  obj;
+int     sz;
+@end group
+@end example
+This is the default method used to obtain the size of an object.
+It returns the total number of bytes use by the objects instance variables.
+This method is often overridden.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     sz;
+
+x = gNewWithInt(ShortInteger, 77);
+sz = gSize(x);    /*  sz = 2  */
+@end group
+@end example
+@sp 1
+See also:  @code{BasicSize::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::Object
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to provide a default format for the display of
+instance objects.  It creates an instance of the @code{String} class
+which represents the class of the object, its address and value.  The
+value is obtained by calling the object's @code{StringRepValue} method.
+This is often used to print or display a representation of an object.
+It is also used by by @code{Print::Object} (a method useful during the
+debugging phase of a project) in order to directly print an object to a
+stream.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Object
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to provide a default mechanism for creating an
+instance of the @code{String} class for the display of instance object's
+values.  It displays the class of the object, and its address.  This
+method is called by the @code{StringRep} method to obtain the value of
+the object and is normally overridden by particular classes.
+
+It is also used by @code{PrintValue::Object} and indirectly by
+@code{Print::Object} (two methods useful during the debugging phase of a
+project) in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SubclassResponsibility}
+@deffn {SubclassResponsibility} SubclassResponsibility::Object
+@sp 2
+@example
+@group
+gSubclassResponsibility(obj, meth)
+
+object  obj;
+char    *meth;
+@end group
+@end example
+This method is used to display an error message indicating that method
+@code{meth} should be implemented by a subclass of the class of
+@code{obj}.  @code{meth} is the name of the method.
+
+This method may be useful when grouping common interfaces in an
+abstract class to insure that its subclasses implement the correct
+methods.
+
+The message is output via @code{Error::Object} which also aborts the
+program.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Error::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@page
+@section Behavior Class
+@pdfsection{Behavior Class}
+The @code{Behavior} Class is used to define the default behavior
+common to @code{Class} and @code{MetaClass} type objects.
+
+@subsection Behavior Class Methods
+@pdfsubsection{Behavior Class Methods}
+There are no class methods defined for the @code{Behavior} class.
+
+@subsection Behavior Instance Methods
+@pdfsubsection{Behavior Instance Methods}
+@code{Behavior}'s instance methods define the default behavior common to all
+@code{Class} and @code{MetaClass} type objects.
+
+
+
+
+
+@pdfsubsubsection {Alloc}
+@deffn {Alloc} Alloc::Behavior
+@sp 2
+@example
+@group
+obj = gAlloc(cls);
+
+object  cls;
+object  obj;
+@end group
+@end example
+This method creates instances of class type objects.  The
+returned value is an instance of class @code{cls}.  All instance
+variables in the @code{obj} object are initialized to NULL or 0.
+
+This method works exactly like @code{New::Behavior} except that it
+is not normally redefined by subclasses.  @code{Alloc} is strictly
+used to allocate new instances without also initializing them.
+@code{Init::Object} would be defined and called to initialize the
+object.  Conceptually, @code{New::Behavior} should be equivalent to
+calling @code{Alloc} and @code{Init}.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gInit(gAlloc(MyClass));
+@end group
+@end example
+@sp 1
+See also:  @code{Init::Object, New::Behavior, StackAlloc macro}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {DoesNotImplement}
+@deffn {DoesNotImplement} DoesNotImplement::Behavior
+@sp 2
+@example
+@group
+gDoesNotImplement(cls, gen);
+
+object  cls;
+object  gen;
+@end group
+@end example
+This method is used to issue an error message when there is an attempt 
+to execute a generic function (@code{gen}) for class @code{cls}.
+The message prints to standard error (@code{stderr}) and exits the program.
+@example
+@group
+@exdent Example:
+
+gDoesNotImplement(MyClass, Generic(MyGeneric));
+@end group
+@end example
+@sp 1
+See also:  @code{RespondesTo, InvalidObject::Method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DontCollect}
+@deffn {DontCollect} DontCollect::Behavior
+@sp 2
+@example
+@group
+obj = gDontCollect(cls);
+
+object  cls;
+object  obj;
+@end group
+@end example
+This method is used to turn garbage collection off for a single
+class of objects.  It doesn't effect any of its superclasses or subclasses and
+has no effect of garbage collection is not being used.  It returns
+@code{cls}.
+@example
+@group
+@exdent Example:
+
+gDontCollect(ShortInteger);
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindMethod}
+@deffn {FindMethod} FindMethod::Behavior
+@sp 2
+@example
+@group
+meth = gFindMethod(cls, gen, lev)
+
+object  cls;    /* class                */
+object  gen;    /* the generic object   */
+int     lev;    /* search level         */
+object  (*meth)();  /*  method          */
+@end group
+@end example
+This method may be used to find the correct method associated with a
+particular generic--class combination.  @code{gen} is the generic
+function object (not a pointer to the generic function).  @code{cls} is
+the class where the search should start and @code{lev} tells whether
+this is a regular or superclass type search.  1 is regular and 2
+indicates a superclass search.
+
+A pointer to the C function which implements the method is returned.  If no
+method is found @code{NULL} is returned.
+
+There also exists a function named @code{_FindMethod} which works
+similar to @code{gFindMethod} except it issues an error message if no
+method is found.  @code{_FindMethod} is the one which does all the work
+to find the correct method associated with a particular generic--class
+combination when executing generics.
+
+@code{FindMethod} should not be called by an application.  The relevant
+macros should be used instead.
+
+There is a similar method called @code{FindMethodObject::Behavior} which
+returns the method object instead of the C function pointer which
+implements the method.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{imcPointer, cmcPointer, imiPointer, cmiPointer, iSuper,}
+@hfil @break @hglue .64in    @code{RespondsTo, cSuper,}
+@hfil @break @hglue .64in    @code{DoesNotImplement::Behavior, FindMethodObject::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindMethodObject}
+@deffn {FindMethodObject} FindMethodObject::Behavior
+@sp 2
+@example
+@group
+meth = gFindMethodObject(cls, gen, lev)
+
+object  cls;    /* class                */
+object  gen;    /* the generic object   */
+int     lev;    /* search level         */
+object  meth;   /*  method          */
+@end group
+@end example
+This method may be used to find the correct
+method associated with a particular generic--class combination.
+@code{gen} is the generic function object (not a pointer to the generic
+function).  @code{cls} is the class where the search should start and
+@code{lev} tells whether this is a regular or superclass type search.
+1 is regular and 2 indicates a superclass search.
+
+This method return the method object found.  If no method is found
+@code{NULL} is returned.
+
+There is a similar method called @code{FindMethod::Behavior} which
+returns the C function which implements the method instead of the method
+object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindMethod::Object, Generic}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {InstanceSize}
+@deffn {InstanceSize} InstanceSize::Behavior
+@sp 2
+@example
+@group
+is = gInstanceSize(cls)
+
+object  cls;    /* class                */
+int     is;     /* instance size        */
+@end group
+@end example
+This method is used to obtain the total size a direct instances of class
+@code{cls} would be.  This includes space used by the instance variables
+defined in class @code{cls} as well as all the superclasses of
+@code{cls}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{BasicSize::Object, StackAlloc::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {IsKindOf}
+@deffn {IsKindOf} IsKindOf::Behavior
+@sp 2
+@example
+@group
+r = gIsKindOf(cls1, cls2);
+
+object  cls1, cls2;
+int     r;
+@end group
+@end example
+This method is used to determine if class @code{cls2} is a
+superclass of @code{cls1}.  If so a 1 is returned and 0 otherwise.
+A 1 will also be returned if @code{cls1} is the same class as @code{cls2}.
+@example
+@group
+@exdent Example:
+
+int     c;
+
+c = gIsKindOf(ShortInteger, Object);      /* c == 1  */
+c = gIsKindOf(ShortInteger, LongInteger); /* c == 0  */
+c = gIsKindOf(Dictionary, Set);           /* c == 1  */
+c = gIsKindOf(Dictionary, LinkList);      /* c == 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsKindOf::Object, IsInstanceOf, ClassOf}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MarkingMethod}
+@deffn {MarkingMethod} MarkingMethod::Behavior
+@sp 2
+@example
+@group
+obj = gMarkingMethod(cls, fun);
+
+object  cls;
+object  (*fun)(cls);
+object  obj;
+@end group
+@end example
+This method is used to specify an additional marking method to be used
+by the garbage collector.  It should only be needed in extremely special
+cases.  After the garbage collector marks all used objects it checks
+for any classes which have a special marking method.  The special
+marking method would normally mark additional objects which are accessed
+in a very unusual way.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c gMarkingMethod(ShortInteger);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MarkRange::Dynace, MarkObject::Dynace,}
+@hfil @break @hglue .64in    @code{RegisterMemory::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::Behavior
+@sp 2
+@example
+@group
+name = gName(cls);
+
+object  cls;
+char    *name;
+@end group
+@end example
+This method is used to obtain the name of a given class type object.
+@example
+@group
+@exdent Example:
+
+char    *name;
+
+name = gName(ShortInteger);
+/*  name now points to:   "ShortInteger"  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::Behavior
+@sp 2
+@example
+@group
+obj = gNew(cls);
+     or
+obj = vNew(cls);
+
+object  cls;
+object  obj;
+@end group
+@end example
+This is the method which creates instances of class type objects.  The
+returned value is an instance of class @code{cls}.  All @code{New}
+methods call this method.  All instance variables in the @code{obj}
+object are initialized to NULL or 0.  This method is often redefined in
+particular classes so that instance variables may be set to appropriate
+initial values.
+
+Both @code{gNew} and @code{vNew} are associated with this method.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNew(LinkList);
+@end group
+@end example
+@sp 1
+See also:  @code{Alloc::Behavior, Init::Object, StackAlloc macro}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StackAlloc}
+@deffn {StackAlloc} StackAlloc::Behavior
+@sp 2
+@example
+@group
+obj = gStackAlloc(cls, ptr);
+
+object  cls;
+void    *ptr;
+object  obj;
+@end group
+@end example
+This method is used to turn arbitrary storage pointed to by @code{ptr}
+into an instance of @code{cls}.  The storage is assumed to be large
+enough (the value returned by @hfil @break @code{InstanceSize::Behavior}).
+The object returned will function as a normal object except that when it
+is disposed (via @code{gDispose}, etc.) no actual freeing of the object
+will occur.  However, user defined disposal code will be utilized.
+
+This facility is currently only used to allocate objects from the
+stack.  The cover macro, @code{StackAlloc}, should be used instead
+of this method.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{StackAlloc macro, InstanceSize::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::Behavior
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the object @code{i} and its value.  The @code{String}
+contains the name of the class, and its address.  It then calls the
+@code{StringRepValue} method to obtain its contents.  This is often used
+to print or display a representation of a class object.  It is also used
+by by @code{Print::Object} (a method useful during the debugging phase
+of a project) in order to directly print an object to a stream.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Link}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Behavior
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SubClasses}
+@deffn {SubClasses} SubClasses::Behavior
+@sp 2
+@example
+@group
+lst = gSubClasses(cls);
+
+object  cls;
+object  lst;
+@end group
+@end example
+This method is used to obtain a list of all the direct subclasses of
+class @code{cls}.  The list returned is an instance of
+@code{LinkObject}.
+
+Use @code{gDispose1()} on the list when no longer needed.
+@example
+@group
+@exdent Example:
+
+object  lst;
+
+lst = gSubClasses(ShortInteger);
+@end group
+@end example
+@sp 1
+See also:  @code{SuperClasses::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SuperClasses}
+@deffn {SuperClasses} SuperClasses::Behavior
+@sp 2
+@example
+@group
+lst = gSuperClasses(cls);
+
+object  cls;
+object  lst;
+@end group
+@end example
+This method is used to obtain a list of all the direct superclasses of
+class @code{cls}.  The list returned is an instance of
+@code{LinkObject}.
+
+Use @code{gDispose1()} on the list when no longer needed.
+@example
+@group
+@exdent Example:
+
+object  lst;
+
+lst = gSuperClasses(ShortInteger);
+@end group
+@end example
+@sp 1
+See also:  @code{SubClasses::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Trace}
+@deffn {Trace} Trace::Behavior
+@sp 2
+@example
+@group
+pm = gTrace(cls, mode)
+
+object  cls;    /*  class                */
+int     mode;   /*  trace mode           */
+int     pm;     /*  previous trace mode  */
+@end group
+@end example
+This method is used to set the trace mode associated with a
+particular class (@code{cls}).  This mode only has an effect when
+the Dynace tracing facility is activated (via @code{Trace::Dynace}).
+The possible settings (defined in @code{dynl.h}) are as follows:
+@example
+@group
+DYNACE_TRACE_DONT_CARE   OK to trace this class if a related
+                         method or generic has tracing turned
+                         on (default)
+
+DYNACE_TRACE_OFF         Turn all tracing related to this
+                         class off
+
+DYNACE_TRACE_ON          Activate tracing for this class
+@end group
+@end example
+The value returned is the previous trace mode in effect.  See the
+section on tracing (under Dynace Customization & Special Techniques) for
+more information.
+@example
+@group
+@exdent Example:
+
+gTrace(Set, DYNACE_TRACE_ON); /* turn tracing on for Set */
+@end group
+@end example
+@sp 1
+See also:  @code{Trace::Dynace, TracePrint::Dynace, Trace::GenericFunction,}
+@hfil @break @hglue .64in @code{Trace::Method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@page
+@section Class Class
+@pdfsection{Class Class}
+The @code{Class} Class is mainly used for the creation of new class objects.
+
+
+@subsection Class Class Methods
+@pdfsubsection{Class Class Methods}
+The only class methods in the class @code{Class} are used to create new
+class objects and find class objects.
+
+
+
+
+
+
+
+@pdfsubsubsection {FindClass}
+@deffn {FindClass} FindClass::Class
+@sp 2
+@example
+@group
+cls = gFindClass(Class, cname)
+
+char    *cname; /*  the name of the class  */
+object  cls;    /*  The class found        */
+@end group
+@end example
+This method is used to find a class object from its name.  The requested
+class is returned or @code{NULL} if it doesn't exist.
+@example
+@group
+@exdent Example:
+
+object  cls;
+
+cls = gFindClass(Class, "Set");
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {GetAll}
+@deffn {GetAll} GetAll::Class
+@sp 2
+@example
+@group
+cl = gGetAll(Class);
+
+object  cl;     /*  LinkObject of all class objects  */
+@end group
+@end example
+This method is used to get a linked list (of type @code{LinkObject})
+of all the class objects (classes).  It is useful for enumerating through
+all the class objects.  Once a class object is obtained, it
+can be used to obtain information about the class.
+
+Once @code{cl} is no longer needed it is important that it is
+disposed with @code{gDispose} and not @code{gDeepDispose}.  Use
+of @code{gDeepDispose} on @code{cl} will dispose of all the class
+objects in the system and crash it.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{GetAll::Class}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NewClass}
+@deffn {NewClass} NewClass::Class
+@sp 2
+@example
+@group
+cls = gNewClass(Class, cname, ivsize, cvsize, superClasses...)
+
+char    *cname; /*  the name of the new class    */
+int     ivsize; /*  the size of the instance variables in 
+                    the new class  */
+int     cvsize; /*  the size of the class variables  */
+object  superClasses;  /*  an END terminated list of 
+                           superclasses  */
+object  cls;    /*  The new class being created  */
+@end group
+@end example
+This method is used to create new classes.  It automatically creates the
+class object, the metaclass object associated with the new class object
+and sets up all the necessary internal pointers and data structures.
+
+The @code{name} parameter is the name associated with the new class.
+The metaclass created will have the same name with ``meta'' prepended
+to the name.  
+
+The @code{ivsize} parameter defines the size of the locally
+declared instance variables associated with the new class.  If there are
+no local instance variables @code{0} should be used.  
+
+The @code{cvsize} parameter is used to declare the size of the locally
+defined class variables associated with the new class.  If there are no
+locally defined class variables @code{0} should be used, otherwise, the
+size of the class variable structure should be used.
+
+The remainder of this method's arguments define the superclasses the new
+class will have.  The last argument must be @code{END}.  If no superclasses
+are defined the single class @code{Object} will be the default
+superclass.  The order of the superclasses will determine the method
+lookup order.
+@example
+@group
+@exdent Example:
+
+object  NewClass;
+
+NewClass = gNewClass(Class, ShortInteger, END);
+@end group
+@end example
+@sp 1
+See also:  @code{NewStdClass::Class}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {NewStdClass}
+@deffn {NewStdClass} NewStdClass::Class
+@sp 2
+@example
+@group
+cls = gNewStdClass(Class, cname, ivsize, mclass, nipib,
+                   sCls...)
+
+char    *cname; /*  the name of the new class    */
+int     ivsize; /*  the size of the instance variables in 
+                    the new class  */
+object  mclass; /*  the metaclass of the new class  */
+int     nipib;  /*  number of instances per instance block  */
+object  sCls;   /*  an END terminated list of 
+                           superclasses  */
+object  cls;    /*  The new class being created  */
+@end group
+@end example
+This method is used to create new classes.  Unlike @code{NewClass::Class},
+which automatically creates a corresponding metaclass (like Smalltalk
+-- more convenient), @code{NewStdClass::Class} creates single independent
+classes with the ability to set the metaclass (like CLOS -- more
+powerful but more cumbersome to use).
+
+The @code{name} parameter is the name associated with the new class.
+
+The @code{ivsize} parameter defines the size of the locally
+declared instance variables associated with the new class.  If there are
+no local instance variables @code{0} should be used.  
+
+The @code{mclass} parameter is used to set the class of the newly
+created class.  This is the class which defines the behavior and
+characteristics of the newly created class.  Note that any number
+of classes may share the same metaclass.  This adds a great deal
+of power to the meta-language aspects of the system.
+
+For efficiency reasons Dynace does not allocate memory for objects
+one at a time.  They are allocated in blocks which are measured
+by the number of instances per block of memory.  This factor
+may be specified by the use of the @code{nipib} parameter.  When
+creating a class which will have many small instances used it
+is best to have @code{nipib} high (~50).  However, if the instances
+are large and there will only be a few of them 1 would be a good choice.
+The use of 0 will cause the system to estimate an appropriate value
+based on the instance size.
+
+The remainder of this method's arguments define the superclasses the new
+class will have.  The last argument must be @code{END}.  If no superclasses
+are defined the single class @code{Object} will be the default
+superclass.  The order of the superclasses will determine the method
+lookup order.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewClass::Class}
+@end deffn
+
+
+
+
+@subsection Class Instance Methods
+@pdfsubsection{Class Instance Methods}
+The class Class has no instance methods.
+
+
+@page
+@section MetaClass Class
+@pdfsection{MetaClass Class}
+All metaclasses in the system are instances of the class @code{MetaClass}.
+Since all metaclasses are instances of the @code{MetaClass} class, and
+all class objects are instances of their associated metaclasses, the
+@code{MetaClass} class is the heart of the Dynace class system.  The
+@code{MetaClass} class has no class or instance methods.
+
+
+
+@page
+@section Method Class
+@pdfsection{Method Class}
+The @code{Method} class gives Dynace the ability to represent methods
+(static C language functions) as true objects.  The principal use of this
+class is to create new methods.
+
+
+@subsection Method Class Methods
+@pdfsubsection{Method Class Methods}
+There is only one class method associated with the @code{Method} class and
+it is used for the creation of new methods.
+
+
+
+
+@pdfsubsubsection {NewMethod}
+@deffn {NewMethod} NewMethod::Method
+@sp 2
+@example
+@group
+method = gNewMethod(Method, name, cls, gen, cf, ff)
+
+char    *name;  /*  the name of the new method   */
+object  cls;    /*  the class associated with the method  */
+object  gen;    /*  the generic associated with the method  */
+object  (*cf)();/*  the C function which implements 
+                              the method  */
+object  (*ff)();/*  the C function which implements 
+                              the method - fixed args  */
+object  method; /*  the new method object  */
+@end group
+@end example
+This method is used to create a new method object.  The new method
+object associates a class object, a generic object, and a C function.
+The macros @code{iMethodFor, ivMethodFor, cMethodFor, cvMethodFor}
+provide the normal access to this method.  See those macros for a
+full description.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{iMethodFor, ivMethodFor, cvMethodFor, cMethodFor}
+@end deffn
+
+
+
+
+
+
+@subsection Method Instance Methods
+@pdfsubsection{Method Instance Methods}
+The instances methods associated with this class are used to obtain
+information about a method object.
+
+
+
+
+
+@pdfsubsubsection {ChangeFunction}
+@deffn {ChangeFunction} ChangeFunction::Method
+@sp 2
+@example
+@group
+ofun = gChangeFunction(m, nfun);
+
+object  m;
+object  (*nfun)();
+object  (*ofun)();
+@end group
+@end example
+This method is used to change the C function associated with a method
+object to @code{nfun}.  The old C function pointer is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindMethodObject::Behavior, Function::Method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Function}
+@deffn {Function} Function::Method
+@sp 2
+@example
+@group
+fun = gFunction(m);
+
+object  m;
+object  (*fun)();
+@end group
+@end example
+This method is used to obtain the C function associated with a method
+object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindMethodObject::Behavior,}
+@hfil @break @hglue .64in      @code{ChangeFunction::Method}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::Method
+@sp 2
+@example
+@group
+name = gName(m);
+
+object  m;
+char    *name;
+@end group
+@end example
+This method is used to obtain the name of a given method type object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{FindMethodObject::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Trace}
+@deffn {Trace} Trace::Method
+@sp 2
+@example
+@group
+pm = gTrace(mth, mode)
+
+object  mth;    /*  method object        */
+int     mode;   /*  trace mode           */
+int     pm;     /*  previous trace mode  */
+@end group
+@end example
+This method is used to set the trace mode associated with a
+particular method (@code{mth}).  This mode only has an effect
+when the Dynace tracing facility is activated (via
+@code{Trace::Dynace}).  The possible settings (defined in
+@code{dynl.h}) are as follows:
+@example
+@group
+DYNACE_TRACE_DONT_CARE   OK to trace this method if a
+                         related generic or class has tracing
+                         turned on (default)
+
+DYNACE_TRACE_OFF         Turn all tracing related to this
+                         method off
+
+DYNACE_TRACE_ON          Activate tracing for this method
+@end group
+@end example
+The value returned is the previous trace mode in effect.  See the
+section on tracing (under Dynace Customization & Special Techniques) for
+more information.
+@example
+@group
+@exdent Example:
+
+object  mth;
+
+mth = gFindMethodObject(Set, Generic(gRemove), 1);
+  /* turn tracing on for Remove::Set */
+gTrace(mth, DYNACE_TRACE_ON);
+@end group
+@end example
+@sp 1
+See also:  @code{Trace::Dynace, TracePrint::Dynace,}
+@hfil @break @hglue .64in @code{FindMethodObject::Behavior, Generic,}
+@hfil @break @hglue .64in @code{Trace::Behavior, Trace::GenericFunction}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@page
+@section GenericFunction Class
+@pdfsection{GenericFunction Class}
+The @code{GenericFunction} class gives Dynace the ability to represent
+generic functions (C language functions) as true objects.  The principal
+use of this class is to create new generic function objects.
+
+
+@subsection GenericFunction Class Methods
+@pdfsubsection{GenericFunction Class Methods}
+The class methods in this class are used to create new generic objects
+and obtain a list of all generics.
+
+
+
+
+
+@pdfsubsubsection {FindGeneric}
+@deffn {FindGeneric} FindGeneric::GenericFunction
+@sp 2
+@example
+@group
+gf = gFindGeneric(GenericFunction, name);
+
+char  *name;    /*  name of generic function to find  */
+object  gf;     /*  GenericFunction object associated with name  */
+@end group
+@end example
+This method is used to obtain the generic function object named @code{name}.
+The generic function object is returned unless it is not found, in that case
+a @code{NULL} is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{GetAll::GenericFunction}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {GetAll}
+@deffn {GetAll} GetAll::GenericFunction
+@sp 2
+@example
+@group
+gf = gGetAll(GenericFunction);
+
+object  gf;     /*  LinkObject of all generic function objects  */
+@end group
+@end example
+This method is used to get a linked list (of type @code{LinkObject})
+of all the generic objects.  It is useful for enumerating through
+all the generic objects.  Once a generic object is obtained, it
+can be used to obtain information about the generic.
+
+Once @code{gf} is no longer needed it is important that it is
+disposed with @code{gDispose} and not @code{gDeepDispose}.  Use
+of @code{gDeepDispose} on @code{gf} will dispose of all the generic
+objects in the system and crash it.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{GetAll::Class, FindGeneric::GenericFunction}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {NewGeneric}
+@deffn {NewGeneric} NewGeneric::GenericFunction
+@sp 2
+@example
+@group
+gf = gNewGeneric(GenericFunction, name, fp);
+
+char    *name;  /*  the name of the new generic function */
+object  gf;     /*  the new generic function object  */
+void    *fp;    /*  pointer to generic function  */
+@end group
+@end example
+This method is used to create a new generic function object.
+The generic function object is used to store the relationship between
+classes, generics and methods.  Normally, all generics are created
+in a single file called ``generics.c''.  All external declarations for
+the generics are kept in a file called ``generics.h''.  These files
+are created automatically by the @code{dpp} program from the
+class documentation.
+
+The macros @code{InitGeneric, defGeneric, externGeneric} provide the
+normal access to this method and the generic function object in general.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{dpp, defGeneric, externGeneric, InitGeneric,}
+@hfil @break @hglue .64in    @code{GetGenericPtr::GenericFunction}
+@end deffn
+
+
+
+
+
+
+@subsection GenericFunction Instance Methods
+@pdfsubsection{GenericFunction Instance Methods}
+@code{GenericFunction} instance methods define the behavior of all generic
+functions.
+
+
+
+
+
+
+@pdfsubsubsection {GetGenericPtr}
+@deffn {GetGenericPtr} GetGenericPtr::GenericFunction
+@sp 2
+@example
+@group
+gfp = gGetGenericPtr(gf);
+
+object  gf;     /*  a GenericFunction object  */
+void    *gfp;   /*  pointer to the generic function
+                    associated with gf  */
+@end group
+@end example
+This method is used to get a pointer to the generic function
+associated with a generic object.  @code{gfp} must be correctly
+typecast prior to use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Generic, GetAll::GenericFunction}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {InvalidObject}
+@deffn {InvalidObject} InvalidObject::GenericFunction
+@sp 2
+@example
+@group
+gInvalidObject(gf, argn, arg1);
+
+object  gf;     /*  the generic function object  */
+int     argn;   /*  argument number  */
+object  arg1;   /*  the first argument to generic  */
+@end group
+@end example
+This method is used to report the case when a generic is passed an
+argument which is not a valid object.  After generation of the error
+message it calls @code{Error::Object} to report the error and abort the
+program.  It is normally called automatically by a generic or by the use
+of one of the @code{ChkArg} macros.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChkArg, InvalidType::GenericFunction, Error::Object}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {InvalidType}
+@deffn {InvalidType} InvalidType::GenericFunction
+@sp 2
+@example
+@group
+gInvalidType(gf, argn, arg1, cls, arg);
+
+object  gf;     /*  the generic function object    */
+int     argn;   /*  argument number            */
+object  arg1;   /*  the first argument to generic  */
+object  cls;    /*  type of object expected    */
+object  arg;    /*  the argument which is bad  */
+@end group
+@end example
+This method is used to report the case when a generic is passed an
+argument which is not the expected type.  It passes the error message to
+@code{Error::Object} which prints the message and aborts the program.
+It is normally called via one of the @code{ChkArg} type macros.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChkArg, InvalidObject::GenericFunction, Error::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::GenericFunction
+@sp 2
+@example
+@group
+name = gName(g);
+
+object  g;
+char    *name;
+@end group
+@end example
+This method is used to obtain the name of a given generic function type object.
+@example
+@group
+@exdent Example:
+
+char    *name;
+
+name = gName(Generic(vNew));
+/*  name now points to:   "vNew"  */
+@end group
+@end example
+@sp 1
+See also:  @code{Generic}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Trace}
+@deffn {Trace} Trace::GenericFunction
+@sp 2
+@example
+@group
+pm = gTrace(gf, mode)
+
+object  gf;     /*  generic function object */
+int     mode;   /*  trace mode              */
+int     pm;     /*  previous trace mode     */
+@end group
+@end example
+This method is used to set the trace mode associated with a
+particular generic function (@code{gf}).  This mode only has an effect
+when the Dynace tracing facility is activated (via
+@code{Trace::Dynace}).  The possible settings (defined in
+@code{dynl.h}) are as follows:
+@example
+@group
+DYNACE_TRACE_DONT_CARE   OK to trace this generic if a
+                         related method or class has tracing
+                         turned on (default)
+
+DYNACE_TRACE_OFF         Turn all tracing related to this
+                         generic off
+
+DYNACE_TRACE_ON          Activate tracing for this generic
+@end group
+@end example
+The value returned is the previous trace mode in effect.  See the
+section on tracing (under Dynace Customization & Special Techniques) for
+more information.
+@example
+@group
+@exdent Example:
+
+/* turn tracing on for vNew */
+gTrace(Generic(vNew), DYNACE_TRACE_ON); 
+@end group
+@end example
+@sp 1
+See also:  @code{Generic, Trace::Dynace, TracePrint::Dynace,}
+@hfil @break @hglue .64in @code{Trace::Behavior, Trace::Method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@page
+@section Dynace Class
+@pdfsection{Dynace Class}
+The @code{Dynace} Class is used to affect various parameters which control
+the internal operation of the Dynace kernel.  The user may control whether
+the garbage collector is activated or not and what parameters it is
+running under.  You may also control such things as the size of the
+method cache.  All operations performed through this class are performed
+by sending messages directly to the Dynace class.  There are no instance
+methods.
+
+
+@subsection Dynace Class Methods
+@pdfsubsection{Dynace Class Methods}
+All functionality of the Dynace class is accessed through it's class methods.
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeRegisteredMemory}
+@deffn {ChangeRegisteredMemory} ChangeRegisteredMemory::Dynace
+@sp 2
+@example
+@group
+rmp = gChangeRegisteredMemory(Dynace, rmp, beg, size)
+
+void    *rmp;   /*  registered memory pointer  */
+void    *beg;   /*  pointer to beginning of region  */
+long    size;   /*  size of region  */
+@end group
+@end example
+This method is used to change the memory region associated with
+a memory region pointer.  @code{rmp} must have been a pointer returned by
+@code{gRegisterMemory}.
+@example
+@group
+@exdent Example:
+
+static  object  a, b;
+void    *rmp;
+
+rmp = gRegisterMemory(Dynace, &a, (long) sizeof(a));
+   .
+   .
+   .
+gChangeRegisteredMemory(Dynace, rmp, &b, (long) sizeof(b));
+@end group
+@end example
+@sp 1
+See also:  @code{RegisterMemory::Dynace, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {CurMemUsed}
+@deffn {CurMemUsed} CurMemUsed::Dynace
+@sp 2
+@example
+@group
+cmu = gCurMemUsed(Dynace)
+
+long    cmu;    /*  current memory used  */
+@end group
+@end example
+This method is used to obtain the current amount of storage being used
+by Dynace objects.  This number increases every time a new object is
+created, and decreases every time an object is disposed.
+@example
+@group
+@exdent Example:
+
+long    cmu;
+
+cmu = gCurMemUsed(Dynace);
+@end group
+@end example
+@sp 1
+See also:  @code{MaxMemUsed::Dynace, GC::Dynace, DumpObjects::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DumpObjects}
+@deffn {DumpObjects} DumpObjects::Dynace
+@sp 2
+@example
+@group
+c = gDumpObjects(Dynace, file, mc)
+
+object  c;      /*  the Dynace class  */
+char    *file;  /*  file to dump object list on  */
+int     mc;     /*  0=no metaclasses, 1=metaclasses too  */
+@end group
+@end example
+This method is used to dump a list of all Dynace objects in a human
+readable format into the file named by @code{file}.  The @code{mc}
+flag is used to determine whether or not metaclasses are included
+in the dump.
+
+This method is mainly used to find leaks in an application.  Typically,
+a body of code would be run, then an object dump performed, then run again,
+and finally a second object dump to another file is performed.  The two
+dump files would then be sorted and diff'ed.  A list of object leaks
+would result.
+@example
+@group
+@exdent Example:
+
+gDumpObjects(Dynace, "objects.lst", 0);
+@end group
+@end example
+@sp 1
+See also:  @code{DumpObjectsString::Dynace, MaxMemUsed::Dynace, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DumpObjectsDiff}
+@deffn {DumpObjectsDiff} DumpObjectsDiff::Dynace
+@sp 2
+@example
+@group
+sd = gDumpObjectsDiff(Dynace, d1, d2)
+
+object  d1, d2; /*  values from gDumpObjectsString  */
+object  sd;     /*  StringDictionary instance  */
+@end group
+@end example
+This method is used to create a string dictionary representing
+the difference between two calls to @code{gDumpObjectsString}.
+The string is the name of the class and
+the value is an instance of @code{LongInteger} which represents the
+number of instances different.
+
+This method is mainly used to find leaks in an application.  Typically,
+a body of code would be run, then an object dump performed, then run
+again, and finally a second object dump is performed.  The two dump
+string dictionaries would then be compared using
+@code{gDumpObjectsDiff}.  A list of object leaks would result.
+@example
+@group
+@exdent Example:
+
+object   d1, d2, diff;
+
+d1 = gDumpObjectsString(Dynace, 0);
+       .
+       .
+       .
+d2 = gDumpObjectsString(Dynace, 0);
+diff = gDumpObjectsDiff(Dynace, d1, d2);
+@end group
+@end example
+@sp 1
+See also:  @code{DumpObjectsString::Dynace, DumpObjects::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DumpObjectsString}
+@deffn {DumpObjectsString} DumpObjectsString::Dynace
+@sp 2
+@example
+@group
+sd = gDumpObjectsString(Dynace, mc)
+
+int     mc;     /*  0=no metaclasses, 1=metaclasses too  */
+object  sd;     /*  StringDictionary instance  */
+@end group
+@end example
+This method is used to create a string dictionary representing all
+Dynace objects in the system.  The string is the name of the class and
+the value is an instance of @code{LongInteger} which represents the
+number of instances.  The @code{mc} flag is used to determine whether or
+not metaclasses are included in the list.
+
+This method is mainly used to find leaks in an application.  Typically,
+a body of code would be run, then an object dump performed, then run
+again, and finally a second object dump is performed.  The two dump
+string dictionaries would then be compared using
+@code{gDumpObjectsDiff}.  A list of object leaks would result.
+@c @example
+@c @group
+@c @exdent Example:
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DumpObjectsDiff::Dynace, DumpObjects::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {GC}
+@deffn {GC} GC::Dynace
+@sp 2
+@example
+@group
+c = gGC(Dynace)
+
+object  c;    /*  the Dynace class  */
+@end group
+@end example
+This method is used to force the Dynace system to perform a garbage collection.
+All inaccessible objects will be collected and made available for reuse.
+This method is not normally used because the Dynace system will automatically
+start the garbage collector when necessary (if turned on via the
+@code{SetMemoryBufferArea} method).
+@example
+@group
+@exdent Example:
+
+gGC(Dynace);
+@end group
+@end example
+@sp 1
+See also:  @code{SetMemoryBufferArea::Dynace, RegisterMemory::Dynace,}
+@hfil @break @hglue .64in    @code{DumpObjects::Dynace, NumbGC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MaxAfterGC}
+@deffn {MaxAfterGC} MaxAfterGC::Dynace
+@sp 2
+@example
+@group
+mem = gMaxAfterGC(Dynace)
+
+long    mem;    /*  maximum memory used  */
+@end group
+@end example
+This method is used to obtain the maximum memory that was in use
+immediately after the last garbage collection.  If no garbage
+collection has taken place the returned value will represent
+the current memory usage.  The value of this number is that
+the amount of storage between the current memory usage and this number
+is considered potential garbage and used (internally) by Dynace
+to help determine when an automatic garbage collection should occur.
+@example
+@group
+@exdent Example:
+
+long    mem;
+
+mem = gMaxAfterGC(Dynace);
+@end group
+@end example
+@sp 1
+See also:  @code{MaxMemUsed::Dynace, CurMemUsed::Dynace, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {MaxMemUsed}
+@deffn {MaxMemUsed} MaxMemUsed::Dynace
+@sp 2
+@example
+@group
+mem = gMaxMemUsed(Dynace)
+
+long    mem;    /*  maximum memory used  */
+@end group
+@end example
+This method is used to obtain the maximum memory that was
+used by the system during the entire run of the application.
+@example
+@group
+@exdent Example:
+
+long    mem;
+
+mem = gMaxMemUsed(Dynace);
+@end group
+@end example
+@sp 1
+See also:  @code{MaxAfterGC::Dynace, CurMemUsed::Dynace, GC::Dynace,}
+@hfil @break @hglue .64in    @code{DumpObjects::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {NumbGC}
+@deffn {NumbGC} NumbGC::Dynace
+@sp 2
+@example
+@group
+ngc = gNumbGC(Dynace)
+
+long    ngc;    /*  maximum memory used  */
+@end group
+@end example
+This method is used to obtain the total number of times the garbage
+collector ran during the entire run of the application.
+@example
+@group
+@exdent Example:
+
+long    ngc;
+
+ngc = gNumbGC(Dynace);
+@end group
+@end example
+@sp 1
+See also:  @code{MaxAfterGC::Dynace, CurMemUsed::Dynace, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ObjectChecking}
+@deffn {ObjectChecking} ObjectChecking::Dynace
+@sp 2
+@example
+@group
+c = gObjectChecking(Dynace, flag)
+
+int     flag;   /*  1=on,  0=off   */
+object  c;      /*  the Dynace class  */
+@end group
+@end example
+Since the first argument to all generics is the Dynace object which is
+being sent the message, the first argument to all generics must always
+be a valid Dynace object.  Whenever a generic is called Dynace verifies that
+the first argument is in fact a valid Dynace object.  If it is not Dynace
+will issue an error message and abort the program.  This is a fatal
+error.
+
+There is a runtime overhead associated with this check.  It's very
+similar to the stack checking which some C compilers perform at
+runtime.  Once a program is sufficiently debugged it is possible
+to turn this runtime checking off in order to achieve maximum
+performance.  Turning the checking off is, however, not recommended.
+If an untested portion of code which contains a bug is executed
+and the checking is off very unpredictable results will occur.
+It's very similar to dereferencing an uninitialized pointer in C.
+
+There are techniques to totally eliminate the runtime overhead
+associated with object validation and method lookup within Dynace.
+See the text.
+
+By default Dynace has object checking turned on.  The @code{ObjectChecking}
+method may be called at arbitrary points in a program to turn the checking
+on or off.  A @code{flag} value of 1 turns checking on and a value of 0
+turns it off.
+@example
+@group
+@exdent Example:
+
+gObjectChecking(Dynace, 0);
+@end group
+@end example
+@sp 1
+See also:  @code{ChkArg}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {RegisterMemory}
+@deffn {RegisterMemory} RegisterMemory::Dynace
+@sp 2
+@example
+@group
+rmp = gRegisterMemory(Dynace, beg, size)
+
+void    *beg;   /*  beginning of registered memory  */
+long    size;   /*  size of region      */
+void    *rmp;   /*  registered memory pointer  */
+@end group
+@end example
+The Dynace garbage collector uses the C stack in order to determine which
+objects are still accessible, either directly or indirectly, by the
+program and need to be saved.  All remaining objects will be collected
+and returned to the free store.  This scheme allows Dynace to automatically
+handle objects which are being referenced, directly or indirectly, by
+automatic variables and function parameters.
+
+Dynace has no way of knowing about objects which are referenced by global
+and static variables or objects which are being referenced by memory
+allocated from the heap.  If an objects is only being referenced by
+one of these methods Dynace will dispose of it the next time the
+garbage collector is called.  If the program later tries to use the
+object an error will occur.  The solution to this problem is to
+register these memory regions with Dynace.
+
+The @code{beg} parameter specifies the address of the beginning of the
+region which needs to be protected.  The @code{size} parameter specifies
+the size in bytes of the region.  @code{RegisterMemory} returns a pointer
+which may be used to un-register the region at a later time.
+
+The @code{RegisterVariable} macro provides a convenient interface
+to protect global and static variables.
+
+If the Dynace garbage collector is not being used there is no need to
+register any memory regions.
+
+@example
+@group
+@exdent Example:
+
+static  object  a, b;
+
+gRegisterMemory(Dynace, &a, (long) sizeof(a));
+RegisterVariable(b);
+@end group
+@end example
+@sp 1
+See also:  @code{GC::Dynace, RemoveRegisteredMemory::Dynace,}
+@hfil @break @hglue .64in   @code{ChangeRegisteredMemory::Dynace}
+@end deffn
+
+
+
+
+
+@pdfsubsubsection {RemoveRegisteredMemory}
+@deffn {RemoveRegisteredMemory} RemoveRegisteredMemory::Dynace
+@sp 2
+@example
+@group
+gRemoveRegisteredMemory(Dynace, rmp)
+
+void    *rmp;   /*  registered memory pointer  */
+@end group
+@end example
+This method is used to remove a memory region from those registered
+with the Dynace system.  The @code{rmp} parameter must be a pointer
+which was obtained from a call to @code{gRegisterMemory}.  Once
+this method is called the specified region of memory will no longer
+be protected from the garbage collector.
+@example
+@group
+@exdent Example:
+
+static  object  a, b;
+void    *rmpa, *rmpb;
+
+rmpa = gRegisterMemory(Dynace, &a, (long) sizeof(a));
+rmpb = RegisterVariable(b);
+   .
+   .
+   .
+gRemoveRegisteredMemory(Dynace, rmpa);
+gRemoveRegisteredMemory(Dynace, rmpb);
+@end group
+@end example
+@sp 1
+See also:  @code{RegisterMemory::Dynace, ChangeRegisteredMemory::Dynace,}
+@hfil @break @hglue .64in   @code{GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ResizeMethodCache}
+@deffn {ResizeMethodCache} ResizeMethodCache::Dynace
+@sp 2
+@example
+@group
+c = gResizeMethodCache(Dynace, nClasses, nGenerics)
+
+int     nClasses;       /*  size of class cache table */
+int     nGenerics;      /*  size of generic cache table */
+object  c;              /*  the Dynace class  */
+@end group
+@end example
+The first time a particular method is evoked it must be searched for
+as described elsewhere in this manual.  This is a time consuming
+process.  It is, however, necessary for this process to occur at runtime
+in order to obtain the true benefit of Object Oriented Programming.
+C++, Objective--C, and Smalltalk all perform this search when using their
+dynamic binding capabilities.
+
+Once the appropriate method is found it is placed in a fast cache
+automatically maintained by Dynace.  This cache is designed such that
+it never overflows.  It just grows on an as-needed basis.  Therefore,
+once a correct method is found it will never be searched for again.
+All future messages to that particular method will be found in the
+cache.
+
+When Dynace is initialized a default cache is established.  Under normal
+circumstances you may never need to be concerned with the cache at
+all.  However, under conditions where there are a very large number
+of classes or generics it may be beneficial to enlarge the cache
+table sizes.
+
+If the cache size is to be changed the best place to do it is immediately
+after the initialization of Dynace.  You could, however, change the cache size
+at any point at the one time cost of some additional CPU time.
+
+The @code{nClasses} parameter should be set to some number larger than
+the total number of classes in your program.  The @code{nGenerics}
+parameter should also be set to some number larger than the number of
+generics in the program.  These numbers may be set lower than the
+number of classes and/or generics in order to save memory at the
+relatively low cost of runtime speed.  Since the cache is implemented
+as a hash table choosing numbers that are prime is best.
+Choosing odd numbers is good too.
+
+There are techniques to totally eliminate the runtime overhead
+associated with object validation and method lookup within Dynace.
+See the text.
+@example
+@group
+@exdent Example:
+
+gResizeMethodCache(Dynace, 101, 203);
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {SetMemoryBufferArea}
+@deffn {SetMemoryBufferArea} SetMemoryBufferArea::Dynace
+@sp 2
+@example
+@group
+c = gSetMemoryBufferArea(Dynace, size)
+
+long    size;   /*  size of buffer area  */
+object  c;      /*  the Dynace class  */
+@end group
+@end example
+This method is used to activate and control the automatic operation of the
+Dynace garbage collector.  When Dynace is first started the default memory buffer
+area is set to -1.  This value indicates that Dynace should not automatically
+start the garbage collector.
+
+If the value of @code{size} is positive then Dynace will automatically
+start the garbage collector every time the program creates enough
+@emph{new} objects to exceed the storage specified by the @code{size}
+parameter (in bytes).  Dynace will automatically adjust its heap storage
+requirements based on the @code{size} parameter and the storage history
+of the application program.
+
+The actual value of @code{size} must be determined experimentally.
+A typical starting place would be about 40000.  The higher the value of
+@code{size} the less frequently the garbage collector will be started
+but the longer it will take to run.  The lower the value of @code{size}
+the more often the garbage collector will run but also the faster.
+The garbage collector is very fast and you will probably not notice much
+of a difference for a wide range of @code{size}.
+
+The typical storage Dynace requires to support this facility is roughly
+equal to the maximum storage of all the active objects in the
+application at any given time plus the value of the @code{size}
+parameter.  Therefore, making @code{size} unnecessarily large would
+be wasteful.
+
+Note that the @code{size} parameter must be of type @code{long}.
+@example
+@group
+@exdent Example:
+
+gSetMemoryBufferArea(Dynace, 40000L);
+@end group
+@end example
+@sp 1
+See also:  @code{GC::Dynace, RegisterMemory::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Trace}
+@deffn {Trace} Trace::Dynace
+@sp 2
+@example
+@group
+pm = gTrace(Dynace, mode)
+
+int     mode;   /*  trace mode           */
+int     pm;     /*  previous trace mode  */
+@end group
+@end example
+This class method is used to set the global trace mode of the Dynace system.
+The possible settings (defined in @code{dynl.h}) are as follows:
+@example
+@group
+DYNACE_TRACE_OFF       Turn all tracing off (default setting)
+
+DYNACE_TRACE_ON        Trace objects which are activated for
+                       tracing
+
+DYNACE_TRACE_ALL       Trace all except those explicitly
+                       deactivated
+@end group
+@end example
+The value returned is the previous trace mode in effect.  See the
+section on tracing (under Dynace Customization & Special Techniques) for
+more information.
+@example
+@group
+@exdent Example:
+
+gTrace(Dynace, DYNACE_TRACE_ON);   /*  turn tracing on  */
+@end group
+@end example
+@sp 1
+See also:  @code{TracePrint::Dynace, Trace::Behavior,}
+@hfil @break @hglue .64in @code{Trace::GenericFunction, Trace::Method}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {TracePrint}
+@deffn {TracePrint} TracePrint::Dynace
+@sp 2
+@example
+@group
+c = gTracePrint(Dynace, msg)
+
+char    *msg;   /*  trace output message  */
+object  c;      /*  the Dynace class      */
+@end group
+@end example
+This class method is used to output trace messages and is called by
+the Dynace internal tracing functions.  This method simply outputs
+@code{msg} to @code{traceStream}.  It is documented here in case
+there is a need to override it.
+
+See the section on tracing (under Dynace Customization & Special Techniques)
+for more information.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{traceStream::Stream, Trace::Dynace, Trace::Behavior,}
+@hfil @break @hglue .64in @code{Trace::GenericFunction, Trace::Method}
+@end deffn
+
+
+
+
+
+
+
+
+@subsection Dynace Instance Methods
+@pdfsubsection{Dynace Instance Methods}
+There are no instance methods associated with the Dynace class.
+
+
+
+
+
+@page
+@section Kernel Macros
+@pdfsection{Kernel Macros}
+Dynace has a number of macros to simplify the creation and usage of objects.
+These macros are all defined in the file @code{dynl.h}.  The following
+text describe each macro.
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {accessIVs}
+@deffn {accessIVs} accessIVs
+@sp 2
+@example
+@group
+accessIVs;
+@end group
+@end example
+This macro is used to access the instance variables from within an
+instance method.  It may be used anywhere within the variable
+declaration section of a normal C function.  @code{accessIVs} actually
+declares a local variable named @code{iv} and initializes it to a
+pointer to the instance variable structure.  Once @code{accessIVs} is
+called the local variable @code{iv} may be used to access all the
+locally defined instance variables in the class being defined in the
+current file.
+
+@code{accessIVs} uses the variable named @code{self} to determine which
+object to obtain instance variables for.  See @code{ivPtr} to access
+instance variables for other variables.
+
+If an instance method makes only a single access to its instance variables
+the use of the @code{ivsPtr} macro would be better suited.
+
+Note that it is rarely ever necessary to explicitly use the
+@code{accessIVs} macro due to the fact the the Dynace preprocessor
+(@code{dpp}) automatically adds this code when preprocessing the class
+definition file.
+@example
+@group
+@exdent Example:
+
+defclass  @{
+      char    name[30];
+      int     age;
+@};
+
+imeth void    PrintInstances(object self, FILE *fp)
+@{
+      accessIVs;
+
+      fprintf(fp, "%s is %d years old\n", iv->name, iv->age);
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{ivsPtr, ivPtr, ivType, GetIVs}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ChkArg}
+@deffn {ChkArg} ChkArg
+@sp 2
+@example
+@group
+ChkArg(arg, argn);
+
+object  arg;    /*  the argument to be checked  */
+int     argn;   /*  the argument number         */
+@end group
+@end example
+This macro provides a convenient way of validating method arguments.
+If @code{arg} is not a valid Dynace object a meaningful error message
+will be displayed and the program will be aborted.  @code{argn} is
+used in the error message to tell which argument caused the problem.
+
+The argument checking properties of this macro may be enabled / disabled
+via the @code{gObjectChecking} generic.  It defaults to ON.
+
+Since Dynace automatically checks the first argument to all generics (if
+argument checking is on) there is never a need to manually check the
+first argument.  @code{ChkArg} would only be needed for arguments
+beyond the first.
+
+@code{ChkArg} may only be used as the first executable statements in a
+method (prior to any other generic calls).
+@example
+@group
+@exdent Example:
+
+imeth object  MyMethod(object self, object arg2, object arg3)
+@{
+        accessIVs;
+
+        ChkArg(arg2, 2);
+        ChkArg(arg3, 3);
+        .
+        .
+        .
+@end group
+@end example
+@sp 1
+See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
+@hfil @break @hglue .64in @code{ChkArgTyp, ChkArgNul, ChkArgTypNul}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ChkArgNul}
+@deffn {ChkArgNul} ChkArgNul
+@sp 2
+@example
+@group
+ChkArgNul(arg, argn);
+
+object  arg;    /*  the argument to be checked  */
+int     argn;   /*  the argument number         */
+@end group
+@end example
+This macro provides a convenient way of validating method arguments.
+Unlike @code{ChkArg} this will also permit an argument of @code{NULL}.
+If @code{arg} is not a valid Dynace object (or @code{NULL}) a meaningful
+error message will be displayed and the program will be aborted.
+@code{argn} is used in the error message to tell which argument caused
+the problem.
+
+The argument checking properties of this macro may be enabled / disabled
+via the @code{gObjectChecking} generic.  It defaults to ON.
+
+Since Dynace automatically checks the first argument to all generics (if
+argument checking is on) there is never a need to manually check the
+first argument.  @code{ChkArgNul} would only be needed for arguments
+beyond the first.
+
+@code{ChkArgNul} may only be used as the first executable statements in a
+method (prior to any other generic calls).
+@example
+@group
+@exdent Example:
+
+imeth object  MyMethod(object self, object arg2, object arg3)
+@{
+        accessIVs;
+
+        ChkArgNul(arg2, 2);
+        ChkArgNul(arg3, 3);
+        .
+        .
+        .
+@end group
+@end example
+@sp 1
+See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
+@hfil @break @hglue .64in @code{ChkArgTyp, ChkArg, ChkArgTypNul}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ChkArgTyp}
+@deffn {ChkArgTyp} ChkArgTyp
+@sp 2
+@example
+@group
+ChkArgTyp(arg, argn, type);
+
+object  arg;    /*  the argument to be checked  */
+int     argn;   /*  the argument number         */
+object  type;   /*  the expected class of arg   */
+@end group
+@end example
+This macro provides a convenient way of validating method arguments.
+If @code{arg} is not a valid Dynace object a meaningful error message
+will be displayed and the program will be aborted.  @code{argn} is
+used in the error message to tell which argument caused the problem.
+
+@code{type} is used to specify the expected type of the argument.  If
+@code{arg} is not an instance of class @code{type} (or one of its
+subclasses) an error message will be displayed and the program will be
+aborted.  If no argument type checking is required @code{type} should
+be passed a @code{NULL} and no type checking will be performed.
+
+The argument checking properties of this macro may be enabled / disabled
+via the @code{gObjectChecking} generic.  It defaults to ON.
+
+Since Dynace automatically checks the first argument to all generics (if
+argument checking is on) there is never a need to manually check the
+first argument.  @code{ChkArgTyp} would only be needed for arguments
+beyond the first.
+
+@code{ChkArgTyp} may only be used as the first executable statements in a
+method (prior to any other generic calls).
+@example
+@group
+@exdent Example:
+
+imeth object  MyMethod(object self, object arg2, object arg3)
+@{
+        accessIVs;
+
+        ChkArgTyp(arg2, 2, String);
+        ChkArgTyp(arg3, 3, Set);
+        .
+        .
+        .
+@end group
+@end example
+@sp 1
+See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
+@hfil @break @hglue .64in @code{ChkArgNul, ChkArgTypNul}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ChkArgTypNul}
+@deffn {ChkArgTypNul} ChkArgTypNul
+@sp 2
+@example
+@group
+ChkArgTypNul(arg, argn, type);
+
+object  arg;    /*  the argument to be checked  */
+int     argn;   /*  the argument number         */
+object  type;   /*  the expected class of arg   */
+@end group
+@end example
+This macro provides a convenient way of validating method arguments.
+Unlike @code{ChkArgTyp} this will also permit an argument of
+@code{NULL}.  If @code{arg} is not a valid Dynace object (or
+@code{NULL}) a meaningful error message will be displayed and the
+program will be aborted.  @code{argn} is used in the error message to
+tell which argument caused the problem.
+
+@code{type} is used to specify the expected type of the argument.  If
+@code{arg} is not an instance of class @code{type} (or one of its
+subclasses) an error message will be displayed and the program will be
+aborted.  If no argument type checking is required @code{type} should
+be passed a @code{NULL} and no type checking will be performed.
+
+The argument checking properties of this macro may be enabled / disabled
+via the @code{gObjectChecking} generic.  It defaults to ON.
+
+Since Dynace automatically checks the first argument to all generics (if
+argument checking is on) there is never a need to manually check the
+first argument.  @code{ChkArgTypNul} would only be needed for arguments
+beyond the first.
+
+@code{ChkArgTypNul} may only be used as the first executable statements in a
+method (prior to any other generic calls).
+@example
+@group
+@exdent Example:
+
+imeth object  MyMethod(object self, object arg2, object arg3)
+@{
+        accessIVs;
+
+        ChkArgTypNul(arg2, 2, String);
+        ChkArgTypNul(arg3, 3, Set);
+        .
+        .
+        .
+@end group
+@end example
+@sp 1
+See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
+@hfil @break @hglue .64in @code{ChkArgNul, ChkArgTyp}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ClassOf}
+@deffn {ClassOf} ClassOf
+@sp 2
+@example
+@group
+c = ClassOf(obj);
+
+object  obj;    /*  an object                   */
+object  c;      /*  the class of the object     */
+@end group
+@end example
+This macro provides a very fast way of obtaining the class of any object.
+Since all objects in Dynace (including classes) are also regular objects and
+since all objects are instances of some class the @code{ClassOf} macro
+may be called repeatedly and indefinitely for any Dynace object and you
+would always receive a valid object.  This macro may also be used to
+map any class hierarchy.
+@example
+@group
+@exdent Example:
+
+object  a, b;
+
+a = gNewWithInt(ShortInteger, 7);
+b = ClassOf(a);   /*  b now contains ShortInteger  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsKindOf::Object, IsInstanceOf}
+@end deffn
+
+
+
+
+
+@pdfsubsection {cmcPointer}
+@deffn {cmcPointer} cmcPointer
+@sp 2
+@example
+@group
+meth = cmcPointer(cls, gen);
+
+object  cls;            /*  the class           */
+object  (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the class method associated with class @code{cls} and
+generic function @code{gen}.  The normal runtime search is used to
+obtain the method.  The process performed by this macro accounts for all
+the additional runtime overhead associated with the runtime binding of
+Dynace generic function usage.  The method pointer returned may be used as
+a normal C function pointer, thus nullifying all future runtime overhead
+associated with dynamic binding.  This macro may therefore be used to
+locally cache a method and eliminate any runtime costs while retaining
+the full dynamic capabilities of Dynace.
+
+This macro correctly typecasts its returned pointer to agree with
+the associated generic's return type and argument list.
+
+The use of this macro should be used sparingly.  It is a little
+cumbersome to use and, if not used with care, may defeat the dynamic
+nature and benefits of dynamic binding.  However, if used appropriately
+(in tight loops where efficiency is important), this macro may be
+a valuable tool.
+
+This macro returns a pointer to the C function which implements the method.
+@code{NULL} is returned if no method is found.
+@example
+@group
+@exdent Example:
+
+vNew_t    meth;
+object  vec[100];
+int     i;
+
+meth = cmcPointer(ShortInteger, vNew);
+for (i=0 ; i != 100 ; )
+       vec[i++] = meth(ShortInteger, 4);
+/* or: vec[i++] = (*meth)(ShortInteger, 4); */
+       /*  on old C compilers */
+/* same as vec[i++] = gNewWithInt(ShortInteger, 4);  */
+/* except 0 runtime overhead in loop          */
+@end group
+@end example
+@sp 1
+See also:  @code{cmiPointer, imiPointer, imcPointer, FindMethod::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {cmeth}
+@deffn {cmeth} cmeth
+@sp 2
+@example
+@group
+cmeth
+@end group
+@end example
+This macro is used to label and introduce a C function which is to serve
+as a class method.  All it really does is declare the C function to be
+static, and therefore not directly accessible externally to other source
+modules.  It is important that all methods be declared static to enforce
+the encapsulation and enable name space overloading.
+@example
+@group
+@exdent Example:
+
+cmeth object  New(self)
+object self;
+{
+        ...
+}
+@end group
+@end example
+@sp 1
+See also:  @code{imeth, method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {cMethodFor}
+@deffn {cMethodFor} cMethodFor
+@sp 2
+@example
+@group
+meth = cMethodFor(cls, gen, cf);
+
+object  cls;            /*  class               */
+object  (*gen)();       /*  generic function    */
+object  (*cf)();        /*  C function          */
+object  meth;           /*  method object       */
+@end group
+@end example
+This macro is used to associate a C function, which implements a class
+method, with a generic function for class @code{cls}. It is normally only
+used within the class initialization function associated with each class
+file.
+
+This macro returns a Dynace object (an instance of the Method class) which
+represents the C function which implements the method.  Each Class 
+and Generic object contains a list of Method objects which it relates
+to so there is not normally a need to save the returned value.
+@example
+@group
+@exdent Example:
+
+cMethodFor(MyClass, gNew, my_new);
+@end group
+@end example
+@sp 1
+See also:  @code{cvMethodFor, iMethodFor}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {cmiPointer}
+@deffn {cmiPointer} cmiPointer
+@sp 2
+@example
+@group
+meth = cmiPointer(i, gen);
+
+object  i;              /*  the instance object */
+object  (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the class method associated with the class of
+instance @code{i} and generic function @code{gen}.  The normal runtime
+search is used to obtain the method.  The process performed by this
+macro accounts for all the additional runtime overhead associated with
+the runtime binding of Dynace generic function usage.  The method pointer
+returned may be used as a normal C function pointer, thus nullifying all
+future runtime overhead associated with dynamic binding.  This macro may
+therefore be used to locally cache a method and eliminate any runtime
+costs while retaining the full dynamic capabilities of Dynace.
+
+This macro correctly typecasts its returned pointer to agree with
+the associated generic's return type and argument list.
+
+The use of this macro should be used sparingly.  It is a little
+cumbersome to use and, if not used with care, may defeat the dynamic
+nature and benefits of dynamic binding.  However, if used appropriately
+(in tight loops where efficiency is important), this macro may be
+a valuable tool.
+
+This macro returns a pointer to the C function which implements the method.
+@code{NULL} is returned if no method is found.
+@example
+@group
+@exdent Example:
+
+vNew_t    meth;
+object  vec[100], x;
+int     i;
+
+x = gNewWithInt(ShortInteger, 5);
+/* normally x would have come from somewhere else  */
+meth = cmiPointer(x, vNew);
+for (i=0 ; i != 100 ; )
+        vec[i++] = meth(ShortInteger, 4);
+/* or:  vec[i++] = (*meth)(ShortInteger, 4); */
+         /*  on old C compilers */
+/* same as vec[i++] = gNewWithInt(ShortInteger, 4);  */
+/* except 0 runtime overhead in loop          */
+@end group
+@end example
+@sp 1
+See also:  @code{cmcPointer, imiPointer, imcPointer, FindMethod::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {cSuper}
+@deffn {cSuper} cSuper
+@sp 2
+@example
+@group
+meth = cSuper(cls, gen);
+
+object  cls;            /*  class               */
+RTYPE   (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the superclass class method associated with the
+generic function @code{gen} for class @code{cls}.  If the method is not
+found the normal method search procedure will be used.
+
+@code{RTYPE} is the return type associated with the generic and
+macro in question.  The method pointer returned will be correctly
+typecast.
+
+This macro has been superseded by @code{oSuper}.
+@example
+@group
+@exdent Example:
+
+cSuper(MyClass, vNew)(self);  /* execute the superclass class
+                                 method associated with vNew
+                                 and pass it the single 
+                                 argument self  */
+@end group
+@end example
+@sp 1
+See also:  @code{oSuper, iSuper}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {cvMethodFor}
+@deffn {cvMethodFor} cvMethodFor
+@sp 2
+@example
+@group
+meth = cvMethodFor(cls, gen, cf, ff);
+
+object  cls;            /*  class               */
+object  (*gen)();       /*  generic function    */
+object  (*cf)();        /*  C function          */
+object  (*ff)();        /*  fixed C function    */
+object  meth;           /*  method object       */
+@end group
+@end example
+This macro is used to associate a C function, which implements a
+class method, with a generic function for class @code{cls}.  It is
+normally only used within the class initialization function associated
+with each class file.
+
+This macro returns a Dynace object (an instance of the Method class) which
+represents the C function which implements the method.  Each Class 
+and Generic object contains a list of Method objects which it relates
+to so there is not normally a need to save the returned value.
+
+The difference between this macro and @code{cMethodFor} is the extra @code{ff}
+parameter.  When using @code{dpp} strategies other then 1 (see the @code{dpp}
+section) under certain circumstance @code{dpp} will alter the argument
+signature of the defined method in order to accommodate the non-assembler
+generic / method interface.  It will then create a new function which has
+the correct signature in case the programmer requests a pointer to the
+method.  This way the returned function pointer will match the argument
+signature defined in the class definition file.  @code{ff} is a pointer
+to this cover function.
+@example
+@group
+@exdent Example:
+
+cvMethodFor(MyClass, gNew, my_new, f_my_new);
+@end group
+@end example
+@sp 1
+See also:  @code{iMethodFor, cMethodFor, ivMethodFor}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {defGeneric}
+@deffn {defGeneric} defGeneric
+@sp 2
+@example
+@group
+defGeneric(typ, gen)
+
+type    typ;       /*  any valid type  */
+object  (*gen)();  /*  generic name    */
+@end group
+@end example
+The @code{defGeneric} macro is used to create a new generic function.
+All generic functions are normally created in a single source file
+called @code{generics.c} which is automatically created by the
+@code{dpp} program.  @code{typ} defines the normal return type
+of the generic and @code{gen} is the name of the new generic function.
+
+There would not normally be a reason to use this macro.
+@example
+@group
+@exdent Example:
+
+defGeneric(object, vNew)
+@end group
+@end example
+@sp 1
+See also:  @code{dpp, externGeneric, InitGeneric,}
+@hfil @break @hglue .64in      @code{NewGeneric::GenericFunction}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {END}
+@deffn {END} END
+@sp 2
+@example
+@group
+END
+@end group
+@end example
+The @code{END} macro is simply syntactic sugar and is defined
+as @code{(object) 0}.  It is used when creating a new class to
+indicate the end of the list of superclasses.
+@example
+@group
+@exdent Example:
+
+CLASS = gNewClass(Class, Dictionary, END);
+@end group
+@end example
+@sp 1
+See also:  @code{NewClass::Class}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {EQ}
+@deffn {EQ} EQ
+@sp 2
+@example
+@group
+r = EQ(obj1, obj2);
+
+object  obj1, obj2;
+int     r;
+@end group
+@end example
+This macro is used to determine if @code{obj1} and @code{obj2} refer to
+the same exact object (not just the same value within the object).  If
+so a 1 is returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  a, b, e;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+b = gNewWithInt(ShortInteger, 7);
+e = a;
+c = EQ(a, b);   /* c == 0  */
+c = EQ(b, e);   /* c == 0  */
+c = EQ(a, e);   /* c == 1  */
+@end group
+@end example
+@sp 1
+See also:  @code{Equal::Object, NEQ}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {externGeneric}
+@deffn {externGeneric} externGeneric
+@sp 2
+@example
+@group
+externGeneric(typ, gen)
+
+type    typ;       /*  any valid type  */
+object  (*gen)();  /*  generic name    */
+@end group
+@end example
+The @code{externGeneric} macro is used to declare a generic function to
+external modules.  All generic functions are normally declared in a
+single source file called @code{generics.h} which is automatically
+created by the @code{dpp} program.  @code{typ} defines the normal
+return type of the generic and @code{gen} is the name of the generic
+function.
+
+There would not normally be a reason to call this macro.
+@example
+@group
+@exdent Example:
+
+externGeneric(object, vNew)
+@end group
+@end example
+@sp 1
+See also:  @code{dpp, defGeneric, InitGeneric}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {Generic}
+@deffn {Generic} Generic
+@sp 2
+@example
+@group
+gen = Generic(name)
+
+object  (*name)();
+object  gen;
+@end group
+@end example
+The @code{Generic} macro is used to obtain the generic object from its
+associated C function which implements the generic.
+@example
+@group
+@exdent Example:
+
+object  obj;
+
+obj = Generic(vNew)
+@end group
+@end example
+@sp 1
+See also:  @code{FindMethodObject::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {GetArg}
+@deffn {GetArg} GetArg
+@sp 2
+@example
+@group
+GetArg(type)
+@end group
+@end example
+This macro is used in conjunction with the @code{MAKE_REST} macro in order
+to create a consistent mechanism for methods which take a variable
+number of arguments to obtain its optional arguments.  This mechanism,
+as opposed to the normal @code{va_*} mechanism, is necessary in order to
+allow the same source code to work across the various @code{dpp} code
+strategies (see the @code{dpp} subsection ``Preprocessing Strategies'').
+
+@code{GetArg} may be used anytime subsequent to the @code{MAKE_REST}
+macro call.  Its single argument is the type of the argument being
+taken off the variable argument list.  Each successive call gets
+successive arguments after the last named argument.
+
+See @code{MAKE_REST} for a complete example.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{MAKE_REST, RESET_REST}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {GetCVs}
+@deffn {GetCVs} GetCVs
+@sp 2
+@example
+@group
+p = GetCVs(cls);
+
+object       cls;
+CLASS_cv_t  *p;
+@end group
+@end example
+This macro is used to obtain a pointer to the class variable structure
+locally defined in class @code{cls}.  See the section ``Internal Naming
+Conventions'' for a description of @code{CLASS_cv_t}.
+@example
+@group
+@exdent Example:
+
+MyClass_cv_t  *cv = GetCVs(MyClass);
+@end group
+@end example
+@sp 1
+See also:  @code{GetIVs}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {GetIVs}
+@deffn {GetIVs} GetIVs
+@sp 2
+@example
+@group
+p = GetIVs(cls, obj);
+
+object       cls;
+object       obj;
+CLASS_iv_t  *p;
+@end group
+@end example
+This macro is used to obtain a pointer to the instance variable
+structure locally defined in class @code{cls} and associated with object
+@code{obj}.  @code{obj} must, at some level, be an instance of
+@code{cls} or one of its subclasses.  See the section ``Internal Naming
+Conventions'' for a description of @code{CLASS_iv_t}.
+@example
+@group
+@exdent Example:
+
+MyClass_iv_t  *iv = GetIVs(MyClass, myObj);
+@end group
+@end example
+@sp 1
+See also:  @code{GetCVs, accessIVs, ivPtr}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {imcPointer}
+@deffn {imcPointer} imcPointer
+@sp 2
+@example
+@group
+meth = imcPointer(cls, gen);
+
+object  cls;            /*  the class           */
+object  (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the instance method associated with an instance of
+class @code{cls} and generic function @code{gen}.  The normal runtime
+search is used to obtain the method.  The process performed by this
+macro accounts for all the additional runtime overhead associated with
+the runtime binding of Dynace generic function usage.  The method pointer
+returned may be used as a normal C function pointer, thus nullifying all
+future runtime overhead associated with dynamic binding.  This macro may
+therefore be used to locally cache a method and eliminate any runtime
+costs while retaining the full dynamic capabilities of Dynace. 
+
+This macro correctly typecasts its returned pointer to agree with
+the associated generic's return type and argument list.
+
+The use of this macro should be used sparingly.  It is a little
+cumbersome to use and, if not used with care, may defeat the dynamic
+nature and benefits of dynamic binding.  However, if used appropriately
+(in tight loops where efficiency is important), this macro may be
+a valuable tool.
+
+This macro returns a pointer to the C function which implements the method.
+@code{NULL} is returned if no method is found.
+@example
+@group
+@exdent Example:
+
+gChangeValue_t  meth;
+object  x;
+int     i;
+
+x = gNewWithInt(ShortInteger, 5);
+meth = imcPointer(ShortInteger, gChangeValue);
+for (i=0 ; i != 100 ; )
+        meth(x, i*2);
+/* or use:  (*meth)(x, i*2);  on old C compilers */
+/* same as gChangeValue(x, i*2);  */
+/* except 0 runtime overhead in loop          */
+@end group
+@end example
+@sp 1
+See also:  @code{imiPointer, cmiPointer, cmcPointer, FindMethod::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {imeth}
+@deffn {imeth} imeth
+@sp 2
+@example
+@group
+imeth
+@end group
+@end example
+This macro is used to label and introduce a C function which is to serve
+as an instance method.  All it really does is declare the C function to be
+static, and therefore not directly accessible externally to other source
+modules.  It is important that all methods be declared static to enforce
+the encapsulation and enable name space overloading.
+@example
+@group
+@exdent Example:
+
+imeth object  ChangeValue(self)
+object self;
+{
+        ...
+}
+@end group
+@end example
+@sp 1
+See also:  @code{cmeth, method}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {iMethodFor}
+@deffn {iMethodFor} iMethodFor
+@sp 2
+@example
+@group
+meth = iMethodFor(cls, gen, cf);
+
+object  cls;            /*  class               */
+object  (*gen)();       /*  generic function    */
+object  (*cf)();        /*  C function          */
+object  meth;           /*  method object       */
+@end group
+@end example
+This macro is used to associate a C function, which implements an
+instance method, with a generic function for class @code{cls}.  It is
+normally only used within the class initialization function associated
+with each class file.
+
+This macro returns a Dynace object (an instance of the Method class) which
+represents the C function which implements the method.  Each Class 
+and Generic object contains a list of Method objects which it relates
+to so there is not normally a need to save the returned value.
+@example
+@group
+@exdent Example:
+
+iMethodFor(MyClass, gChangeValue, my_change);
+@end group
+@end example
+@sp 1
+See also:  @code{ivMethodFor, cMethodFor}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {imiPointer}
+@deffn {imiPointer} imiPointer
+@sp 2
+@example
+@group
+meth = imiPointer(i, gen);
+
+object  i;              /*  the instance        */
+object  (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the instance method associated with an instance 
+@code{i} and generic function @code{gen}.  The normal runtime
+search is used to obtain the method.  The process performed by this
+macro accounts for all the additional runtime overhead associated with
+the runtime binding of Dynace generic function usage.  The method pointer
+returned may be used as a normal C function pointer, thus nullifying all
+future runtime overhead associated with dynamic binding.  This macro may
+therefore be used to locally cache a method and eliminate any runtime
+costs while retaining the full dynamic capabilities of Dynace.
+
+This macro correctly typecasts its returned pointer to agree with
+the associated generic's return type and argument list.
+
+The use of this macro should be used sparingly.  It is a little
+cumbersome to use and, if not used with care, may defeat the dynamic
+nature and benefits of dynamic binding.  However, if used appropriately
+(in tight loops where efficiency is important), this macro may be
+a valuable tool.
+
+This macro returns a pointer to the C function which implements the method.
+@code{NULL} is returned if no method is found.
+@example
+@group
+@exdent Example:
+
+gChangeValue_t    meth;
+object  x;
+int     i;
+
+x = gNewWithInt(ShortInteger, 5);
+meth = imiPointer(x, gChangeValue);
+for (i=0 ; i != 100 ; )
+        meth(x, i*2);
+/* or use:  (*meth)(x, i*2);  on old C compilers */
+/* same as gChangeValue(x, i*2);  */
+/* except 0 runtime overhead in loop          */
+@end group
+@end example
+@sp 1
+See also:  @code{imcPointer, cmiPointer, cmcPointer,}
+@hfil @break @hglue .64in         @code{FindMethod::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {InitGeneric}
+@deffn {InitGeneric} InitGeneric
+@sp 2
+@example
+@group
+InitGeneric(gen);
+
+object  (*gen)();
+@end group
+@end example
+The @code{InitGeneric} macro is used to create Dynace generic function
+objects which know the address of the C function which implements it.
+
+All generic functions are normally initialized from a single source file
+called @code{generics.c} which is automatically created by the
+@code{dpp} program.  @code{gen} is the name of the generic
+function.
+
+There would not normally be a reason to call this macro.
+@example
+@group
+@exdent Example:
+
+InitGeneric(vNew);
+@end group
+@end example
+@sp 1
+See also:  @code{dpp, NewGeneric::GenericFunction, defGeneric,}
+@hfil @break @hglue .64in         @code{externGeneric}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {IsaClass}
+@deffn {IsaClass} IsaClass
+@sp 2
+@example
+@group
+r = IsaClass(obj);
+
+object  obj;
+int     r;
+@end group
+@end example
+This macro is used to determine if @code{obj} refers to a class type
+object.  It returns a 1 for class and metaclass type objects and 0 for
+instance type objects.
+@example
+@group
+@exdent Example:
+
+object  a;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+c = IsaClass(a);            /* c == 0  */
+c = IsaClass(ShortInteger)  /* c == 1  */
+c = IsaClass(ClassOf(a));   /* c == 1  */
+c = IsaClass(ClassOf(ShortInteger))  /* c == 1  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsaMetaClass, ClassOf, EQ}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {IsaMetaClass}
+@deffn {IsaMetaClass} IsaMetaClass
+@sp 2
+@example
+@group
+r = IsaMetaClass(obj);
+
+object  obj;
+int     r;
+@end group
+@end example
+This macro is used to determine if @code{obj} refers to a metaclass
+type object.  It returns a 1 for metaclass type objects and 0 for
+instance and class type objects.
+@example
+@group
+@exdent Example:
+
+object  a;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+c = IsaMetaClass(a);            /* c == 0  */
+c = IsaMetaClass(ShortInteger)  /* c == 0  */
+c = IsaMetaClass(ClassOf(a));   /* c == 0  */
+c = IsaMetaClass(ClassOf(ShortInteger))  /* c == 1  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsaClass, ClassOf, EQ}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {IsInstanceOf}
+@deffn {IsInstanceOf} IsInstanceOf
+@sp 2
+@example
+@group
+r = IsInstanceOf(i, cls);
+
+object  i;
+object  cls;
+int     r;
+@end group
+@end example
+This macro is used to determine if @code{i} is a direct
+instance of @code{cls}.  If so a 1 is returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  a, b;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+b = gNewWithInt(Dictionary, 101);
+c = IsInstanceOf(a, ShortInteger);  /* c == 1  */
+c = IsInstanceOf(a, LongInteger);   /* c == 0  */
+c = IsInstanceOf(b, Dictionary);    /* c == 1  */
+c = IsInstanceOf(b, Set);           /* c == 0  */
+c = IsInstanceOf(b, LinkList);      /* c == 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{IsKindOf::Object, ClassOf}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {iSuper}
+@deffn {iSuper} iSuper
+@sp 2
+@example
+@group
+meth = iSuper(cls, gen);
+
+object  cls;            /*  class               */
+RTYPE   (*gen)();       /*  generic function    */
+RTYPE   (*meth)();      /*  method              */
+@end group
+@end example
+This macro returns the superclass instance method associated with the
+generic function @code{gen} for class @code{cls}.  If the method is not
+found the normal method search procedure will be used.
+
+@code{RTYPE} is the return type associated with the generic and
+macro in question.  The method pointer returned will be correctly
+typecast.
+
+This macro has been superseded by @code{oSuper}.
+@example
+@group
+@exdent Example:
+
+ /* execute the superclass instance
+    method associated with gDispose
+    and pass it the single argument self  */
+iSuper(MyClass, gDispose)(self);
+@end group
+@end example
+@sp 1
+See also:  @code{oSuper, cSuper}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ivMethodFor}
+@deffn {ivMethodFor} ivMethodFor
+@sp 2
+@example
+@group
+meth = ivMethodFor(cls, gen, cf, ff);
+
+object  cls;            /*  class               */
+object  (*gen)();       /*  generic function    */
+object  (*cf)();        /*  C function          */
+object  (*ff)();        /*  fixed C function    */
+object  meth;           /*  method object       */
+@end group
+@end example
+This macro is used to associate a C function, which implements an
+instance method, with a generic function for class @code{cls}.  It is
+normally only used within the class initialization function associated
+with each class file.
+
+This macro returns a Dynace object (an instance of the Method class) which
+represents the C function which implements the method.  Each Class 
+and Generic object contains a list of Method objects which it relates
+to so there is not normally a need to save the returned value.
+
+The difference between this macro and @code{iMethodFor} is the extra @code{ff}
+parameter.  When using @code{dpp} strategies other then 1 (see the @code{dpp}
+section) under certain circumstance @code{dpp} will alter the argument
+signature of the defined method in order to accommodate the non-assembler
+generic / method interface.  It will then create a new function which has
+the correct signature in case the programmer requests a pointer to the
+method.  This way the returned function pointer will match the argument
+signature defined in the class definition file.  @code{ff} is a pointer
+to this cover function.
+@example
+@group
+@exdent Example:
+
+ivMethodFor(MyClass, gChangeValue, my_change, f_my_change);
+@end group
+@end example
+@sp 1
+See also:  @code{iMethodFor, cMethodFor}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ivPtr}
+@deffn {ivPtr} ivPtr
+@sp 2
+@example
+@group
+iv = ivPtr(i);
+
+object  i;
+ivType  *iv;
+@end group
+@end example
+The @code{ivPtr} macro returns a pointer to the locally defined
+instance variable structure associated with instance @code{i}.  It is
+used to gain access to the instance variables associated with the
+instance object pointed to by the @code{i} variable.  It may only be
+used in a file which defines a class and @code{i} must be an instance
+of the class being defined or one of its subclasses.
+
+If the method is going to make more than one access to its instances
+variables the pointer returned by @code{ivPtr} should normally be saved
+and reused.
+
+If the variable containing the instance variables you wish to access is
+named @code{self} than the @code{ivsPtr} or @code{accessIVs} macro
+should be used.
+
+Although the example below makes its illustration with the @code{self}
+variable (because it's always the name of the first argument to a
+method) @code{ivPtr} is most often used to access the instance variables
+of a second argument (which wouldn't have the name @code{self}) which is
+an instance of the same (or sub) class.
+@example
+@group
+@exdent Example:
+
+defclass  @{
+    char    name[30];
+    int     age;
+@};
+
+imeth object  PrintAge(object self)
+@{
+    printf("Age = %d\n", ivPtr(self)->age);
+    return self;
+@}
+
+imeth object  PrintInstance(object self)
+@{
+    ivType  *iv = ivPtr(self);      /*  save the pointer */
+/* the above line is the same as accessIVs  */
+    printf("Name = %s\n", iv->name); /* use saved pointer   */
+    printf("Age = %d\n", iv->age);
+    return self;
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{accessIVs, ivsPtr, ivType, GetIVs}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ivsPtr}
+@deffn {ivsPtr} ivsPtr
+@sp 2
+@example
+@group
+iv = ivsPtr;
+
+ivType  *iv;
+@end group
+@end example
+The @code{ivsPtr} macro returns a pointer to the locally defined
+instance variable structure for the variable named @code{self}.  It is
+used to gain access to the instance variables associated with the
+instance object pointed to by the @code{self} variable.  It may only be
+used in instance methods, in a file which defines a class.
+
+This macro is typically used when an instance method makes a single
+access to its instance variables.  If the method is going to make more
+than one access to its instances variables the macro @code{accessIVs}
+would normally be used or the pointer returned by @code{ivsPtr}
+would normally be saved and reused.
+
+If the variable containing the instance variables you wish to access
+is not named @code{self} than the @code{ivPtr} macro should be used.
+@example
+@group
+@exdent Example:
+
+defclass  @{
+    char    name[30];
+    int     age;
+@};
+
+imeth object  PrintAge(object self)
+@{
+    printf("Age = %d\n", ivsPtr->age);  /*  single use      */
+    return self;
+@}
+
+imeth object  PrintInstance(object self)
+@{
+    ivType  *iv = ivsPtr;   /*  save the pointer */
+/* the above line is the same as accessIVs  */
+    printf("Name = %s\n", iv->name); /* use saved pointer   */
+    printf("Age = %d\n", iv->age);
+    return self;
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{accessIVs, ivPtr, ivType, GetIVs}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ivType}
+@deffn {ivType} ivType
+@sp 2
+@example
+@group
+ivType
+@end group
+@end example
+This macro is used to declare a variable to be of a structure which is defined
+by the local instance variable declaration.  It can only be used in a source
+file which is used to define a class and only of the structure of the locally
+defined instance variable structure.  It's main use is while passing a pointer
+to a local variable structure to other, usually statically defined, C functions
+within a class definition file.
+@example
+@group
+@exdent Example:
+
+ivType  *ivp;
+
+ivp = ivsPtr;
+@end group
+@end example
+@sp 1
+See also:  @code{accessIVs, ivPtr, ivsPtr}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {MAKE_REST}
+@deffn {MAKE_REST} MAKE_REST
+@sp 2
+@example
+@group
+MAKE_REST(lst);
+@end group
+@end example
+This macro is used in conjunction with the @code{GetArg} macro in order
+to create a consistent mechanism for methods which take a variable
+number of arguments to obtain its optional arguments.  This mechanism,
+as opposed to the normal @code{va_*} mechanism, is necessary in order to
+allow the same source code to work across the various @code{dpp} code
+strategies (see the @code{dpp} subsection ``Preprocessing Strategies'').
+
+Methods which take a variable number of arguments and wish to access
+those arguments must use the @code{MAKE_REST} macro.  This macro must
+exist immediately following the declaration section of the method and
+prior to the normal executable code.
+
+@code{MAKE_REST} takes a single argument which must be the last named
+argument in the method's argument list.  The result of calling
+@code{MAKE_REST} is the creation of a variable named @code{_rest_}
+which acts as a pointer to the variable argument list, a
+@code{va_list}.
+@example
+@group
+@exdent Example:
+
+imeth  gChangeValue(int a, char *b, ...)
+{
+        double  var1;
+        int     dd;
+        MAKE_REST(b);
+
+        var1 = GetArg(double);
+        dd = GetArg(int);
+        ...
+}
+@end group
+@end example
+@sp 1
+See also:  @code{GetArg, RESET_REST}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {NEQ}
+@deffn {NEQ} NEQ
+@sp 2
+@example
+@group
+r = NEQ(obj1, obj2);
+
+object  obj1, obj2;
+int     r;
+@end group
+@end example
+This macro is used to determine if @code{obj1} and @code{obj2} refer to
+the same exact object (not just the same value within the object).  If
+so a 0 is returned and 1 otherwise.
+@example
+@group
+@exdent Example:
+
+object  a, b, e;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+b = gNewWithInt(ShortInteger, 7);
+e = a;
+c = NEQ(a, b);   /* c == 1  */
+c = NEQ(b, e);   /* c == 1  */
+c = NEQ(a, e);   /* c == 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{Equal::Object, EQ}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {oSuper}
+@deffn {oSuper} oSuper
+@sp 2
+@example
+@group
+meth = oSuper(cls, gen, obj);
+
+object  cls;
+RTYPE   (*gen)();
+object  obj;     
+RTYPE   (*meth)();
+@end group
+@end example
+This macro returns the superclass instance or class method associated
+with the generic function @code{gen} for class @code{cls}.  @code{obj}
+is used to tell whether the object being acted upon is a class or
+instance object.  It should be the argument which will be the first
+argument to the methods being returned.  If the method is not found the
+normal method search procedure will be used.
+
+@code{RTYPE} is the return type associated with the generic and
+macro in question.  The method pointer returned will be correctly
+typecast.
+
+This macro effectively eliminates the need for the @code{iSuper} or
+@code{cSuper} macros.  
+@example
+@group
+@exdent Example:
+
+ /* execute the superclass
+    method associated with gDispose
+    and pass it the single argument self  */
+oSuper(MyClass, gDispose, self)(self);
+@end group
+@end example
+@sp 1
+See also:  @code{iSuper, cSuper}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {RegisterVariable}
+@deffn {RegisterVariable} RegisterVariable
+@sp 2
+@example
+@group
+p = RegisterVariable(v);
+
+object  v;
+void    *p;
+@end group
+@end example
+The @code{RegisterVariable} macro is used as a short hand way of
+registering global object variables to protect them from the
+automatic garbage collector.  @code{v} is the global variable to be
+protected and @code{p} is a registered memory pointer which may
+be used to change or delete the registration at some later point.
+
+See the text for a detailed description of the garbage collector.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RegisterMemory::Dynace, RemoveRegisteredMemory::Dynace,}
+@hfil @break @hglue .64in      @code{ChangeRegisteredMemory::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {RESET_REST}
+@deffn {RESET_REST} RESET_REST
+@sp 2
+@example
+@group
+RESET_REST;
+@end group
+@end example
+This macro is used in conjunction with the @code{GetArg} and
+@code{MAKE_REST} macros in order
+to create a consistent mechanism for methods which take a variable
+number of arguments to obtain its optional arguments.  This macro
+allows the @code{GetArg} to go back over the argument list from
+the beginning, thus allowing multiple passes over the entire
+argument list.  @code{RESET_REST} may be called anytime, and any
+number of times, after @code{MAKE_REST} has been called.  Each time
+@code{RESET_REST} is called, @code{GetArg} will start back at the
+beginning of the argument list.
+@example
+@group
+@exdent Example:
+
+imeth  gChangeValue(int a, char *b, ...)
+{
+        double  var1;
+        int     dd;
+        MAKE_REST(b);
+
+        var1 = GetArg(double);
+        dd = GetArg(int);
+        /*  get the same arguments again  */
+        RESET_REST;
+        var1 = GetArg(double);
+        dd = GetArg(int);
+        ...
+}
+@end group
+@end example
+@sp 1
+See also:  @code{GetArg, MAKE_REST}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {RespondsTo}
+@deffn {RespondsTo} RespondsTo
+@sp 2
+@example
+@group
+r = RespondsTo(i, gen);
+
+object  i;
+object  (*gen)();
+int     r;
+@end group
+@end example
+This macro is used to determine if the class of @code{i} implements a
+method which is associated with generic @code{gen}.  If so a 1 is
+returned and 0 otherwise.
+@example
+@group
+@exdent Example:
+
+object  a;
+int     c;
+
+a = gNewWithInt(ShortInteger, 7);
+c = RespondsTo(a, gShortValue);  /* c == 1  */
+c = RespondsTo(a, gNext);        /* c == 0  */
+@end group
+@end example
+@sp 1
+See also:  @code{FindMethod::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {StackAlloc}
+@deffn {StackAlloc} StackAlloc
+@sp 2
+@example
+@group
+i = StackAlloc(cls);
+
+object  cls;
+object  i;
+@end group
+@end example
+This macro is used to allocate a new instance of class @code{cls} from
+the local stack space.  @code{i} will be an instance of class @code{cls}
+with all its instance variables initialized to @code{NULL}.
+
+Disposal of the returned object will occur automatically when the local
+stack is exited, however, no automatic execution of additional disposal
+code will occur.  Manual disposal may also be used (via @code{gDispose},
+etc.) but the object will still take up stack space until the stack
+frame is exited.
+
+Since the returned object is allocated from the current stack frame
+it cannot be returned from the function which allocated it.
+
+This facility depends on a robust implementation of the @code{alloca}
+system call.
+@example
+@group
+@exdent Example:
+
+object  a;
+
+a = StackAlloc(ShortInteger);
+@end group
+@end example
+@sp 1
+See also:  @code{StackAlloc::Behavior}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@page
+@section  Kernel Functions
+@pdfsection{Kernel Functions}
+The number of regular C language functions available externally
+has been kept to an absolute minimum.  The reason for this is the
+static nature of C functions and an effort to minimize the number
+of routines the programmer needs to use the system.  The following
+text describes each function.
+
+
+
+
+
+
+
+
+
+@pdfsubsection {Dynace GetInitialPageSize}
+@deffn {Dynace_GetInitialPageSize} Dynace_GetInitialPageSize
+@sp 2
+@example
+@group
+sz = Dynace_GetInitialPageSize();
+
+long    sz;
+@end group
+@end example
+This is an application defined function optionally supplied to determine
+the amount of memory Dynace should allocate upon startup.  If used, it
+must be defined and supplied as part of the application's code.  The value
+returned, given in number of bytes, is what Dynace uses to allocate its
+initial block of memory for various objects to be allocated from.
+This is used to speed up Dynace under Windows.  @xref{Speeding Up IsObj}.
+@example
+@group
+@exdent Example:
+
+The following function would be defined by the application:
+
+long    Dynace_GetInitialPageSize()
+@{
+        return 1000000;
+@}        
+@end group
+@end example
+@sp 1
+See also:  @code{Dynace_GetPageSize}
+@end deffn
+
+
+
+
+
+
+@pdfsubsection {Dynace GetPageSize}
+@deffn {Dynace_GetPageSize} Dynace_GetPageSize
+@sp 2
+@example
+@group
+sz = Dynace_GetPageSize();
+
+long    sz;
+@end group
+@end example
+This is an application defined function optionally supplied to determine
+the amount of memory Dynace should allocate after its startup allocation.  If used, it
+must be defined and supplied as part of the application's code.  The value
+returned, given in number of bytes, is what Dynace uses to allocate its
+blocks of memory, when needed, after its initial memory block is used up.
+This is used to speed up Dynace under Windows.  @xref{Speeding Up IsObj}.
+@example
+@group
+@exdent Example:
+
+The following function would be defined by the application:
+
+long    Dynace_GetPageSize()
+@{
+        return 100000;
+@}        
+@end group
+@end example
+@sp 1
+See also:  @code{Dynace_GetInitialPageSize}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {GetIVptr}
+@deffn {GetIVptr} GetIVptr
+@sp 2
+@example
+@group
+iv = GetIVptr(obj, cls);
+
+object  obj;
+object  cls;
+void    *iv;
+@end group
+@end example
+This function is the one which does all the work to obtain
+a pointer to the instances variables from an object.  @code{obj}
+is the object whose instance variables are needed.  @code{cls}
+is the class which describes the structure of the instance
+variables needed.  @code{obj} must be an instance of class @code{cls}
+at some point in its hierarchy.  The pointer returned will only allow
+access to the instance variables defined by class @code{cls} regardless
+of any other instance variables @code{obj} may contain.
+
+This function should not be called by an application.  The relevant
+macros should be used instead.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ivPtr, ivsPtr, accessIVs}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsection {InitDynace}
+@deffn {InitDynace} InitDynace
+@sp 2
+@example
+@group
+InitDynace(sb);
+
+void    *sb;  /*  stack beginning  */
+@end group
+@end example
+This function is used to initialize the Dynace kernel and all classes
+and generics.  It must be called prior to the use of any other Dynace
+facility.  It is typically called in @code{main()}.
+
+This function calls @code{InitKernel} internally to initialize the
+kernel first.  The @code{sb} parameter tells Dynace where the beginning
+of the stack resides.  The garbage collector needs this information to
+automatically scan automatic variables.  @code{sb} is typically passed
+the address of the @code{argc} argument to @code{main()}.
+@example
+@group
+@exdent Example:
+
+main(int argc, char *argv[])
+@{
+        InitDynace(&argc);
+        .....
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{InitKernel, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+@pdfsubsection {InitKernel}
+@deffn {InitKernel} InitKernel
+@sp 2
+@example
+@group
+InitKernel(sb);
+
+void    *sb;  /*  stack beginning  */
+@end group
+@end example
+This function is used to initialize the Dynace kernel.  It must be
+called prior to the use of any other Dynace facility.  Typically,
+however, @code{InitKernel} is called indirectly through another function
+(such as @code{InitDynace} which also initializes the class library and
+user added classes).  The @code{sb} parameter tells Dynace where the
+beginning of the stack resides.  The garbage collector needs this
+information to automatically scan automatic variables.  @code{sb} is
+typically passed the address of the @code{argc} argument to
+@code{main()}.
+@example
+@group
+@exdent Example:
+
+main(int argc, char *argv[])
+@{
+        InitKernel(&argc);
+        .....
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{InitDynace, GC::Dynace}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {IsObj}
+@deffn {IsObj} IsObj
+@sp 2
+@example
+@group
+r = IsObj(obj);
+
+object  obj;
+int     r;
+@end group
+@end example
+This function is used to determine the validity of an object.  If
+@code{obj} is a valid Dynace object @code{IsObj} returns a 1 otherwise
+it returns a 0.
+@example
+@group
+@exdent Example:
+
+if (IsObj(obj))
+        gGeneric(obj);
+else
+        abort("Not an object");
+@end group
+@end example
+@sp 1
+ @xref{Speeding Up IsObj}.
+@end deffn
+
+
+
+
+
+
+
+@page
+@section  Kernel Data Types
+@pdfsection{Kernel Data Types}
+There is really only one new data type associated with Dynace, the
+@code{object} type.  However, Dynace also has some type definitions
+which are simply used to ease programming in the Dynace environment.
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {object}
+@deffn {object} object
+@sp 2
+@example
+@group
+object
+@end group
+@end example
+This is the principal type of object in Dynace.  All Dynace objects are of
+type @code{object}.  @code{object} is actually a pointer to memory
+which is allocated (by Dynace) from the heap.  Objects never reside
+on the stack or static memory, although pointers to them may.
+
+The @code{object} declaration may be used any place the @code{int}
+declaration may be used.
+@example
+@group
+@exdent Example:
+
+object  a, b, c;
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsection {ofun}
+@deffn {ofun} ofun
+@sp 2
+@example
+@group
+ofun
+@end group
+@end example
+This declaration is just a short hand way of declaring a variable to
+be a pointer to a function which returns an object.
+
+The @code{ofun} declaration may be used any place the @code{int}
+declaration may be used.
+@example
+@group
+@exdent Example:
+
+ofun    a;
+object  (*b)();
+
+/*  a and b are of the same type  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+

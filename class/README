@@ -1,0 +1,39 @@
+
+To rebuild the libraries use:
+
+dmake -d MAKEFILE.DM
+
+where MAKEFILE.DM is one of:
+
+M16.DM		Microsoft 16 bit
+M32.DM		Microsoft 32 bit
+B16.DM		Borland 16 bit
+B32.DM		Borland 32 bit
+W32.DM		WATCOM 32 bit
+S32.DM		Symantec 32 bit
+
+Or use the following for Linux/unix
+
+make -f makefile.unx
+
+If you are building from scratch start at the kernel directory.
+
+The BORLAND_HOME path needs to be edited in B16.DM or B32.DM prior to use.
+
+If you want to build for a different dpp Strategy use (like S1):
+
+dmake -f MAKEFILE.DM  STRAT=-S1 newgens  (regenerates the .c files)
+dmake -f MAKEFILE.DM  STRAT=-S1
+
+You must, however, rebuild ../kernel with the selected strategy first!
+
+Debug libraries may be produced as follows:
+
+dmake -d MAKEFILE.DM  DEBUG=1
+
+There is also a clean.bat batch file which will clean all the garbage files
+or you can use:
+
+dmake -f MAKEFILE.DM  clean
+
+

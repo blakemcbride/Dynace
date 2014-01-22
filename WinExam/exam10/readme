@@ -1,0 +1,12 @@
+
+This example combines all the dialog control usage into one example
+program.  It simply includes a merging of all the code in all the
+previous modal examples to show a complete example.
+
+
+This example has no MAIN.TXT file because it is completely documented
+by all the previous examples.
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

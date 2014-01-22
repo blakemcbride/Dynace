@@ -1,0 +1,26 @@
+
+Updated file:
+
+c:\fsi\dynace\class\m32.dm
+c:\fsi\dynace\class\m16.dm
+
+c:\fsi\dynace\class\socket.d
+c:\fsi\dynace\class\crc.d
+
+c:\fsi\stef\internet.c
+c:\fsi\stef\m32.dm
+c:\fsi\stef\m16.dm
+
+
+added file:
+c:\fsi\dynace\class\doc    // this is a document directory
+
+c:\fsi\dynace\class\ssleay.h
+
+c:\fsi\dynace\class\inc16
+c:\fsi\dynace\class\lib16
+
+c:\fsi\dynace\class\inc32
+c:\fsi\dynace\class\lib32
+
+c:\fsi\stef\PEM   // this is a directory

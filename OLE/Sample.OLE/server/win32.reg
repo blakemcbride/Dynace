@@ -1,0 +1,11 @@
+REGEDIT
+HKEY_CLASSES_ROOT\AlgorithmsCorp.CTCS.2 = Algorithms Corporation Ctree Server
+HKEY_CLASSES_ROOT\AlgorithmsCorp.CTCS.2\CLSID = {ccbe60a5-01a9-11d1-bc41-004005185208}
+HKEY_CLASSES_ROOT\AlgorithmsCorp.CTCS = Algorithms Corporation Ctree Server
+HKEY_CLASSES_ROOT\AlgorithmsCorp.CTCS\CurVer = AlgorithmsCorp.CTCS.2
+HKEY_CLASSES_ROOT\AlgorithmsCorp.CTCS\CLSID = {ccbe60a5-01a9-11d1-bc41-004005185208}
+
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a5-01a9-11d1-bc41-004005185208} = Algorithms Corporation Ctree Server
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a5-01a9-11d1-bc41-004005185208}\ProgID = AlgorithmsCorp.CTCS.2
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a5-01a9-11d1-bc41-004005185208}\VersionIndependentProgID = AlgorithmsCorp.CTCS
+HKEY_CLASSES_ROOT\CLSID\{ccbe60a5-01a9-11d1-bc41-004005185208}\LocalServer32 = c:\OleTest\server\server32.exe

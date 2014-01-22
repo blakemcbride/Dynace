@@ -1,0 +1,143 @@
+
+
+#include "generics.h"
+#include "resource.h"
+
+static	long	file_message(object wind, unsigned id);
+static	long	file_dialog(object wind, unsigned id);
+static	long	file_exit(object wind, unsigned id);
+
+int	start()
+{
+	object	win;
+	char	title[80];
+
+	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	win = vNew(MainWindow, title);
+
+	mLoadIcon(win, ALGOCORP_ICON);
+
+	mLoadMenu(win, IDR_MENU1);
+	mAssociate(win, ID_FILE_MESSAGE, file_message);
+	mAssociate(win, ID_FILE_DIALOG, file_dialog);
+	mAssociate(win, ID_FILE_EXIT, file_exit);
+
+	return gProcessMessages(win);
+}
+
+static	long	file_message(object wind, unsigned id)
+{
+	gMessage(wind, "File Message");
+	return 0L;
+}
+
+static	void	init_controls(object dlg)
+{
+	object	ctl;
+	
+	/*  Declare the control labeled FIELD_AGE (labeled by the
+	    programmer when defining the dialog with the resource editor)
+	    of the dialog (dlg) to be a NumericControl.  ctl will reference
+	    that defined control object.  */
+
+	ctl = mAddControl(dlg, NumericControl, FIELD_AGE);
+
+	/*  This next call defines the acceptable range of values associated
+	    with the control.  The user must enter a number between 1.0 and
+	    99.0 with 0 decimal places.  */
+
+	gNumericRange(ctl, 1.0, 99.0, 0);
+
+	/*  Define the FIELD_BIRTH_DATE field to of type DateControl.  */
+
+	ctl = mAddControl(dlg, DateControl, FIELD_BIRTH_DATE);
+
+	/*  This call indicates that the user must enter a date between
+	    19000101 and 19951231.  Note that dates are represented as
+	    C longs in the YYYYMMDD format.  The last argument specifies
+	    whether or not the user can leave this field blank (no date
+	    entered).  */
+
+	gDateRange(ctl, 19000101L, 19951231L, 0);
+
+
+	/*  Define the FIELD_MONEY field to be a NumericControl.  Notice
+	    that there is no differientation made between short, long
+	    and double at this point.  */
+
+	ctl = mAddControl(dlg, NumericControl, FIELD_MONEY);
+
+	/*  This declares the range to be from 0.0 to 1000000.0 with
+	    2 decimal places.  */
+	
+	gNumericRange(ctl, 0.0, 1000000.0, 2);
+}
+
+static	void	displayValues(object wind, object dlg)
+{
+	/*  Declare some variables to hold the control values.  */
+
+	int	ival;
+	long	lval;
+	double	dval;
+	
+	/*  This call obtains a short value representation of the value
+	    in the FIELD_AGE control.  Note that a long or double value
+	    could just as easily been obtained.  In addition,  a Dynace
+	    object could also have been requested (as well as with all the
+	    other control types).  The advantage of using a Dynace object
+	    would be in the increased formatting abilities (like formating
+	    numbers with commas or dates into various formats).  */
+
+	ival = mCtlShortValue(dlg, FIELD_AGE);
+
+	/*  Display the age to the main window.  */
+
+	vPrintf(wind, "Age = %d\n", ival);
+
+	/*  Obtain a long value representation of the value associated
+	    with FIELD_BIRTH_DATE.  Obtaining a Dynace object (via
+	    mCtlValue()) would have yielded a much more flexable, in
+	    terms of formatting ability, value.   */
+
+	lval = mCtlLongValue(dlg, FIELD_BIRTH_DATE);
+
+	/*  Display the value.  */
+
+	vPrintf(wind, "Birth Date = %ld\n", lval);
+
+	/*  Obtain a double value representation of the value associated with
+	    the FIELD_MONEY control.  Note that if mCtlLongValue were used
+	    instead the value would have been rounded.  */
+
+	dval = mCtlDoubleValue(dlg, FIELD_MONEY);
+
+	/*  Display the value.  */
+	
+	vPrintf(wind, "Money = %.2f\n\n", dval);
+}
+
+static	long	file_dialog(object wind, unsigned id)
+{
+	object	dlg;
+	int	r;
+	
+	dlg = mNewDialog(ModalDialog, DL1, wind);
+
+	init_controls(dlg);
+
+	r = gPerform(dlg);
+
+	if (r == TRUE)
+		displayValues(wind, dlg);
+
+	gDispose(dlg);
+
+	return 0L;
+}
+
+static	long	file_exit(object wind, unsigned id)
+{
+	gQuitApplication(Application, 0);
+	return 0L;
+}

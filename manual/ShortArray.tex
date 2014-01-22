@@ -1,0 +1,60 @@
+@page
+
+@section  ShortArray Class
+@pdfsection{ShortArray Class}
+This class, which is a subclass of @code{NumberArray}, is used to
+represent arbitrary shaped arrays of the C language @code{short} data
+type in an efficient manner.  Although this class implements much of its
+own functionality most of it is documented within the @code{NumberArray}
+and @code{Array} classes because the interface is shared by all
+subclasses of the @code{NumberArray} class.
+
+@subsection ShortArray Class Methods
+@pdfsubsection{ShortArray Class Methods}
+There is only one class method which is particular to this class.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Iota}
+@deffn {Iota} Iota::ShortArray
+@sp 2
+@example
+@group
+ary = gIota(ShortArray, n);
+
+object    ary;
+int       n;
+@end group
+@end example
+This method is used to create a @code{ShortArray} which has 1 dimension
+of length @code{n}.  The first element is initialized with the value
+set by @code{IndexOrigin::Array} and each successive element is given
+a value one greater than the previous element.
+
+The value returned is the new array.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = gIota(ShortArray, 5);
+/*  ary = (0, 1, 2, 3, 4)  */
+@end group
+@end example
+@sp 1
+See also:  @code{IndexOrigin::Array}
+@end deffn
+
+
+
+
+
+
+
+

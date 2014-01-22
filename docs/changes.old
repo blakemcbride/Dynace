@@ -1,0 +1,828 @@
+
+
+
+12/17/93	kernel.c - the chk_ptr macro defined under unix and watcom
+		didn't check the full pointer range
+
+		VERSION 1.0 RELEASED
+
+---------------------------------------------------------------------------
+
+1/18/94		Fixed bug in pipe.c Gets()
+
+
+ 1/18/94	Ported to:
+		Architecture: sun4c (Sparc 2, Sparc ELC), sun4m (Sparc 10)
+		Operating System: SunOS 4.1.2, 4.1.3
+		Compiler: gcc 2.4.4
+
+		Created Number class and made Character, ShortInteger,
+		UnsignedShortInteger, LongInteger & DoubleFloat subclasses
+		of it
+
+		All ChangeValue methods now take an object as an argument
+
+		Added CharValue, ShortValue, UnsignedShortValue, LongValue
+		and DoubleValue to all Number subclasses
+
+		Added ChangeCharValue, ChangeShortValue, ChangeUShortValue,
+		ChangeLongValue and ChangeDoubleValue to all Number
+		subclasses
+
+		Added numeric formating facilities to the Number class
+
+		Greatly enhanced the Date class
+
+		Added EXAM34 to demo numeric formatting & Date formatting
+
+		Added Round and Truncate methods to DoubleFloat class
+
+		Added Format method to Character class
+
+		Changed class precedence to depth-first (was bredth-first)
+
+		Fixed bug in class creation with multiple-inheretance
+
+		Added ability to create CLOS like individual classes by
+		using a NewClass method
+
+		Fixed out-of-memory bug which caused the system to recurse
+		indefinitly
+
+		Moved most of the code in the defGeneric macro into the
+		_FindMethod function (reduces the size of the generics
+		object file)
+
+		Made kernel function direct_ivs function a macro (should
+		speed the system a little)
+
+ 2/2/94		Added the generic call tracing facility which allows generic
+		call tracing of arbitrary combinations of class/generic/
+		method
+
+ 2/3/94		Moved definition of the basic object structure into the
+		class Object
+
+ 2/5/94		Changed gAbort to gError and associated it with Object
+		instead of Dynace class
+
+		Added SubclassResponsibility and ShouldNotImplement to
+		the object class
+
+ 2/8/94		Created object.c behavior.c class.c metaclas.c method.c
+		genfun.c and dynace.c from kernel.c to make it easier to
+		add basic functionality
+
+ 2/8/94		Changed Remove::Link to NULL out pointers
+
+ 2/8/94		Changed New::Link to set pointers in next and prev objects
+
+ 2/8/94		New::LinkItem now calls its super with the correct arguments
+
+ 2/8/94		New::Association now calls its super with the correct arguments
+
+ 2/8/94		Renamed Key::ShortAssociation to ShortKey
+
+ 2/8/94		Renamed ChangeKey::ShortAssociation to ChangeShortKey
+
+ 2/8/94		Renamed Key::StringAssociation to StringKey
+
+ 2/8/94		Renamed ChangeKey::StringAssociation to ChangeStringKey
+
+ 2/8/94		Renamed CheckArg macro to ChkArgTyp
+
+ 2/8/94		Added ChkArg ChkArgNul and ChkArgTypNul macros
+
+ 2/9/94		Added additional argument checking to all Dynace methods
+
+ 2/10/94	Locally cached Lookup::Set in Dictionary StringDictionary
+		and ShortDictionary
+
+ 2/10/94	Renamed the LinkItem class to LinkValue
+
+ 2/10/94	Renamed Item::LinkValue to Value
+
+ 2/10/94	Renamed ChangeItem::LinkValue to ChangeValue
+
+ 2/10/94	Renamed all ItemDispose methods to DisposeNode
+
+ 2/10/94	Renamed all ItemDeepDispose methods to DeepDisposeNode
+
+ 2/10/94	Renamed all GroupDispose methods to DisposeGroup
+
+ 2/10/94	Renamed all GroupDeepDispose methods to DeepDisposeGroup
+
+ 2/12/94	Added blocking factor to string class to make faster
+
+ 2/12/94	Changed all Print & PrintValue methods to StringRep and
+		StringRepValue which return String instances
+
+ 2/12/94	Added Print and PrintValue methods to Object which use
+		StringRep and StringRepValue
+
+ 2/12/94	ShortDictionary was never being initialized - fixed
+
+ 2/12/94	Renamed the Association class to ObjectAssociation
+
+ 2/12/94	Created abstract Association class and moved LookupKey
+		StringAssociation and ShortAssociation under it
+
+ 2/12/94	Created abstract Sequence class and put LinkSequence
+		LinkObjectSequence and Setsequence under it
+
+ 2/12/94	Created abstract Stream class and put String and Pipe
+		under it
+
+ 2/12/94	Created File class which is under Stream class
+
+ 2/14/94	Fleshed out File class and created LowFile class
+
+ 2/14/94	Heavy mods to Pipe class to conform to Stream interface
+
+ 2/14/94	Additions to String class to conform to Stream interface
+
+ 2/14/94	Added some functionality to the Stream class
+
+ 2/16/94	Created stdoutStream stderrStream stdinStream traceStream
+		global variables
+
+ 2/16/94	Modified Print::Object and PrintValue::Object to use streams
+
+ 2/16/94	Error::Object now uses stderrStream
+
+ 2/16/94	TracePrint::Dynace now uses traceStream
+
+ 2/17/94	Checked all example programs for Stream and other changes
+
+ 2/17/94	Added FindClass::Class
+
+ 2/17/94	Added BasicSize::Object
+
+ 2/17/94	Added Copy::Set and DeepCopy::Set
+
+ 2/17/94	Added DeepCopy::LinkValue
+
+ 2/18/94	Added Copy::StringAssociation & DeepCopy::StringAssociation
+
+ 2/18/94	Added DeepCopy::LookupKey
+
+ 2/18/94	Added DeepCopy::ObjectAssociation
+
+ 2/18/94	Added DeepCopy::ShortAssociation
+
+ 2/18/94	Added Dispose::LinkObject
+
+ 2/18/94	Added Copy1::LinkList and DeepCopy::LinkList
+
+ 2/18/94	Added Copy::LinkObject
+
+ 2/18/94	Added Copy::BitVector & DeepCopy::BitVector
+
+ 2/18/94	Took size argument out of all HashOf methods
+
+ 2/18/94	Moved HashOf and Compare methods from ObjectAssociation
+		to LookupKey
+
+ 2/18/94	Added HashOf::StringAssociation and Compare::StringAssociation
+
+ 2/18/94	Added HashOf::ShortAssociation and Compare::ShortAssociation
+
+ 2/18/94	Added HashOf::DoubleFloat and Compare::DoubleFloat
+
+ 2/18/94	Added HashOf::Character and Compare::Character
+
+ 2/18/94	Added facilities in Number to Compare different types
+
+ 2/19/94	Enhanced makegens to parse source files
+
+ 2/19/94	Makegens now uses the Stream class
+
+ 2/19/94	Changed Resize::Set to work in place
+
+ 2/20/94	Added Array class
+
+ 2/20/94	Added Constant class
+
+ 2/20/94	Added CharacterArray ShortArray UnsignedShortArray LongArray
+		FloatArray DoubleFloatArray BitArray ObjectArray and
+		PointerArray classes
+
+ 2/20/94	Removed BitVector class
+
+ 2/28/94	Added class NumberArray and made numeric array classes a
+		subclass to it
+
+ 2/28/94	Renamed all HashOf methods to Hash
+
+ 3/2/94		Changed StringAssociation to use MA_ memory allocator
+
+ 3/2/94		Changed MonthOfYear::Date to MonthName
+
+ 3/2/94		Changed DayOfWeek::Date to DayName
+
+ 3/2/94		Added docs directory
+
+ 3/2/94		Updated all documentation
+
+ 3/3/94		VERSION 2.00 RELEASED
+
+---------------------------------------------------------------------------
+
+3/10/94		Fixed bug in set.c which effected the ShortDictionary class
+
+3/10/94		VERSION 2.00 RE-RELEASED (old 2.00 users updated)
+
+---------------------------------------------------------------------------
+
+3/26/94		Fixed bug (important code commented out) which made the GC
+		not work with the threader
+
+3/26/94		VERSION 2.01 RELEASED
+
+---------------------------------------------------------------------------
+
+5/16/94		Fixed bug in GC which effected classes which had their
+		DontCollect attribute set.  It caused their instance
+		variables not to be marked the second and subsequent
+		time the GC ran.
+
+5/16/94		VERSION 2.02 RELEASED
+
+---------------------------------------------------------------------------
+
+3/17/94		Added IntegerAssociation and IntegerDictionary classes
+
+4/15/94		Changed all Trace methods to return the previos mode (an int)
+		instead of self
+
+x/xx/xx		Added Windows library, documentation & examples
+
+		Renamed makegens to dpp and enhanced it to handle the
+		new syntax
+
+		Converted all code to the new syntax
+
+		Updated the language manual
+
+		Fixed small return bug in threader (WaitFor)
+
+		
+5/15/95		VERSION 3.00.00 RELEASED
+---------------------------------------------------------------------------
+
+6/95		Had to build M32 libraries with 2.0 instead of 2.1 because
+		2.0 objects can't link with 2.1 libraries due to pentium
+		bug code.  However 2.1 objects can link with 2.0 libraries.
+
+		Added #define WIN32 to dynace.h.  M32 2.0 required it.
+		2.1, nor any of the others require it....
+
+		Added -DWIN32 to windows/m32.dm
+
+		Updated manuals to use only ANSI declarations in all examples
+
+		Added InitClasses documentation and removed InitSystemClasses
+		documentation
+
+6/12/95		Fixed readme files associated with winexam/exam18
+
+6/14/95		Corrected problem with all example and winexams b16.dm files.
+		Libraries were linked in the wrong order.
+
+		Added in vms patches from Kaelin
+
+		Removed unnecessary malloc.h includes
+
+		Removed unnecessary floor, log, fabs, ... declarations
+
+		Cleaned up much of the code with maximum warning level
+
+		Changed generated files from include <> to ""
+
+		Added MACROS macro which controls whether or not dpp generates
+		code which uses the CLASS macro or not.  Default to yes.
+
+		Generate declaration for InitXXXXClass functions in generics.h
+		and InitClasses().
+
+		Changed all Dispose generics which used to return void to
+		now return NULL.
+
+		Added declarations to generated and other include files to
+		force C (as aposed to C++) linkage.
+
+		Changed generic_t declarations in generics.h to include arg
+		type info and modified super macros accordingly
+
+		Changed array.d macros to be more portable
+
+		Minimized warnings when compiling with maximum warnings
+
+		Got everything (except windows stuff) to compile in C++.
+
+		Changes all occurances of HUGE to _HUGE
+
+		Fixed potential bug in gChangePriority::Thread
+		and gFormatNumber::Number
+
+		
+6/21/95		Version 3.01.00 released
+
+----------------------------------------------------------------------
+
+6/25/95		Fixed bug Windows auto scrolling facility
+
+7/11/95		Fixed bug in Garbage collector
+		
+
+
+
+
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+Changes done for 4.x
+
+6/17/95		Removed need for jumpto.asm by adding the ability to
+		generate the appropriate generics - this necessatated
+		variable argument methods to be handled differently due
+		to an additional level of abstraction (not true - fixed!)
+		- this also breaks the old way of cacheing variable argument
+		methods	(not true - fixed!)
+
+		Added support for C++ inline generics - controled by a new
+		-S option in dpp
+
+		Added GetArg macro to get arguments in variable arg
+		situations
+
+		Renamed vNew::Array to gNewArray
+
+6/19/95		Fixed bug in Dup::Array
+
+		Removed Genericm, cMethod and iMethod macros
+
+		Renamed dynace.h to dynl.h
+
+		Added ability to macro guard typedefs in generics.h files
+
+		Reduced the possiblity of dpp clobering needed files by
+		performing some file extension checks.
+
+		Made changes in dpp to recognise the .dyn extension as a
+		.d file also.
+
+		Renamed InitDynace to InitKernel
+
+		Renamed InitClasses to InitDynace
+
+		Renamed usesClass to InitClass
+
+		Added the ability to support "" or <> include syntax on
+		generated includes
+
+		Changed gIndex::Array and gNewArray::Array interface
+		(there was a problem with the WATCOM compiler)
+
+6/30/95		Added dpp Strategy #4 (C++ inlines except for variable
+		argument generics)
+
+		Added the objrtn type which is basically an object without
+		the volatile.  Changed dpp to make all methods and generics
+		which return an object to be auto-converted to return objrtn.
+		This was needed for the GNU compiler.
+
+		Cleaned up all GNU/Wall/C++ warnings
+
+		Updated unix makefiles to prevent auto removal of .c
+		intermediate files.
+
+7/1/95		Changed all vNew generics (except true vararg methods) into
+		unique gNewXXX generics as follows:
+
+			vNew::Character -> gNewWithChar
+			vNew::Double -> gNewWithDouble
+			vNew::File -> gOpenFile
+			vNew::IntegerAssociation -> gNewWithIntObj
+			vNew::LinkList -> gNew
+			vNew::LinkSequence -> gNewWithObj
+			vNew::LinkValue -> gNewWithObj
+			vNew::LongInteger -> gNewWithLong
+			vNew::LookupKey -> gNewWithObj
+			vNew::LinkObjectSequence -> gNewWithObj
+			vNew::LowFile -> gOpenLowFile
+			vNew::ObjectAssociation -> gNewWithObjObj
+			vNew::Pointer -> gNewWithPtr
+			vNew::Set -> gNewWithInt
+			vNew::SetSequence -> gNewSetSeq
+			vNew::ShortInteger -> gNewWithInt
+			vNew::StringAssociation -> gNewWithStrObj
+			vNew::String -> gNew / gNewWithStr / gNewWithObj
+			vNew::UnsignedShortInteger -> gNewWithUnsigned
+			vNew::Pipe -> gNew / gNewWithStrInt
+			vNew::Semaphore -> gNew / gNewSemaphore
+			vNew::Thread -> gNewThread
+			vNew::Method -> gNewMethod
+			vNew::Class -> gNewClass
+			vNew::Generic -> gNewWithStr
+			vNew::Behavior -> vNew / gNew
+
+		Renamed the old gNewClass::Class to gNewStdClass
+	
+		Fixed ShouldNotImplement::Object and SubclassResponsibility::
+		Object to work correctly with class objects as well as
+		instance objects.
+
+		Changed Dispose::Constant to return self instead of NULL.
+
+		Added gNew::Set, gNew::String, gNew::Pipe, gNew::Semaphore,
+		gNew::Number which use reasonable defaults.
+
+		Added new generic syntax to allow for the creation of methods
+		which are associated with generics which have argument
+		checking and _optionally_ generics which have been overloaded
+		(and thefore have no compile time checking).  This is
+		controlled by the -X dpp option.  The overloaded generics are
+		indicated in the method definition by surrounding the
+		generic name in <>
+
+		Added (optional) overloaded generics - vNew, vFindXXX, vRemove,
+		vFormat, vAdd
+
+		Added vNew::Behavior.
+
+		Added gShouldNotImplement call to several classes which
+		shouldn't implement gNew,
+
+
+7/4/95		Changed acceptable extensions to .d .dd .n .nn
+		(dropped .dyn)
+
+		Made .dd and .nn create .cc (instead of .c) file
+
+		Removed accidental use of C++ keyword (overload) in dpp
+
+		Added dummy code to make dpp generate vNew generic from
+		kernel.c
+
+		Added -Isc, -Iac, -Ish and -Iah flags to allow inclusion of
+		system and application include files in either generics.c
+		or generics.h
+
+7/8/95		Fixed bug in new -I?? dpp option
+
+		Added gInit() and gAlloc()
+
+		Changed gInit::Link to gInitLink
+
+		Implemented fast-wide caching scheme
+		(dpp option -F and compile all source with FASTWIDE defined)
+		
+7/10/95		Fixed a bug in the garbage collector
+
+		Added assembler support for the GC under i386 & unix
+		(no more volatile needed in that environment)
+
+		Made gen(super) be the same as gen(super self)
+		(self is implied)
+
+		Converted all .d files to use new super syntax
+
+		Enhanced dpp to allow (via compile time directive) full
+		dependency (and testing) of the garbage collector
+
+7/11/95		Changed gMaxMemUsed::Dynace to gMaxAfterGC
+
+		Added gMaxMemUsed::Dynace
+
+7/11/95		Made changes to avoid "variable not used" warnings
+
+7/17/95		Made changes so all the InitClass functions are now static.
+		Therefore, the only thing externally accessable to a class
+		is now the class object itself.
+
+7/18/95		Fixed a few anomolies associated with the 7/17 code.
+
+		Removed two compiler warnings
+
+7/22/95		Added automatic and lazy initialization of classes!
+		This caused the removal of changes made on 7/17/95.
+		This also causes Dynace to only and automatically
+		link in the minimum number of classes - only the
+		ones you actually use regardless of what's in
+		generics.h. Class objects are now macros which
+		init the class if it's not already.
+
+		Changed default method names from m_generic to
+		class_generic (where "class" is the name of the class
+		being defined).  This makes debugging a lot easier.
+
+		Added SMALL_FW macro to cause the fast-wide cache
+		to use smaller/faster generics by eliminating object
+		checking and threading.
+
+		Renamed imethod, cmethod, etc to imeth, cmeth in generated
+		.c files
+
+		The following macros have been removed because they are
+		uneeded and conflict with future goals:  cName, ivSize,
+		cvSize, instanceVars, classVars, cvsPtr, accessCVs, cvType
+
+		Class and instance variables are now typedef's
+
+		Changed kernel data structure to conform to new conventions
+
+7/23/95		Ported all the language examples to Dynace 4.x
+
+7/25/95		Made changes to support the move to multiple classes in a
+		single file by requiring the class to be specified, instead
+		of assumed, with some macros.
+
+		Added class argument to iMethodFor and cMethodFor.
+
+		Switched to the following naming convention:
+
+			String		class object with auto init
+			String_c	the class object
+			String_t	String type (object)
+			String_cv	class variable pointer
+			String_cv_t	class variable type
+			String_iv_t	instance variable type
+			String_initialize()  class init function
+			gNew_t		generic type
+			gNew_g		generic object
+			String_im_gDispose default instance method name
+			String_cm_gNew     default class method name
+			String_cvm_vNew    overloaded class method
+			String_ivm_vNew    overloaded instance method
+
+		Added GetIVs and GetCVs macros to get instance/class variable
+		pointers while taking the class as an argument.
+
+		dpp now generates code using GetIVs instead of accessIVs
+
+		dpp now generates class_initialize() instead of
+		InitClass(class)
+
+		Added gInstanceSize::Behavior and gStackAlloc::Behavior
+		generics and StackAlloc macro
+
+		Added the ability to allocate objects from the stack.
+		These objects require no disposal or GC.
+
+7/26/95		Added dpp support for "::", "->*", ".*", "::*" C++ operators
+
+		Fixed a potental infinite-recursion problem when initializing
+		classes.
+
+		Fixed a bug in IsObj() caused by the new stack based object
+		code.
+
+		Fixed memmove (for sparc) code to be more ANSI standard
+
+		Enhanced all unix makefiles
+
+7/28/95		Compiled everything including dpp for MSC 32 bit
+
+8/2/95		Made changes to examples 1,9,20,32 to make them more clear
+
+		Added the dropunx.sh shell script
+
+		Fixed ?m?Pointer macros to correctly typecast the result
+		and modified the system to use it.
+
+		Unix make changed to build and install dpp prior to generics
+		directory
+
+		Added thread inhibit code to dpp's generation of init
+		class functions.
+
+		Verified that some anomily (bug) in GCC 2.7.0 breaks the
+		threader.
+
+8/8/95		Made some kernel name changes
+
+		Enhanced unix top level makefile to automatically remove
+		cr/lf sequence from source files
+
+		Made delcr.c ANSI C
+
+		Added addcr.c to convert files back to DOS format
+
+		Enhanced top level makefile to be able to put DOS file name
+		conventions back in
+
+8/8/95		Added a class argument to the oSuper, iSuper, cSuper macros
+		in preparation to be able to access external instance variables
+		and modified dpp to generate the new syntax
+
+		Added the ability for dpp to create a .iv and .cv file
+
+		Added makefiles to support one-header-per-class
+		with the main Dynace dist.
+
+		Enhanced top level makefile.unx to convert the system to the
+		optional format (if you select multiple-header-setup target)
+		
+8/9/95		Added the ability to cause dpp not to generate class
+		initialization functions.
+
+		Changed dpp to downcase file names in #line directives when
+		run from DOS.
+
+8/10/95		Converted kernel classes from .c to .d files
+
+		Moved all dummy code (for dpp to scan) from kernel.c to
+		the correct .d files.  You no longer scan kernel.c to
+		create the generics file.
+
+		Removed all use of the makeThenAccess macro and the macro
+		itself
+
+8/11/95		dpp now macro guards .iv and .cv files it generates
+
+		Changed dpp to include .iv and .cv files when they are
+		generated as opposed to duplicating the typedef definition.
+
+		Enabled "public" and "private" keywords before a defclass.
+		public defclass causes .iv and .cv files to be created.
+
+		Updated kernel makefiles for all DOS compilers
+
+8/12/95		Broke dpp -n flag into -nai and -mgt flags
+
+		Update all DOS makefiles and created a master makefile for m32
+
+
+8/21/95		Fixed bug in top level makefile.unx which caused files to
+		be processed in the wrong order
+
+		Enhanced unix makefile to be able to build with different
+		options.
+
+		STARTED WDS PORT!
+
+		Renamed:
+
+			OpenFile::FileDialog -> GetOpenFile
+			SaveFile::FileDialog -> GetSaveFile
+
+8/23/95		Made some major changes in order for dpp to automatically
+		generate cover functions in _all_ cases in which a method
+		pointer would have a different argument list then the one
+		declared by the programmer.  The generated cover function
+		would correctly handle the argument list and call the correct
+		method.  The cover function and programmer defined method are
+		now both stored.  The correct one is returned when evoking
+		a method depending on the curcumstance.
+
+		Added an argument to gNewMethod.
+
+		Added two new macros:  ivMethodFor and cvMethodFor.
+
+		As before _FindMethod returns a pointer to the method defined
+		by the programmer (for use by the generic), but now
+		_FindMethod2 and gFindMethod return the cover function
+		associated with a method if one exists.  It returns the
+		programmer defined method otherwise.
+
+		Got the Windows Development System working!
+
+8/24/95		Made change in FASTWIDE cache configuration to take advantage
+		of the new dpp code generation (this fixed an undetected bug
+		in the previous FASTWIDE stuff that made it not work with
+		variable argument or overloaded methods).  UNTESTED!
+
+		Added an option to dpp to eliminate #line directives
+
+		Changed the oSuper macro to generate smaller code
+
+		Plugged a small memory leak in ostream.d (DPP)
+
+		Changed the #line stuff to point to the generated C file
+		whenever corresponding lines don't exist in the .d file.
+
+		Took advantage of the fact that just naming a class with a
+		semicolon causes the class to be initialized to get rid of
+		calls to Class_initialize() or InitClass(Class).  They are
+		now simply  Class;
+
+		Removed dpp's description of its -d option
+
+9/10/95		Removed garbage line in dpp help message
+
+		Fixed portability problems with overloaded generics
+
+9/16/95		Make change in startup.mk file to allow dmake to work even
+		in conditions when the SHELL environment variable is set
+
+9/17/95		Enhanced top level makefile for Microsoft C 32 to build the
+		system from scratch
+
+9/24/95		Macro guarded multhead/include/kernel.h
+
+		Fixed bug which allowed dpp to generate generics files with
+		improper file extensions
+
+		Changed dpp to generate generics files (both .c & .h) in a
+		human readable format
+
+		Changed the -mgt dpp option to -mg
+
+		The -mg dpp option now also macro guards inline functions
+
+		Added an option to cause dpp to always generate a generics.h
+		file, even if it's the same.
+
+9/25/95		Fixed code ordering problem in dpp which caused problems
+		with generics.h files and inline generics
+
+		Added compile date and time to dpp help display
+
+		Fixed bug in new kernel code which killed the fast-wide cache
+		option
+
+		Added DPP_STRATEGY & DPP_FASTWIDE auto macros to dpp so Dynace
+		now automatically sets and verifies the build mode for
+		consistancy
+
+		Fixed declaration problem with gInvalidObject when used with
+		fast-wide cache
+
+9/26/95		Fixed incorrect include sequence in a few class modules
+
+		Fixed a number of C++ compiler warnings associated with the
+		new GCC compiler
+
+10/10/95	Enhanced top level m32.dm with more options
+
+10/22/95	Added s32.dm files in support of Symantec C++
+		(Doesn't work due to a bug in their compiler version 7.2)
+
+		Added a quick and dirty port to the Macintosh (68k) using
+		Code Warrior 6.1
+
+10/26/95	Received a patch from Symantec and completed port
+		(including Windows stuff)
+
+1/14/96		Removed garbage multi-header makefiles
+		
+		Made change to DPP such that if you explicitly name a method
+		DPP will generate code so that that name gets associated
+		with the interface that matches the one defined in the .d file
+
+1/26/96		Added defines in dpp for debugging method/generic interface
+
+		Fixed bug in generic/method interface which caused bad code to
+		be produced
+
+1/27/96		Fixed misc bugs associated with explicitly naming methods
+
+		Made changes necessary to allow Strategy 1 to work again
+		(version 3.x assembler generics)
+
+		Added MAKE_REST macro to make the _rest_ variable Strategy
+		independent
+
+		Made several adjustments to the array classes to make them
+		portable between the various Strategies
+
+		Changed the way dpp makes macro names - it now drops file
+		paths and just makes the macro based on the file name
+
+		Added DPP_STRATEGY & DPP_FASTWIDE macros to generated .c files
+		to avoid conflics between generics and class files
+
+2/4/96		Pretty much finished manual changes to correspond to 4.x
+		and the new distribution method
+
+		Validate linux build
+
+		Created top level M16.DM and validated M16 build
+
+		Created dpp/b32.dm
+
+		Created a top level b32.dm makefile and validated B32 build
+
+		Fixed bug in B32 Windows example setup in B32DM.bat &
+		B32IDE.BAT which caused main.def to not be copied
+
+2/5/96		Fixed bug in windows/b16.dm
+
+		Created top level b16.dm
+
+		Validated B16 build
+
+		Created top level w32.dm
+
+		Validated W32 build
+
+2/6/96		Created top level S32.DM and validates S32 build
+
+2/18/96		Finished final manual changes, system tweaks and system
+		testing - ready for release!
+
+
+2/18/96		RELEASE of 4.0
+---------------------------------------------------------------------------

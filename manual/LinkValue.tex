@@ -1,0 +1,290 @@
+@page
+
+@section LinkValue Class
+@pdfsection{LinkValue Class}
+The @code{LinkValue} class is a subclass of the @code{Link} class.  It is
+used in conjunction with the @code{LinkList} class in order to manage
+arbitrary objects on a doubly linked list data structure.
+
+Like the @code{Link} class, it is used to represent a single link on a
+doubly linked list.  However, the @code{LinkValue} class has the
+additional capability to store a single arbitrary object at each link.
+Therefore, the @code{LinkValue} class may be used without creating a
+subclass of it.
+
+This class (@code{LinkValue}) inherits much of its functionality from its
+superclass (@code{Link}), therefore, in addition to the specific
+documentation on this class please also refer to the documentation of
+its superclass.
+
+See the examples included with the Dynace system for an illustration of the
+use of the doubly linked list related classes.
+
+
+
+@subsection LinkValue Class Methods
+@pdfsubsection{LinkValue Class Methods}
+The @code{LinkValue} class has only a single class method.  That method
+is used to create and initialize new instances of itself.
+
+
+
+
+@pdfsubsubsection {NewWithObj}
+@deffn {NewWithObj} NewWithObj::LinkValue
+@sp 2
+@example
+@group
+i = gNewWithObj(LinkValue, item);
+
+object  item;
+object  i;
+@end group
+@end example
+This class method creates instances of the LinkValue class.  @code{item}
+is the object to be associated with the new link.  
+
+The value returned is the instance object created (the new link).
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Link, DeepDispose::LinkValue}
+@end deffn
+
+
+
+
+
+
+@subsection LinkValue Instance Methods
+@pdfsubsection{LinkValue Instance Methods}
+The instances methods associated with the @code{LinkValue} class are used to
+link, unlink, move and dispose of particular instances of the
+@code{LinkValue} class.  The majority of its linking type functionality
+is inherited from its superclass, @code{Link}.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::LinkValue
+@sp 2
+@example
+@group
+i = gChangeValue(i, obj);
+
+object  i;
+object  obj;
+@end group
+@end example
+This method is used to change the object associated with a link.
+@code{i} is the instance of the @code{LinkValue} class, and
+@code{obj} is the new object to be associated with it.
+Any previous association is simply disassociated (not disposed).
+
+This method returns @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Value::LinkValue, NewWithObj::LinkValue}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::LinkValue
+@sp 2
+@example
+@group
+c = gDeepCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new instance of the @code{LinkValue} class
+which contains a @emph{copy} of the value associated with the link.
+@code{DeepCopy} is used to create the copied value.
+The new @code{LinkValue} instance is returned.
+
+Note that the new link returned will not be associated with any list.
+It will just be an unlinked link.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::LinkValue
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This instance method is used to perform a deep disposal of an instance
+of the @code{LinkValue} class.  It does this by calling @code{gDeepDispose}
+on the item associated with the link and then calling the link's
+superclass to dispose of the @code{LinkValue} instance.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Link}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::LinkValue
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the object @code{i} and its value.  This is often used
+to print or display a representation of an object.  It is also used by
+by @code{Print::Object} (a method useful during the debugging phase of
+a project) in order to directly print an object to a stream.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object,}
+@hfil @break @hglue .64in      @code{StringRepValue::LinkValue}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::LinkValue
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x;
+@c object  s;
+@c 
+@c x = gNewWithPtr(Pointer, NULL);
+@c s = gStringRepValue(x);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {Value}
+@deffn {Value} Value::LinkValue
+@sp 2
+@example
+@group
+obj = gValue(i);
+
+object  i;
+object  obj;
+@end group
+@end example
+This method is used to obtain the object associated with a link.
+@code{i} is the instance of the @code{LinkValue} class, and
+@code{obj} is the object associated with it.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeValue::LinkValue, NewWithObj::LinkValue}
+@end deffn
+
+
+
+
+
+
+
+
+

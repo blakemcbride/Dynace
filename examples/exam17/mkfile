@@ -1,0 +1,45 @@
+# Makefile for Plan 9
+
+</$objtype/mkfile
+
+DYNACE_PATH = ../..
+
+BINDIR = $DYNACE_PATH/bin
+LIBDIR = $DYNACE_PATH/lib
+INCDIR = $DYNACE_PATH/include
+
+TARGET = main
+
+CLASSES = class1.d class2.d
+
+CFILES = main.c
+
+OBJS = ${CFILES:%.c=%.$O} ${CLASSES:%.d=%.$O}
+
+CFLAGS = -DPLAN9 -I$INCDIR -p
+
+C_CLASSES = ${CLASSES:%.d=%.c}
+
+%.$O : %.c
+	$CC $CFLAGS $stem.c
+
+%.c : %.d
+	$BINDIR/dpp -g -p $stem.d
+
+$TARGET : generics.$O $OBJS
+	$LD -o $target $OBJS generics.$O $LIBDIR/Dynace.a
+
+generics.h : generics.1 $CLASSES
+	$BINDIR/dpp -g -t generics.h generics.c generics.$O -h -s $newprereq
+
+generics.c : generics.h
+	$BINDIR/dpp -g -c
+
+generics.1 newgens: $INCDIR/generics.h
+	$BINDIR/dpp -g $INCDIR/generics.h -s $CLASSES -h
+	touch generics.1
+
+$OBJS $C_CLASSES : generics.h
+
+clean realclean:VQ:
+	rm -f generics.* $TARGET *.$O $C_CLASSES

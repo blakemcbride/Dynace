@@ -1,0 +1,108 @@
+@page
+
+@section Character Class
+@pdfsection{Character Class}
+The @code{Character} class is used to represent the C language
+@code{char} data type as a Dynace object.  It is a subclass of the
+@code{Number} class.  Even though the @code{Character} class
+implements most of its own functionality, it is documented as part of
+the @code{Number} class because most of the interface is the same for
+all subclasses of the @code{Number} class.  Differences are documented
+in this section.
+
+
+@subsection Character Class Methods
+@pdfsubsection{Character Class Methods}
+The @code{Character} class has only one class method and it is used to create
+new instances of itself.
+
+
+
+@pdfsubsubsection {NewWithChar}
+@deffn {NewWithChar} NewWithChar::Character
+@sp 2
+@example
+@group
+i = gNewWithChar(Character, c);
+
+int     c;
+object  i;
+@end group
+@end example
+This class method creates instances of the Character class.  @code{c} is
+the initial value of the character being represented.  Note that
+@code{c} is of type @code{int}.  That is because if you pass a character
+to a generic function (which uses a variable argument declaration) the C
+language will automatically promote it to an @code{int}.
+
+The value returned is a Dynace instance object which represents the character
+passed.
+
+Note that the default disposal methods are used by this class since
+there are no special storage allocation requirements.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithChar(Character, 'a');
+@end group
+@end example
+@sp 1
+See also:  @code{CharValue::Number, ChangeCharValue::Number,}
+@hfil @break @hglue .64in      @code{Dispose::Object}
+@end deffn
+
+
+
+
+
+@subsection Character Instance Methods
+@pdfsubsection{Character Instance Methods}
+The instance methods associated with the @code{Character} class provide
+a means of changing and obtaining the value associated with an instance
+of the @code{Character} class.  Most of the @code{Character} class
+instance methods are documented in the @code{Number} class because of
+their common interface with all other subclasses of the @code{Number}
+class.  The remainder are documented in this section.
+
+
+
+
+
+
+@pdfsubsubsection {FormatChar}
+@deffn {FormatChar} FormatChar::Character
+@sp 2
+@example
+@group
+s = gFormatChar(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method creates an instance of the @code{String} class which
+contains the character represented by @code{i}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithChar(Character, 'a');
+y = gFormatChar(x);
+/*  y is a String object which represents "a"  */
+@end group
+@end example
+@sp 1
+See also:  @code{FormatNumber::Number}
+@end deffn
+
+
+
+
+
+
+

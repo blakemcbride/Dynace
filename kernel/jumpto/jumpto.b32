@@ -1,0 +1,46 @@
+;
+;  Jumpto for Borland 32 bit
+;
+	.386p
+	ifndef	??version
+?debug	macro
+	endm
+	endif
+	?debug	S "JUMPTO.C"
+	?debug	T "JUMPTO.C"
+_TEXT	segment byte public use32 'CODE'
+_TEXT	ends
+_DATA	segment dword public use32 'DATA'
+_DATA	ends
+_BSS	segment dword public use32 'BSS'
+_BSS	ends
+DGROUP	group	_DATA,_BSS
+	assume	cs:_TEXT,ds:DGROUP
+_TEXT	segment byte public use32 'CODE'
+c@	label	byte
+	assume	cs:_TEXT
+__jumpToMethod	proc	near
+@5@44:
+	add	esp,8
+	pop	ebp
+	jmp	eax
+@7:
+@7@0:
+	ret
+__jumpToMethod	endp
+_TEXT	ends
+	?debug	D "JUMPTO.C" 7792 24239
+_s@	equ	s@
+	public	__jumpToMethod
+_DATA	segment dword public use32 'DATA'
+d@	label	byte
+d@w	label	word
+d@d	label	dword
+s@	label	byte
+_DATA	ends
+_BSS	segment dword public use32 'BSS'
+b@	label	byte
+b@w	label	word
+b@d	label	dword
+_BSS	ends
+	end

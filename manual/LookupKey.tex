@@ -1,0 +1,261 @@
+@page
+
+@section LookupKey Class
+@pdfsection{LookupKey Class}
+The @code{LookupKey} class, which is a subclass of @code{Association},
+is used to represent an object which contains a key.  It is normally
+used in conjunction with the @code{ObjectAssociation}, @code{Set} and
+@code{Dictionary} classes in order to manage a group of arbitrary
+objects.
+
+Since instances of the @code{LookupKey} class only contain enough
+information to describe the key, the @code{LookupKey} class can be
+thought of as an abstract class.  It is never used by itself (instances
+of it are never created).  Instead a new class would be created which
+would have the @code{LookupKey} class as a superclass.  This new class
+would describe the data items which would be stored at each link.  The
+@code{LookupKey} class would keep track of the key to the object.
+Alternatively, a new class with the same methods as this class could be
+created and used with the @code{Set} and @code{Dictionary} classes.
+
+The @code{LookupKey} class also has a subclass called
+@code{ObjectAssociation} which associates a single arbitrary object with
+the key.
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+
+@subsection LookupKey Class Methods
+@pdfsubsection{LookupKey Class Methods}
+This class has only a single class method which is used to create and
+initialize instances of itself.   Although this class can handle
+@code{NULL} key values, their use is discouraged.
+
+
+
+
+
+
+@pdfsubsubsection {NewWithObj}
+@deffn {NewWithObj} NewWithObj::LookupKey
+@sp 2
+@example
+@group
+i = gNewWithObj(LookupKey, key);
+
+object  key;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{LookupKey} class.
+@code{key} is used to initialize the key associated with the instance
+created.  The new instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+@subsection LookupKey Instance Methods
+@pdfsubsection{LookupKey Instance Methods}
+The instance methods associated with this class are used access, change,
+dispose and print the key associated with the instances of this class.
+Additional functionality, although implemented by this class, is documented
+in @code{LookupKey}'s superclass, @code{Association}.  This is done
+because of the common interface these methods share with all subclasses
+of @code{Association}.
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeKey}
+@deffn {ChangeKey} ChangeKey::LookupKey
+@sp 2
+@example
+@group
+old = gChangeKey(i, key);
+
+object  i;
+object  key;
+object  old;
+@end group
+@end example
+This method is used to change the key associated with instance @code{i}.
+@code{key} is the new key.  The old key is simply replaced, it is not
+disposed.  This method returns the old key object.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Key::LookupKey}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::LookupKey
+@sp 2
+@example
+@group
+c = gDeepCopy(i);
+
+object  i, c;
+@end group
+@end example
+This method is used to create a new instance of the
+@code{LookupKey} class which contains a @emph{copy} of the
+key value from the original @code{LookupKey}.  @code{DeepCopy} is
+used to create the copy of the value.  The new
+@code{LookupKey} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::LookupKey
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of instance @code{i} as well as the key
+associated with it.  It disposes of the key by calling the
+@code{DeepDispose} method on it.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Object}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Key}
+@deffn {Key} Key::LookupKey
+@sp 2
+@example
+@group
+key = gKey(i);
+
+object  i;
+object  key;
+@end group
+@end example
+This method is used to obtain the key associated with instance @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeKey::LookupKey}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::LookupKey
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x;
+@c object  s;
+@c 
+@c x = gNewWithPtr(Pointer, NULL);
+@c s = gStringRepValue(x);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+

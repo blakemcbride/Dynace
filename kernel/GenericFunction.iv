@@ -1,0 +1,18 @@
+
+#ifndef	_GENERICFUNCTION_IV
+#define	_GENERICFUNCTION_IV
+
+
+typedef struct  _GenericFunction_iv_t  {
+	ofun * mc;
+	char * name;
+	int id;
+	int cache_idx;
+	int trace;
+	object next;
+	void * ptrGeneric;
+}	GenericFunction_iv_t;
+
+#endif	/*  _GENERICFUNCTION_IV  */
+
+

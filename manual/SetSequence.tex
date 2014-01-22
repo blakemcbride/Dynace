@@ -1,0 +1,76 @@
+@page
+
+@section SetSequence Class
+@pdfsection{SetSequence Class}
+This class is a subclass of @code{Sequence} and is used to provide a
+mechanism to enumerate through all the objects in a @code{Set} (or one
+of its subclasses) without effecting the structure.
+
+Typically, the @code{Sequence} instance method of the @code{Set} class
+is used to create the instances of the @code{SetSequence} class.  
+
+
+
+@subsection SetSequence Class Methods
+@pdfsubsection{SetSequence Class Methods}
+There is only one class method associated with this class.  It is used
+to create new instances of itself and is only called by the @code{Sequence}
+method associated with the @code{Set} class.
+
+@subsection SetSequence Instance Methods
+@pdfsubsection{SetSequence Instance Methods}
+This class only has a single instance method which is used to enumerate
+through objects in the @code{Set}.
+
+
+
+
+
+
+@pdfsubsubsection {Next}
+@deffn {Next} Next::SetSequence
+@sp 2
+@example
+@group
+obj = gNext(i);
+
+object  i;
+object  obj;
+@end group
+@end example
+This method is used to enumerate through all the objects in a @code{Set}.
+Each time @code{Next} is called the following object in the @code{Set}
+is returned.  It does this in a non-destructive way so the associated
+@code{Set} is not effected.
+
+When @code{Next} is called after the last object has been returned (or
+if there are no objects in the @code{Set}) it will return @code{NULL} and
+automatically dispose of the sequence object @code{i}.  Therefore,
+the only time @code{Dispose} would be needed (if the garbage collector
+weren't being used) would be if the entire list was not enumerated.
+
+Note that if this method is used with one of the @code{Dictionary} classes
+each call to @code{Next} returns the appropriate @code{Association} type.
+The @code{gValue} and @code{gKey} generics may be used to obtain
+the desired values from the @code{Association} returned.
+@example
+@group
+@exdent Example:
+
+object  set;  /*  Set                        */
+object  s;    /*  Set sequence               */
+object  obj;  /*  one object or association  */
+
+/*  set must be initialized previously  */
+
+for (s=gSequence(set) ; obj = gNext(s) ; )  @{
+        /*  do something with object obj  */
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{Sequence::Set}
+@end deffn
+
+
+

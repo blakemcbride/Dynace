@@ -1,0 +1,1085 @@
+@page
+
+@section Set Class
+@pdfsection{Set Class}
+The @code{Set} class is used to store a collection of objects which
+contain some means of unique identification for quick access.  The
+objects stored may be any Dynace object.  @code{gHash} and
+@code{gCompare} will be used on the object to be added in order to store
+and compare it amongst other objects in the @code{Set}.
+
+Since Dynace contains default methods for @code{Hash} and @code{Compare},
+any group of Dynace objects may be stored in any @code{Set} instance.
+
+If values are to be associated with the keys one of the @code{Dictionary}
+classes would be preferred.  The @code{Set} class, however, provides
+most of the functionality needed by the @code{Dictionary} classes.
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+
+@subsection Set Class Methods
+@pdfsubsection{Set Class Methods}
+The only class method used in this class is one to create instances of itself.
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::Set
+@sp 2
+@example
+@group
+i = gNew(Set);
+
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{Set} class.  The set
+created is designed to accommodate rather small sets of about 30
+elements.  If a @code{Set} becomes too full it automatically re-sizes
+itself.  See @code{NewWithInt::Set} for a method of creating a set
+while specifying its initial size.
+
+The new instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewWithInt::Set, Resize::Set}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {NewWithInt}
+@deffn {NewWithInt} NewWithInt::Set
+@sp 2
+@example
+@group
+i = gNewWithInt(Set, size);
+
+int     size;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{Set} class.
+@code{size} is used to give the instance some idea of the initial maximum number
+of objects to be stored in the @code{Set}.  The actual number of objects may
+exceed this number, however, some loss of efficiency will occur.
+
+Since a @code{Set} is implemented as a hash table it is best if @code{size}
+is actually larger than the number of objects to be held.  It should
+be an odd number or better yet a prime number.  Keep in mind, however,
+that there is storage requirements associated with this number and
+the use of a very large number will consume large memory resources.
+In reality most reasonable numbers will work fine.
+
+Regardless of the size specified the set object will never overflow.
+It will just be less efficient if many more elements then @code{size}
+are added.
+
+The new instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{New::Set, Resize::Set}
+@end deffn
+
+
+
+
+
+@subsection Set Instance Methods
+@pdfsubsection{Set Instance Methods}
+The instance methods associated with this class provide all the means
+to add, inquire, remove and print instances of the @code{Set} class.
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Add}
+@deffn {Add} Add::Set
+@sp 2
+@example
+@group
+r = gAdd(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to add a new object (@code{luk}) to the @code{Set} instance
+(@code{i}).  If an object with the same key already exists in the @code{Set} it
+will be left as is and @code{Add} will return @code{NULL}.  If
+@code{luk} is added it will also be returned.
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Find::Set, FindAdd::Set, RemoveObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::Set
+@sp 2
+@example
+@group
+so = gCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the @code{Set} class
+with the @emph{same} elements as @code{Set} @code{i}.  Or put more simply,
+it makes a copy.  The new @code{Set} instance is returned.
+
+Note that this method is designed to also work correctly for the
+@code{Dictionary} subclasses of @code{Set}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithInt(Set, 101);
+y = gCopy(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithInt::Set, DeepCopy::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::Set
+@sp 2
+@example
+@group
+so = gDeepCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the @code{Set} class
+which contains @emph{copies} of all the elements from the original @code{Set}.
+@code{DeepCopy} is used on each element to create the copies.
+The new @code{Set} instance is returned.
+
+Note that this method is designed to also work correctly for the
+@code{Dictionary} subclasses of @code{Set}.
+@example
+@group
+@exdent Example:
+
+object  x, y;
+
+x = gNewWithInt(Set, 100);
+y = gDeepCopy(x);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithInt::Set, Copy::Set}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Set
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an entire @code{Set} instance.  It also
+disposes of all the objects or associations in the @code{Set} by use of the
+@code{DeepDispose} method.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::Set, Dispose1::Set, DisposeAllNodes::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeAllNodes}
+@deffn {DeepDisposeAllNodes} DeepDisposeAllNodes::Set
+@sp 2
+@example
+@group
+i = gDeepDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in a @code{Set} instance
+without disposing of the set itself.  Each object or association
+is disposed of via @code{DeepDispose}.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeAllNodes::Set, Dispose::Set, DisposeAllNodes1::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeGroup}
+@deffn {DeepDisposeGroup} DeepDisposeGroup::Set
+@sp 2
+@example
+@group
+i = gDeepDisposeGroup(i, fun);
+
+object  i;
+int     (*fun)(object);
+@end group
+@end example
+This method is used to remove and dispose of a group of objects from the
+@code{Set} @code{i}.  The function, @code{fun}, is executed for each object in
+the @code{Set}.  With each call @code{fun} is passed the object at that point
+in the @code{Set}.  If @code{fun} returns a 1 that particular object will be
+removed, or else if @code{fun} returns a 0 the object will not be
+removed.  @code{fun} is used to decide which objects will be removed.
+
+The objects removed are disposed of by use of the @code{DeepDispose} method.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{GroupRemove::Set, DisposeGroup::Set, DisposeAllNodes::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDisposeObj}
+@deffn {DeepDisposeObj} DeepDisposeObj::Set
+@sp 2
+@example
+@group
+r = gDeepDisposeObj(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of an object (@code{luk}) from
+the @code{Set} instance (@code{i}).  If it is not found @code{NULL} is returned,
+otherwise @code{i} is returned.  @code{luk} is disposed of by use of the
+@code{DeepDispose} method.
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Set, DisposeObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Set
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of an entire @code{Set} instance.
+It does not dispose of any of the objects or associations in the @code{Set}.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::Set, Dispose1::Set, DisposeAllNodes::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose1}
+@deffn {Dispose1} Dispose1::Set
+@sp 2
+@example
+@group
+gDispose1(i);
+
+object  i;
+@end group
+@end example
+This method is used to dispose of an entire @code{Set} instance.  It also
+disposes of all of the objects or associations in the @code{Set} by the use of
+the @code{Dispose} method applied to each object.  There is no value
+returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::Set, Dispose::Set, DisposeAllNodes1::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes}
+@deffn {DisposeAllNodes} DisposeAllNodes::Set
+@sp 2
+@example
+@group
+i = gDisposeAllNodes(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in a @code{Set} instance
+without disposing of the set itself.  It does not dispose of any of the
+objects or associations in the @code{Set}, they are simply
+disassociated with the @code{Set}.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDisposeAllNodes::Set, DisposeAllNodes1::Set,}
+@hfil @break @hglue .64in      @code{Dispose::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeAllNodes1}
+@deffn {DisposeAllNodes1} DisposeAllNodes1::Set
+@sp 2
+@example
+@group
+i = gDisposeAllNodes1(i);
+
+object  i;
+@end group
+@end example
+This method is used to remove all objects in a @code{Set} instance
+without disposing of the set itself.  Each object or association in the
+set are disposed of via @code{Dispose}.
+
+The value returned is always the instance passed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeAllNodes::Set, DeepDisposeAllNodes::Set,}
+@hfil @break @hglue .64in      @code{Dispose::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeGroup}
+@deffn {DisposeGroup} DisposeGroup::Set
+@sp 2
+@example
+@group
+i = gDisposeGroup(i, fun);
+
+object  i;
+int     (*fun)(object);
+@end group
+@end example
+This method is used to remove and dispose of a group of objects from the
+@code{Set} @code{i}.  The function, @code{fun}, is executed for each object in
+the @code{Set}.  With each call @code{fun} is passed the object at that point
+in the @code{Set}.  If @code{fun} returns a 1 that particular object will be
+removed, or else if @code{fun} returns a 0 the object will not be
+removed.  @code{fun} is used to decide which objects will be removed.
+
+The objects removed are disposed of by use of the @code{Dispose} method.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{GroupRemove::Set, DeepDisposeGroup::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DisposeObj}
+@deffn {DisposeObj} DisposeObj::Set
+@sp 2
+@example
+@group
+r = gDisposeObj(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to remove and dispose of an object (@code{luk}) from
+the @code{Set} instance (@code{i}).  If it is not found @code{NULL} is returned,
+otherwise @code{i} is returned.  @code{luk} is disposed of by use of the
+@code{Dispose} method.
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Set, DeepDisposeObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Find}
+@deffn {Find} Find::Set
+@sp 2
+@example
+@group
+r = gFind(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to find an existing object (@code{luk}) in the
+@code{Set} instance (@code{i}).  If the object is found in
+the @code{Set} it will be returned otherwise @code{Find} will return @code{NULL}.
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Add::Set, FindAdd::Set, RemoveObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FindAdd}
+@deffn {FindAdd} FindAdd::Set
+@sp 2
+@example
+@group
+r = gFindAdd(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to find an existing object (@code{luk}) in the @code{Set}
+instance (@code{i}) and return it.  If the object is not found it will
+be added and returned.  
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Add::Set, Find::Set, RemoveObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {First}
+@deffn {First} First::Set
+@sp 2
+@example
+@group
+r = gFirst(i);
+
+object  i;
+object  r;
+@end group
+@end example
+This method returns one of the objects in the set.  The returned
+object will be an arbitrary one in the set.  This method is useful
+in cases where you want to enumerate through each object in the
+set where you will perform some operation on the returned object and
+then remove or dispose it from the set.  In that case the next call
+to @code{gFirst} will simply return a different object from the set.
+
+If no objects are left in the set, @code{gFirst} returns @code{NULL}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{RemoveObj::Set, Sequence::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ForAll}
+@deffn {ForAll} ForAll::Set
+@sp 2
+@example
+@group
+r = gForAll(i, fun);
+
+object  i;
+object  (*fun)(object);
+object  r;
+@end group
+@end example
+This method is used to execute function @code{fun} on each object in a @code{Set}.
+
+Each time @code{fun} is called it is passed the next object in the @code{Set}
+as its first and only argument.  If @code{fun} returns a non-NULL
+object, @code{ForAll} returns immediately with the value returned by
+@code{fun}.  As long as @code{fun} returns NULL it will be passed
+successive objects in the @code{Set} until there are no more objects.  At
+that time @code{ForAll} will just return NULL indicating that all
+objects have been enumerated.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Sequence::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {GroupRemove}
+@deffn {GroupRemove} GroupRemove::Set
+@sp 2
+@example
+@group
+i = gGroupRemove(i, fun);
+
+object  i;
+int     (*fun)(object);
+@end group
+@end example
+This method is used to remove a group of objects from the @code{Set}
+@code{i}.  The function, @code{fun}, is executed for each
+object in the @code{Set}.  With each call @code{fun} is passed the
+object at that point in the @code{Set}.  If @code{fun} returns a 1
+that particular object will be removed, or else if @code{fun}
+returns a 0 the object will not be removed.  @code{fun} is used
+to decide which objects will be removed.
+
+The objects removed are not disposed.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeGroup::Set, DeepDisposeGroup::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RemoveObj}
+@deffn {RemoveObj} RemoveObj::Set
+@sp 2
+@example
+@group
+r = gRemoveObj(i, luk);
+
+object  i;
+object  luk;
+object  r;
+@end group
+@end example
+This method is used to remove an object (@code{luk}) from the @code{Set}
+instance (@code{i}) and return it.  If the object is not found
+@code{NULL} will be returned.  @code{luk} is not disposed.
+
+@code{luk} may be any Dynace object.  The @code{gHash} and
+@code{gCompare} generics are used to find and compare the various
+objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DisposeObj::Set, DeepDisposeObj::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Resize}
+@deffn {Resize} Resize::Set
+@sp 2
+@example
+@group
+r = gResize(i, size);
+
+object  i;
+int     size;
+object  r;
+@end group
+@end example
+This method is used to change the size of the hash table used to
+implement the @code{Set}.  It may be used if during runtime it is
+discovered that the number of objects stored or to be stored in the
+@code{Set} are very different than the number used when the @code{Set}
+was created.
+
+Since a @code{Set} is implemented as a hash table it is best if
+@code{size} is actually larger than the number of objects to be held.
+It should be an odd number or better yet a prime number.  Keep in mind,
+however, that there is storage requirements associated with this number
+and the use of a very large number will consume large memory resources.
+The @code{Set} will support more objects than defined by @code{size} at
+a lesser efficiency.  In reality most reasonable numbers will work fine.
+
+@code{r} is the re-sized @code{Set}.
+
+This method is very time consuming and should only be used when
+absolutely necessary.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{NewWithInt::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Sequence}
+@deffn {Sequence} Sequence::Set
+@sp 2
+@example
+@group
+s = gSequence(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method takes an instance of the @code{Set} class (@code{i})
+and returns an instance of the @code{SetSequence} class
+(@code{s}).  The @code{Set} represented by @code{i} is not effected by
+this operation.  The @code{Set} sequence item, @code{s}, is used to enumerate
+through all the objects in @code{Set} @code{i}.  See the
+@code{SetSequence} class for documentation of other methods
+needed to use @code{s}.
+@example
+@group
+@exdent Example:
+
+object  set; /*  Set           */
+object  s;   /*  Set sequence  */
+object  obj; /*  an object     */
+
+/*  set must be initialized previously  */
+
+for (s=gSequence(set) ; obj = gNext(s) ; )  @{
+        /*  do something with obj  */
+@}
+@end group
+@end example
+@sp 1
+See also:  @code{Next::SetSequence, First::Set}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Size}
+@deffn {Size} Size::Set
+@sp 2
+@example
+@group
+sz = gSize(i);
+
+object  i;
+int     sz;
+@end group
+@end example
+This method is used to obtain the number of objects in the @code{Set}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRep}
+@deffn {StringRep} StringRep::Set
+@sp 2
+@example
+@group
+s = gStringRep(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the object @code{i} and its value.  This is often used
+to print or display a representation of an object.  It is also used by
+by @code{Print::Object} (a method useful during the debugging phase of
+a project) in order to directly print an object to a stream.
+
+This method obtains the values of each object by calling
+@code{StringRepValue} on each element.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Print::Object, PrintValue::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+

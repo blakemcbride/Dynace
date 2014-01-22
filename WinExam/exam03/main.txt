@@ -1,0 +1,77 @@
+
+
+#include "generics.h"
+#include "resource.h"
+
+static	long	file_message(object wind, unsigned id);
+static	long	file_dialog(object wind, unsigned id);
+static	long	file_exit(object wind, unsigned id);
+
+int	start()
+{
+	object	win;
+	char	title[80];
+
+	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	win = vNew(MainWindow, title);
+
+	mLoadIcon(win, ALGOCORP_ICON);
+
+	mLoadMenu(win, IDR_MENU1);
+	mAssociate(win, ID_FILE_MESSAGE, file_message);
+
+	/*  Create an association to the new menu option  */
+
+	mAssociate(win, ID_FILE_DIALOG, file_dialog);
+
+	mAssociate(win, ID_FILE_EXIT, file_exit);
+
+	return gProcessMessages(win);
+}
+
+static	long	file_message(object wind, unsigned id)
+{
+	gMessage(wind, "File Message");
+	return 0L;
+}
+
+/*  This function executes whenever the user selects the "Dialog" menu option.
+    Its structure is the same as any function which processes a menu selection.
+    */
+
+static	long	file_dialog(object wind, unsigned id)
+{
+	/*  Declare an object which will hold the dialog instance which will
+	    be loaded.  */
+
+	object	dlg;
+
+	/*  Declare a variable which will hold the return value.  */
+	
+	int	r;
+	
+	/*  Load the dialog indicated by DL1 (defined in RESOURCE.H) and
+	    make it subordinate to the main window (wind).  The dialog
+	    loaded (dlg) is an instance of the ModalDialog class.  */
+
+	dlg = mNewDialog(ModalDialog, DL1, wind);
+
+	/*  Display and perform the dialog (dlg).  r will equal TRUE if the
+	    user correctly entered the data and accepted the dialog or will
+	    be FALSE if the user canceled the dialog.  */
+
+	r = gPerform(dlg);
+
+	/*  As with any instance object, it must be disposed when no longer
+	    needed.  */
+
+	gDispose(dlg);
+
+	return 0L;
+}
+
+static	long	file_exit(object wind, unsigned id)
+{
+	gQuitApplication(Application, 0);
+	return 0L;
+}

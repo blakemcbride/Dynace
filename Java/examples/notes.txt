@@ -1,0 +1,45 @@
+
+Running the example
+-------------------
+
+path c:\j2sdk1.4.0\bin;C:\j2sdk1.4.0\jre\bin\client;%path%
+
+wds -j .;../java/Dynace.jar ../dll Dynace.generics wdsexam08 start
+
+
+Creating new Dynace Objects from Java
+-------------------------------------
+
+DynaceObject x = new DynaceObject(LongInteger.gNewWithLong(6));
+
+DynaceObject x = LongInteger.gNewWithLong(6);
+
+The first example will cause Java to Dispose of the Dynace object
+when the Java object (x) gets garbage collected.  The second
+will not auto-dispose the Dynace object when X gets collected.
+
+
+Inheriting from Dynace
+----------------------
+
+Java classes which inherit from Dynace can do the following:
+
+LongInteger.gNewWithLong(6);
+
+Otherwise you'd have to do:
+
+Dynace.LongInteger.gNewWithLong(6);
+
+
+Runtime environment needed
+--------------------------
+The following files are needed at runtime:
+    Dynace.jar
+    JavaDynace.dll
+        &
+    PATH set to include jre\bin\client
+    (which contains jvm.dll)
+
+No other environment variables are needed.  Java figures everything
+out from the relative location of the jvm.dll (i.e. you can't change
+the relative path of jvm.dll with respect to the other jre files)

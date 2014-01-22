@@ -1,0 +1,51 @@
+# Makefile for Plan 9
+
+<../mkfile.inc
+
+DPPOPTS = $DPPOPTS -g $INCDIR/generics.h
+
+CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.d \
+	LookupKey.d Set.d Dictionary.d String.d LongInteger.d DoubleFloat.d \
+	Character.d SetSequence.d LinkObjectSequence.d StringAssociation.d StringDictionary.d LinkSequence.d \
+	Date.d Pointer.d Number.d ObjectAssociation.d UnsignedShortInteger.d \
+	Sequence.d Stream.d File.d LowFile.d Array.d CharacterArray.d XMLNode.d \
+	Constant.d ShortArray.d UnsignedShortArray.d IntegerArray.d LongArray.d FloatArray.d \
+	DoubleFloatArray.d BitArray.d ObjectArray.d PointerArray.d NumberArray.d IntegerAssociation.d \
+	IntegerDictionary.d BTree.d BTreeNode.d Memory.d Time.d DateTime.d ObjectPool.d \
+	PropertyList.d WeakPointer.d BufferedTempFile.d \
+	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d
+
+OBJ = ${CLASSES:%.d=%.$O} memalloc.$O
+
+LIB = $LIBDIR/Dynace.a
+$LIB(%):N: %
+$LIB: ${OBJ:%=$LIB(%)}
+	ar rv $LIB $OBJ
+
+#$LIB : $OBJ
+#	ar r $target $prereq
+
+$INCDIR/generics.h : $CLASSES
+	$DPP $DPPOPTS -t $INCDIR/generics.h -h $INCDIR/generics.h -p $prereq
+
+
+Dictionary.$O Set.$O SetSequence.$O StringDictionary.$O IntegerDictionary.$O : set1.h
+
+
+String.$O Array.$O : memalloc.h
+
+Array.$O : array2.h
+
+Array.$O CharacterArray.$O  ShortArray.$O UnsignedShortArray.$O LongArray.$O FloatArray.$O \
+	DoubleFloatArray.$O BitArray.$O ObjectArray.$O PointerArray.$O: array1.h
+
+memalloc.c : memalloc.d
+	cp memalloc.d memalloc.c
+
+
+newgens:
+	$DPP $DPPOPTS -p $CLASSES -h $INCDIR/generics.h
+
+clean:VQ:
+	rm -f *.obj *.exe generics.* *.$O core *~ *.pdb
+

@@ -1,0 +1,187 @@
+@page
+
+@section Constant Class
+@pdfsection{Constant Class}
+This class is used to represent constants.  Constants are objects which
+can never be destroyed or copied.  They always retain their value and
+when compared, they only equal themselves.  An example of a constant
+would be an object which represents a true or false condition such
+as @code{T} and @code{NIL} in lisp.
+
+@subsection Constant Class Methods
+@pdfsubsection{Constant Class Methods}
+There are no specific class methods associated with this class.  The
+default instance creation method (@code(New)) is used.
+
+
+@subsection Constant Instance Methods
+@pdfsubsection{Constant Instance Methods}
+The instance methods associated with this class are used to override
+certain default methods in order to insure the ``constant'' status
+of instances of this class.
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::Constant
+@sp 2
+@example
+@group
+s = gCopy(s)
+
+object  s;
+@end group
+@end example
+This method performs no function and returns the value passed.  Its only
+use is to insure that there is only one copy of any particular instances
+of the @code{Constant} class.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::Constant
+@sp 2
+@example
+@group
+s = gDeepCopy(s)
+
+object  s;
+@end group
+@end example
+This method performs no function and returns the value passed.  Its only
+use is to insure that there is only one copy of any particular instances
+of the @code{Constant} class.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::Constant
+@sp 2
+@example
+@group
+r = gDeepDispose(s)
+
+object  s;
+object  r;
+@end group
+@end example
+This method performs no function and returns the value passed.  Its only
+use is to insure the undelete-ability of instances of the
+@code{Constant} class.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Constant
+@sp 2
+@example
+@group
+r = gDispose(s)
+
+object  s;
+object  r;
+@end group
+@end example
+This method performs no function and returns the value passed.  Its only
+use is to insure the undelete-ability of instances of the
+@code{Constant} class.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Equal}
+@deffn {Equal} Equal::Constant
+@sp 2
+@example
+@group
+r = gEqual(s, t)
+
+object  s;
+object  t;
+int     r;
+@end group
+@end example
+This method checks for the equality of two objects (@code{s} and @code{t}).
+If they are the same constant a 1 is returned and 0 otherwise.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+

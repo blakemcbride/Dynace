@@ -1,0 +1,245 @@
+@page
+
+@section Pointer Class
+@pdfsection{Pointer Class}
+The @code{Pointer} class is used to represent the C language
+@code{void *} data type as a Dynace object.
+
+
+
+
+
+@subsection Pointer Class Methods
+@pdfsubsection{Pointer Class Methods}
+The Pointer class has only one class method and it is used to create
+new instances of itself.
+
+
+
+@pdfsubsubsection {NewWithPtr}
+@deffn {NewWithPtr} NewWithPtr::Pointer
+@sp 2
+@example
+@group
+i = gNewWithPtr(Pointer, val);
+
+void    *val;
+object  i;
+@end group
+@end example
+This class method creates instances of the Pointer class.  @code{val}
+is the initial value of the pointer being represented.  
+
+The value returned is a Dynace instance object which represents the pointer
+passed.
+
+Note that the default disposal methods are used by this class since
+there are no special storage allocation requirements.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     v = 3;
+
+x = gNewWithPtr(Pointer, &v);
+@end group
+@end example
+@sp 1
+See also:  @code{PointerValue::Pointer, Dispose::Object}
+@end deffn
+
+
+
+
+
+@subsection Pointer Instance Methods
+@pdfsubsection{Pointer Instance Methods}
+The instance methods associated with the Pointer class provide a
+means of changing and obtaining the value associated with an instance of
+the Pointer class.  Methods are also included to help the generic
+container classes to quickly access members of this class.
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::Pointer
+@sp 2
+@example
+@group
+i = gChangeValue(i, val);
+
+object  i;
+void    *val;
+@end group
+@end example
+This method is used to change the value associated with an instance of
+the Pointer class.  Notice that this method returns the instance
+being passed.  @code{val} is the new value.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     v1 = 4, v2 = 5;
+
+x = gNewWithPtr(Pointer, &v1);
+gChangeValue(x, &v2);
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithPtr::Pointer, PointerValue::Pointer}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Compare}
+@deffn {Compare} Compare::Pointer
+@sp 2
+@example
+@group
+r = gCompare(i, obj);
+
+object  i;
+object  obj;
+int     r;
+@end group
+@end example
+This method is used by the generic container classes to determine
+the equality of the values represented by @code{i} and @code{obj}. 
+@code{r} is -1 if the value represented by @code{i} is less than
+the value represented by @code{obj}, 1 if the value of @code{i}
+is greater than @code{obj}, and 0 if they are equal.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Hash::Pointer}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {Hash}
+@deffn {Hash} Hash::Pointer
+@sp 2
+@example
+@group
+val = gHash(i);
+
+object  i;
+int     val;
+@end group
+@end example
+This method is used by the generic container classes to obtain hash values
+for the object.  @code{val}
+is a hash value between 0 and a large integer value.
+@c @example
+@c @group
+@c @exdent Example:
+@c
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Compare::Pointer}
+@end deffn
+
+
+
+
+
+
+
+@pdfsubsubsection {PointerValue}
+@deffn {PointerValue} PointerValue::Pointer
+@sp 2
+@example
+@group
+val = gPointerValue(i);
+
+object  i;
+void    *val;
+@end group
+@end example
+This method is used to obtain the @code{void *} value associated with an
+instance of the Pointer class.  Note that this is one of the few
+generics which doesn't return a Dynace object.  It returns a void * pointer.
+@example
+@group
+@exdent Example:
+
+object  x;
+int     a = 4, *b;
+void    *val;
+
+x = gNewWithPtr(Pointer, &a);
+b = (int *) gPointerValue(x);
+/*  b now points to a  */
+@end group
+@end example
+@sp 1
+See also:  @code{NewWithPtr::Pointer, ChangeValue::Pointer}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::Pointer
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@example
+@group
+@exdent Example:
+
+object  x;
+object  s;
+
+x = gNewWithPtr(Pointer, NULL);
+s = gStringRepValue(x);
+@end group
+@end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+

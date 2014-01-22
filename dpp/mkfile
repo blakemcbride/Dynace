@@ -1,0 +1,41 @@
+# Makefile for Plan 9
+
+<../mkfile.inc
+
+DPPOPTS = $DPPOPTS $STRAT
+
+TARGET = dpp
+
+CLASSES = Prototype.d InputStream.d OutputStream.d Token.d ArgumentList.d OutputStream2.d
+
+CFILES = dpp.c
+
+C_CLASSES = ${CLASSES:%.d=%.c}
+
+OBJS = ${CFILES:%.c=%.$O} ${CLASSES:%.d=%.$O}
+
+
+$TARGET : generics.$O $OBJS
+	$LD -o $TARGET $OBJS generics.$O $LIBDIR/Dynace.a
+
+install : $TARGET
+	cp $TARGET $BINDIR
+
+generics.h : generics.1 $CLASSES
+	$DPP $DPPOPTS -g -t -h -p $?
+
+generics.c : generics.h
+	$DPP $DPPOPTS -g -c
+
+generics.o : generics.c 
+	$CC $GFLAGS -c $<
+
+generics.1 newgens: # $INCDIR/generics.h
+	rm -f generics.*
+	$DPP $DPPOPTS -g $INCDIR/generics.h -p $CLASSES -h
+	touch generics.1
+
+$OBJS $C_CLASSES : generics.h
+
+clean realclean:VQ:
+	rm -f *.obj *.exe *.$O core $(TARGET)

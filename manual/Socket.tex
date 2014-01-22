@@ -1,0 +1,479 @@
+@page
+
+@section Socket Class
+@pdfsection{Socket Class}
+The @code{Socket} class is a subclass of @code{Stream} and provides
+facilities which make utilizing sockets easy and portable.  Sockets
+provide a mechanism for network communication over TCP or the Internet.
+
+
+At present only the client-side methods are implemented.
+
+
+@subsection Socket Class Methods
+@pdfsubsection{Socket Class Methods}
+The only class method is used to open a new socket which equates to
+forming a connection with a server.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SocketConnect}
+@deffn {SocketConnect} SocketConnect::Socket
+@sp 2
+@example
+@group
+skt = gSocketConnect(Socket, addr, port);
+
+char    *addr;
+int     port;
+object  skt;
+@end group
+@end example
+This method is used to form a connection between a client and server.
+The application calling this method would be the client side.  In order
+to form a connection the IP address (``123.456.789.012'') or domain name
+(``prep.ai.mit.edu'') as well as the port number of the server
+application must be known.  @code{addr} is a character string representing
+the IP address or domain name, and @code{port} is the port number for the
+server application.  This information would always be known by the organization
+responsible for the server end.
+
+@code{gSocketConnect} returns an object which represents the connection or
+@code{NULL} if the connection was not made.
+@example
+@group
+@exdent Example:
+
+object  skt = gSocketConnect(Socket, "192.44.32.44", 4099);
+@end group
+@end example
+@sp 1
+See also:  @code{Dispose::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@subsection Socket Instance Methods
+@pdfsubsection{Socket Instance Methods}
+Instance methods associated with the @code{Socket} class enable data to
+be sent to and from a client / server pair of applications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::Socket
+@sp 2
+@example
+@group
+r = gDispose(skt);
+
+object  skt;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to close a socket connection and dispose of its
+associated object.  There is also a @code{gDeepDispose} which performs the
+same function.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {GetErrorCode}
+@deffn {GetErrorCode} GetErrorCode::Socket
+@sp 2
+@example
+@group
+r = gGetErrorCode(skt);
+
+object  skt;
+int     r;
+@end group
+@end example
+This method is used to obtain an error code which describes the last
+error on more detail.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Read}
+@deffn {Read} Read::Socket
+@sp 2
+@example
+@group
+r = gRead(skt, buf, n);
+
+object   skt;
+char     *buf;
+unsigned n;
+int      r;
+@end group
+@end example
+This method is used to read @code{n} bytes into @code{buf} from
+@code{Socket} @code{skt}.  The value returned is the actual number
+of bytes read or -1 on error.  An error can occur for two reasons:
+a severed connection, or a time out error.  In the case of a severed
+connection one would not want to continue use of that socket since
+it is probably not valid anymore.
+
+@code{gRead} normally waits up to 60 seconds for reception of the
+requested bytes.  If part of the data is received @code{gRead}
+will again wait up to 60 seconds for the remaining data.  @code{gRead}
+continues to wait for @emph{all} the data unless a connection error
+occurs or no data is received for at least 60 seconds.
+@example
+@group
+@exdent Example:
+ 
+char    buf[80];
+
+if (10 != gRead(skt, buf, 10))
+        error code;
+@end group
+@end example
+@sp 1
+See also:  @code{gTimedRead::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {RecvFile}
+@deffn {RecvFile} RecvFile::Socket
+@sp 2
+@example
+@group
+r = gRecvFile(skt, tf);
+
+object  skt;
+char    *tf;
+int     r;
+@end group
+@end example
+This method is used to receive a whole file over a socket connection.
+@code{ff} is the name (and path) of the local file to where the received
+file is to be saved.
+
+This method returns 0 on success or non-zero upon failure.  This method
+makes some degree of effort (via acknowledgments and check sums) to assure
+that the file was in fact correctly received.
+
+This method is unique to Dynace which means that the server end would
+have to have the correct receive function in order for this facility
+to be used.
+@example
+@group
+@exdent Example:
+ 
+if (gRecvFile(skt, "myFile"))
+      handle error;
+@end group
+@end example
+@sp 1
+See also:  @code{SendFile::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {SendFile}
+@deffn {SendFile} SendFile::Socket
+@sp 2
+@example
+@group
+r = gSendFile(skt, ff, tf);
+
+object  skt;
+char    *ff;
+char    *tf;
+int     r;
+@end group
+@end example
+This method is used to transmit a whole file over a socket connection.
+@code{ff} is the name (and path) of the local file to be transmitted.
+@code{tf} is the name of the file that the receiving end will see
+(i.e. the name of the file the receiving end will think you are
+sending).  If @code{tf} is @code{NULL} then @code{ff} is used.
+
+This method returns 0 on success or non-zero upon failure.  This method
+makes some degree of effort (via acknowledgments and check sums) to assure
+that the file was in fact correctly received by the other end.
+
+This method is unique to Dynace which means that the server end would
+have to have the correct receive function in order for this facility
+to be used.
+@example
+@group
+@exdent Example:
+ 
+if (gSendFile(skt, "../myFile", NULL))
+      handle error;
+@end group
+@end example
+@sp 1
+See also:  @code{RecvFile::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {TimedRead}
+@deffn {TimedRead} TimedRead::Socket
+@sp 2
+@example
+@group
+r = gTimedRead(skt, buf, n, w);
+
+object   skt;
+char     *buf;
+unsigned n;
+int      w;
+int      r;
+@end group
+@end example
+This method is used to read @code{n} bytes into @code{buf} from
+@code{Socket} @code{skt}.  The value returned is the actual number
+of bytes read or -1 on error.  An error can occur for two reasons:
+a severed connection, or a time out error.  In the case of a severed
+connection one would not want to continue use of that socket since
+it is probably not valid anymore.
+
+@code{gTimedRead} normally waits up to @code{w} seconds for reception of the
+requested bytes.  If part of the data is received @code{gTimedRead}
+will again wait up to @code{w} seconds for the remaining data.  @code{gTimedRead}
+continues to wait for @emph{all} the data unless a connection error
+occurs or no data is received for at least @code{w} seconds.
+@example
+@group
+@exdent Example:
+ 
+char    buf[80];
+
+if (10 != gTimedRead(skt, buf, 10, 60))
+        error code;
+@end group
+@end example
+@sp 1
+See also:  @code{gRead::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {TimedWrite}
+@deffn {TimedWrite} TimedWrite::Socket
+@sp 2
+@example
+@group
+r = gTimedWrite(skt, buf, n, w);
+
+object   skt;
+char     *buf;
+unsigned n;
+int      w;
+int      r;
+@end group
+@end example
+This method is used to send @code{n} bytes from @code{buf} to
+@code{Socket} @code{skt}.  The value returned is the actual number
+of bytes sent or -1 on error.  An error can occur for two reasons:
+a severed connection, or a time out error.  In the case of a severed
+connection one would not want to continue use of that socket since
+it is probably not valid anymore.
+
+@code{gTimedWrite} normally waits up to @code{w} seconds for the ability to send the
+requested bytes.  If part of the data is sent @code{gTimedWrite} will again
+wait up to @code{w} seconds for the remaining data.  @code{gTimedWrite} continues to
+wait until @emph{all} the data is sent unless a connection error occurs
+or no data is able to send for at least @code{w} seconds.
+
+Successfully sending data does not guarantee that the data was received
+on the other end.  You must send back some kind of acknowledgement to
+assure that.
+@example
+@group
+@exdent Example:
+ 
+if (12 != gTimedWrite(skt, "Hello, World", 12, 60))
+        error code;
+@end group
+@end example
+@sp 1
+See also:  @code{gWrite::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Write}
+@deffn {Write} Write::Socket
+@sp 2
+@example
+@group
+r = gWrite(skt, buf, n);
+
+object   skt;
+char     *buf;
+unsigned n;
+int      r;
+@end group
+@end example
+This method is used to send @code{n} bytes from @code{buf} to
+@code{Socket} @code{skt}.  The value returned is the actual number
+of bytes sent or -1 on error.  An error can occur for two reasons:
+a severed connection, or a time out error.  In the case of a severed
+connection one would not want to continue use of that socket since
+it is probably not valid anymore.
+
+@code{gWrite} normally waits up to 60 seconds for the ability to send the
+requested bytes.  If part of the data is sent @code{gWrite} will again
+wait up to 60 seconds for the remaining data.  @code{gWrite} continues to
+wait until @emph{all} the data is sent unless a connection error occurs
+or no data is able to send for at least 60 seconds.
+
+Successfully sending data does not guarantee that the data was received
+on the other end.  You must send back some kind of acknowledgement to
+assure that.
+@example
+@group
+@exdent Example:
+ 
+if (12 != gWrite(skt, "Hello, World", 12))
+        error code;
+@end group
+@end example
+@sp 1
+See also:  @code{gTimedWrite::Socket}
+@end deffn
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+
+This example builds on the previous example by the addition of a modal
+dialog (or data entry screen).  While the dialog in this example will
+function, it will do so at a very fundemental level.  This example is
+designed merely to illustrate the minimum steps necessary to get a dialog
+loaded and running.  Subsequent example programs will add real
+functionality to this dialog.
+
+There are two types of dialogs, modal and modeless.  Modal dialogs
+require the user to complete the screen before they can switch to
+another window within the same app.  This prevents the user from
+having multiple copies of the same screen active at the same time (a
+difficult situation to handle sometimes).  Modeless dialogs allow the
+user to leave the dialog active and go back to the main window and go
+into another section of the app (or a duplicate of the same section!).
+Dynace WDS supports both types of dialogs.
+
+The actual dialog is defined in MAIN.RC by use of the resource
+editor which comes with your compiler (App Studio for Microsoft).
+(See the documentation included with that utility.)
+MAIN.C is modified to use the defined dialog.
+
+Note that an additional menu option "Dialog" was added to the menu.
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

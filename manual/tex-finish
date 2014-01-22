@@ -1,0 +1,4 @@
+
+texindex $1.fn
+texinfo $1
+

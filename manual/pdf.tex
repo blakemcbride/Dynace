@@ -1,0 +1,75 @@
+% $Header: /home/cvs1/Dynace/manual/pdf.tex,v 1.1.1.1 2002/02/20 17:06:06 Blake Exp $
+% \special{ pdf: pagesize width 8.5truein height 11.0truein}
+\special{  pdf:  docview <</PageMode /UseOutlines>>}%
+\catcode`\ =11\gdef\pdfspace{ }\catcode`\ =10
+%
+%
+% Some color definitions
+% 
+\gdef\begincolor#1{\special{pdf:bc #1}}%
+\gdef\endcolor{\special{pdf:ec}}%
+\gdef\colored#1#2{%
+  \begincolor{#1}#2\endcolor}
+\gdef\red{[0.8 0.5 0]}%
+\gdef\green{[0 1 0]}%
+\gdef\blue{[0 0.4 0.8]}%
+\gdef\yellow{[0.8 0.9 0.1]}%
+\gdef\linkcolor{[0.5 0.0 0.7]}%
+%
+% Some font definitions
+%
+\global\font\maintitlefont=cmti12 at 20.74pt
+\global\font\headingfont=cmss12 at 14.4pt
+\global\font\subheadingfont=cmss12 at 12pt
+%
+% Counters for section levels
+%
+\newcount\sectioncount\newcount\ssectioncount\newcount\sssectioncount
+\sectioncount0\ssectioncount0\sssectioncount0
+%
+\newskip\indentlevel\indentlevel=\parindent
+\newskip\secskip\secskip=24pt plus 1pt minus 2pt
+\newskip\subsecskip\subsecskip=16pt plus 1pt minus 2pt
+%
+%
+
+\gdef\setlink#1{\colored{\linkcolor}{#1}}%
+%  
+\gdef\pdfchapter#1{%
+  %{\headingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 1 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\gdef\pdfsection#1{%
+  %{\subheadingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 2 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\gdef\pdfsubsection#1{%
+  %{\subheadingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 3 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\gdef\pdfsubsubsection#1{%
+  %{\subheadingfont\colored{\blue}{#1}}\raise\baselineskip
+  \hbox{\special{pdf: outline 4 << /Title (#1) /Dest [
+@thispage /FitH @ypos ]  >> }}}%
+%
+\gdef\link#1#2{\setbox0\hbox{\setlink{#1}}%
+   \leavevmode\special{pdf: ann width \the\wd0\pdfspace height \the\ht0\pdfspace depth \the\dp0
+     << /Type /Annot /Subtype /Link /Border [ 0 0 0 ] /A << /S /GoTo
+     /D (#2) >> >>}\box0\relax}%
+%
+\gdef\dest#1{\hbox{\raise14pt\hbox{\special{pdf:dest (#1) [ @thispage /FitH @ypos ]}}}}%
+%
+\gdef\section#1{\advance\sectioncount by 1\ssectioncount0
+\vskip-\lastskip\vskip\secskip\goodbreak
+\noindent\pdfchapter{\the\sectioncount. #1}\medskip\nobreak}%
+\gdef\subsection#1{\vskip-\lastskip\advance\ssectioncount by 1%
+\vskip\subsecskip\noindent
+\pdfsection{\the\sectioncount.\the\ssectioncount\
+          #1}\par\nobreak\smallskip}%
+%
+%
+\gdef\newpage{\vfill\eject}
+%

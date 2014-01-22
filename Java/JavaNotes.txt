@@ -1,0 +1,45 @@
+
+1)  Download & install the Java Development Kit from Sun.
+
+2)  Under the install directory at \jre\bin\classic there's a dll called jvm.dll.
+    Put the directory containing this dll on your system path.
+
+New Dynace Classes
+
+1) DynJava - This class is used to start the Java virtual machine (VM)
+             in the Dynace process.  It has a single class method
+             called gNewJavaVM. (see below) The parameters passed to
+             this method determine where the Java VM looks for Java
+             classes and native code DLL's.  The first two parameters
+             are environment variable names that specify this.  If
+             these parameters are wrong, the environment may still
+             initialize, but nothing will work.  If the function
+             errors, it returns NULL and the third parameter will be
+             loaded with a text error message.  The remaining
+             parameters are for debugger use and are ignored if NULL.
+
+cmeth gNewJavaVM(char *ClassPathEnv, char *LibPathEnv, char *packageName, 
+		     int nDebugJVMPort)
+
+2)  JavaClass - This class wraps a Java class.		   
+
+3)  JavaObject - This class wraps a Java object.
+
+New DLL
+
+1) JavaDynace.dll - This is used for callbacks to Dynace from Java
+                    code.  The path to this dll must be specified in
+                    the environment variable whose name is passed in
+                    the LibPathEnv parameter for gNewJavaVM.
+
+New Java Classes - The path to these class files must be specified in
+                   the environment variable whose name is passed in
+                   the ClassPathEnv parameter for gNewJavaVM.  The
+                   path to any custom java code called from Dynace
+                   must also be present in this environment variable.
+
+1)  DynaceBase.class
+4)  DynaceClass.class
+5)  DynaceGeneric.class
+
+

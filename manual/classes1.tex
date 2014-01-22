@@ -1,0 +1,78 @@
+
+@vbox to @vsize {
+@catcode`@#=6
+@def@x#1{@vglue .15in @hglue .4in #1}
+@def@xx#1{@hglue .8in #1}
+@def@xxx#1{@hglue 1.2in #1}
+@def@xxxx#1{@hglue 1.6in #1}
+@font@normfont = cmr12
+@font@bigfont = cmr17
+@normfont
+@centerline{@bigfont@underbar{Dynace Class Hierarchy}}
+@vskip .5in
+@hbox{@obeylines @parskip=0in  @vtop{@hsize 3.2 true in 
+     Object
+@x{Behavior}
+@xx{Class}
+@xx{MetaClass}
+@x{Method}
+@x{GenericFunction}
+@x{Dynace}
+@x{Number}
+@xx{Character}
+@xx{ShortInteger}
+@xx{UnsignedShortInteger}
+@xx{LongInteger}
+@xxx{Date}
+@xxxx{DateTime *}
+@xx{DoubleFloat}
+@x{Time}
+@xx{DateTime *}
+@x{Pointer}
+@x{Link}
+@xx{LinkList}
+@xxx{LinkObject}
+@xx{LinkValue}
+@x{Sequence}
+@xx{LinkSequence}
+@xx{LinkObjectSequence}
+@xx{SetSequence}
+@x{Association}
+@xx{LookupKey}
+@xxx{ObjectAssociation}
+@xx{StringAssociation}
+@xx{IntegerAssociation}
+@vskip .4in * DateTime inherits from Date and Time}
+@kern .25 true in @vtop{@hsize 3.5 true in
+@vskip @lineskip
+@x{Set}
+@xx{Dictionary}
+@xx{StringDictionary}
+@xx{IntegerDictionary}
+@x{Stream}
+@xx{String}
+@xx{File}
+@xx{LowFile}
+@xx{Pipe}
+@xx{Socket}
+@x{PropertyList}
+@x{Thread}
+@x{Semaphore}
+@x{Constant}
+@x{Array}
+@xx{NumberArray}
+@xxx{CharacterArray}
+@xxx{ShortArray}
+@xxx{UnsignedShortArray}
+@xxx{IntegerArray}
+@xxx{LongArray}
+@xxx{FloatArray}
+@xxx{DoubleFloatArray}
+@xx{BitArray}
+@xx{ObjectArray}
+@xx{PointerArray}
+@x{FindFile}
+@x{BTree}
+@x{BTreeNode}
+}}
+@vfill}

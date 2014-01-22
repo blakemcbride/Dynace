@@ -1,0 +1,18 @@
+
+#ifndef	_METHOD_IV
+#define	_METHOD_IV
+
+
+typedef struct  _Method_iv_t  {
+	char * name;
+	object cls;
+	object generic;
+	ofun meth;
+	ofun fmeth;
+	int trace;
+	object next;
+}	Method_iv_t;
+
+#endif	/*  _METHOD_IV  */
+
+

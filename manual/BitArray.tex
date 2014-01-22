@@ -1,0 +1,164 @@
+@page
+
+@section  BitArray Class
+@pdfsection{BitArray Class}
+This class, which is a subclass of @code{Array}, is used to represent
+arbitrary shaped arrays of on/off--yes/no information in an efficient
+manner.  Much of the functionality of this class is implemented and
+documented in the @code{Array} class.  Differences are documented in
+this section.
+
+
+
+@subsection BitArray Class Methods
+@pdfsubsection{BitArray Class Methods}
+The only class method implemented by this class is one used to create
+new @code{BitArray} instances.
+
+
+
+
+
+
+@pdfsubsubsection {New}
+@deffn {New} New::BitArray
+@sp 2
+@example
+@group
+ary = vNew(BitArray, rnk, ...)
+
+unsigned  rnk, ...
+object    ary;
+@end group
+@end example
+This class method is used to create a new bit array.
+
+@code{rnk} is the number of dimensions the new array should have.
+The remaining arguments (each of type unsigned) indicates the size of
+each consecutive dimension.  Note that the number of arguments following
+@code{rnk} @emph{must} be the same as the value in @code{rnk}.
+
+@code{ary} is the new array object created and will be initialized to
+all zeros.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(BitArray, 2, 5, 4);
+/*  ary is a 5x4 matrix  */
+@end group
+@end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+@subsection BitArray Instance Methods
+@pdfsubsection{BitArray Instance Methods}
+The @code{BitArray} instance methods are implemented in the @code{Array} class
+for efficiency reasons but those methods which are particular to the
+@code{BitArray} are documented here.
+
+
+
+
+
+
+
+
+@pdfsubsubsection {BitValue}
+@deffn {BitValue} BitValue::BitArray
+@sp 2
+@example
+@group
+v = vBitValue(ary, ...);
+
+object    ary;
+unsigned  ...
+int       v;
+@end group
+@end example
+This method is used to obtain the bit (1 or 0) value associated with a
+particular element of an instance of the @code{BitArray} class.
+
+The arguments after the @code{ary} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{ary} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+Note that this is one of the few generics which doesn't return a Dynace
+object.  It returns an @code{int}.
+@example
+@group
+@exdent Example:
+
+object  ary;
+int     v;
+
+ary = vNew(BitArray, 2, 5, 4);
+v = vBitValue(ary, 1, 2);
+/*  v has ary[1][2]  */
+@end group
+@end example
+@sp 1
+See also:  @code{ChangeBitValue::BitArray}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeBitValue}
+@deffn {ChangeBitValue} ChangeBitValue::BitArray
+@sp 2
+@example
+@group
+ary = vChangeBitValue(ary, val, ...);
+
+object    ary;
+int       val;
+unsigned  ...
+@end group
+@end example
+This method is used to change the value of one element of
+@code{BitArray} @code{ary}.
+
+@code{val} is the value which the element of the array should be changed
+to (a 1 or 0).
+
+The arguments after the @code{val} argument (each an @code{unsigned})
+are used to specify the exact index into each consecutive dimension of
+the array.  The number of arguments after the @code{val} argument
+@emph{must} be equal to the number of dimensions (or rank) of array
+@code{ary}.  See @code{IndexOrigin::Array} for more information.
+
+The value returned is the modified array passed.
+@example
+@group
+@exdent Example:
+
+object  ary;
+
+ary = vNew(BitArray, 2, 5, 4);
+vChangeBitValue(ary, 1, 1, 2);
+/*  ary[1][2] <- 1  */
+@end group
+@end example
+@sp 1
+See also:  @code{BitValue::BitArray}
+@end deffn
+
+
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+\input texinfo    @c -*-texinfo-*-
+@c %**start of header
+@setfilename odbc.inf
+@settitle ODBC User Manual
+@c %**end of header
+@setchapternewpage odd
+
+@ifinfo
+Copyright  @copyright{} 1996 Blake McBride
+All rights reserved.
+@sp 1
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+@sp 1
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+@sp 1
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+@sp 1
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@end ifinfo
+
+@titlepage
+@title Dynace
+@subtitle ODBC User Manual
+@c @subtitle Scheme Version
+@subtitle Version 4.02
+@c @subtitle @today{}
+@subtitle June 25, 2002
+@author by Blake McBride
+@page
+@vskip 0pt plus 1filll
+Copyright  @copyright{} 1996 Blake McBride
+All rights reserved.
+@sp 1
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+@sp 1
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+@sp 1
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+@sp 1
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@sp 1
+MS-DOS, Windows and Microsoft are registered trademarks of
+Microsoft Corporation.  WATCOM is a trademark of WATCOM Systems,
+Inc. All Borland products are trademarks or registered trademarks of
+Borland International, Inc. @TeX@ is a trademark of the American
+Mathematical Society. Other brand and product names are trademarks or
+registered trademarks of their respective holders.
+@sp 1
+This manual was typeset with the @TeX@ typesetting system developed by
+Donald Knuth.
+@end titlepage
+@iftex
+@parskip = .5@baselineskip
+@font@smallfnt = cmr5
+@font@crfont = cmr7
+@everyfooting {@smallfnt {@crfont @copyright{}} 1997 Blake McBride} @| @|
+
+{@catcode`@\=0 \catcode`\%=14 \catcode`\<=12 \catcode`\>=12 \catcode `\#=6 \catcode `\@=12
+\include pdf.tex
+\special{pdf:  docinfo << /Title (Dynace Manual) >>}
+\special{pdf:  docinfo << /Author (Blake McBride) >>}
+% \catcode`\%=12 @catcode`@\=12
+}
+
+@end iftex
+
+
+@include odbcusr1.tex
+
+
+@unnumbered Method Index
+@pdfchapter{Method Index}
+@printindex fn
+
+@c @summarycontents
+@contents
+@bye
+

@@ -1,0 +1,84 @@
+@page
+
+@section LongInteger Class
+@pdfsection{LongInteger Class}
+The @code{LongInteger} class is used to represent the C language
+@code{long} data type as a Dynace object.  It is a subclass of the
+@code{Number} class.  Even though the @code{LongInteger} class
+implements most of its own functionality, it is documented as part of
+the @code{Number} class because most of the interface is the same for
+all subclasses of the @code{Number} class.  Differences are documented
+in this section.
+
+
+
+
+
+@subsection LongInteger Class Methods
+@pdfsubsection{LongInteger Class Methods}
+The @code{LongInteger} class has only one class method and it is used to
+create new instances of itself.
+
+
+
+@pdfsubsubsection {NewWithLong}
+@deffn {NewWithLong} NewWithLong::LongInteger
+@sp 2
+@example
+@group
+i = gNewWithLong(LongInteger, val);
+
+long    val;
+object  i;
+@end group
+@end example
+This class method creates instances of the LongInteger class.  @code{val}
+is the initial value of the integer being represented.  
+
+The value returned is a Dynace instance object which represents the integer
+passed.
+
+Note that the default disposal methods are used by this class since
+there are no special storage allocation requirements.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithLong(LongInteger, 55L);
+@end group
+@end example
+@sp 1
+See also:  @code{LongValue::Number, Dispose::Object}
+@end deffn
+
+
+
+
+
+@subsection LongInteger Instance Methods
+@pdfsubsection{LongInteger Instance Methods}
+The instance methods associated with the @code{LongInteger} class
+provide a means of changing and obtaining the value associated with an
+instance of the @code{LongInteger} class.  All of the
+@code{LongInteger} class instance methods are documented in the
+@code{Number} class because of their common interface with all other
+subclasses of the @code{Number} class.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+
+
+This example illustrates the procedure necessary to initialize
+instance variables while creating a new instances (via gNew).
+
+Class1.d is modified to give its New method the additional functionality,
+and main.c is modified to utilize this changed interface to the
+New method.
+
+This example is a duplicate of the previous example except that it shows
+a dirty and slightly more efficient method of accessing instance variables
+from within a class method.
+
+(To build see the readme file in the first example.)

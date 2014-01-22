@@ -1,0 +1,420 @@
+@page
+
+@section StringAssociation Class
+@pdfsection{StringAssociation Class}
+This class is a subclass of @code{Association} and is used to
+represent an association between a C language string and an arbitrary
+Dynace object.  It performs all the functions as the @code{LookupKey}
+and @code{ObjectAssociation} classes and is used in conjunction with the
+@code{Set} and @code{Dictionary} classes.  The purpose of this class is
+to provide an efficient mechanism to form a common association.
+
+
+See the examples included with the Dynace system for an illustration of the
+use of the @code{Set}/@code{Dictionary} related classes.
+
+
+@subsection StringAssociation Class Methods
+@pdfsubsection{StringAssociation Class Methods}
+The only class method associated with this class is one needed to create
+new instances of itself.
+
+
+
+
+
+
+@pdfsubsubsection {NewWithStrObj}
+@deffn {NewWithStrObj} NewWithStrObj::StringAssociation
+@sp 2
+@example
+@group
+i = gNewWithStrObj(StringAssociation, key, val);
+
+char    *key;
+object  val;    /*  or NULL   */
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{StringAssociation}
+class.  @code{key} is used to initialize the key associated with the
+instance created and @code{val} is used to initialize its associated
+value.  Note that internally @code{key} is copied into an allocated
+buffer so that it is all right to reuse the buffer passed to this
+method.
+
+The new instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+@subsection StringAssociation Instance Methods
+@pdfsubsection{StringAssociation Instance Methods}
+The instance methods associated with this class are used to obtain,
+change and print the key and value associated with the instance.
+Additional functionality, although implemented by this class, is documented
+in @code{StringAssociation}'s superclass, @code{Association}.  This is done
+because of the common interface these methods share with all subclasses
+of @code{Association}.
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeStringKey}
+@deffn {ChangeStringKey} ChangeStringKey::StringAssociation
+@sp 2
+@example
+@group
+i = gChangeStringKey(i, key);
+
+object  i;
+char    *key;
+@end group
+@end example
+This method is used to change the key associated with instance @code{i}.
+@code{key} is the new key.  The old key is simply replaced.  This method
+returns @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{StringKey::StringAssociation,}
+@hfil @break @hglue .64in      @code{ChangeValue::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {ChangeValue}
+@deffn {ChangeValue} ChangeValue::StringAssociation
+@sp 2
+@example
+@group
+old = gChangeValue(i, val);
+
+object  i;
+object  val;    /*  or NULL   */
+object  old;
+@end group
+@end example
+This method is used to change the value associated with an association,
+@code{i}, to a value, @code{val}.  The old value is simply no longer
+associated with the instance.  It is not disposed.  This method
+returns the old value being replaced.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Value::StringAssociation,}
+@hfil @break @hglue .64in      @code{ChangeStringKey::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Copy}
+@deffn {Copy} Copy::StringAssociation
+@sp 2
+@example
+@group
+so = gCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the
+@code{StringAssociation} class with the @emph{same} value as
+@code{StringAssociation} @code{i}.  Or put more simply, it makes a copy.
+The new @code{StringAssociation} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepCopy::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepCopy}
+@deffn {DeepCopy} DeepCopy::StringAssociation
+@sp 2
+@example
+@group
+so = gDeepCopy(i);
+
+object  i, so;
+@end group
+@end example
+This method is used to create a new instance of the
+@code{StringAssociation} class which contains a @emph{copy} of the
+value from the original @code{StringAssociation}.  @code{DeepCopy} is
+used to create the copy of the value.  The new
+@code{StringAssociation} instance is returned.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Copy::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::StringAssociation
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of a @code{StringAssociation} instance.
+It also disposes of the value associated with the instance by the
+use of its @code{DeepDispose} method.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::StringAssociation
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to dispose of a @code{StringAssociation} instance.
+It does not dispose of its associated value.
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Key}
+@deffn {Key} Key::StringAssociation
+@sp 2
+@example
+@group
+key = gKey(i);
+
+object  i;
+object  key;
+@end group
+@end example
+This method is used to obtain the key associated with instance @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{StringKey::StringAssociation}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {StringKey}
+@deffn {StringKey} StringKey::StringAssociation
+@sp 2
+@example
+@group
+key = gStringKey(i);
+
+object  i;
+char    *key;
+@end group
+@end example
+This method is used to obtain the key associated with instance @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Key::StringAssociation,}
+@hfil @break @hglue .64in      @code{ChangeStringKey::StringAssociation, Value::StringAssociation}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {StringRepValue}
+@deffn {StringRepValue} StringRepValue::StringAssociation
+@sp 2
+@example
+@group
+s = gStringRepValue(i);
+
+object  i;
+object  s;
+@end group
+@end example
+This method is used to generate an instance of the @code{String} class
+which represents the value associated with @code{i}.  This is often
+used to print or display the value.  It is also used by
+@code{PrintValue::Object} and indirectly by @code{Print::Object}
+(two methods useful during the debugging phase of a project)
+in order to directly print an object's value.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c object  x;
+@c object  s;
+@c 
+@c x = gNewWithPtr(Pointer, NULL);
+@c s = gStringRepValue(x);
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{PrintValue::Object, Print::Object}
+@end deffn
+
+
+
+
+
+
+@pdfsubsubsection {Value}
+@deffn {Value} Value::StringAssociation
+@sp 2
+@example
+@group
+val = gValue(i);
+
+object  i;
+object  val;
+@end group
+@end example
+This method is used to obtain the value associated with
+@code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{ChangeValue::StringAssociation,}
+@hfil @break @hglue .64in      @code{StringKey::StringAssociation}
+@end deffn
+
+
+
+
+

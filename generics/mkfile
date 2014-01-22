@@ -1,0 +1,24 @@
+# Makefile for Plan 9
+
+<../mkfile.inc
+
+OBJ = generics.$O
+
+LIB = $LIBDIR/Dynace.a
+$LIB(%):N: %
+$LIB: ${OBJ:%=$LIB(%)}
+	ar rv $LIB $OBJ
+
+#$LIBDIR/Dynace.a :  generics.$O
+#	ar r $target $prereq
+
+generics.$O : generics.c generics.h
+	$CC $CFLAGS generics.c
+
+generics.c generics.h : $INCDIR/generics.h
+	rm -f generics.h
+	$DPP $DPPOPTS -g $INCDIR/generics.h -c -h
+
+clean:VQ:
+	rm -f generics.* *~ *.pdb
+

@@ -1,0 +1,16 @@
+
+This example illustrates the use of menus, message boxes and how to
+exit an application.
+
+The actual menus are defined in MAIN.RC by use of the resource
+editor which comes with your compiler (App Studio for Microsoft).
+(See the documentation included with that utility.)
+
+MAIN.C is modified to use the defined menu.
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

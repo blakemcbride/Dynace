@@ -1,0 +1,206 @@
+@page
+
+@section LowFile Class
+@pdfsection{LowFile Class}
+This class is used to encapsulate the standard C low level IO facility.  It
+is a subclass of @code{Stream} and enables access to these routines
+through an interface which is common to all subclasses of @code{Stream}.
+
+Although this class implements most of its own functionality, it is
+documented as part of the @code{Stream} class because most of the
+interface is the same for all subclasses of @code{Stream}.  Differences
+are documented in this section.
+
+
+@subsection LowFile Class Methods
+@pdfsubsection{LowFile Class Methods}
+The one class method associated with this class is the method used to
+open or create a file.
+
+
+
+
+@pdfsubsubsection {OpenLowFile}
+@deffn {OpenLowFile} OpenLowFile::LowFile
+@sp 2
+@example
+@group
+i = gOpenLowFile(LowFile, name, oflag, pmode);
+
+char    *name;  /*  file name  */
+int     oflag;
+int     pmode;
+object  i;
+@end group
+@end example
+This class method us used to open or create a normal file using the C
+low level IO facility.  @code{name} is the file name to be opened and
+may also be an instance of the @code{String} class.  The @code{name},
+@code{oflag} and @code{pmode} parameters correspond to the local C
+library function @code{open}.  The local library manuals can more
+completely describe those arguments.  The value returned is an object
+which refers to the opened file.  If the file cannot be opened a
+@code{NULL} will be returned.
+@example
+@group
+@exdent Example:
+
+object  f;
+
+f = gOpenLowFile(LowFile, "myfile", O_CREAT|O_WRONLY,
+                 S_IREAD|S_IWRITE);
+@end group
+@end example
+@sp 1
+See also:  @code{Dispose::LowFile, Read::Stream}
+@end deffn
+
+
+
+
+
+@subsection LowFile Instance Methods
+@pdfsubsection{LowFile Instance Methods}
+The instance methods associated with this class are used to read and write
+data to the file represented by the instance.
+
+Although this class implements most of its own functionality, it is
+documented as part of the @code{Stream} class because most of the
+interface is the same for all subclasses of @code{Stream}.  Differences
+are documented in this section.
+
+
+
+
+
+@pdfsubsubsection {DeepDispose}
+@deffn {DeepDispose} DeepDispose::LowFile
+@sp 2
+@example
+@group
+r = gDeepDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to close the file associated with the instance and
+dispose of the instance.  It performs the same function as
+@code{Dispose::LowFile}.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{Dispose::LowFile, OpenLowFile::LowFile}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Dispose}
+@deffn {Dispose} Dispose::LowFile
+@sp 2
+@example
+@group
+r = gDispose(i);
+
+object  i;
+object  r;     /*  NULL  */
+@end group
+@end example
+This method is used to close the file associated with the instance and
+dispose of the instance.  It performs the same function as
+@code{DeepDispose::LowFile}.  
+
+The value returned is always @code{NULL} and may be used to null out
+the variable which contained the object being disposed in order to
+avoid future accidental use.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@sp 1
+See also:  @code{DeepDispose::LowFile, OpenLowFile::LowFile}
+@end deffn
+
+
+
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {FileHandle}
+@deffn {FileHandle} FileHandle::LowFile
+@sp 2
+@example
+@group
+h = gFileHandle(i);
+
+object  i;
+int     h;
+@end group
+@end example
+This method is used to obtain the file handle associated with @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+
+
+
+
+
+
+
+@pdfsubsubsection {Name}
+@deffn {Name} Name::LowFile
+@sp 2
+@example
+@group
+n = gName(i);
+
+object  i;
+char    *n;  /*  the file name  */
+@end group
+@end example
+This method is used to obtain the name of the file represented by @code{i}.
+@c @example
+@c @group
+@c @exdent Example:
+@c 
+@c @end group
+@c @end example
+@c @sp 1
+@c See also:  @code{}
+@end deffn
+
+
+

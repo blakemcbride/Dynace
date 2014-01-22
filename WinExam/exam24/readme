@@ -1,0 +1,15 @@
+
+This example demonstrates how to associated a function to a control
+such that when the control is left, a function is executed.  It also
+demonstrates how to update another field while a dialog is running
+and how to set a display only field.
+
+This example also shows the most portable way to set up a right
+justified entry field.
+
+Remember that a commented version of MAIN.C is in MAIN.TXT.
+
+
+Note that a full description of all files and instructions on how to
+configure, build and run this example appear in full detail in the
+README file located in the first example.

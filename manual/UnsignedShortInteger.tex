@@ -1,0 +1,85 @@
+@page
+
+@section UnsignedShortInteger Class
+@pdfsection{UnsignedShortInteger Class}
+The @code{UnsignedShortInteger} class is used to represent the C language
+@code{unsigned short} data type as a Dynace object.  It is a subclass of the
+@code{Number} class.  Even though the @code{UnsignedShortInteger} class
+implements most of its own functionality, it is documented as part of
+the @code{Number} class because most of the interface is the same for
+all subclasses of the @code{Number} class.  Differences are documented
+in this section.
+
+
+@subsection UnsignedShortInteger Class Methods
+@pdfsubsection{UnsignedShortInteger Class Methods}
+The @code{UnsignedShortInteger} class has only one class method and it
+is used to create new instances of itself.
+
+
+
+@pdfsubsubsection {NewWithUnsigned}
+@deffn {NewWithUnsigned} NewWithUnsigned::UnsignedShortInteger
+@sp 2
+@example
+@group
+i = gNewWithUnsigned(UnsignedShortInteger, s);
+
+unsigned s;
+object  i;
+@end group
+@end example
+This class method creates instances of the @code{UnsignedShortInteger}
+class.  @code{s} is the initial value of the integer being represented.
+Note that @code{s} is of type @code{unsigned}.  That is because if you
+pass an unsigned short type to a generic function (which uses a variable
+argument declaration) the C language will automatically promote it to an
+@code{unsigned}.
+
+The value returned is a Dynace instance object which represents the
+integer passed.
+
+Note that the default disposal methods are used by this class since
+there are no special storage allocation requirements.
+@example
+@group
+@exdent Example:
+
+object  x;
+
+x = gNewWithUnsigned(UnsignedShortInteger, 55);
+@end group
+@end example
+@sp 1
+See also:  @code{UnsignedShortValue::Number, Dispose::Object}
+@end deffn
+
+
+
+
+
+@subsection UnsignedShortInteger Instance Methods
+@pdfsubsection{UnsignedShortInteger Instance Methods}
+The instance methods associated with the @code{UnsignedShortInteger}
+class provide a means of changing and obtaining the value associated
+with an instance of the @hfil @break @code{UnsignedShortInteger} class.
+All of the @code{UnsignedShortInteger} class instance methods are
+documented in the @code{Number} class because of their common interface
+with all other subclasses of the @code{Number} class.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

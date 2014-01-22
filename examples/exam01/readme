@@ -1,0 +1,59 @@
+
+
+This example demonstrates the minimum steps necessary to compile and
+link a program which correctly initializes the Dynace system.
+
+The remaining instructions in this file should be followed for
+all the other examples.  They will not be repeated.
+
+
+To compile the example with the Microsoft, WATCOM or Borland compilers
+use the following command:
+
+	dmake -f MAKEFILE.DM
+
+where MAKEFILE.DM is one of the following:
+
+	M16.DM		Microsoft C 16 bit
+	M32.DM		Microsoft C 32 bit
+	W32.DM		WATCOM C 32 bit
+	B16.DM		Borland C 16 bit
+	B32.DM		Borland C 32 bit
+	S32.DM		Symantec C 32 bit
+
+In addition, the following command can be used to build with debugging
+information:
+
+	dmake -f MAKEFILE.DM  DEBUG=1
+
+
+To compile the example under UNIX/Linux with the GNU C compiler use:
+
+	make -f makefile.unx
+
+(or just 'make' if you've removed the .unx extensions)
+
+
+The make process will create a stand-alone executable named main.exe
+which may be executed to run the example.
+
+
+To return the directory to its initial state (delete all the created
+files) use the following:
+
+	dmake -f MAKEFILE.DM  clean
+
+
+
+The DMAKE utility is documented in \DYNACE\DOCS\DMAKE.MAN
+
+
+Note that the file ..\list contains the most up-to-date list of example
+programs.
+
+After this example, you will want to continue in numeric order with
+all the example programs located at:
+
+	examples/exam??/readme
+
+(where ?? is the example number)
