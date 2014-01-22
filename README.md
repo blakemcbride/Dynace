@@ -40,3 +40,9 @@ Dynace is production quality and has been used in commercial environments for mo
 Dynace was written to solve perceived problems with C++ as outlined in the user manual.
 
 Dynace is released under the BSD 2-Clause license.
+
+System overview is at:  docs/ORIENT.txt
+
+Build instruction are at:  docs/BUILD.txt
+
+
