@@ -2404,6 +2404,7 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 
 	gTrace(Generic(gTracePrint), DYNACE_TRACE_OFF);
 	gTrace(Generic(gTrace), DYNACE_TRACE_OFF);
+	WeakPointer;  /* this class must be initialized before the GC is ever called  */
 }
 
 
