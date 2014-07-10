@@ -1,8 +1,8 @@
 #  Makefile designed for use by the GNUMAKE utility and		-*-Makefile-*-
 #  the Wine libraries
 
-CC = winegcc
-GCC = gcc
+CC = winegcc -m32
+GCC = gcc -m32
 
 .SUFFIXES: .d
 

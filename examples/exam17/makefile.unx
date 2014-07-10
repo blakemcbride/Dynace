@@ -3,9 +3,11 @@
 
 ifdef WINE
 WINEINCPATH = /usr/include/wine
-CC = winegcc
+CC = winegcc -m32
+GCC = gcc -m32
 else
 CC = gcc
+GCC = $(CC)
 endif
 
 .SUFFIXES: .d
@@ -56,8 +58,9 @@ generics.h : $(CLASSES)
 generics.c : generics.h
 	$(BINDIR)/dpp -g -c
 
+# generics.c must be compiled with gcc and not winegcc
 generics.o : generics.c 
-	$(CC) $(GFLAGS) -c $<
+	$(GCC) $(GFLAGS) -c $<
 
 generics.1 newgens:
 	$(BINDIR)/dpp -g $(INCDIR)/generics.h -p $(CLASSES) -h

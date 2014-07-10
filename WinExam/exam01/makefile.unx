@@ -1,7 +1,7 @@
 #  Makefile designed for use by the GNUMAKE utility and		-*-Makefile-*-
 #  the Wine libraries
 
-CC = winegcc
+CC = winegcc -m32
 
 
 DYNACE_PATH = ../..

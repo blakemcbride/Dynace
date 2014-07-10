@@ -294,10 +294,17 @@ If you now want to build the GUI library under WINE use the following.
 This can only be done after the above steps were followed (although
 switching to STRAT=-S1 doesn't matter.  It works either way.)
 
+At this point, the system has only been tested on 32 bit machines
+(Win32).  If you follow these instructions, the system will be rebuilt
+in 32 bit mode even if operating on a 64 bit machine.  Also, if
+running on a 64 bit machine, the 32 bit libraries and compiler will
+have to be installed.
+
 Make sure the WINEINCPATH is setup correctly in makefile.inc
 
 	cd back to the root of the Dynace tree
 	make WINE=1 newgens
+	make realclean
 	make WINE=1
 
 You can test the GUI system as follows:

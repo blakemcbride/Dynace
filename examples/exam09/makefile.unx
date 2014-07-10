@@ -3,7 +3,7 @@
 
 ifdef WINE
 WINEINCPATH = /usr/include/wine
-CC = winegcc
+CC = winegcc -m32
 else
 CC = gcc
 endif
