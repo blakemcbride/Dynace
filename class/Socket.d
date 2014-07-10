@@ -46,7 +46,10 @@
 #include <winsock.h>
 #endif
 #include <stdlib.h>
+#ifdef __WINE__
+#else
 #include <errno.h>
+#endif
 #include <string.h>
 #include <ctype.h>
 #include <time.h>

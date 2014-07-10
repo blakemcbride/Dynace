@@ -1,6 +1,7 @@
 
 ifdef WINE
-WINEINCPATH = /usr/local/include/wine
+WINEINCPATH = /usr/include/wine
+THIRTYTWOBIT = true
 endif
 .SUFFIXES: .d .iv
 .PRECIOUS : %.c %.iv
@@ -14,6 +15,9 @@ ifdef	DEBUG
 OPT = -g
 else
 OPT = -O
+endif
+ifdef THIRTYTWOBIT
+OPT += -m32
 endif
 ifdef	BOEHM_GC
 OPT += -DBOEHM_GC
