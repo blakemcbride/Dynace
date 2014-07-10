@@ -5,7 +5,7 @@ WINE = 1
 
 include ../makefile.inc
 
-CC = winegcc
+CC = winegcc -m32
 
 
 DYNACE_PATH = ..
