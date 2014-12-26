@@ -45,7 +45,7 @@ OBJS2     := $(OBJS:s/\/\\/)
 RESOURCES = $(TARGET).res
 
 .rc.res:
-	rc $<
+	rc /nologo $<
 
 $(TARGET).exe : $(OBJS) $(RESOURCES) $(LIBS)
 	link @$(mktmp /out:$@ $(LFLAGS) \n\
