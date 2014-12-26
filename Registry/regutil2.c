@@ -40,6 +40,13 @@ extern char *_fullpath();
 #include <direct.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#if _MSC_VER >= 1400
+#define stricmp _stricmp
+#endif
+#endif
+
+
 
 void	RegStoreApplicationPath(char *company, char *product, char *version)
 {
@@ -66,7 +73,7 @@ void	RegStoreApplicationPath(char *company, char *product, char *version)
 	_getcwd(dir, _MAX_PATH);
 	for (i=0 ; ERROR_SUCCESS == RegEnumValue(h, i, name, &name_len, NULL, &type, data, &data_len) ; i++) {
 //		vPrintf(wind, "\"%s\" = \"%s\"\n", name, data);
-		if (!_stricmp(dir, data)) {
+		if (!stricmp(dir, data)) {
 			found = 1;
 			break;
 		}
@@ -108,7 +115,7 @@ void	RegStoreDataPath(char *company, char *product, char *version, char *path)
 	_fullpath(dir, path, _MAX_PATH);
 	for (i=0 ; ERROR_SUCCESS == RegEnumValue(h, i, name, &name_len, NULL, &type, data, &data_len) ; i++) {
 //		vPrintf(wind, "\"%s\" = \"%s\"\n", name, data);
-		if (!_stricmp(dir, data)) {
+		if (!stricmp(dir, data)) {
 			found = 1;
 			break;
 		}
