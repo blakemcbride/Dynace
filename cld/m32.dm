@@ -3,9 +3,6 @@
 #  Microsoft Visual C 32 bit
 
 
-INTEGRA=1
-
-
 C_SRC = main.c flash.c jsfl.c
 
 
@@ -16,10 +13,10 @@ INCDIR = ..\include
 
 
 .IF	$(DEBUG)
-CFLAGS = -nologo -I$(INCDIR) -WX -Zi -D_WINDOWS -MT
+CFLAGS = -nologo -I$(INCDIR) -WX -Zi -Od -D_WINDOWS -MT
 LFLAGS = /nologo /subsystem:windows /debug
 .IF $(INTEGRA)
-CFLAGS = -nologo -I$(INCDIR) -WX -Zi -D_WINDOWS -DINTEGRA -MT
+CFLAGS = -nologo -I$(INCDIR) -WX -Zi -Od -D_WINDOWS -DINTEGRA -MT
 .END
 .ELSE
 CFLAGS = -nologo -I$(INCDIR) -WX -O2 -D_WINDOWS -MT
@@ -46,7 +43,7 @@ OBJS2     := $(OBJS:s/\/\\/)
 RESOURCES = main.res
 
 .rc.res:
-	rc $<
+	rc /nologo $<
 
 cld.exe : $(OBJS) $(RESOURCES) $(LIBS)
 	link @$(mktmp /out:$@ $(LFLAGS) \n\

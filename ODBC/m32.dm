@@ -30,7 +30,7 @@ CFEXTRA += -DNATIVE_THREADS
 .END
 
 .IF	$(DEBUG)
-CFLAGS = -nologo -I$(INCDIR) -WX -D_WINDOWS -Zi -Fd$(LIBDIR)\dynm32.pdb $(CFEXTRA)
+CFLAGS = -nologo -I$(INCDIR) -WX -D_WINDOWS -Od -Zi -Fd$(LIBDIR)\dynm32.pdb $(CFEXTRA)
 GFLAGS = -nologo -I$(INCDIR) -Oityb1 -Gs -Gy -D_WINDOWS -Zi -Fd$(LIBDIR)\dynm32.pdb
 LFLAGS = /nologo /subsystem:windows /debug
 .ELSE

@@ -46,8 +46,8 @@ wds-all : all
 %@[
 	@echo off
 
-	cd registry
-	echo Entering registry
+	cd Registry
+	echo Entering Registry
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
 	if errorlevel 1 goto done
 
@@ -140,8 +140,8 @@ wds-all-scratch : all-scratch
 	cd ODBC
 	$(TOUCH) sqlgrammar.c sqlgrammar.h sqltokens.c 
 
-	cd ..\registry
-	echo Entering registry
+	cd ..\Registry
+	echo Entering Registry
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
 	if errorlevel 1 goto done
 
@@ -230,8 +230,8 @@ wds-clean : clean
 %@[
 	@echo off
 
-	cd registry
-	echo Entering registry
+	cd Registry
+	echo Entering Registry
 	$(MAKE) clean $(MAKEFILE)
 
 	cd ..\Windows
@@ -307,8 +307,8 @@ wds-realclean : realclean
 %@[
 	@echo off
 
-	cd registry
-	echo Entering registry
+	cd Registry
+	echo Entering Registry
 	$(MAKE) realclean $(MAKEFILE)
 
 	cd ..\Windows
