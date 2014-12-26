@@ -604,6 +604,8 @@ static	HBITMAP	load_bitmap(ivType *iv, char *file, unsigned id, int state, int p
 		}
 	}
 	rgb = (DWORD *) ((char *) bmi + bmi->biSize);
+/*  Writing to rgb seems to be no longer possible on recent Win32.  It seems the memory is read-only.
+    CLD.EXE was crashing on startup
 	if (state > 0) {
 		int	i;
 		for (i = 0; i < 16; i++) {
@@ -615,6 +617,7 @@ static	HBITMAP	load_bitmap(ivType *iv, char *file, unsigned id, int state, int p
 		for (i = 0; i < 16; i++)
 			rgb[i] = iRGBHold[pos][i];
 	}
+*/
 	pid = (void *) (rgb + 16);
 	dc = GetDC((HWND)0);
 	bm = CreateDIBitmap(dc, bmi, CBM_INIT, pid, (BITMAPINFO *) bmi, DIB_RGB_COLORS);
