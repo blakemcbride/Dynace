@@ -99,16 +99,28 @@ struct _priority_queue {
 
 #if !defined(unix) && !defined(__APPLE__) && !defined(PLAN9) && !defined(__minix) 
 #include <conio.h> 
+#ifdef _MSC_VER 
+#if _MSC_VER >= 800 
+#define kbhit _kbhit 
+#define getch _getch 
+#endif 
+
+
+#line 96 "Thread.d"
+#endif 
+
+
+#line 97 "Thread.d"
 #else 
 
 
-#line 92 "Thread.d"
+#line 98 "Thread.d"
 int getch(void); 
 int kbhit(void); 
 #endif 
 
 
-#line 98 "Thread.d"
+#line 104 "Thread.d"
 jmp_buf _t_start; 
 
 
@@ -132,19 +144,19 @@ static void del_tnr(ivType *t);
 #else 
 
 
-#line 130 "Thread.d"
+#line 136 "Thread.d"
 #define NEXT_THREAD if (Thread_cv->cCpq) Thread_cv->cCpq->thread = Thread_cv->cCpq->thread->iNext; if (Thread_cv->cGkt && kbhit()) { Release(Thread_cv->cGkt->iObj, 0); Thread_cv->cGkt = NULL; } if (Thread_cv->cCpq = Thread_cv->cMpq) Thread_cv->cCt = Thread_cv->cCpq->thread; else exit(0) 
 
-#line 136 "Thread.d"
+#line 142 "Thread.d"
 #define add_tnr(t) if (t->iNext = Thread_cv->cTnr) Thread_cv->cTnr->iPrev = t; t->iPrev = NULL; Thread_cv->cTnr = t 
 
-#line 144 "Thread.d"
+#line 150 "Thread.d"
 #define del_tnr(t) if (t->iPrev) t->iPrev->iNext = t->iNext; else Thread_cv->cTnr = t->iNext; if (t->iNext) t->iNext->iPrev = t->iPrev 
 
 #endif 
 
 
-#line 148 "Thread.d"
+#line 154 "Thread.d"
 extern void _start_timer(void); 
 
 
@@ -177,7 +189,7 @@ static void next_thread(void)
 #endif 
 
 
-#line 182 "Thread.d"
+#line 188 "Thread.d"
 static void start_thread(ivType *s) 
 { 
 	PQ tpq, ppq, npq; 
@@ -270,7 +282,7 @@ static void del_tnr(ivType *t)
 #endif 
 
 
-#line 273 "Thread.d"
+#line 279 "Thread.d"
 PMETHOD objrtn Kill(object self, int rtn)
 { Thread_iv_t *iv = GetIVs(Thread, self);
 	if (iv->iState == DONE_THREAD) 
@@ -305,7 +317,7 @@ PMETHOD objrtn Kill(object self, int rtn)
 	} 
 #endif 
 
-#line 306 "Thread.d"
+#line 312 "Thread.d"
 		ENABLE_THREADER; 
 	if (!Thread_cv->cCpq || Thread_cv->cCt == iv) { 
 		Thread_cv->cCt = NULL; 
@@ -350,7 +362,7 @@ PMETHOD objrtn Dispose(object self)
 	} 
 #endif 
 
-#line 349 "Thread.d"
+#line 355 "Thread.d"
 		gRemoveStr(Thread_cv->cThreads, iv->iName); 
 	free(iv->iName); 
 	oSuper(Thread_c, gDispose, self)(self); 
@@ -502,12 +514,12 @@ static void _dynace_yield(void)
 #else 
 
 
-#line 498 "Thread.d"
+#line 504 "Thread.d"
 		Thread_cv->cCt->iStack_location = (char *) &t; 
 #endif 
 
 
-#line 500 "Thread.d"
+#line 506 "Thread.d"
 		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
 		if (Thread_cv->cCt->iStack_size > Thread_cv->cCt->iStack_buf_size) { 
@@ -535,7 +547,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 525 "Thread.d"
+#line 531 "Thread.d"
 		} 
 		if (Thread_cv->cCt->iStack_size) { 
 #ifdef sparc 
@@ -543,7 +555,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 530 "Thread.d"
+#line 536 "Thread.d"
 			memcpy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
@@ -575,7 +587,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 559 "Thread.d"
+#line 565 "Thread.d"
 		longjmp(Thread_cv->cCt->iRtn, 1); 
 	} 
 } 
@@ -605,7 +617,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 586 "Thread.d"
+#line 592 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -837,7 +849,7 @@ int getch(void)
 #endif 
 
 
-#line 816 "Thread.d"
+#line 822 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -855,7 +867,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 859 "Thread.c"
+#line 871 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {

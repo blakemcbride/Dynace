@@ -66,7 +66,7 @@ void	RegStoreApplicationPath(char *company, char *product, char *version)
 	_getcwd(dir, _MAX_PATH);
 	for (i=0 ; ERROR_SUCCESS == RegEnumValue(h, i, name, &name_len, NULL, &type, data, &data_len) ; i++) {
 //		vPrintf(wind, "\"%s\" = \"%s\"\n", name, data);
-		if (!stricmp(dir, data)) {
+		if (!_stricmp(dir, data)) {
 			found = 1;
 			break;
 		}
@@ -108,7 +108,7 @@ void	RegStoreDataPath(char *company, char *product, char *version, char *path)
 	_fullpath(dir, path, _MAX_PATH);
 	for (i=0 ; ERROR_SUCCESS == RegEnumValue(h, i, name, &name_len, NULL, &type, data, &data_len) ; i++) {
 //		vPrintf(wind, "\"%s\" = \"%s\"\n", name, data);
-		if (!stricmp(dir, data)) {
+		if (!_stricmp(dir, data)) {
 			found = 1;
 			break;
 		}
