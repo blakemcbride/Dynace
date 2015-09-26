@@ -1,7 +1,7 @@
 All examples are buildable under all supported environments and build
-procedures, including IDE or DMAKE builds, as well as 16 bit Windows or
-32 bit Win32 (NT, Win32s, Windows 95).  The only difference is the build
-procedures or associated makefiles.
+procedures, including IDE or DMAKE builds, as well as 16 bit Windows
+or 32 bit Win32.  The only difference is the build procedures or
+associated makefiles.
 
 In order to avoid having all supported build procedures cluttering up
 the example directories, the example directories are shipped without
@@ -15,9 +15,6 @@ the WINEXAM\SETUP directory unless otherwise indicated.  There is no
 harm in configuring the examples for more than one configuration at
 the same time.
 
-Borland users must set their INCLUDE environment variable to where
-their Borland header files are - something like:
-	set INCLUDE=d:\bc45\include
 
 M16IDE
 IDE build with Microsoft Visual C 16 bit
@@ -30,26 +27,6 @@ IDE build with Microsoft Visual C 32 bit
 
 M32DM
 DMAKE build with Microsoft Visual C 32 bit
-
-B16IDE
-IDE build with Borland C 16 bit
-
-B16DM
-DMAKE build with Borland C 16 bit
-(First edit b16.dm to correct the BORLAND_HOME variable)
-
-B32IDE
-IDE build with Borland C 32 bit
-
-B32DM
-DMAKE build with Borland C 32 bit
-(First edit b32.dm to correct the BORLAND_HOME variable)
-
-S32IDE
-IDE build with Symantec C 32 bit
-
-S32DM
-DMAKE build with Symantec C 32 bit
 
 CLEANALL
 Used to delete all files produced by builds in all examples

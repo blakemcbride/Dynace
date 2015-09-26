@@ -28,7 +28,8 @@ API for Unix))
 Build instructions:
 
 There are four sections labeled:
-     Windows
+
+    Windows
     Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
     Plan 9
     Minix
@@ -62,43 +63,29 @@ with Visual Studio and is located under "Visual Studio Tools".  I
 suggest that you create a "Hello, World" program and compile and link
 it from the command line to be sure it's all set up correctly.
 
-1.  Make sure you copy the exe files from bin\win32 to the bin directory:
+All of the following commands should be executed in the root of the
+Dynace tree.  For example, you should see sub-directories named
+kernel, class, dpp, and generics at this level.
 
-	copy  bin\win32\*  bin  
+1.  Setup the build environment by executing the following file:
 
-2.  Next, goto the DR (Remember DR is the location where you unzipped
-Dynace) directory and if you are operating under the DOS or Windows
-3.1 OS you should edit the file named 16bit.bat.  Otherwise, edit
-32bit.bat.  The file will tell you what to do.
+	setupenv.bat
 
-IMPORTANT!: Make sure you edit the 32bit.bat file as described in the
-previous paragraph.  If you don't have the MAKESTARTUP environment
-variable setup the system won't build.
-
-3.  Next execute the file you just edited by typing:
-
-	16bit
-	 or
-	32bit
-
-4.  Build the system
+2.  Build the system
 
 The following table indicates the correct makefile for each supported
 environment: (note:  only M32.DM is really tested or used anymore)
 If you are using one of the other compilers, substitute the m32.dm
 shown throughout with the makefile appropriate to your environment.
 
-M32.DM		Microsoft C 32 bit
+MSC.DM		Microsoft C 32 or 64 bit
 M16.DM		Microsoft C 16 bit
-B16.DM		Borland C 16 bit  (requires tasm.exe - their assembler)
-B32.DM		Borland C 32 bit  (requires tasm32.exe - their assembler)
 W32.DM		Watcom C 32 bit
-S32.DM		Symantec C 32 bit (not tested recently)
 
 M32.dm can be substitutied with the above if necessary, type:
 (Note: the case does matter.)
 
-	dmake -f m32.dm all-scratch
+	dmake -f msc.dm all-scratch
 
 The system is now built.
 
@@ -109,7 +96,7 @@ examples\exam03, building and running the example using the following
 commands:
 
 	cd examples\exam03
-	dmake -f m32.dm
+	dmake -f msc.dm
 	main
 
 
@@ -125,9 +112,9 @@ If you are performing a 32 bit build you could follow the following
 steps to enable the assembler dispatcher.  The system works equally
 well with or without this code.
 
-	dmake -f m32.dm STRAT=-S1 newgens
-	dmake -f m32.dm realclean
-	dmake -f m32.dm all-scratch
+	dmake -f msc.dm STRAT=-S1 newgens
+	dmake -f msc.dm realclean
+	dmake -f msc.dm all-scratch
 
 --------------------
 
@@ -141,15 +128,15 @@ If you now want to build the GUI library use the following.  This can
 only be done after the above steps were followed (although switching
 to STRAT=-S1, the fater mode doesn't matter.  It works either way.)
 
-	dmake -f m32.dm wds-makegens
-	dmake -f m32.dm wds-all-scratch
+	dmake -f msc.dm wds-makegens
+	dmake -f msc.dm wds-all-scratch
 	cd WinExam\setup
 	m32dm
 
 You can test the GUI system as follows:
 
 	cd WinExam\exam10
-	dmake -f m32.dm
+	dmake -f msc.dm
 	main
 
 --------------------
@@ -176,7 +163,7 @@ custom resource editor which is loaded at runtime by this system.  To
 build use:
 
 	cd cld
-	dmake -f m32.dm
+	dmake -f msc.dm
 
 --------------------
 

@@ -1,5 +1,5 @@
 
-# DMAKE makefile for Microsoft C 32 bit
+# DMAKE makefile for Microsoft C 32 & 64 bit
 
 DPP = ..\bin\dpp
 
@@ -347,7 +347,7 @@ rem	$(MAKE) realclean $(MAKEFILE)
 
 dist:
 	bin\rm -zq dynace*.zip
-	zip -r dynace README m32.dm makefile.unx makefile.inc change.log
+	zip -r dynace README msc.dm makefile.unx makefile.inc change.log
 	zip dynace bin\* class\* docs\* dpp\* generics\* lib\*
 	zip dynace include\* kernel\* threads\* utils\* Windows\* ODBC\* Resources\*
 	zip -r dynace examples\list examples\exam* examples\setup

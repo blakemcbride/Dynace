@@ -1,5 +1,5 @@
 
-# DMAKE makefile for Microsoft Visual C++ 32 bit
+# DMAKE makefile for Microsoft Visual C++ 32 & 64 bit
 
 
 BINDIR = ..\bin

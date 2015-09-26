@@ -15,11 +15,8 @@ use the following command:
 where MAKEFILE.DM is one of the following:
 
 	M16.DM		Microsoft C 16 bit
-	M32.DM		Microsoft C 32 bit
+	MSC.DM		Microsoft C 32 or 64 bit
 	W32.DM		WATCOM C 32 bit
-	B16.DM		Borland C 16 bit
-	B32.DM		Borland C 32 bit
-	S32.DM		Symantec C 32 bit
 
 In addition, the following command can be used to build with debugging
 information:
