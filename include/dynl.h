@@ -91,10 +91,13 @@
 
 
 /* int to pointer conversion  */
+/* turns out, this is already defined in Windows  */
+#ifndef _MSC_VER
 #ifdef _M_X64
 typedef long long  INT_PTR;
 #else
 typedef unsigned long  INT_PTR;
+#endif
 #endif
 
 #ifdef	PLAN9
