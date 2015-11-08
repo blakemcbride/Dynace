@@ -80,8 +80,7 @@ setup.unx :
 	find examples -name '*.h'          -exec bin/delcr \{\} \;
 	find examples -name '*.d'          -exec bin/delcr \{\} \;
 	find examples -name '*.c'          -exec bin/delcr \{\} \;
-	bin/delcr examples/list makefile makefile.inc dropunx.sh
-	chmod 755 dropunx.sh
+	bin/delcr examples/list makefile makefile.inc
 #	find multhead -type f -exec bin/delcr \{\} \;
 	rm -f setup.dos
 	touch setup.unx
