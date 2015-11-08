@@ -54,8 +54,8 @@ typedef struct  _Thread_iv_t  {
 	jmp_buf iRtn;
 	char * iStack_buf;
 	char * iStack_location;
-	int iStack_buf_size;
-	int iStack_size;
+	INT_PTR iStack_buf_size;
+	INT_PTR iStack_size;
 	int iState;
 	int iAutoDispose;
 	int iPriority;

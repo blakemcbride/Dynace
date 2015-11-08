@@ -29,10 +29,14 @@
 #ifndef	_DYNL_H
 #define	_DYNL_H
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 /*  What kind of machine?  */
 
 #ifdef	_MSC_VER
-#if	_MSC_VER >= 900  &&  defined(_M_IX86)
+#if	_MSC_VER >= 900  &&  (defined(_M_IX86) || defined(_M_X64))
 #define	MSC32
 #define	_INLINE_	__forceinline
 #else
@@ -83,6 +87,14 @@
 #define _POSIX_
 #endif
 #endif
+#endif
+
+
+/* int to pointer conversion  */
+#ifdef _M_X64
+typedef long long  INT_PTR;
+#else
+typedef unsigned long  INT_PTR;
 #endif
 
 #ifdef	PLAN9
@@ -538,7 +550,7 @@ extern	void	*Chkmem(void *, char *, int);
 #define	 Talloc(t)   (t *) Chkmem(malloc(sizeof(t)), __FILE__, __LINE__)
 #define	 Tcalloc(t)  (t *) Chkmem(calloc(1, sizeof(t)), __FILE__, __LINE__)
 #define	 Tnalloc(t,n)   (t *) Chkmem(malloc((n) * sizeof(t)), __FILE__, __LINE__)
-#define	 Tncalloc(t,n)  (t *) Chkmem(calloc((n), sizeof(t)), __FILE__, __LINE__)
+#define	 Tncalloc(t,n)  (t *) Chkmem(calloc((size_t)(n), sizeof(t)), __FILE__, __LINE__)
 #define  Tnrealloc(t,n,b) (t *) Chkmem(realloc((void*)(b), (n) * sizeof(t)), __FILE__, __LINE__)
 
 #endif
@@ -652,11 +664,11 @@ extern	void	JavaScript_init_app(void);
 #define BIG_INT		(sizeof(int) > 2 ? 320000001.0 : 32001.0)
 
 
-#if !defined(unix) && !defined(__APPLE__)  &&  !defined(vms) && !defined(__WATCOMC__) && _M_IX86 < 300 && !defined(__MWERKS__)  &&  !defined(__COSMIC__)  &&  !defined(PLAN9)  &&  !defined(__MINGW32__)  &&  !defined(__minix)
-#define _HUGE_	huge
-#else
+//#if !defined(unix) && !defined(__APPLE__)  &&  !defined(vms) && !defined(__WATCOMC__) && _M_IX86 < 300 && !defined(__MWERKS__)  &&  !defined(__COSMIC__)  &&  !defined(PLAN9)  &&  !defined(__MINGW32__)  &&  !defined(__minix)
+//#define _HUGE_	huge
+//#else
 #define _HUGE_
-#endif
+//#endif
 
 /* macro to make believe a variable is used to keep picky compilers happy  */
 #define USE(x)		(void) x

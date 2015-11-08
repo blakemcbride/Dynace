@@ -54,7 +54,7 @@ static void cond_add_roots(char *base, char *limit)
 	sprintf(buf, "%lx %lx  %ld", base, limit, limit-base);
 	printf("%s\n", buf);
 #else
-	if ((base > (char *)&base  ||  limit < (char *) &base)  &&  !_gc_chk_ptr(base, limit-base))  //  don't mark the stack!
+	if ((base > (char *)&base  ||  limit < (char *) &base)  &&  !_gc_chk_ptr(base, (unsigned)(limit-base)))  //  don't mark the stack!
 		gMarkRange(Dynace, (char **)base, (char **)limit);
 #endif
 }
@@ -80,7 +80,8 @@ int _is_heap_base(ptr_t p)
      
 	if (0 == malloc_heap_pointer) {
 		MEMORY_BASIC_INFORMATION buf;
-		register DWORD result = VirtualQuery(malloc(1), &buf, sizeof(buf));
+/*		register DWORD result = VirtualQuery(malloc(1), &buf, sizeof(buf));    */
+		SIZE_T result = VirtualQuery(malloc(1), &buf, sizeof(buf));
          
 		if (result != sizeof(buf)) {
 			ABORT("Weird VirtualQuery result");
@@ -103,7 +104,8 @@ void _register_global_memory()
 {
 	MEMORY_BASIC_INFORMATION buf;
 	SYSTEM_INFO sysinfo;
-	DWORD result;
+/*	DWORD result;  */
+	SIZE_T result;
 	DWORD protect;
 	LPVOID p;
 	char * base;

@@ -126,11 +126,11 @@ static int get_line(ivType *iv)
 	tbuf = iv->iBuf; 
 	*tbuf = '\0'; 
 	while (1) { 
-		if (!gGets(iv->iStream, tbuf, MAXBUF-strlen(iv->iBuf))) 
+		if (!gGets(iv->iStream, tbuf, MAXBUF-(int)strlen(iv->iBuf))) 
 			break; 
 		iv->iLine++; 
 		something = 1; 
-		i = strlen(tbuf) - 1; 
+		i = (int)strlen(tbuf) - 1; 
 		while (i >= 0 && (tbuf[i] == '\n' || tbuf[i] == '\r')) 
 			i--; 
 		if (i < 0 || tbuf[i] != '\\') { 

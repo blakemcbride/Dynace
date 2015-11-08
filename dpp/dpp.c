@@ -2926,7 +2926,7 @@ make_arg(object	fobj,
 	int	len;
 
 	*buf = '\0';
-	while ((tkn = gettoken(fobj))  &&  (len=strlen(buf)) < 200)  {
+	while ((tkn = gettoken(fobj))  &&  (len=(int)strlen(buf)) < 200)  {
 		if (!paren  &&  (*tkn == ')'  ||  *tkn == ','))
 			break;
 		if (*tkn == '(')  {
@@ -2984,7 +2984,7 @@ pp_make_arg(object	fobj,
 	while (1)  {
 		if (tkn = gNextToken(fobj))
 			p = gStringValue(tkn);
-		if (!tkn  ||  (len=strlen(buf)) > 200)
+		if (!tkn  ||  (len=(int)strlen(buf)) > 200)
 			break;
 		if (!paren  &&  (*p == ')'  ||  *p == ','))
 			break;
@@ -4700,7 +4700,7 @@ static	int	get_line(object fobj, char *line)
 			break;
 		CurrentLine++;
 		something = 1;
-		i = strlen(tbuf) - 1;
+		i = (int)strlen(tbuf) - 1;
 		while (i >= 0  &&  (tbuf[i] == '\n' ||  tbuf[i] == '\r'))
 			i--;
 		if (i < 0  ||  tbuf[i] != '\\')  {

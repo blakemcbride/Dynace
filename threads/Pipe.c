@@ -104,18 +104,18 @@ imeth int Pipe_im_gWrite(object self, char *buf, unsigned sz)
 	while (sz) { 
 
 
-		room = iv->iBufsiz - (iv->iWptr - iv->iBuf); 
+		room = (int)(iv->iBufsiz - (iv->iWptr - iv->iBuf)); 
 
 
 
 		if (room < (int) sz) { 
-			rroom = iv->iRptr - iv->iBuf; 
+			rroom = (int)(iv->iRptr - iv->iBuf); 
 			if (rroom) { 
-				bytes = iv->iWptr - iv->iRptr; 
+				bytes = (int)(iv->iWptr - iv->iRptr); 
 				memmove(iv->iBuf, iv->iRptr, bytes); 
 				iv->iRptr = iv->iBuf; 
 				iv->iWptr = iv->iBuf + bytes; 
-				room = iv->iBufsiz - (iv->iWptr - iv->iBuf); 
+				room = (int)(iv->iBufsiz - (iv->iWptr - iv->iBuf)); 
 			} 
 		} 
 
@@ -131,7 +131,7 @@ imeth int Pipe_im_gWrite(object self, char *buf, unsigned sz)
 		} 
 
 
-		room = iv->iBufsiz - (iv->iWptr - iv->iRptr); 
+		room = (int)(iv->iBufsiz - (iv->iWptr - iv->iRptr)); 
 		if (sz && !room && iv->iWblock) { 
 			iv->iWblk = gFindStr(Thread, NULL); 
 			gHold(iv->iWblk); 
@@ -152,7 +152,7 @@ imeth int Pipe_im_gRead(object self, char *buf, unsigned sz)
 	if (iv->iRblk) 
 		return 0; 
 	while (sz) { 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		bg = ba < (int) sz ? ba : (int) sz; 
 		if (bg) { 
 			memcpy(buf, iv->iRptr, bg); 
@@ -164,7 +164,7 @@ imeth int Pipe_im_gRead(object self, char *buf, unsigned sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 
@@ -189,7 +189,7 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 		return buf; 
 	} 
 	while (sz) { 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		for (bg=0 ; bg < ba && bg < sz && iv->iRptr[bg++] != '\n' ; ); 
 		if (iv->iRptr[bg-1] == '\n') 
 			sz = bg; 
@@ -203,7 +203,7 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 
@@ -265,7 +265,7 @@ imeth long Pipe_im_gLength(object self)
 #endif 
 
 #line 244 "Pipe.d"
-		return iv->iWptr - iv->iRptr; 
+		return (long)(iv->iWptr - iv->iRptr); 
 } 
 
 imeth int Pipe_im_gRoom(object self)
@@ -279,7 +279,7 @@ imeth int Pipe_im_gRoom(object self)
 #endif 
 
 #line 256 "Pipe.d"
-		return iv->iBufsiz - (iv->iWptr - iv->iRptr); 
+		return (int)(iv->iBufsiz - (iv->iWptr - iv->iRptr)); 
 } 
 
 imeth int Pipe_im_gSize(object self)
@@ -308,7 +308,7 @@ imeth long Pipe_im_gAdvance(object self, long sz)
 	if (iv->iRblk) 
 		return 0; 
 	while (sz) { 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		bg = (long) ba < sz ? ba : (int) sz; 
 		if (bg) { 
 			iv->iRptr += bg; 
@@ -318,7 +318,7 @@ imeth long Pipe_im_gAdvance(object self, long sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
-		ba = iv->iWptr - iv->iRptr; 
+		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 

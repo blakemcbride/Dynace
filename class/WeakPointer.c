@@ -109,7 +109,7 @@ imeth int WeakPointer_im_gHash(object self)
 { WeakPointer_iv_t *iv = GetIVs(WeakPointer, self);
 	double t; 
 
-	t = .6125423371 * (double) (unsigned long) iv->iVal; 
+	t = .6125423371 * (double) (INT_PTR) iv->iVal; 
 	t = t < 0.0 ? -t : t; 
 	return (int) (BIG_INT * (t - floor(t))); 
 } 

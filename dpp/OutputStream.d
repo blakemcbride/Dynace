@@ -586,7 +586,7 @@ imeth	int	gPuts(char *str)
 	iOLine = -20L;
 	iRLine += count_nl(str);
 	iILine = 0L;
-	return iStream ? gPuts(iStream, str) : strlen(str);
+	return iStream ? gPuts(iStream, str) : (int)strlen(str);
 }
 
 ivmeth	int	vPrintf(char *fmt, ...)
@@ -598,7 +598,7 @@ ivmeth	int	vPrintf(char *fmt, ...)
 	iOLine = -20L;
 	iRLine += count_nl(buf);
 	iILine = 0L;
-	return iStream ? gPuts(iStream, buf) : strlen(buf);
+	return iStream ? gPuts(iStream, buf) : (int)strlen(buf);
 }
 
 imeth	gSetOSVars(cname, cvs, ivs)

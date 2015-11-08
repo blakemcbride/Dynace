@@ -82,18 +82,18 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 	while (sz)  {
 		/*  how much room is left on the write end of the buffer?  */
 
-		room = iBufsiz - (iWptr - iBuf);
+		room = (int)(iBufsiz - (iWptr - iBuf));
 		
 		/*  if not enough make room from read end   */
 	
 		if (room < (int) sz)  {
-			rroom = iRptr - iBuf;
+			rroom = (int)(iRptr - iBuf);
 			if (rroom)  {
-				bytes = iWptr - iRptr; /* bytes in buffer  */
+				bytes = (int)(iWptr - iRptr); /* bytes in buffer  */
 				memmove(iBuf, iRptr, bytes);
 				iRptr = iBuf;
 				iWptr = iBuf + bytes;
-				room = iBufsiz - (iWptr - iBuf);
+				room = (int)(iBufsiz - (iWptr - iBuf));
 			}
 		}
 
@@ -109,7 +109,7 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 		}
 		/*  the following line is needed because the above release might have cause
 		    more room - if the read thread has a higher priority  */
-		room = iBufsiz - (iWptr - iRptr);
+		room = (int)(iBufsiz - (iWptr - iRptr));
 		if (sz  &&  !room  &&  iWblock)  { /*  there is more - block  */
 			iWblk = gFindStr(Thread, NULL);
 			gHold(iWblk); /*  does a yield  */
@@ -130,7 +130,7 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 	if (iRblk)
 		return 0;
 	while (sz)  {
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		bg = ba < (int) sz ? ba : (int) sz;
 		if (bg)  {
 			memcpy(buf, iRptr, bg);
@@ -142,7 +142,7 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */
@@ -167,7 +167,7 @@ imeth	char	*gGets(object self, char *buf, int sz)
 		return buf;
 	}
 	while (sz)  {
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		for (bg=0 ; bg < ba  &&  bg < sz  &&  iRptr[bg++] != '\n' ; );
 		if (iRptr[bg-1] == '\n')
 			sz = bg;
@@ -181,7 +181,7 @@ imeth	char	*gGets(object self, char *buf, int sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */
@@ -241,7 +241,7 @@ imeth	long	gLength(object self)
 		iRblk = NULL;
 	}
 #endif
-	return iWptr - iRptr;
+	return (long)(iWptr - iRptr);
 }
 
 imeth	int	gRoom(object self)
@@ -253,7 +253,7 @@ imeth	int	gRoom(object self)
 		iWblk = NULL;
 	}
 #endif
-	return iBufsiz - (iWptr - iRptr);
+	return (int)(iBufsiz - (iWptr - iRptr));
 }
 
 imeth	int	gSize(object self)
@@ -282,7 +282,7 @@ imeth	long	gAdvance(object self, long sz)
 	if (iRblk)
 		return 0;
 	while (sz)  {
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		bg = (long) ba < sz ? ba : (int) sz;
 		if (bg)  {
 			iRptr += bg;
@@ -292,7 +292,7 @@ imeth	long	gAdvance(object self, long sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
-		ba = iWptr - iRptr;
+		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */

@@ -101,7 +101,7 @@ typedef	struct	memory_range  {
 
 
 #ifdef	ALIGN4   /* align 4 byte */
-#define EVEN(x)		((((unsigned long)(x) + 3) >> 2) << 2)
+#define EVEN(x)		((((INT_PTR)(x) + 3) >> 2) << 2)
 #else	
 #define EVEN(x)		((x) + ((x) % 2))
 #endif
@@ -672,7 +672,7 @@ LOCAL	void	set_superclass(object obj, object sc)
 
 LOCAL	char	*strsave(char *x)
 {
-	char	*p = Tncalloc(char, (x ? strlen(x) : 0) + 1);
+	char	*p = Tncalloc(char, (x ? (int)strlen(x) : 0) + 1);
 	if (!p)
 		gError(Dynace_c, "Out of memory.\n");
 	strcpy(p, x ? x : "");
@@ -1972,7 +1972,7 @@ LOCAL	void	get_mem_stats(void)
 }
 
 
-#if	defined(MSC32)  ||  defined(BC32)
+#if	(defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)
 #define MARK_REG(r)				\
 	__asm	{ mov	c, r  }			\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)	\
@@ -2016,7 +2016,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
 	mark_non_collecting_classes();
-#if defined(MSC32)  ||  defined(BC32)  ||  (defined(unix) && defined(i386))
+#if (defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)  ||  (defined(unix) && defined(i386))
 	MARK_REG(eax);
 	MARK_REG(ebx);
 	MARK_REG(ecx);

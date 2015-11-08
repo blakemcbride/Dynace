@@ -65,7 +65,7 @@ imeth	int	gHash()
 {
 	double	t;
 
-	t = .6125423371	* (double) (unsigned long) iVal;
+	t = .6125423371	* (double) (INT_PTR) iVal;
 	t = t < 0.0 ? -t : t;
 	return (int) (BIG_INT * (t - floor(t)));
 }

@@ -147,7 +147,7 @@ imeth	int	gHash()
 {
 	double	t;
 
-	t = .6125423371	* (double)(unsigned long) self;
+	t = .6125423371	* (double)(INT_PTR) self;
 	t = t < 0.0 ? -t : t;
 	return (int) (BIG_INT * (t - floor(t)));
 }
@@ -157,7 +157,7 @@ imeth	int	gCompare(object obj2)
 	if (EQ(self, obj2))
 		return 0;
 	ChkArg(obj2, 2);
-	if ((unsigned long) self < (unsigned long) obj2)
+	if ((INT_PTR) self < (INT_PTR) obj2)
 		return -1;
 	else
 		return 1;

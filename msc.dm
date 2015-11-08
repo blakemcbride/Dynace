@@ -90,7 +90,7 @@ rem	if errorlevel 1 goto done
 	cd ..
 ]
 
-all-scratch : # setup.dos
+all-scratch : setup.dos
 %@[
 	@echo off
 
@@ -98,29 +98,31 @@ all-scratch : # setup.dos
 
 rem	copy bin\win32\dpp.exe bin
 
-	touch include\generics.h
-
 	cd kernel
 	echo Entering kernel
-	$(TOUCH) *.c
+	rem $(TOUCH) *.c
+	rem $(TOUCH) ..\include\generics.h
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) NEW=1
 	if errorlevel 1 goto done
 
 	cd ..\class
 	echo Entering class
-	$(TOUCH) *.c
+	rem $(TOUCH) *.c
+	rem $(TOUCH) ..\include\generics.h
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
 	if errorlevel 1 goto done
 
 	cd ..\threads
 	echo Entering threads
-	$(TOUCH) *.c
+	rem $(TOUCH) *.c
+	rem $(TOUCH) ..\include\generics.h
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
 	if errorlevel 1 goto done
 
 	cd ..\dpp
 	echo Entering dpp
-	$(TOUCH) *.c
+	rem $(TOUCH) *.c
+	rem $(TOUCH) ..\include\generics.h
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) install
 	if errorlevel 1 goto done
 
@@ -292,11 +294,11 @@ realclean :
 	echo Entering dpp
 	$(MAKE) realclean $(MAKEFILE)
 
-	cd ..\examples\setup
-	echo Entering examples (takes a while - please wait)
-	call cleanall.bat
+	rem cd ..\examples\setup
+	rem echo Entering examples (takes a while - please wait)
+	rem call cleanall.bat
 
-	cd ..\..
+	cd ..
 	bin\rm -zq setup.unx setup.dos setup.p9 *.~ *.?~ *.??~ #*.* *.{*
 	bin\rm -zq lib\d*.* bin\dpp bin\dpp.exe 
 	bin\rm -zq bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.*
@@ -584,6 +586,17 @@ java-realclean :
 
 :done
 	cd ..\..
+]
+
+setup.dos :
+%@[
+	bin\touch kernel\*.c
+	bin\touch class\*.c
+	bin\touch threads\*.c
+	bin\touch dpp\*.c
+	bin\touch dpp\generics.*
+	pause
+	bin\touch include\generics.h
 ]
 
 # The following target is used to convert an SVN checkout into a shippable distribution

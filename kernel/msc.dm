@@ -47,7 +47,7 @@ CLASSES = Object.d Behavior.d MetaClass.d Class.d Method.d GenericFunction.d Dyn
 
 OBJ = $(CLASSES:s/.d/.obj/) kernel.obj win32gm.obj malloc.obj getpagesize.obj getinitialpagesize.obj
 
-curlib.cm .LIBRARY : $(OBJ) jumpto.obj
+curlib.cm .LIBRARY : $(OBJ) # jumpto.obj
 .IF	$(NEW)
 	lib /nologo /out:$(LIBDIR)\dynlcm.lib @$(mktmp $(?:t"\n")\n)
 .ELSE

@@ -54,6 +54,8 @@ Windows
 If you are operating With Cygwin under Windows, use the Linux build
 docs below rather than this secion.
 
+This procedure will work for 32 and 64 bit builds.
+
 Dynace is build from the command line using the included DMAKE
 program.  DMAKE is just an enhanced nmake or make program.
 
@@ -74,15 +76,15 @@ kernel, class, dpp, and generics at this level.
 2.  Build the system
 
 The following table indicates the correct makefile for each supported
-environment: (note:  only M32.DM is really tested or used anymore)
-If you are using one of the other compilers, substitute the m32.dm
+environment: (note:  only MSC.DM is really tested or used anymore)
+If you are using one of the other compilers, substitute the msc.dm
 shown throughout with the makefile appropriate to your environment.
 
 MSC.DM		Microsoft C 32 or 64 bit
 M16.DM		Microsoft C 16 bit
 W32.DM		Watcom C 32 bit
 
-M32.dm can be substitutied with the above if necessary, type:
+MSC.dm can be substitutied with the above if necessary, type:
 (Note: the case does matter.)
 
 	dmake -f msc.dm all-scratch

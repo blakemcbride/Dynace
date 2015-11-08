@@ -607,7 +607,7 @@ imeth int OutputStream_im_gPuts(object self, char *str)
 	iv->iOLine = -20L; 
 	iv->iRLine += count_nl(str); 
 	iv->iILine = 0L; 
-	return iv->iStream ? gPuts(iv->iStream, str) : strlen(str); 
+	return iv->iStream ? gPuts(iv->iStream, str) : (int)strlen(str); 
 } 
 
 ivmeth int OutputStream_ivm_vPrintf(object self, va_list _rest_)
@@ -619,7 +619,7 @@ ivmeth int OutputStream_ivm_vPrintf(object self, va_list _rest_)
 	iv->iOLine = -20L; 
 	iv->iRLine += count_nl(buf); 
 	iv->iILine = 0L; 
-	return iv->iStream ? gPuts(iv->iStream, buf) : strlen(buf); 
+	return iv->iStream ? gPuts(iv->iStream, buf) : (int)strlen(buf); 
 } 
 
 #line 626 "OutputStream.c"
