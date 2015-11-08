@@ -2,40 +2,40 @@
 #  Call this makefile with "WINE=1" if compiling with/for WINE
 include makefile.inc
 all : setup.unx
-	cd kernel   ; $(MAKE) -f makefile.unx
-	cd class    ; $(MAKE) -f makefile.unx
-	cd threads  ; $(MAKE) -f makefile.unx
-	cd dpp      ; $(MAKE) -f makefile.unx install
-	cd generics ; $(MAKE) -f makefile.unx
+	cd kernel   ; $(MAKE) -f makefile
+	cd class    ; $(MAKE) -f makefile
+	cd threads  ; $(MAKE) -f makefile
+	cd dpp      ; $(MAKE) -f makefile install
+	cd generics ; $(MAKE) -f makefile
 ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile.unx
-	cd ODBC     ; $(MAKE) -f makefile.unx
+	cd Windows  ; $(MAKE) -f makefile
+	cd ODBC     ; $(MAKE) -f makefile
 endif
 base : makegens
-	cd kernel   ; $(MAKE) -f makefile.unx
-	cd class    ; $(MAKE) -f makefile.unx
-	cd threads  ; $(MAKE) -f makefile.unx
-	cd generics ; $(MAKE) -f makefile.unx
+	cd kernel   ; $(MAKE) -f makefile
+	cd class    ; $(MAKE) -f makefile
+	cd threads  ; $(MAKE) -f makefile
+	cd generics ; $(MAKE) -f makefile
 ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile.unx
-	cd ODBC     ; $(MAKE) -f makefile.unx
-	cd Java/Dynace  ; $(MAKE) -f makefile.unx
+	cd Windows  ; $(MAKE) -f makefile
+	cd ODBC     ; $(MAKE) -f makefile
+	cd Java/Dynace  ; $(MAKE) -f makefile
 endif
 debug : setup.unx
-	cd kernel   ; $(MAKE) -f makefile.unx DEBUG=1
-	cd class    ; $(MAKE) -f makefile.unx DEBUG=1
-	cd threads  ; $(MAKE) -f makefile.unx DEBUG=1
-	cd dpp      ; $(MAKE) -f makefile.unx DEBUG=1 install
-	cd generics ; $(MAKE) -f makefile.unx DEBUG=1
+	cd kernel   ; $(MAKE) -f makefile DEBUG=1
+	cd class    ; $(MAKE) -f makefile DEBUG=1
+	cd threads  ; $(MAKE) -f makefile DEBUG=1
+	cd dpp      ; $(MAKE) -f makefile DEBUG=1 install
+	cd generics ; $(MAKE) -f makefile DEBUG=1
 clean :
-	cd kernel   ; $(MAKE) $@ -f makefile.unx
-	cd class    ; $(MAKE) $@ -f makefile.unx
-	cd threads  ; $(MAKE) $@ -f makefile.unx
-	cd generics ; $(MAKE) $@ -f makefile.unx
-	cd dpp      ; $(MAKE) $@ -f makefile.unx
+	cd kernel   ; $(MAKE) $@ -f makefile
+	cd class    ; $(MAKE) $@ -f makefile
+	cd threads  ; $(MAKE) $@ -f makefile
+	cd generics ; $(MAKE) $@ -f makefile
+	cd dpp      ; $(MAKE) $@ -f makefile
 ifdef WINE
-	cd Windows  ; $(MAKE) $@ -f makefile.unx
-	cd ODBC     ; $(MAKE) $@ -f makefile.unx
+	cd Windows  ; $(MAKE) $@ -f makefile
+	cd ODBC     ; $(MAKE) $@ -f makefile
 endif
 	find . -name '*~' -exec rm \{\} \;
 	find . -name '*.o' -exec rm \{\} \;
@@ -58,10 +58,10 @@ ship-unix : realclean
 setup.unx :
 	@-mkdir lib
 	cd bin ; $(CC) -o delcr -O delcr.c
-	cd kernel   ; ../bin/delcr makefile.unx README *.d
-	cd class    ; ../bin/delcr makefile.unx README *.d
-	cd threads  ; ../bin/delcr makefile.unx README *.d
-	cd dpp      ; ../bin/delcr makefile.unx README *.d
+	cd kernel   ; ../bin/delcr makefile README *.d
+	cd class    ; ../bin/delcr makefile README *.d
+	cd threads  ; ../bin/delcr makefile README *.d
+	cd dpp      ; ../bin/delcr makefile README *.d
 #  Times associated with .c files must be after the .d files for make's sake
 	sleep 2
 	cd kernel   ; ../bin/delcr *.h *.iv *.c
@@ -71,16 +71,16 @@ setup.unx :
 	sleep 2
 	cd dpp      ; ../bin/delcr *.c
 	cd docs     ; ../bin/delcr  *.DOC *.txt *.tex
-	cd generics ; ../bin/delcr makefile.unx README makegens mkgens3 mkgens4 mkgens4f mkgensx
+	cd generics ; ../bin/delcr makefile README makegens mkgens3 mkgens4 mkgens4f mkgensx
 	cd include  ; ../bin/delcr *.h
 	cd generics ; chmod 775 makegens mkgens3 mkgens4 mkgens4f mkgensx
-	find examples -name 'makefile.unx' -exec bin/delcr \{\} \;
+	find examples -name 'makefile' -exec bin/delcr \{\} \;
 	find examples -name 'readme'       -exec bin/delcr \{\} \;
 	find examples -name 'README'       -exec bin/delcr \{\} \;
 	find examples -name '*.h'          -exec bin/delcr \{\} \;
 	find examples -name '*.d'          -exec bin/delcr \{\} \;
 	find examples -name '*.c'          -exec bin/delcr \{\} \;
-	bin/delcr examples/list makefile.unx makefile.inc dropunx.sh
+	bin/delcr examples/list makefile makefile.inc dropunx.sh
 	chmod 755 dropunx.sh
 #	find multhead -type f -exec bin/delcr \{\} \;
 	rm -f setup.dos
@@ -107,19 +107,19 @@ makegens:
 	cd class ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
 	cd threads ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
 ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile.unx newgens
-	cd ODBC     ; $(MAKE) -f makefile.unx newgens
-	cd Java/Dynace  ; $(MAKE) -f makefile.unx newgens
+	cd Windows  ; $(MAKE) -f makefile newgens
+	cd ODBC     ; $(MAKE) -f makefile newgens
+	cd Java/Dynace  ; $(MAKE) -f makefile newgens
 endif
 newgens : makegens
-	cd kernel   ;  $(MAKE) -f makefile.unx reallynewgens
-	cd class    ;  $(MAKE) -f makefile.unx newgens
-	cd threads  ;  $(MAKE) -f makefile.unx newgens
-	cd dpp      ;  $(MAKE) -f makefile.unx newgens  ;  $(MAKE) -f makefile.unx generics.c
+	cd kernel   ;  $(MAKE) -f makefile reallynewgens
+	cd class    ;  $(MAKE) -f makefile newgens
+	cd threads  ;  $(MAKE) -f makefile newgens
+	cd dpp      ;  $(MAKE) -f makefile newgens  ;  $(MAKE) -f makefile generics.c
 ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile.unx newgens
-	cd ODBC     ; $(MAKE) -f makefile.unx newgens
-	cd Java/Dynace  ; $(MAKE) -f makefile.unx newgens
+	cd Windows  ; $(MAKE) -f makefile newgens
+	cd ODBC     ; $(MAKE) -f makefile newgens
+	cd Java/Dynace  ; $(MAKE) -f makefile newgens
 endif
 # The following target is used to convert an SVN checkout into a shippable distribution
 # It must only be run immediatly after a co or export
@@ -128,5 +128,5 @@ bootable:
 	rm -f include/generics.h
 	cp bin/Linux/dpp bin
 	chmod 755 bin/dpp
-	$(MAKE) -f makefile.unx STRAT=-S2 newgens
+	$(MAKE) -f makefile STRAT=-S2 newgens
 	touch  ODBC/sqlgrammar.c ODBC/sqlgrammar.h ODBC/sqltokens.c

@@ -186,14 +186,7 @@ Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
 
 GNU-make, bash and gcc are assumed.
 
-1.  You can type the following lines in order to remove the .unx file
-extension from all makefiles and negate the need for "-f makefile.unx"
-This only need be done once.
-
-	chmod 755 dropunx.sh
-	./dropunx.sh
-
-2.  Then, build the system as follows:
+1.  Build the system as follows:
 
 	make
 
