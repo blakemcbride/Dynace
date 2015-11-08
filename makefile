@@ -1,4 +1,4 @@
-# Makefile for Linux   	-*-Makefile-*-
+# Makefile for Linux, Mac, BSD, Cygwin, Solaris, etc.   	-*-Makefile-*-
 #  Call this makefile with "WINE=1" if compiling with/for WINE
 include makefile.inc
 all : setup.unx
