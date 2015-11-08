@@ -520,7 +520,7 @@ static void _dynace_yield(void)
 
 
 #line 506 "Thread.d"
-		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
+		if ((int)(Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
 		if (Thread_cv->cCt->iStack_size > Thread_cv->cCt->iStack_buf_size) { 
 			Thread_cv->cCt->iStack_buf_size = ((Thread_cv->cCt->iStack_size / STACKINC) + 1) * STACKINC; 

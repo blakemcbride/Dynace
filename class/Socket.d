@@ -364,13 +364,13 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 			if (buf[1]) {
 				buf[0] = 1;
 				buf[1] = strlen(proxy_user);
-				strcpy(buf+2, proxy_user);
-				if (buf[1]+2 != gWrite(obj, buf, buf[1]+2))
+				strcpy((char *)buf+2, proxy_user);
+				if (buf[1]+2 != gWrite(obj, (char *)buf, buf[1]+2))
 					return errorReturn(obj, 8, "write error 7");
 				buf[0] = proxy_pw ? strlen(proxy_pw) : 0;
 				if (proxy_pw)
-					strcpy(buf+1, proxy_pw);
-				if (buf[0]+1 != gWrite(obj, buf, buf[0]+1))
+					strcpy((char *)buf+1, proxy_pw);
+				if (buf[0]+1 != gWrite(obj, (char *)buf, buf[0]+1))
 					return errorReturn(obj, 8, "write error 8");
 				if (2 != (r=gRead(obj, (char *)buf, 2)))
 					return errorReturn(obj, 8, "read error 8");
@@ -391,33 +391,33 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 		if (isip) {
 			unsigned long ad = inet_addr(addr);
 			c = '\x01';
-			if (1 != gWrite(obj, &c, 1))
+			if (1 != gWrite(obj, (char *)&c, 1))
 				return errorReturn(obj, 8, "write error 3");
 			if (4 != gWrite(obj, (char *) &ad, 4))
 				return errorReturn(obj, 8, "write error 4");
 		} else {
 			buf[0] = '\x03';
-			strcpy(buf+2, addr);
-			buf[1] = strlen(buf+2);
-			if ((int) buf[1] + 2 != gWrite(obj, buf, (int) buf[1] + 2))
+			strcpy((char *)buf+2, addr);
+			buf[1] = strlen((char *)buf+2);
+			if ((int) buf[1] + 2 != gWrite(obj, (char *)buf, (int) buf[1] + 2))
 				return errorReturn(obj, 8, "write error 5");
 		}
 		if (2 != gWrite(obj, (char *) &dport, 2))
 			return errorReturn(obj, 8, "write error 6");
-		if (4 != gRead(obj, buf, 4))
+		if (4 != gRead(obj, (char *)buf, 4))
 			return errorReturn(obj, 8, "read error 2");
 		if (buf[1])
 			return errorReturn(obj, 8, "general SOCKS server failure");
 		if (buf[3] == 1) {
-			if (6 != gRead(obj, buf, 6))
+			if (6 != gRead(obj, (char *)buf, 6))
 				return errorReturn(obj, 8, "read error 3");
 		} else if (buf[3] == 3) {
-			if (1 != gRead(obj, &c, 1))
+			if (1 != gRead(obj, (char *)&c, 1))
 				return errorReturn(obj, 8, "read error 4");
-			if (c+2 != gRead(obj, buf, c+2))
+			if (c+2 != gRead(obj, (char *)buf, c+2))
 				return errorReturn(obj, 8, "read error 5");
 		} else if (buf[3] == 4) {
-			if (18 != gRead(obj, buf, 18))
+			if (18 != gRead(obj, (char *)buf, 18))
 				return errorReturn(obj, 8, "read error 6");
 		} else
 			return errorReturn(obj, 8, "invalid ATYP");
@@ -1237,7 +1237,7 @@ imeth	gAccept()
 	int	flag = 0;
 #endif
 
-	newsock = accept(sockfd, (struct sockaddr *)&client_addr, &sin_size);
+	newsock = accept(sockfd, (struct sockaddr *)&client_addr, (unsigned int *)&sin_size);
 	if (newsock == INVALID_SOCKET) {
 #if	(!defined(unix) && !defined(__APPLE__) && !defined(__minix))  ||  defined(__WINE__)
 		int	e = WSAGetLastError();

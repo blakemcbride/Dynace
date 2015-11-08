@@ -9,7 +9,7 @@
 #ifndef PLAN9
 #include <string.h>
 #include <stdlib.h>
-#ifdef __minix
+#if defined(__minix) ||  !defined(_MSC_VER)
 #include <unistd.h>
 #endif
 #endif

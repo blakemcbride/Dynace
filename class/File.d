@@ -32,6 +32,8 @@
 #define _CRT_SECURE_NO_DEPRECATE
 #define _POSIX_
 #endif
+#else
+#include <unistd.h>
 #endif
 
 

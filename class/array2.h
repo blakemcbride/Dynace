@@ -33,13 +33,8 @@
 
 #define INDEX_TYPE	unsigned 
 
-#if defined(unix)  ||  defined(M_I386)
-#define AT_INDEX	AT_LONG
+#define AT_INDEX	AT_INT
 #define PRNT_SHAPE	"%u "
-#else
-#define AT_INDEX	AT_USHT
-#define PRNT_SHAPE	"%hu "
-#endif
 
 #define BITS_PER_BYTE	8
 #define BIT_VAL(x,y) (((char *) (x))[(INDEX_TYPE) (y) / (INDEX_TYPE) BITS_PER_BYTE] & pow1[(INDEX_TYPE) (y) % (INDEX_TYPE) BITS_PER_BYTE])

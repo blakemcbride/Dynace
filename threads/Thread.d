@@ -503,7 +503,7 @@ static	void	_dynace_yield(void)
 #else
 		cCt->iStack_location = (char *) &t;
 #endif
-		if ((cCt->iStack_size = cTs_stkpos - cCt->iStack_location) < 0)
+		if ((int)(cCt->iStack_size = cTs_stkpos - cCt->iStack_location) < 0)
 			cCt->iStack_size = 0;
 		if (cCt->iStack_size > cCt->iStack_buf_size)  {
 			cCt->iStack_buf_size = ((cCt->iStack_size / STACKINC) + 1) * STACKINC;
