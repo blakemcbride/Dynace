@@ -26,7 +26,7 @@ int	start()
 	char	title[80];
 	int	r;
 
-	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	sprintf(title, "My Test Application - %d", 8*(int)sizeof(char *));
 	win = vNew(MainWindow, title);
 	gSetMaxLines(win, 200);
 

@@ -458,6 +458,7 @@ private imeth BOOL pGetLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWO
 
 private imeth void pImagehlpStackWalk(LPTSTR szText, PCONTEXT pContext )
 {
+#ifndef _M_X64
 	STACKFRAME sf;
 
 	_tcscat(szText, _T("\n") );
@@ -560,6 +561,7 @@ private imeth void pImagehlpStackWalk(LPTSTR szText, PCONTEXT pContext )
 			}
 		}
 	}
+#endif
 }
 
 private imeth void pGenerateExceptionReport(LPTSTR szText, PEXCEPTION_POINTERS pExceptionInfo )

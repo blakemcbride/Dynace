@@ -16,7 +16,7 @@ int	start()
 	char	title[80];
 	object	obj1, obj2;
 
-	sprintf(title, "My Test Application - %d", 8*sizeof(int));
+	sprintf(title, "My Test Application - %d", 8*(int)sizeof(char *));
 	win = vNew(MainWindow, title);
 
 	mLoadIcon(win, ALGOCORP_ICON);

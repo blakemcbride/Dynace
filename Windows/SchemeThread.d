@@ -80,6 +80,7 @@ imeth	void	gSchemeThreadWait() {
 			int retVal;
 			void *fun = iSchemeExecFun;
 
+#ifndef _M_X64
 			_asm 
 			{
 				mov		ecx, parmCnt
@@ -94,6 +95,7 @@ docall:				call		fun
 				add		esp,nStackFix
 				mov		retVal,eax
 			}
+#endif
 			iExecRetVal = retVal;
 			SetEvent(iCallWaitEvent);
 		}
