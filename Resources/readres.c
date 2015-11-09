@@ -341,7 +341,7 @@ static char *ReadNewPopup(char *p,HMENU hnewmenu)
                 }
                 if (p == NULL) break;
         } while ((*pflags & MF_END) == 0);
-		AppendMenu(hnewmenu,MF_POPUP|MF_STRING,(UINT)hnew,menutitle);
+		AppendMenu(hnewmenu,MF_POPUP|MF_STRING,(INT_PTR)hnew,menutitle);
         return(p);
 }
 
@@ -409,9 +409,9 @@ static HWND 	SearchResource(LPCSTR lpName,
 	char Name[512],*bb;
 	PDIALOGBOXHEADER pdbh;
 	HWND result;
-	unsigned long ul;
+	UINT_PTR ul;
 
-	ul = (unsigned long)lpName;
+	ul = (UINT_PTR)lpName;
 	if (HIWORD(ul) == 0) {
 		sprintf(pszSearchedName,"%d",LOWORD(ul));
 	}
@@ -420,7 +420,7 @@ static HWND 	SearchResource(LPCSTR lpName,
 		sprintf(pszSearchedName,"%d",OrdID(lpName));
 	}
 	else if (lpName[1] == 0 && lpName[3] == 0) {
-		ConvertWideString(lpName,pszSearchedName);
+		ConvertWideString((char *)lpName,(char *)pszSearchedName);
 	}
 	else {
 		strcpy(pszSearchedName,lpName);
