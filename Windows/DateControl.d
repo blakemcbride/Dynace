@@ -1646,7 +1646,7 @@ imeth gWriteXML(FILE *fp)
 
 	fprintf(fp,"\t\t<date>\n");
 	fprintf(fp,"\t\t\t<name>%s</name>\n",gStringToXML(XMLNode,buf,v.name));
-	fprintf(fp,"\t\t\t<defaultVal>%f</defaultVal>\n",v.defaultVal);
+	fprintf(fp,"\t\t\t<defaultVal>%ld</defaultVal>\n",v.defaultVal);
 	fprintf(fp,"\t\t\t<format>%s</format>\n",gStringToXML(XMLNode,buf,v.format));
 	fprintf(fp,"\t\t\t<x>%d</x>\n",v.xPos);
 	fprintf(fp,"\t\t\t<y>%d</y>\n",v.yPos);
@@ -1656,8 +1656,8 @@ imeth gWriteXML(FILE *fp)
 	fprintf(fp,"\t\t\t<hidden>%c</hidden>\n",v.hidden);
 	fprintf(fp,"\t\t\t<disabled>%c</disabled>\n",v.disabled);
 	fprintf(fp,"\t\t\t<fontname>%s</fontname>\n",gStringToXML(XMLNode,buf,gName(fnt)));
-	fprintf(fp,"\t\t\t<minimum>%f</minimum>\n",v.minimum);
-	fprintf(fp,"\t\t\t<maximum>%f</maximum>\n",v.maximum);
+	fprintf(fp,"\t\t\t<minimum>%ld</minimum>\n",v.minimum);
+	fprintf(fp,"\t\t\t<maximum>%ld</maximum>\n",v.maximum);
 	fprintf(fp,"\t\t\t<fontNameLen>%d</fontNameLen>\n",v.fontNameLen);
 	fprintf(fp,"\t\t\t<helpTopicLen>%d</helpTopicLen>\n",v.helpTopicLen);
 	fprintf(fp,"\t\t\t<helpTopic>%s</helpTopic>\n",gStringToXML(XMLNode,buf,gGetTopic(self)));

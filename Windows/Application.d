@@ -972,15 +972,6 @@ int	printf(const char *fmt, ...)
 }
 #endif
 
-#else
-
-
-HWND  ResourceDialogParam(char * ResFileName, LPCSTR lpName, HWND   parent, DLGPROC pDialogProc, LPARAM  param){}
-HMENU ResourceLoadMenu(char *ResFileName, char *id){}
-HICON ResourceLoadIcon(char *ResFileName, char *id){}
-HCURSOR ResourceLoadCursor(char *ResFileName, char *id){}
-char *ResourceLoadBitmap(char *ResFileName, char *id){}
-
 
 #endif
 

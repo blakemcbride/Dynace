@@ -591,7 +591,7 @@ private imeth void pGenerateExceptionReport(LPTSTR szText, PEXCEPTION_POINTERS p
 			0,
 			NULL 
 			);
-		_stprintf(szText + _tcslen(szText), "SymInitialize Error: %s\n", lpMsgBuf);
+		_stprintf(szText + _tcslen(szText), "SymInitialize Error: %s\n", (char *)lpMsgBuf);
 		if (lpMsgBuf)
 			LocalFree( lpMsgBuf );
 		return;

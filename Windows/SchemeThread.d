@@ -220,7 +220,7 @@ private imeth initInstance()
 	iSchemeExecEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	iCallWaitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	iThreadAvailable = 1;
-	sprintf(execBuf, "(threadInit (int->object %ld))", self);
+	sprintf(execBuf, "(threadInit (int->object %p))", self);
 	gExecuteStringWithErrorNR(Scheme, execBuf, errbuf, &err);
 	if (err)
 		gError(Application, errbuf);

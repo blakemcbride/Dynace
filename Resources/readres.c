@@ -420,7 +420,7 @@ static HWND 	SearchResource(LPCSTR lpName,
 		sprintf(pszSearchedName,"%d",OrdID(lpName));
 	}
 	else if (lpName[1] == 0 && lpName[3] == 0) {
-			ConvertWideString(lpName,pszSearchedName);
+		ConvertWideString(lpName,pszSearchedName);
 	}
 	else {
 		strcpy(pszSearchedName,lpName);
@@ -495,7 +495,7 @@ static HWND 	SearchResource(LPCSTR lpName,
 								char *start = SkipResHeader(pRes);
 								bb = malloc(size);
 								memcpy(bb,start,size);
-								return bb;
+								return (HWND) bb;
 							}
 						}
 					}
