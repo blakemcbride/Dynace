@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#define X(y)  printf(#y " = %lld (%d)\n", (long long) &y, (int) sizeof(y))
+
 typedef	struct	{
 	void	*cls;
 	unsigned short  tag;
@@ -17,16 +19,18 @@ typedef	struct	{
 main()
 {
 	Type	v1,  v2;
-	char	c;
+	char	c, d;
 	Type	v3;
 	Type2	v4;
 
-	printf("v1 = %x\n", &v1);
-	printf("v2 = %x\n", &v2);
-	printf("v3 = %x\n", &v3,  c);
-	printf("v4 = %x\n", &v4);
-	printf("a = %x\n", &v4.a);
-	printf("b = %x\n", &v4.b);
-	printf("c = %x\n", &v4.c);
+	X(v1);
+	X(v2);
+	X(c);
+	X(d);
+	X(v3);
+	X(v4);
+	X(v4.a);
+	X(v4.b);
+	X(v4.c);
 	return 0;
 }
