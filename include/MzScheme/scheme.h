@@ -210,7 +210,7 @@ typedef struct Scheme_Vector {
 
 #define SCHEME_CHARP(obj)    SAME_TYPE(SCHEME_TYPE(obj), scheme_char_type)
 
-#define SCHEME_INTP(obj)     (((long)obj) & 0x1)
+#define SCHEME_INTP(obj)     (((INT_PTR)obj) & 0x1)
 #define SCHEME_DBLP(obj)     SAME_TYPE(SCHEME_TYPE(obj), scheme_double_type)
 #ifdef MZ_USE_SINGLE_FLOATS
 # define SCHEME_FLTP(obj)     SAME_TYPE(SCHEME_TYPE(obj), scheme_float_type)
@@ -272,7 +272,7 @@ typedef struct Scheme_Vector {
 /*========================================================================*/
 
 #define SCHEME_CHAR_VAL(obj) (((Scheme_Small_Object *)(obj))->u.char_val)
-#define SCHEME_INT_VAL(obj)  (((long)(obj))>>1)
+#define SCHEME_INT_VAL(obj)  (((INT_PTR)(obj))>>1)
 #define SCHEME_DBL_VAL(obj)  (((Scheme_Double *)(obj))->double_val)
 #ifdef MZ_USE_SINGLE_FLOATS
 # define SCHEME_FLT_VAL(obj)  (((Scheme_Float *)(obj))->float_val)
@@ -288,7 +288,7 @@ typedef struct Scheme_Vector {
 #define SCHEME_SYM_VAL(obj)  (((Scheme_Symbol *)(obj))->s)
 #define SCHEME_SYM_LEN(obj)  (((Scheme_Symbol *)(obj))->len)
 
-#define SCHEME_SYMSTR_OFFSET(obj) ((unsigned long)SCHEME_SYM_VAL(obj)-(unsigned long)(obj))
+#define SCHEME_SYMSTR_OFFSET(obj) ((INT_PTR)SCHEME_SYM_VAL(obj)-(INT_PTR)(obj))
 
 #define SCHEME_BOX_VAL(obj)  (((Scheme_Small_Object *)(obj))->u.ptr_val)
 

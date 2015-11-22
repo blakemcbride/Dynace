@@ -258,7 +258,7 @@ SCHEME_FUNCTION(object_to_int)
 		scheme_wrong_count(fun, 1, 1, argc, argv);
 	if (!SCHEME_DYNACEP(argv[0]))
 		scheme_wrong_type(fun, "Dynace-object", 0, argc, argv);
-	return scheme_make_integer((int) SCHEME_PTR_VAL(argv[0]));
+	return scheme_make_integer((INT_PTR) SCHEME_PTR_VAL(argv[0]));
 }
 
 SCHEME_FUNCTION(int_to_pointer)
