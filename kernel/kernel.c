@@ -48,14 +48,8 @@
 
 
 
-#if	defined(MSC16)  ||  defined(WATCOM16)  ||  defined(BC16)  ||  defined(SYMC16)
-#define SEGMENTED_MEMORY
 #define ALIGN2
 #define ALIGNMENT (2)
-#else
-#define ALIGN4
-#define ALIGNMENT (4)
-#endif
 
 #ifdef	BC32
 #pragma inline
@@ -100,9 +94,9 @@ typedef	struct	memory_range  {
 #define SCIV(x)	((Behavior_iv_t *) ((object)(x) + 1))  /* Behavior_iv_t IVs */
 
 
-#ifdef	ALIGN4   /* align 4 byte */
+#ifdef	ALIGN4	/* align 4 bytes */
 #define EVEN(x)		((((INT_PTR)(x) + 3) >> 2) << 2)
-#else	
+#else		/*  align 2 bytes  */
 #define EVEN(x)		((x) + ((x) % 2))
 #endif
 
@@ -333,11 +327,11 @@ LOCAL	void	add_ptr(char *p, unsigned len)
 }
 
 #ifdef	ALIGN4
-#define chk_ptr(p, len)	(!((unsigned long)(p) & (3)) &&		\
+#define chk_ptr(p, len)	(!((INT_PTR)(p) & (3)) &&		\
 			 (char *)(p) >= lowPtr  &&		\
 			 (char *)(p) <= highPtr - (len))
 #else
-#define	chk_ptr(p, len)	((char *)(p) >= lowPtr  &&  (char *)(p) <= highPtr - (len))
+#define	chk_ptr(p, len)	(!((INT_PTR)(p) & 1)  &&  (char *)(p) >= lowPtr  &&  (char *)(p) <= highPtr - (len))
 #endif
 
 #else  /*  not SEGMENTED_MEMORY and not HEAP_HAS_HOLES  */
@@ -1594,7 +1588,7 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 	USE(self);
 	USE(obj);
 #else
-	char	**p=NULL;
+	char	**p = NULL;
 	short	sz;
 	object	rtn = NULL, nxt;
 
@@ -1668,9 +1662,9 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 	from = (char _HUGE_ **) EVEN(from);
 	to   = (char _HUGE_ **) EVEN(to);
 #else
-	if ((long) from & 1L)
+	if ((INT_PTR) from & 1L)
 		from = (char _HUGE_ **) ((char _HUGE_ *) from + 1);
-	if ((long) to & 1L)
+	if ((INT_PTR) to & 1L)
 		to = (char _HUGE_ **) ((char _HUGE_ *) to + 1);
 #endif
 	while (from < to)  {
