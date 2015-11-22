@@ -9,10 +9,10 @@
 #include <windows.h>
 #include <wininet.h>
 #include <initguid.h>
-#include <shlobj.h>
 #include <shlguid.h>
 #include <objbase.h>
 #include <wtypes.h>
+//#include <shlobj.h>
 #include <string.h>
 
 #include "generics.h"
@@ -42,27 +42,27 @@ extern	void	saveJSFLFile(object wind, char *fname, char *asname);
 #define LOAD_TYPE_XML		1
 #define BUFFER_SIZE			2048
 
-static	long	file_exit(object wind, unsigned id);
+static	LRESULT	file_exit(object wind, unsigned id);
 
 static	void	init_controls(object dlg);
-static	long	static_tool(object wind, unsigned bm);
-static	long	text_tool(object wind, unsigned bm);
-static	long	numeric_tool(object wind, unsigned bm);
-static	long	date_tool(object wind, unsigned bm);
-static	long	time_tool(object wind, unsigned bm);
-static	long	push_tool(object wind, unsigned bm);
-static	long	radio_tool(object wind, unsigned bm);
-static	long	check_tool(object wind, unsigned bm);
-static	long	listbox_tool(object wind, unsigned bm);
-static	long	combobox_tool(object wind, unsigned bm);
-static	long	quit_tool(object wind, unsigned bm);
-static	long	save_tool(object wind, unsigned bm);
-static	long	load_tool(object wind, unsigned bm);
-static	long	new_tool(object wind, unsigned bm);
-static	long	test_tool(object wind, unsigned bm);
-static	long	scale_tool(object wind, unsigned bm);
-static	long	lang_tool(object wind, unsigned bm);
-static	long	generic_tool(object wind, unsigned bm);
+static	LRESULT	static_tool(object wind, unsigned bm);
+static	LRESULT	text_tool(object wind, unsigned bm);
+static	LRESULT	numeric_tool(object wind, unsigned bm);
+static	LRESULT	date_tool(object wind, unsigned bm);
+static	LRESULT	time_tool(object wind, unsigned bm);
+static	LRESULT	push_tool(object wind, unsigned bm);
+static	LRESULT	radio_tool(object wind, unsigned bm);
+static	LRESULT	check_tool(object wind, unsigned bm);
+static	LRESULT	listbox_tool(object wind, unsigned bm);
+static	LRESULT	combobox_tool(object wind, unsigned bm);
+static	LRESULT	quit_tool(object wind, unsigned bm);
+static	LRESULT	save_tool(object wind, unsigned bm);
+static	LRESULT	load_tool(object wind, unsigned bm);
+static	LRESULT	new_tool(object wind, unsigned bm);
+static	LRESULT	test_tool(object wind, unsigned bm);
+static	LRESULT	scale_tool(object wind, unsigned bm);
+static	LRESULT	lang_tool(object wind, unsigned bm);
+static	LRESULT	generic_tool(object wind, unsigned bm);
 
 static	void	touch(char *file);
 
@@ -71,27 +71,27 @@ void			print_barcode(object pntr, double yInches, double xInches, double heightI
 
 static	long	updateMenuAndToolBar(object objMainWindow);
 
-static	long	about(object wind);
-static  long    cut_tool(object wind, unsigned bm);
-static  long    copy_tool(object wind, unsigned bm);
-static  long    paste_tool(object wind, unsigned bm);
-static  long    undo_tool(object wind, unsigned bm);
+static	LRESULT	about(object wind);
+static  LRESULT    cut_tool(object wind, unsigned bm);
+static  LRESULT    copy_tool(object wind, unsigned bm);
+static  LRESULT    paste_tool(object wind, unsigned bm);
+static  LRESULT    undo_tool(object wind, unsigned bm);
 
-static  long    print_tool(object wind, unsigned bm);
-static  long    run_test_tool(object wind, unsigned bm);
-static  long    run_test_tool2(object wind, unsigned bm);
-static	long	window_tool(object wind);
+static  LRESULT    print_tool(object wind, unsigned bm);
+static  LRESULT    run_test_tool(object wind, unsigned bm);
+static  LRESULT    run_test_tool2(object wind, unsigned bm);
+static	LRESULT	window_tool(object wind);
 
-// static  long    print_preview_tool(object wind, unsigned bm);
+// static  LRESULT    print_preview_tool(object wind, unsigned bm);
 
-static  long    rect_tool(object wind, unsigned bm);
-static  long    line_horz_tool(object wind, unsigned bm);
-static  long    line_vert_tool(object wind, unsigned bm);
-static  long    image_tool(object wind, unsigned bm);
+static  LRESULT    rect_tool(object wind, unsigned bm);
+static  LRESULT    line_horz_tool(object wind, unsigned bm);
+static  LRESULT    line_vert_tool(object wind, unsigned bm);
+static  LRESULT    image_tool(object wind, unsigned bm);
 
-static  long    align_tool(object wind, unsigned bm);
-static  long    sameSize_tool(object wind, unsigned bm);
-static  long    toggleTheRulerAndGrid(object wind, unsigned bm);
+static  LRESULT    align_tool(object wind, unsigned bm);
+static  LRESULT    sameSize_tool(object wind, unsigned bm);
+static  LRESULT    toggleTheRulerAndGrid(object wind, unsigned bm);
 
 static  void    addColorOptions(object ctl);
 static  void    setColorStringValue(object ctl, char color);
@@ -105,8 +105,8 @@ static  BOOL    setRegKey(char *lpszKey, char *lpszValue, char *lpszValueName);
 static  BOOL    deleteRegKey(char *lpszKey);
 static  BOOL	modifyStyle(HWND hWnd, DWORD dwRemove, DWORD dwAdd, UINT nFlags);
 
-static	long	fileOpen(object wind, char *file);
-static	long	filePrint(object wind, char *strIn);
+static	LRESULT	fileOpen(object wind, char *file);
+static	LRESULT	filePrint(object wind, char *strIn);
 static	void	registerShellFileTypes();
 // Yanghui
 
@@ -133,9 +133,9 @@ static	int	saveProperty(object ctl, object dlg);
 static	int	deleteProperty(object ctl, object dlg);
 
 
-static	long	changeDefaultControlFonts(object wind, unsigned bm);
-static	long	export_xml(object wind, unsigned bm);
-static	long	export_flash(object wind, unsigned bm);
+static	LRESULT	changeDefaultControlFonts(object wind, unsigned bm);
+static	LRESULT	export_xml(object wind, unsigned bm);
+static	LRESULT	export_flash(object wind, unsigned bm);
 static	void	updateControlDictionary(object dlg);
 static	void	updateAllControlFonts(object wind);
 static	int	changeFont(object nctl, object dlg);
@@ -146,7 +146,7 @@ static	int	loadFontComboBoxes(object dlg);
 
 static	void setLanguageValues(object ctl, object dlg);
 static	void addLanguageChoices(object ctl, object dlg, int size);
-static	long	saveLanguageChoice(object	ctl, 
+static	LRESULT	saveLanguageChoice(object	ctl, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -379,7 +379,7 @@ static	int loadWSDLList()
 	return 0;
 }
 
-static	long	about(object wind)
+static	LRESULT	about(object wind)
 {
 	object	dlg, ctl;
 	char	buf[256];
@@ -421,7 +421,7 @@ static	long	about(object wind)
 }
 
 
-static	long	window_tool(object wind)
+static	LRESULT	window_tool(object wind)
 {
 	object	dlg, ctl;
 	int	   end;
@@ -488,7 +488,7 @@ static	void	set_mouse_functions(int flg)
 
 // Yanghui:
 
-static	long	toggleTheRulerAndGrid(object wind, unsigned bm)
+static	LRESULT	toggleTheRulerAndGrid(object wind, unsigned bm)
 {
 	gToggleTheRulerAndGrid(wind);
 	return 0L;
@@ -496,7 +496,7 @@ static	long	toggleTheRulerAndGrid(object wind, unsigned bm)
 
 
 
-static	long	rect_tool(object wind, unsigned bm)
+static	LRESULT	rect_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl, font;
@@ -541,7 +541,7 @@ static	long	rect_tool(object wind, unsigned bm)
 }
 
 
-static	long	line_horz_tool(object wind, unsigned bm)
+static	LRESULT	line_horz_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl;
@@ -577,7 +577,7 @@ static	long	line_horz_tool(object wind, unsigned bm)
 }
 
 
-static	long	line_vert_tool(object wind, unsigned bm)
+static	LRESULT	line_vert_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl;
@@ -617,7 +617,7 @@ static	long	line_vert_tool(object wind, unsigned bm)
 }
 
 
-static	long	image_tool(object wind, unsigned bm)
+static	LRESULT	image_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl;
@@ -653,7 +653,7 @@ static	long	image_tool(object wind, unsigned bm)
 }
 
 
-static	long	generic_tool(object wind, unsigned bm)
+static	LRESULT	generic_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl;
@@ -690,7 +690,7 @@ static	long	generic_tool(object wind, unsigned bm)
 
 
 // Yanghui
-static	long	static_tool(object wind, unsigned bm)
+static	LRESULT	static_tool(object wind, unsigned bm)
 {
 	RECT    rectMFMargins;    // used foe test metafile
 	int	end;
@@ -754,7 +754,7 @@ static	long	static_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	text_tool(object wind, unsigned bm)
+static	LRESULT	text_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -797,7 +797,7 @@ static	long	text_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	numeric_tool(object wind, unsigned bm)
+static	LRESULT	numeric_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -841,7 +841,7 @@ static	long	numeric_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	date_tool(object wind, unsigned bm)
+static	LRESULT	date_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -884,7 +884,7 @@ static	long	date_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	time_tool(object wind, unsigned bm)
+static	LRESULT	time_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -927,7 +927,7 @@ static	long	time_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	push_tool(object wind, unsigned bm)
+static	LRESULT	push_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -970,7 +970,7 @@ static	long	push_tool(object wind, unsigned bm)
 }
 
 
-static	long	radio_tool(object wind, unsigned bm)
+static	LRESULT	radio_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -1012,7 +1012,7 @@ static	long	radio_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	check_tool(object wind, unsigned bm)
+static	LRESULT	check_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -1053,7 +1053,7 @@ static	long	check_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	listbox_tool(object wind, unsigned bm)
+static	LRESULT	listbox_tool(object wind, unsigned bm)
 {
 	int	   end;
 	object ctl, font;
@@ -1096,7 +1096,7 @@ static	long	listbox_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	combobox_tool(object wind, unsigned bm)
+static	LRESULT	combobox_tool(object wind, unsigned bm)
 {
 	int	end;
 	object ctl, font;
@@ -1139,7 +1139,7 @@ static	long	combobox_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	save_tool(object wind, unsigned bm)
+static	LRESULT	save_tool(object wind, unsigned bm)
 {
 	int     n;
 	char    cldFile[256], metaFile[256];
@@ -1215,7 +1215,7 @@ static	long	save_tool(object wind, unsigned bm)
 }
 
 // Yanghui:
-static	long	cut_tool(object wind, unsigned bm)
+static	LRESULT	cut_tool(object wind, unsigned bm)
 {
 	object  objDWs = gGetDWs(DragWindow);
 	if (!wind || !objDWs)  // if no DWs, the appearance of the toolbar Bitmap should not be changed
@@ -1228,7 +1228,7 @@ static	long	cut_tool(object wind, unsigned bm)
 }
 
 
-static	long	copy_tool(object wind, unsigned bm)
+static	LRESULT	copy_tool(object wind, unsigned bm)
 {
 	if (!wind)
 		return -1L;
@@ -1239,7 +1239,7 @@ static	long	copy_tool(object wind, unsigned bm)
 }
 
 
-static	long	paste_tool(object wind, unsigned bm)
+static	LRESULT	paste_tool(object wind, unsigned bm)
 {
 	if (!wind) 
 		return -1L;
@@ -1249,7 +1249,7 @@ static	long	paste_tool(object wind, unsigned bm)
 }
 
 
-static	long	undo_tool(object wind, unsigned bm)
+static	LRESULT	undo_tool(object wind, unsigned bm)
 {
 		gUndoLastDelete(wind);
 
@@ -1259,7 +1259,7 @@ static	long	undo_tool(object wind, unsigned bm)
 #undef ctl1
 #undef ctl2
 
-static	long	run_test_tool(object wind, unsigned bm)
+static	LRESULT	run_test_tool(object wind, unsigned bm)
 {
 	object   ctl1, ctl2;
 	object	 printerObj;
@@ -1306,7 +1306,7 @@ static	long	run_test_tool(object wind, unsigned bm)
 }
 
 
-static	long	run_test_tool2(object wind, unsigned bm)
+static	LRESULT	run_test_tool2(object wind, unsigned bm)
 {
 	object   ctl;
 	object	 printerObj;
@@ -1334,7 +1334,7 @@ static	long	run_test_tool2(object wind, unsigned bm)
 }
 
 
-static	long	print_tool(object wind, unsigned bm)
+static	LRESULT	print_tool(object wind, unsigned bm)
 {
 	object printerObj=NULL;
 
@@ -1353,7 +1353,7 @@ static	long	print_tool(object wind, unsigned bm)
 // Yanghui
 
 
-static	long	load_tool(object wind, unsigned bm)
+static	LRESULT	load_tool(object wind, unsigned bm)
 {
 	object	fd;
 	char	file[128];
@@ -1418,7 +1418,7 @@ static	long	load_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	lang_tool(object wind, unsigned bm)
+static	LRESULT	lang_tool(object wind, unsigned bm)
 {
 	//switch the application language
 	gSetCurrentLanguage(wind,!gLanguage(Application));
@@ -1426,7 +1426,7 @@ static	long	lang_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	test_tool(object wind, unsigned bm)
+static	LRESULT	test_tool(object wind, unsigned bm)
 {
 	// if the dragging window exists, cancel the dragging window
 	gRmAllOfDWs(DragWindow); 
@@ -1438,7 +1438,7 @@ static	long	test_tool(object wind, unsigned bm)
 }
 
 
-static	long	scale_tool(object wind, unsigned bm)
+static	LRESULT	scale_tool(object wind, unsigned bm)
 {
 	object  dlg = mNewDialog(ModalDialog, IDD_SCALE, wind);
 	object  ctl;
@@ -1473,7 +1473,7 @@ static	long	scale_tool(object wind, unsigned bm)
 }
 
 
-static	long	new_tool(object wind, unsigned bm)
+static	LRESULT	new_tool(object wind, unsigned bm)
 {
 	RECT rect;
 	gEraseAll(wind);
@@ -1489,7 +1489,7 @@ static	long	new_tool(object wind, unsigned bm)
 	return 0;
 }
 
-static	long	quit_tool(object wind, unsigned bm)
+static	LRESULT	quit_tool(object wind, unsigned bm)
 {
 	gQuitApplication(Application, 0);
 	return 0;
@@ -4388,7 +4388,7 @@ static	int	changeSingleControlFontAndTextColor(object ctl, object dlg)
 // Yanghui
 
 
-static	long	changeDefaultControlFonts(object wind, unsigned bm)
+static	LRESULT	changeDefaultControlFonts(object wind, unsigned bm)
 {
 	object	dlg = mNewDialog(ModalDialog, IDD_CONTROL_FONTS, wind);
 	object	nctl, pctl;
@@ -4650,7 +4650,7 @@ static	int	changeFont(object nctl, object dlg)
 	
 	return 0;
 }
-static	long	saveLanguageChoice(object	ctl, 
+static	LRESULT	saveLanguageChoice(object	ctl, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -5012,7 +5012,7 @@ static long updateMenuAndToolBar(object objMainWindow)
 // align all of the DragWindows in the set to the current DrawWindow according to the flag nAligment
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-static	long	align_tool(object wind, unsigned nAlignment)
+static	LRESULT	align_tool(object wind, unsigned nAlignment)
 {
 	HWND        hwndP;
 	RECT        rectCurrentDW, rectTmp, rcDrag;
@@ -5191,7 +5191,7 @@ void	print_barcode(object pntr, double yInches, double xInches, double heightInc
 // If the control under the current DragWindow is a LineControl, nothing will happen;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////
-static	long	sameSize_tool(object wind, unsigned nSize)
+static	LRESULT	sameSize_tool(object wind, unsigned nSize)
 {
 	object  objDWs, objCurrentDW, selectedCtl, seq, objTmp;
 	RECT    rectCurrentDW, rcDrag, rcGroupMoveDrag;
@@ -5284,7 +5284,7 @@ static	long	sameSize_tool(object wind, unsigned nSize)
 }
 
 
-static	long	fileOpen(object wind, char *strIn)
+static	LRESULT	fileOpen(object wind, char *strIn)
 {
 	char *  pChar;  
 	object  objMFName;
@@ -5330,7 +5330,7 @@ static	long	fileOpen(object wind, char *strIn)
 }
 
 
-static	long	filePrint(object wind, char *strIn)
+static	LRESULT	filePrint(object wind, char *strIn)
 {
 	int	    len;
 	char    file[_MAX_PATH];
@@ -5491,7 +5491,7 @@ static	void	saveXMLFile(object wind, char *fname)
 		fclose(fp);
 	}
 }
-static	long	export_xml(object wind, unsigned bm)
+static	LRESULT	export_xml(object wind, unsigned bm)
 {
 	object  fd = vNew(FileDialog, wind);
 	char	fname[256], *p;
@@ -5524,7 +5524,7 @@ static	long	export_xml(object wind, unsigned bm)
 	return 0L;
 }
 
-static	long	export_flash(object wind, unsigned bm)
+static	LRESULT	export_flash(object wind, unsigned bm)
 {
 	object  fd = vNew(FileDialog, wind);
 	char	fname[256], *p;
