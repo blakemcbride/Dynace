@@ -38,10 +38,10 @@ defclass WindowTask : Task {
 
 
 static	int	completion(object wind);
-static	long	onOK(object wind, unsigned id);
-static	long	onCancel(object wind, unsigned id);
+static	LRESULT	onOK(object wind, unsigned id);
+static	LRESULT	onCancel(object wind, unsigned id);
 
-static	long	process_wm_close(object	wind, 
+static	LRESULT	process_wm_close(object	wind, 
 				 HWND	hwnd, 
 				 UINT	mMsg, 
 				 WPARAM	wParam, 
@@ -182,7 +182,7 @@ imeth	gOnTaskCancel()
 	return self;
 }
 
-static	long	onOK(object wind, unsigned id)
+static	LRESULT	onOK(object wind, unsigned id)
 {
 	object	self = gPropertyGet(wind, "WindowTask");
 	accessIVs;
@@ -192,7 +192,7 @@ static	long	onOK(object wind, unsigned id)
 	return 0;
 }
 
-static	long	onCancel(object wind, unsigned id)
+static	LRESULT	onCancel(object wind, unsigned id)
 {
 	object	self = gPropertyGet(wind, "WindowTask");
 	accessIVs;

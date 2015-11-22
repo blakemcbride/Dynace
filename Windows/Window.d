@@ -343,7 +343,7 @@ static  int    getClipboardFileName(char * szClipboardFileName);
 			   DefWindowProc(hwnd, mMsg, wParam, lParam)
 #endif
 
-typedef	long	(*lfun)();
+typedef	LRESULT	(*lfun)();
 
 
 // Yanghui:
@@ -403,7 +403,7 @@ imeth	gCenter()
 	return self;
 }
 
-private	imeth	long	process_wm_timer(object	self,
+private	imeth	LRESULT	process_wm_timer(object	self,
 					 HWND	hwnd,
 					 UINT	mMsg,
 					 WPARAM	wParam,
@@ -419,15 +419,15 @@ private	imeth	long	process_wm_timer(object	self,
 		else if (SchemeClassSurrogate  &&  IsObj(obj)  &&  ClassOf(obj) == String) {
 			char	cmd[100], ns[80];
 			
-			sprintf(cmd, "(%s (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object) obj),
-				(long) self);
+				(long long) self);
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 					      cmd);
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"))", gStringValue((object)obj), (long) self);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"))", gStringValue((object)obj), (long long) self);
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else {
 			ifun	fun = (ifun) gPointerValue(obj);
@@ -438,7 +438,7 @@ private	imeth	long	process_wm_timer(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_create(object	self, 
+private	imeth	LRESULT	process_wm_create(object	self, 
 					  HWND		hwnd, 
 					  UINT		mMsg, 
 					  WPARAM	wParam, 
@@ -764,7 +764,7 @@ private imeth int gDrawRulerAndGrid(HDC hdc, short nRulerAndGrid)
 // Yanghui
 
 
-private	imeth	long	process_wm_paint(object	self, 
+private	imeth	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 
 					 UINT	mMsg, 
@@ -824,7 +824,7 @@ private	imeth	long	process_wm_paint(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_activate(object	self, 
+private	imeth	LRESULT	process_wm_activate(object	self, 
 					    HWND	hdlg, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -956,7 +956,7 @@ static	void	update_parts(ivType *iv)
 }
 
 
-private	imeth	long	process_wm_vscroll(object	self, 
+private	imeth	LRESULT	process_wm_vscroll(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -1034,7 +1034,7 @@ private	imeth	long	process_wm_vscroll(object	self,
 
 
 
-private	imeth	long	process_wm_hscroll(object	self, 
+private	imeth	LRESULT	process_wm_hscroll(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -1111,7 +1111,7 @@ private	imeth	long	process_wm_hscroll(object	self,
 }
 
 
-private	imeth	long	process_wm_size(object	self, 
+private	imeth	LRESULT	process_wm_size(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -1162,7 +1162,7 @@ static	void	updateDockedWindows(ivType *iv, int hp, int vp)
 	}
 }
 
-private	imeth	long	process_wm_move(object	self, 
+private	imeth	LRESULT	process_wm_move(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -1287,7 +1287,7 @@ imeth	int	gSetModifyChildren(int mode)
 #define	DEL_CTL		(wParam == (MK_CONTROL | MK_RBUTTON))
 
 
-private	imeth	long	process_wm_buttondown(object	self, 
+private	imeth	LRESULT	process_wm_buttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -1410,7 +1410,7 @@ private	imeth	pUpdateControlVectors(object self, object ctl)
 }
 */
 
-private	imeth	long	process_wm_buttonup(object	self, 
+private	imeth	LRESULT	process_wm_buttonup(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -1522,7 +1522,7 @@ private	imeth	long	process_wm_buttonup(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_mousemove(object	self, 
+private	imeth	LRESULT	process_wm_mousemove(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -1589,7 +1589,7 @@ private	imeth	long	process_wm_mousemove(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -1633,7 +1633,7 @@ private	imeth	long	process_wm_keydown(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_char(object	self, 
+private	imeth	LRESULT	process_wm_char(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -1653,7 +1653,7 @@ private	imeth	long	process_wm_char(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_setfocus(object	self, 
+private	imeth	LRESULT	process_wm_setfocus(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -1669,7 +1669,7 @@ private	imeth	long	process_wm_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_killfocus(object	self, 
+private	imeth	LRESULT	process_wm_killfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -1681,7 +1681,7 @@ private	imeth	long	process_wm_killfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_menuselect(object	self, 
+private	imeth	LRESULT	process_wm_menuselect(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -1739,7 +1739,7 @@ LRESULT	CALLBACK  WindowProc(HWND	hwnd,
 		DFLT;
 }
 
-private	imeth	long	process_wm_command(object	self, 
+private	imeth	LRESULT	process_wm_command(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -1751,7 +1751,7 @@ private	imeth	long	process_wm_command(object	self,
 	object		ctl;
 
 	id = LOWORD(wParam);
-	chldwind = (HWND)(UINT) lParam;
+	chldwind = (HWND) lParam;
 
 #ifdef WIN32
 	cmd = HIWORD(wParam);
@@ -1806,9 +1806,9 @@ private	imeth	long	process_wm_command(object	self,
 					char	cmd[100], ns[80];
 					object	ret;
 					long	res = 0;
-					sprintf(cmd, "(%s (int->object %ld) %u)",
+					sprintf(cmd, "(%s (int->object %lld) %u)",
 						gFunctionName(SchemeClassSurrogate, (object)fp),
-						(long) self, id);
+						(long long) self, id);
 					ret = gExecuteInNamespace(SchemeClassSurrogate,
 								  gNamespaceName(SchemeClassSurrogate, (object)fp, ns), 
 								  cmd);
@@ -1822,7 +1822,7 @@ private	imeth	long	process_wm_command(object	self,
 					object	ret;
 					char	cmd[128];
 					
-					sprintf(cmd, "%s(StringToObject(\"%ld\"), %ld)", gStringValue((object)fp), (long) self, (long) id);
+					sprintf(cmd, "%s(StringToObject(\"%lld\"), %ld)", gStringValue((object)fp), (long long) self, (long) id);
 					ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 					if (IsObj(ret)) {
 						if (ClassOf(ret) == LongInteger)
@@ -1856,7 +1856,7 @@ private	imeth	long	process_wm_command(object	self,
 	DFLT;
 }
 
-static	long	process_wm_destroy(object	self, 
+static	LRESULT	process_wm_destroy(object	self, 
 				   HWND		hwnd, 
 				   UINT		mMsg, 
 				   WPARAM	wParam, 
@@ -1867,7 +1867,7 @@ static	long	process_wm_destroy(object	self,
 	return 0L;
 }
 
-static	long	process_wm_syscolorchange(object	self, 
+static	LRESULT	process_wm_syscolorchange(object	self, 
 					  HWND		hwnd, 
 					  UINT		mMsg, 
 					  WPARAM	wParam, 
@@ -1879,7 +1879,7 @@ static	long	process_wm_syscolorchange(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_setcursor(object	self, 
+private	imeth	LRESULT	process_wm_setcursor(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -1890,7 +1890,7 @@ private	imeth	long	process_wm_setcursor(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_close(object	self, 
+private	imeth	LRESULT	process_wm_close(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -1938,7 +1938,7 @@ private	imeth	long	process_wm_close(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_color(object	self, 
+private	imeth	LRESULT	process_wm_color(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -2003,11 +2003,11 @@ private	imeth	long	process_wm_color(object	self,
 		tb = gGetTextBrush(ctl);
 		SetBkColor((HDC) wParam, gColor(bb));
 		SetTextColor((HDC) wParam, gColor(tb));
-		return (long) gHandle(bb);
+		return (INT_PTR) gHandle(bb);
 	} else if ((bb = gGetBackBrush(self))  &&  (tb = gGetTextBrush(self)) /* &&  !Ctl3dSubclassDlgEx */)  {
 		SetBkColor((HDC) wParam, gColor(bb));
 		SetTextColor((HDC) wParam, gColor(tb));
-		return (long) gHandle(bb);
+		return (INT_PTR) gHandle(bb);
 	} else
 		return 0L;  //  code needed for Ctl3d stuff
 }
@@ -2032,7 +2032,7 @@ private	imeth	pShowDockedWindows(object self)
 	return self;
 }
 
-private	imeth	long	process_wm_syscommand(object	self, 
+private	imeth	LRESULT	process_wm_syscommand(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -2221,7 +2221,7 @@ cmeth	gNewWithStr : newWithClass (char *class_name)		/*  should only be called b
 	else {
 		static	long	cn = 1L;
 		char	className[40];
-		sprintf(className, "Dynace-%d-%lu", (int) gInstance(Application), cn++);
+		sprintf(className, "Dynace-%lld-%lu", (long long) gInstance(Application), cn++);
 		iClassName = gNewWithStr(String, className);
 	}
 	
@@ -2358,7 +2358,7 @@ imeth	gSubclassWindow(HWND hctl)
 	return self;
 }
 
-imeth	long	gCallDefaultProc(UINT	mMsg, 
+imeth	LRESULT	gCallDefaultProc(UINT	mMsg, 
 				 WPARAM	wParam, 
 				 LPARAM	lParam)
 {
@@ -2809,7 +2809,7 @@ imeth	gDispose, gDeepDispose ()
 	return gDispose(super);
 }
 
-imeth	gAddHandlerAfter(unsigned msg, long (*fun)())
+imeth	gAddHandlerAfter(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -2821,7 +2821,7 @@ imeth	gAddHandlerAfter(unsigned msg, long (*fun)())
 	return self;
 }
 
-imeth	gAddHandlerBefore(unsigned msg, long (*fun)())
+imeth	gAddHandlerBefore(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -3981,7 +3981,7 @@ imeth	gAddSection(int id, int width, int mode)
 	return iStatusBar ? gAddSection(iStatusBar, id, width, mode) : NULL;
 }
 
-imeth	gAddToolBitmap(unsigned id1, unsigned id2, int space, long (*fun)(), char *tip)
+imeth	gAddToolBitmap(unsigned id1, unsigned id2, int space, LRESULT (*fun)(), char *tip)
 {
 	if (!iToolBar)
 		vNew(ToolBar, self);
@@ -3999,7 +3999,7 @@ imeth	gAddToolComboBox(int height, int width, int space, int (*fun)(), char *tip
 	return iToolBar ? gAddToolComboBox(iToolBar, height, width, space, fun, tip, name) : NULL;
 }
 
-imeth	gAddToolBitmapFromFile(char *file, unsigned id1, unsigned id2, int space, long (*fun)(), char *tip)
+imeth	gAddToolBitmapFromFile(char *file, unsigned id1, unsigned id2, int space, LRESULT (*fun)(), char *tip)
 {
 	if (!iToolBar)
 		vNew(ToolBar, self);
@@ -4018,7 +4018,7 @@ imeth	int	gShowToolBitmap(unsigned id, int val)
 	return iToolBar ? gShowToolBitmap(iToolBar, id, val) : 0;
 }
 
-imeth	ifun	gSetToolFunction(unsigned id, long (*fun)())
+imeth	ifun	gSetToolFunction(unsigned id, LRESULT (*fun)())
 {
 	return iToolBar ? gSetToolFunction(iToolBar, id, fun) : (ifun) 0;
 }

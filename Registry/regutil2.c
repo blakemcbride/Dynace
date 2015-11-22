@@ -85,7 +85,7 @@ void	RegStoreApplicationPath(char *company, char *product, char *version)
 	}
 	if (!found) {
 		sprintf(name, "%d", highest+1);
-		RegSetValueEx(h, name, 0, REG_SZ, dir, strlen(dir)+1);
+		RegSetValueEx(h, name, 0, REG_SZ, dir, (DWORD)strlen(dir)+1);
 	}
 	RegCloseKey(h);
 }
@@ -127,7 +127,7 @@ void	RegStoreDataPath(char *company, char *product, char *version, char *path)
 	}
 	if (!found) {
 		sprintf(name, "%d", highest+1);
-		RegSetValueEx(h, name, 0, REG_SZ, dir, strlen(dir)+1);
+		RegSetValueEx(h, name, 0, REG_SZ, dir, (DWORD)strlen(dir)+1);
 	}
 	RegCloseKey(h);
 }

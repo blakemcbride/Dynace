@@ -47,7 +47,7 @@
 
 
 extern	char	*Getenv(char *);
-
+extern char	*lcase(char *v);
 
 
 

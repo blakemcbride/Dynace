@@ -202,7 +202,7 @@ static void convert_select_list(selection_t pselection, from_clause_t *pfrom)
 				{
 					table_ref_t *ptable = (table_ref_t*)_sql_get_element(item2);
 					scalar_exp_t *pnewentry = convert_one_selection(pexp, ptable);
-					_sql_add_tail(pselection, (int)pnewentry);
+					_sql_add_tail(pselection, (INT_PTR)pnewentry);
 				}
 			}
 			else
@@ -212,11 +212,11 @@ static void convert_select_list(selection_t pselection, from_clause_t *pfrom)
 				scalar_exp_t *pnewentry = convert_one_selection(pexp, ptable);
 				join_ref_t *pjoinref = pjoin->pjoin;
 
-				_sql_add_tail(pselection, (int)pnewentry);
+				_sql_add_tail(pselection, (INT_PTR)pnewentry);
 				while (pjoinref)
 				{
 					pnewentry = convert_one_selection(pexp, pjoinref->ptable);
-					_sql_add_tail(pselection, (int)pnewentry);
+					_sql_add_tail(pselection, (INT_PTR)pnewentry);
 					pjoinref = pjoinref->pjoin;
 				}
 			}

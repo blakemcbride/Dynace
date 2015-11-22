@@ -101,7 +101,7 @@ static LRESULT CALLBACK DDEClientWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LP
 		case WM_DDE_DATA:
 #ifdef	WIN32
 			if (iServer != (HWND) wParam) {
-				UINT	low, high;
+				UINT_PTR	low, high;
 
 				UnpackDDElParam(wMsg, lParam, &low, &high);
 				// Conversation not initiated with this Server or

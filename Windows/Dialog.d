@@ -211,14 +211,14 @@ static	int	centerDialog(object dlg)
 	return 0;
 }
 
-static	BOOL	CALLBACK
+static	LRESULT	CALLBACK
 DialogProc(HWND		hDlg, 
 	   UINT		mMsg, 
 	   WPARAM	wParam, 
 	   LPARAM	lParam)
 {
 	object	h;
-	BOOL	r = FALSE;
+	LRESULT	r = FALSE;
 	HC_VARS;
 
 	if (mMsg == WM_INITDIALOG)  {
@@ -281,7 +281,7 @@ static	void	eliminate_killfocus_functions(object ctls)
 	}
 }
 
-private	imeth	BOOL	process_wm_command(object	self, 
+private	imeth	LRESULT	process_wm_command(object	self, 
 					   HWND		hdlg, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -291,7 +291,7 @@ private	imeth	BOOL	process_wm_command(object	self,
 	object		ctl;
 	int		res, exit;
 	unsigned	id;
-	BOOL		ret = FALSE;
+	LRESULT		ret = FALSE;
 
 #ifdef WIN32
 	cmd = HIWORD(wParam);
@@ -392,7 +392,7 @@ private	imeth	BOOL	process_wm_command(object	self,
 	return ret;
 }
 
-private	imeth	BOOL	process_wm_scroll(object	self, 
+private	imeth	LRESULT	process_wm_scroll(object	self, 
 					  HWND		hdlg, 
 					  UINT		mMsg, 
 					  WPARAM	wParam, 
@@ -424,7 +424,7 @@ private	imeth	BOOL	process_wm_scroll(object	self,
 	return FALSE;
 }
 
-private	imeth	BOOL	process_wm_color(object	self, 
+private	imeth	LRESULT	process_wm_color(object	self, 
 					 HWND	hdlg, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -446,9 +446,6 @@ private	imeth	BOOL	process_wm_color(object	self,
 	if (ctl  &&  !gIsKindOf(ctl, Control))
 		return FALSE;
 	
-
-	
-
 	if (ctl  &&  ctl != self) {
 		cbb = gGetBackBrush(ctl);
 		ctb = gGetTextBrush(ctl);
@@ -465,21 +462,21 @@ private	imeth	BOOL	process_wm_color(object	self,
 	if (gUsingAlternateColor(Application))
 	{	
 		if (hctl==iHDlg)
-			return (BOOL) gHandle(cbb);  
+			return (LRESULT) gHandle(cbb);  
 
 		if (ctl  && ( /*gIsKindOf(ctl, ListBox)||*/gIsKindOf(ctl, PushButton)|| gIsKindOf(ctl, StaticControl)||gIsKindOf(ctl, StaticTextControl)||gIsKindOf(ctl, RadioButton)
 			||gIsKindOf(ctl, LineControl)
 			||gIsKindOf(ctl, CheckBox)||gIsKindOf(ctl, TextVector)||gIsKindOf(ctl, RectControl))){
 			SetBkColor((HDC) wParam, gColor(cbb));
 			SetTextColor((HDC) wParam, gColor(ctb));
-			return (BOOL) gHandle(cbb);   //   ???   
+			return (LRESULT) gHandle(cbb);   //   ???   
 		}
 		
 		if (ctl && gDisableStatus(ctl)==1)
 		{
 			SetBkColor((HDC) wParam, gColor(cbb));
 			SetTextColor((HDC) wParam, gColor(ctb));
-			return (BOOL) gHandle(cbb);   //   ???   
+			return (LRESULT) gHandle(cbb);   //   ???   
 		}
 
 		if (!ctl)
@@ -490,13 +487,13 @@ private	imeth	BOOL	process_wm_color(object	self,
 			if (strcmp(windowClassName,"SysTreeView32")&&strcmp(windowClassName,"ListBox")) //leave tree view alone
 			{
  				SetBkColor((HDC) wParam, gColor(cbb));
-				return (BOOL) gHandle(cbb);  
+				return (LRESULT) gHandle(cbb);  
 			}
 			else
 			{
 				object br=gNewSolidBrush(SolidBrush,255,255,255);
 				SetBkColor((HDC) wParam, gColor(br));
-				return (BOOL) gHandle(br); 	
+				return (LRESULT) gHandle(br); 	
 
 			}
 		}
@@ -505,13 +502,13 @@ private	imeth	BOOL	process_wm_color(object	self,
 	if (cbb  &&  ctb  &&  (force || !Ctl3dSubclassDlgEx))  {
 		SetBkColor((HDC) wParam, gColor(cbb));
 		SetTextColor((HDC) wParam, gColor(ctb));
-		return (BOOL) gHandle(cbb);   //   ???   
+		return (LRESULT) gHandle(cbb);   //   ???   
 	} else
 		return FALSE;  //  code needed for Ctl3d stuff
 		
 }
 
-private	imeth	BOOL	process_wm_activate(object	self, 
+private	imeth	LRESULT	process_wm_activate(object	self, 
 					    HWND	hdlg, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -538,7 +535,7 @@ private	imeth	BOOL	process_wm_activate(object	self,
 	return FALSE;
 }
 
-private	imeth	BOOL	process_wm_move(object	self, 
+private	imeth	LRESULT	process_wm_move(object	self, 
 					HWND	hdlg, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -552,7 +549,7 @@ private	imeth	BOOL	process_wm_move(object	self,
 	return FALSE;
 }
 
-private	imeth	BOOL	process_wm_setcursor(object	self, 
+private	imeth	LRESULT	process_wm_setcursor(object	self, 
 					     HWND	hdlg, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -565,7 +562,7 @@ private	imeth	BOOL	process_wm_setcursor(object	self,
 
 #ifdef	WIN32
 
-private	imeth	BOOL	process_wm_notify(object	self, 
+private	imeth	LRESULT	process_wm_notify(object	self, 
 					  HWND		hdlg, 
 					  UINT		mMsg, 
 					  WPARAM	wParam, 
@@ -603,7 +600,7 @@ private	imeth	pShowDockedWindows(object self)
 	return self;
 }
 
-private	imeth	BOOL	process_wm_syscommand(object	self, 
+private	imeth	LRESULT	process_wm_syscommand(object	self, 
 					      HWND	hdlg, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -1307,9 +1304,9 @@ imeth	char	*gGetTopic()
 	return iTopic ? gStringValue(iTopic) : NULL;
 }
 
-typedef	long (*lfun)();
+typedef	LRESULT (*lfun)();
 
-imeth	gAddDlgHandlerAfter(unsigned msg, BOOL (*fun)())
+imeth	gAddDlgHandlerAfter(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -1321,7 +1318,7 @@ imeth	gAddDlgHandlerAfter(unsigned msg, BOOL (*fun)())
 	return self;
 }
 
-imeth	gAddDlgHandlerBefore(unsigned msg, BOOL (*fun)())
+imeth	gAddDlgHandlerBefore(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -1587,7 +1584,7 @@ imeth	unsigned     gGetResourceID()
 
 imeth	unsigned     gResourceIDFromFileResource()
 {
-	return (unsigned) (iResource ? (WORD) ((DWORD) iResource) : 0);
+	return (unsigned) (iResource ? (WORD) ((INT_PTR) iResource) : 0);
 }
 
 imeth	gDisableObject(obj)	//  needed by tasklist code

@@ -175,7 +175,7 @@ imeth int Object_im_gHash(object self)
 { 
 	double t; 
 
-	t = .6125423371 * (double) (INT_PTR) self; 
+	t = .6125423371 * (double)(INT_PTR) self; 
 	t = t < 0.0 ? -t : t; 
 	return (int) (BIG_INT * (t - floor(t))); 
 } 

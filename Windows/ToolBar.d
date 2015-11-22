@@ -31,6 +31,7 @@
 
 //#include "logfile.h"
 #include "hdlcache.h"
+#include <windows.h>
 
 // #define	MAXBITMAPS	30 // Yanghui
 #define	MAXBITMAPS	40     // Yanghui
@@ -38,7 +39,7 @@
 #define TYPE_BUTTON	1
 #define TYPE_COMBO	2
 
-typedef	long	(*lfun)();
+typedef	LRESULT	(*lfun)();
 
 defclass  ToolBar : ChildWindow  {
 	object		iParent;
@@ -83,27 +84,27 @@ class:
 
 static	int	get_index(WPARAM p);
 
-static	long	process_wm_paint(object	self, 
+static	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
 					 LPARAM	lParam);
-static	long	process_wm_lbuttondown(object	self, 
+static	LRESULT	process_wm_lbuttondown(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
 					 LPARAM	lParam);
-static	long	process_wm_lbuttonup(object	self, 
+static	LRESULT	process_wm_lbuttonup(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
 					 LPARAM	lParam);
-static	long	process_wm_rbuttondown(object	self, 
+static	LRESULT	process_wm_rbuttondown(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
 					 LPARAM	lParam);
-static	long	process_wm_mousemove(object	self, 
+static	LRESULT	process_wm_mousemove(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -250,7 +251,7 @@ static	void	paint_bitmap(ivType *iv, HDC dc, int i, int wth)
 		}
 }
 
-private	imeth	long	process_wm_paint(object	self, 
+private	imeth	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -424,7 +425,7 @@ imeth void gUseAlternateColor()
 	iAltColor = 1;
 }
 
-private	imeth	long	process_wm_mousemove(object	self, 
+private	imeth	LRESULT	process_wm_mousemove(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -458,7 +459,7 @@ private	imeth	long	process_wm_mousemove(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_lbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondown(object	self, 
 					       HWND	hwnd, 
 					       UINT	mMsg, 
 					       WPARAM	wParam, 
@@ -498,7 +499,7 @@ private	imeth	long	process_wm_lbuttondown(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_lbuttonup(object	self, 
+private	imeth	LRESULT	process_wm_lbuttonup(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -524,14 +525,14 @@ private	imeth	long	process_wm_lbuttonup(object	self,
 	InvalidateRect(gHandle(self), &r, FALSE);
 	ReleaseCapture();
 	if (iFun[i]  &&  PtInRect(&r, p)) {
-		long	(*fun)() = iFun[i];
+		LRESULT	(*fun)() = iFun[i];
 
 		if (SchemeClassSurrogate  &&  IsObj((object)fun)  &&  ClassOf(fun) == String) {
 			char	cmd[100], ns[80];
 
-			sprintf(cmd, "(%s (int->object %ld) %ld)",
+			sprintf(cmd, "(%s (int->object %lld) %lld)",
 				gFunctionName(SchemeClassSurrogate, (object)fun),
-				(long) iParent, (long) iID[i]);
+				(long long) iParent, (long long) iID[i]);
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object)fun, ns), 
 					      cmd);
@@ -539,7 +540,7 @@ private	imeth	long	process_wm_lbuttonup(object	self,
 			return gPerformJavaMenuCallback((object)fun, iParent, iID[i]);
 		else if (JavaScriptClassSurrogate  &&  IsObj((object)fun)  &&  ClassOf(fun) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), %ld)", gStringValue((object)fun), (long) iParent, (long) iID[i]);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fun), (long long) iParent, (long long) iID[i]);
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else
 			fun(iParent, iID[i]);
@@ -631,7 +632,7 @@ static	HBITMAP	load_bitmap(ivType *iv, char *file, unsigned id, int state, int p
 	return bm;
 }
 
-private	imeth	pAddToolBitmap(char *file, unsigned id1, unsigned id2, int space, long (*fun)(), char *tip)
+private	imeth	pAddToolBitmap(char *file, unsigned id1, unsigned id2, int space, LRESULT (*fun)(), char *tip)
 {
 	BITMAP	bm;
 	HBITMAP	hbm;
@@ -757,12 +758,12 @@ imeth	gAddToolComboBox(int height, int width, int space, int (*fun)(), char *tip
 	return ctl;
 }
 
-imeth	gAddToolBitmap(unsigned id1, unsigned id2, int space, long (*fun)(), char *tip)
+imeth	gAddToolBitmap(unsigned id1, unsigned id2, int space, LRESULT (*fun)(), char *tip)
 {
 	return pAddToolBitmap(self, NULL, id1, id2, space, fun, tip);
 }
 
-imeth	gAddToolBitmapFromFile(char *file, unsigned id1, unsigned id2, int space, long (*fun)(), char *tip)
+imeth	gAddToolBitmapFromFile(char *file, unsigned id1, unsigned id2, int space, LRESULT (*fun)(), char *tip)
 {
 	return pAddToolBitmap(self, file, id1, id2, space, fun, tip);
 }
@@ -871,7 +872,7 @@ imeth	int	gShowToolBitmap(unsigned id, int val)
 	return !ps;
 }
 
-imeth	ifun	gSetToolFunction(unsigned id, long (*fun)())
+imeth	ifun	gSetToolFunction(unsigned id, LRESULT (*fun)())
 {
 	ifun	org;
 	int	i;
@@ -961,7 +962,7 @@ cmeth	ofun	gSetMouseFunction(unsigned button, ifun fun)
 	return (ofun) org;
 }
 
-private	imeth	long	process_wm_rbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_rbuttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 

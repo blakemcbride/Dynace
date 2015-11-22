@@ -77,7 +77,7 @@ imeth	void	gSchemeThreadWait() {
 			int parmCnt = *iParmBlockStart;
 			int *parmPnt = iParmBlockStart + parmCnt;
 			int nStackFix = parmCnt * 4;
-			int retVal;
+			int retVal=0;
 			void *fun = iSchemeExecFun;
 
 #ifndef _M_X64

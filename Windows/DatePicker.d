@@ -43,7 +43,7 @@ defclass DatePicker {
 private	imeth	object	pLoadWindow(object self);
 private	imeth	object	pUpdateWindow(object self);
 
-static	long	process_wm_char(object	wind, 
+static	LRESULT	process_wm_char(object	wind, 
 				HWND	hwnd, 
 				UINT	mMsg, 
 				WPARAM	wParam, 

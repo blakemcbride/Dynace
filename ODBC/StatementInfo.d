@@ -68,7 +68,7 @@ defclass  StatementInfo  {
 	UDWORD	iPrecision;
 	SWORD	iScale;
 	SWORD	iNulls;
-	SDWORD	iPCBValue;
+	SQLLEN	iPCBValue;
 	int	iDBMS;
 
 	int	iSetToNull;

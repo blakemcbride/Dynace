@@ -139,23 +139,21 @@ wds-all-scratch : all-scratch
 %@[
 	@echo off
 
-	cd ODBC
-	$(TOUCH) sqlgrammar.c sqlgrammar.h sqltokens.c 
-
-	cd ..\Registry
-	echo Entering Registry
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-	cd ..\Windows
+	cd Windows
 	echo Entering Windows
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) newgens
 	if errorlevel 1 goto done
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) NEW=1
 	if errorlevel 1 goto done
 
+	cd ..\Registry
+	echo Entering Registry
+	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
+	if errorlevel 1 goto done
+
 	cd ..\ODBC
 	echo Entering ODBC
+	$(TOUCH) sqlgrammar.c sqlgrammar.h sqltokens.c 
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) newgens
 	if errorlevel 1 goto done
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS)

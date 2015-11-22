@@ -88,7 +88,7 @@ private	imeth	void	set_width(object self, char *text);
 #define	ACTIVE	(iHCtl  &&  iDlg  &&  gInDialog(iDlg))
 
 
-private	imeth	long	process_wm_setfocus(object	self, 
+private	imeth	LRESULT	process_wm_setfocus(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -99,7 +99,7 @@ private	imeth	long	process_wm_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_killfocus(object	self, 
+private	imeth	LRESULT	process_wm_killfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -111,7 +111,7 @@ private	imeth	long	process_wm_killfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_lbuttondblclk(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondblclk(object	self, 
 						 HWND	hwnd, 
 						 UINT	mMsg, 
 						 WPARAM	wParam, 
@@ -125,7 +125,7 @@ private	imeth	long	process_wm_lbuttondblclk(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_char(object	self, 
+private	imeth	LRESULT	process_wm_char(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -140,7 +140,7 @@ private	imeth	long	process_wm_char(object	self,
 	return gCallDefaultProc(self, mMsg, wParam, lParam);
 }
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -228,7 +228,7 @@ private	imeth	void	initList(object self)
 	for (seq=gSequence(iOptions) ; obj=gNext(seq) ; ) {
 		str = gStringValue(gValue(obj));
 		set_width(self, str);
-		SendMessage(iHCtl, LB_INSERTSTRING, -1, (long) str);
+		SendMessage(iHCtl, LB_INSERTSTRING, -1, (LPARAM) str);
 	}
 	SendMessage(iHCtl, WM_SETREDRAW, TRUE, 0L);
 }
@@ -508,9 +508,9 @@ imeth	int	gCheckValue()
 			char	cmd[100], ns[80];
 			object	ret;
 			int	res;
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long) self, (long) iValue);
+				(long long) self, (long long) iValue);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -522,7 +522,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iAcf), (long) self, (long) iValue);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), (long long) self, (long long) iValue);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)
@@ -970,9 +970,9 @@ imeth	int	gPerformChg()
 		char	cmd[100], ns[80];
 		object	ret;
 		int	res=0;
-		sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+		sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 			gFunctionName(SchemeClassSurrogate, (object)iChgFun),
-			(long) self, (long) iDlg);
+			(long long) self, (long long) iDlg);
 		ret = gExecuteInNamespace(SchemeClassSurrogate,
 					  gNamespaceName(SchemeClassSurrogate, (object)iChgFun, ns), 
 					  cmd);
@@ -985,7 +985,7 @@ imeth	int	gPerformChg()
 		int	res = 0;
 		object	ret;
 		char	cmd[128];
-		sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iChgFun), (long) self, (long) iDlg);
+		sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iChgFun), (long long) self, (long long) iDlg);
 		ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 		if (IsObj(ret)) {
 			if (ClassOf(ret) == LongInteger)

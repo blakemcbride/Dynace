@@ -49,15 +49,15 @@ static int scrollFunction(object ctl, unsigned code, unsigned npos)
 			if (SchemeClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == String) 
 			{
 				char	cmd[100], ns[80];
-				sprintf(cmd, "(%s (int->object %ld) (int->object %ld) 1)",
+				sprintf(cmd, "(%s (int->object %lld) (int->object %lld) 1)",
 					gFunctionName(SchemeClassSurrogate, (object)iIncFunc),
-					(long) self, (long) dlg);
+					(long long) self, (long long) dlg);
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 							  gNamespaceName(SchemeClassSurrogate, (object)iIncFunc, ns), 
 							  cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"), 1)", gStringValue((object)iIncFunc), (long) self, (long) dlg);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), 1)", gStringValue((object)iIncFunc), (long long) self, (long long) dlg);
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				iIncFunc(self, dlg, 1);
@@ -68,15 +68,15 @@ static int scrollFunction(object ctl, unsigned code, unsigned npos)
 			if (SchemeClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == String) 
 			{
 				char	cmd[100], ns[80];
-				sprintf(cmd, "(%s (int->object %ld) (int->object %ld) -1)",
+				sprintf(cmd, "(%s (int->object %lld) (int->object %lld) -1)",
 					gFunctionName(SchemeClassSurrogate, (object)iIncFunc),
-					(long) self, (long) dlg);
+					(long long) self, (long long) dlg);
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 							  gNamespaceName(SchemeClassSurrogate, (object)iIncFunc, ns), 
 							  cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"), -1)", gStringValue((object)iIncFunc), (long) self, (long) dlg);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), -1)", gStringValue((object)iIncFunc), (long long) self, (long long) dlg);
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				iIncFunc(self, dlg, -1);

@@ -133,7 +133,7 @@ to STRAT=-S1, the fater mode doesn't matter.  It works either way.)
 	dmake -f msc.dm wds-makegens
 	dmake -f msc.dm wds-all-scratch
 	cd WinExam\setup
-	m32dm
+	mscdm
 
 You can test the GUI system as follows:
 

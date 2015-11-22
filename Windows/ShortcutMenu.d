@@ -105,7 +105,7 @@ imeth	int	gAddMenuOption(char *title, void (*fun)())
 imeth	gAddPopupMenu : add_popup_menu (char *title, menu)
 {
 	ChkArg(menu, 2);
-	AppendMenu(gHandle(self), MF_POPUP, (UINT) gHandle(menu), title);
+	AppendMenu(gHandle(self), MF_POPUP, (UINT_PTR) gHandle(menu), title);
 	gAddLast(iPopups, menu);
 	return self;
 }
@@ -163,15 +163,15 @@ imeth	int	gPerform()
 			} else if (SchemeClassSurrogate  &&  IsObj((object)fp)  &&  ClassOf(fp) == String) {
 				char	cmd[100], ns[80];
 
-				sprintf(cmd, "(%s (int->object %ld) %u)",
+				sprintf(cmd, "(%s (int->object %lld) %u)",
 					gFunctionName(SchemeClassSurrogate, (object)fp),
-					(long) wind, id);
+					(long long) wind, id);
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 						      gNamespaceName(SchemeClassSurrogate, (object)fp, ns), 
 						      cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)fp)  &&  ClassOf(fp) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%ld\"), %ld)", gStringValue((object)fp), (long) wind, (long) id);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fp), (long long) wind, (long long) id);
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				fp(wind, id);

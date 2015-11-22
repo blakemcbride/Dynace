@@ -67,7 +67,7 @@ defclass  Application  {
 	/*  vars dealing with F1 hook  */
 
 	HHOOK	cHook;			/*  handle to hook function	*/
-	FARPROC	cHI;			/*  hook function instance	*/
+	HOOKPROC	cHI;		/*  hook function instance	*/
 
 	cCtl3d;				/*  Ctl3d dynamic library	*/
 	int	cNoCtl3d;		/*  1=Don't use ctl3d		*/
@@ -215,9 +215,12 @@ void	_init_WDS(HINSTANCE hInstance,
 	stderrStream_o = vNew(PopupWindow, "stderrStream", 12, 45);
 	gAutoShow(stderrStream, 1);
 
-	cHI = MakeProcInstance((FARPROC) KeyboardProc, hInstance);
+	cHI = MakeProcInstance(KeyboardProc, hInstance);
 #ifdef	WIN32
-	cHook = SetWindowsHookEx(WH_KEYBOARD, (long (__stdcall *)(int ,unsigned int ,long))cHI, hInstance, GetCurrentThreadId());
+	cHook = SetWindowsHookEx(WH_KEYBOARD,
+				 cHI,
+				 hInstance,
+				 GetCurrentThreadId());
 	InitCommonControls();
 #else
 	cHook = SetWindowsHookEx(WH_KEYBOARD, cHI, hInstance, GetCurrentTask());

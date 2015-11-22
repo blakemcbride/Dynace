@@ -100,11 +100,11 @@ private	imeth	pLoadTableInfo(object self)
 	r = SQLColumns(stmt, NULL, 0, schema, (SQLSMALLINT)(schema ? SQL_NTS : 0), iPName, SQL_NTS, NULL, 0);
 
 	if (r == SQL_SUCCESS) {
-		long	pcbValueOwner;
-		long	pcbValueTypeName;
-		long	pcbValueLength;
-		long	pcbValueScale;
-		long	pcbValueNullable;
+		SQLLEN	pcbValueOwner;
+		SQLLEN	pcbValueTypeName;
+		SQLLEN	pcbValueLength;
+		SQLLEN	pcbValueScale;
+		SQLLEN	pcbValueNullable;
 
 		iColumns = gNewWithInt(StringDictionary, 101);
 		iLLColumns = gNew(LinkObject);

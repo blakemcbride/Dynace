@@ -38,7 +38,7 @@ defclass  ModelessDialog : Dialog  {
 init:	init_class;
 };
 
-private	imeth	BOOL	process_wm_keydown(HWND	hdlg, UINT mMsg, WPARAM	wParam, LPARAM lParam);
+private	imeth	LRESULT	process_wm_keydown(HWND	hdlg, UINT mMsg, WPARAM	wParam, LPARAM lParam);
 
 #define MODAL		0
 #define MODELESS	1
@@ -69,7 +69,7 @@ static	void	init_class()
 	gDontCollect(CLASS);
 }
 
-private	imeth	BOOL	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hdlg, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -81,7 +81,7 @@ private	imeth	BOOL	process_wm_keydown(object	self,
 	if (parent=gGetParent(self))
 		SendMessage(gHandle(parent), mMsg, wParam, lParam);
 
-	return ret;
+	return (LRESULT) ret;
 }
 
 

@@ -43,7 +43,7 @@ defclass SplashWindow : PopupWindow {
 
 private imeth	pInitializeSplashWindow(object self, unsigned bmpID);
 
-private	imeth	long	process_wm_paint(object	self, 
+private	imeth	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -169,7 +169,7 @@ imeth	gDeepDispose, gDispose ()
 	return gDispose(super);
 }
 
-private	imeth	long	process_wm_paint(object	self, 
+private	imeth	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 

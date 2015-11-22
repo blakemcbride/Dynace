@@ -169,7 +169,7 @@ static char *SkipSz(LPTSTR pNameOrd)
 
 static VOID DWordAlign(char **ppb)
 {
-    *ppb += (4 - (((WORD)(DWORD)*ppb) & 3)) % 4;
+    *ppb += (4 - (((INT_PTR)*ppb) & 3)) % 4;
 }
 
 static PRES2 ResourcePart2(PRES pRes)

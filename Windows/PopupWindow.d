@@ -35,7 +35,7 @@ defclass  PopupWindow : Window  {
  init:	init_class;
 };
 
-private imeth long	process_wm_keydown(HWND hwnd, UINT mMsg, WPARAM wParam, LPARAM lParam);
+private imeth LRESULT	process_wm_keydown(HWND hwnd, UINT mMsg, WPARAM wParam, LPARAM lParam);
 
 cmeth	gNewPopupWindowWithClass(char *title, int lines, int characters, char *classname)
 {
@@ -88,13 +88,13 @@ static	void	init_class()
 	gDontCollect(CLASS);
 }
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
 					   LPARAM	lParam)
 {
-	long rval = 0;
+	LRESULT rval = 0;
 	object	parent;
 
 	if (parent=gGetParent(self))

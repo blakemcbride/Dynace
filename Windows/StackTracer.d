@@ -36,8 +36,9 @@
 #endif
 
 #include <windows.h>
+//#include <imagehlp.h>
+#include <DbgHelp.h>
 #include <tchar.h>
-#include <imagehlp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -53,8 +54,7 @@
 typedef BOOL (__stdcall * SYMINITIALIZEPROC)( HANDLE, LPSTR, BOOL );
 typedef BOOL (__stdcall *SYMCLEANUPPROC)( HANDLE );
 
-typedef BOOL (__stdcall * STACKWALKPROC)
-				( DWORD, HANDLE, HANDLE, LPSTACKFRAME, LPVOID,
+typedef BOOL (__stdcall * STACKWALKPROC)( DWORD, HANDLE, HANDLE, LPSTACKFRAME, LPVOID,
 				PREAD_PROCESS_MEMORY_ROUTINE,PFUNCTION_TABLE_ACCESS_ROUTINE,
 				PGET_MODULE_BASE_ROUTINE, PTRANSLATE_ADDRESS_ROUTINE );
 
@@ -62,14 +62,11 @@ typedef LPVOID (__stdcall *SYMFUNCTIONTABLEACCESSPROC)( HANDLE, DWORD );
 
 typedef DWORD (__stdcall *SYMGETMODULEBASEPROC)( HANDLE, DWORD );
 
-typedef BOOL (__stdcall *SYMGETSYMFROMADDRPROC)
-							( HANDLE, DWORD, PDWORD, PIMAGEHLP_SYMBOL );
+typedef BOOL (__stdcall *SYMGETSYMFROMADDRPROC)( HANDLE, DWORD, PDWORD, PIMAGEHLP_SYMBOL );
 
-typedef BOOL (__stdcall *SYMGETLINEFROMADDRPROC)
-							( HANDLE, DWORD, PDWORD, PIMAGEHLP_LINE );
+typedef BOOL (__stdcall *SYMGETLINEFROMADDRPROC)( HANDLE, DWORD, PDWORD, PIMAGEHLP_LINE );
 
-typedef DWORD (__stdcall *SYMSETOPTIONSPROC)
-							( DWORD );
+typedef DWORD (__stdcall *SYMSETOPTIONSPROC)( DWORD );
 
 defclass StackTracer
 {
@@ -394,13 +391,13 @@ private imeth LPTSTR pGetExceptionString( DWORD dwCode )
     return NULL;
 }
 
-private imeth BOOL pGetLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWORD *section, DWORD *offset )
+private imeth BOOL pGetLogicalAddress(LPCVOID addr, PTSTR szModule, DWORD len, DWORD *section, DWORD *offset )
 {
 	MEMORY_BASIC_INFORMATION mbi;
-	DWORD hMod;
+	INT_PTR hMod;
 	PIMAGE_DOS_HEADER pDosHdr;
 	PIMAGE_NT_HEADERS pNtHdr;
-	DWORD rva;
+	INT_PTR rva;
 	PIMAGE_SECTION_HEADER pSection;
 	unsigned i;
 
@@ -408,10 +405,10 @@ private imeth BOOL pGetLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWO
 	__try
 	{	
 
-		if ( !VirtualQuery( addr, &mbi, sizeof(mbi) ) )
+		if ( !VirtualQuery( addr, &mbi, (SIZE_T)sizeof(mbi) ) )
 			return FALSE;
 
-		hMod = (DWORD)mbi.AllocationBase;
+		hMod = (INT_PTR) mbi.AllocationBase;
 
 		if ( !GetModuleFileName( (HMODULE)hMod, szModule, len ) )
 			return FALSE;
@@ -421,11 +418,11 @@ private imeth BOOL pGetLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWO
 
 		
 		// From the DOS header, find the NT (PE) header
-		pNtHdr = (PIMAGE_NT_HEADERS)(hMod + pDosHdr->e_lfanew);
+		pNtHdr = (PIMAGE_NT_HEADERS)((char *)hMod + pDosHdr->e_lfanew);
 
 		pSection = IMAGE_FIRST_SECTION( pNtHdr );
 
-		rva = (DWORD)addr - hMod; // RVA is offset from module load address
+		rva = (INT_PTR)addr - hMod; // RVA is offset from module load address
 
 		// Iterate through the section table, looking for the one that encompasses
 		// the linear address.
@@ -433,8 +430,8 @@ private imeth BOOL pGetLogicalAddress(PVOID addr, PTSTR szModule, DWORD len, DWO
 			 i < pNtHdr->FileHeader.NumberOfSections;
 			 i++, pSection++ )
 		{
-			DWORD sectionStart = pSection->VirtualAddress;
-			DWORD sectionEnd = sectionStart
+			INT_PTR sectionStart = pSection->VirtualAddress;
+			INT_PTR sectionEnd = sectionStart
 				+ max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
 
 			// Is the address in this section???

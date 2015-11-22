@@ -478,7 +478,7 @@ private imeth int runPreparedStatement(char *cmd)
 	int	r=0;
 	char	*params[MAX_PARAMS];
 	int	loop;
-	long	nts=(long)SQL_NTS;
+	SQLLEN	nts=(SQLLEN)SQL_NTS;
 
 	if (iDBMS == DBMS_ORACLE  ||  strnicmp(cmd, "SELECT", 6)  &&  strnicmp(cmd, "INSERT", 6)  &&  strnicmp(cmd, "UPDATE", 6)  &&  strnicmp(cmd, "DELETE", 6)) {
 		char *p = fix_statement(cmd, iDBMS);
@@ -743,7 +743,7 @@ private	imeth	int	bindCols(char *err)
 	RETCODE	r;
 	SWORD	n, type, scale, nulls;
 	UWORD	i;
-	UDWORD	prec;
+	SQLULEN	prec;
 	char	cname[100];
 	object	si;
 	int	size;
@@ -2030,7 +2030,7 @@ imeth	int	gFldSetBinary(char *fld, long size, char *val)
 	free(t);
 	free(cmd);
 	if (!r) {
-		SDWORD	pcbVal = SQL_LEN_DATA_AT_EXEC(size);
+		SQLLEN	pcbVal = SQL_LEN_DATA_AT_EXEC(size);
 		PTR	pToken;
 		
 		r = SQLBindParameter(h, (UWORD) 1, SQL_PARAM_INPUT, SQL_C_BINARY, SQL_LONGVARBINARY, 0, 0, (PTR) 1, 0, &pcbVal);
@@ -2061,7 +2061,7 @@ imeth	int	gFldGetBinary(char *fld, long *size, char **val)
 	char	*cmd, c;
 	int	r, fn;
 	HSTMT	h;
-	SDWORD	pcbVal;
+	SQLLEN	pcbVal;
 	static	char	fun[] = "gFldGetBinary";
 	char * t;
 
@@ -4415,7 +4415,7 @@ imeth	int	gSQLStatistics(char *tname, char *oname)
 	if (!r  ||  r == SQL_SUCCESS_WITH_INFO) {
 		SWORD	n, type, scale, nulls;
 		UWORD	i;
-		UDWORD	prec;
+		SQLLEN	prec;
 		char	cname[100];
 		object	si;
 		int	size;
@@ -4619,7 +4619,7 @@ imeth	int	gSQLForeignKeys(char *tname, char *oname, int refby)
 	if (!r  ||  r == SQL_SUCCESS_WITH_INFO) {
 		SWORD	n, type, scale, nulls;
 		UWORD	i;
-		UDWORD	prec;
+		SQLLEN	prec;
 		char	cname[100];
 		object	si;
 		int	size;

@@ -47,19 +47,21 @@ defclass  HandleCache  {
 
 cmeth	gAddHandle(int type, HWND hwnd, obj)
 {
-	object	obj2;
+	object	obj2, key;
 	ivType	*iv;
 
-	obj2 = gFindValueInt(cHandles[type], (unsigned) hwnd);
-	if (obj2)     /*  dup load of stock object  */
+	key = gNewWithPtr(Pointer, (void *)hwnd);
+	obj2 = gFindValue(cHandles[type], key);
+	if (obj2)  {   /*  dup load of stock object  */
 		ivPtr(obj2)->iN++;
-	else  {
+		gDispose(key);
+	}  else  {
 		obj2 = vNew(super);
 		iv = ivPtr(obj2);
 		iObj = obj;
 		iCachePtrs = gNew(LinkList);
 		iN = 1;
-		gAddInt(cHandles[type], (unsigned) hwnd, obj2);
+		gAddValue(cHandles[type], key, obj2);
 	}
 	return obj2;
 }
@@ -70,11 +72,13 @@ cmeth	gAddCache(int 		type,
 {
 	object	obj;
 	ivType	*iv;
-	object	lnk;
+	object	lnk, key;
 
 	if (*lp)
 		gDeepDispose(*lp);
-	obj = gFindValueInt(cHandles[type], (unsigned) hwnd);
+	key = gNewWithPtr(Pointer, (void *)hwnd);
+	obj = gFindValue(cHandles[type], key);
+	gDispose(key);
 	if (!obj)
 		return NULL;
 	iv = ivPtr(obj);
@@ -84,9 +88,11 @@ cmeth	gAddCache(int 		type,
 
 cmeth	gGetObject(int type, HWND h)
 {
-	object	i;
-	
-	i = gFindValueInt(cHandles[type], (unsigned) h);
+	object	i, key;
+
+	key = gNewWithPtr(Pointer, (void *)h);
+	i = gFindValue(cHandles[type], key);
+	gDispose(key);
 	if (!i)
 		return NULL;
 	return ivPtr(i)->iObj;
@@ -95,11 +101,14 @@ cmeth	gGetObject(int type, HWND h)
 cmeth	gDeleteHandle(int type, HWND h)
 {
 	ivType	*iv;
-	object	i, ll, f;
-	
-	i = gFindValueInt(cHandles[type], (unsigned) h);
-	if (!i)
+	object	i, ll, f, key;
+
+	key = gNewWithPtr(Pointer, (void *)h);
+	i = gFindValue(cHandles[type], key);
+	if (!i) {
+		gDispose(key);
 		return NULL;
+	}
 	iv = ivPtr(i);
 	if (--iN)
 		return self;
@@ -107,7 +116,8 @@ cmeth	gDeleteHandle(int type, HWND h)
 	while (f = gFirst(ll))
 		gDeepDispose(f);
 	gDeepDispose(ll);
-	gRemoveInt(cHandles[type], (unsigned) h);
+	gRemoveObj(cHandles[type], key);
+	gDispose(key);
 	gDispose(super i);
 	return NULL;
 }
@@ -117,7 +127,7 @@ static	void	init_class()
 	int	i;
 
 	for (i=0 ; i < CACHE_TYPES ; ++i)
-		cHandles[i] = gNewWithInt(IntegerDictionary, 99);
+		cHandles[i] = gNewWithInt(Dictionary, 99);
 }
 
 

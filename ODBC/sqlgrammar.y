@@ -49,11 +49,13 @@ int yywrap(void)
 	return 1;
 }
 
-int yyerror(char *msg)
+int yyerror(void *root, char const *msg)
 {
 	return 1;
 }
 %}
+
+%parse-param {void *root}
 
 	/* symbolic tokens */
 
@@ -124,7 +126,7 @@ sql:		schema
 				sql_declare(sql_t, psql);
 				psql->which = 0;
 				psql->pschema = (schema_t*)$1;
-				$$ = (int)psql;
+				$$ = (LITEM)psql;
 			}
 		|
 			schema_element
@@ -132,7 +134,7 @@ sql:		schema
 				sql_declare(sql_t, psql);
 				psql->which = 4;
 				psql->pschema_element = (schema_element_t*)$1;
-				$$ = (int)psql;
+				$$ = (LITEM)psql;
 			}
 	;
 	
@@ -142,7 +144,7 @@ schema:
 			schema_t *pschema = sql_alloc(schema_t);
 			pschema->puser = (user_t*)$4;
 			pschema->plist = $5;
-			$$ = (int)pschema;
+			$$ = (LITEM)pschema;
 		}
 	;
 
@@ -173,28 +175,28 @@ schema_element:
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 0;
 			pelement->ptabledef = (base_table_def_t *)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	|	view_def
 		{
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 1;
 			pelement->pviewdef = (view_def_t *)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	|	privilege_def
 		{
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 2;
 			pelement->pprivilegedef = (privilege_def_t *)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	|	drop_trigger
 		{
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 3;
 			pelement->pdroptrigger = (drop_trigger_t*)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	|
 		drop_table
@@ -202,7 +204,7 @@ schema_element:
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 4;
 			pelement->pdroptable = (drop_table_t*)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	;
 
@@ -226,7 +228,7 @@ base_table_def:
 			base_table_def_t *pdef = sql_alloc(base_table_def_t);
 			pdef->ptable = (table_t*)$3;
 			pdef->plist = $5;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	;
 
@@ -249,14 +251,14 @@ base_table_element:
 			sql_declare(base_table_element_t, pelement);
 			pelement->which = 0;
 			pelement->pcolumn = (column_def_t*)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	|	table_constraint_def
 		{
 			sql_declare(base_table_element_t, pelement);
 			pelement->which = 1;
 			pelement->pconstraint = (table_constraint_def_t*)$1;
-			$$ = (int)pelement;
+			$$ = (LITEM)pelement;
 		}
 	;
 
@@ -267,14 +269,14 @@ column_def:
 			pcolumn->pcolumn = (column_t)$1;
 			pcolumn->ptype = (data_type_t*)$2;
 			pcolumn->popt = $3;
-			$$ = (int)pcolumn;
+			$$ = (LITEM)pcolumn;
 		}
 	;
 
 column_def_opt_list:
 		/* empty */
 	{
-		$$ = (int)NULL;
+		$$ = (LITEM)NULL;
 	}
 	|	column_def_opt_list column_def_opt
 	{
@@ -289,21 +291,21 @@ column_def_opt:
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	NOT NULLX UNIQUE
 		{
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX_UNIQUE;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	NOT NULLX PRIMARY KEY
 		{
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX_PKEY;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	DEFAULT literal
 		{
@@ -312,7 +314,7 @@ column_def_opt:
 			pdef->pdefault = sql_alloc(default_t);
 			pdef->pdefault->which = 0;
 			pdef->pdefault->pliteral = (literal_t*)$2;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	DEFAULT NULLX
 		{
@@ -321,7 +323,7 @@ column_def_opt:
 			pdef->pdefault = sql_alloc(default_t);
 			pdef->pdefault->which = 1;
 			pdef->pdefault->nullx = IS_NULLX;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	DEFAULT USER
 		{
@@ -330,14 +332,14 @@ column_def_opt:
 			pdef->pdefault = sql_alloc(default_t);
 			pdef->pdefault->which = 2;
 			pdef->pdefault->puser = (char*)$2;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	CHECK '(' search_condition ')'
 		{
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 2;
 			pdef->psearch = (search_condition_t*)$3;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	REFERENCES table
 		{
@@ -345,7 +347,7 @@ column_def_opt:
 			pdef->which = 3;
 			pdef->preferences = sql_alloc(references_t);
 			pdef->preferences->ptable = (table_t*)$2;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	REFERENCES table '(' column_commalist ')'
 		{
@@ -354,7 +356,7 @@ column_def_opt:
 			pdef->preferences = sql_alloc(references_t);
 			pdef->preferences->ptable = (table_t*)$2;
 			pdef->preferences->pcolumns = $4;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	;
 
@@ -364,14 +366,14 @@ table_constraint_def:
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 0;
 			pdef->punique = $3;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	PRIMARY KEY '(' column_commalist ')'
 		{
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 1;
 			pdef->pprimarykeys = $4;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	FOREIGN KEY '(' column_commalist ')'
 			REFERENCES table 
@@ -382,7 +384,7 @@ table_constraint_def:
 			pdef->pforeignkey->pcolumns = $4;
 			pdef->pforeignkey->preferences = sql_alloc(references_t);
 			pdef->pforeignkey->preferences->ptable = (table_t*)$7;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	FOREIGN KEY '(' column_commalist ')'
 			REFERENCES table '(' column_commalist ')'
@@ -394,14 +396,14 @@ table_constraint_def:
 			pdef->pforeignkey->preferences = sql_alloc(references_t);
 			pdef->pforeignkey->preferences->ptable = (table_t*)$7;
 			pdef->pforeignkey->preferences->pcolumns = $9;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	|	CHECK '(' search_condition ')'
 		{
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 3;
 			pdef->pcheck = (search_condition_t*)$3;
-			$$ = (int)pdef;
+			$$ = (LITEM)pdef;
 		}
 	;
 
@@ -444,7 +446,7 @@ opt_with_check_option:
 opt_column_commalist:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	'(' column_commalist ')'
 		{
@@ -481,21 +483,21 @@ privileges:
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 0;
 			pprivs->all = 1;
-			$$ = (int)pprivs;
+			$$ = (LITEM)pprivs;
 		}
 	|	ALL
 		{
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 0;
 			pprivs->all = 1;
-			$$ = (int)pprivs;
+			$$ = (LITEM)pprivs;
 		}
 	|	operation_commalist
 		{
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 1;
 			pprivs->pops = $1;
-			$$ = (int)pprivs;
+			$$ = (LITEM)pprivs;
 		}
 	;
 
@@ -558,7 +560,7 @@ grantee_commalist:
 grantee:
 		PUBLIC
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	user
 		{
@@ -569,7 +571,7 @@ grantee:
 	/* module language */
 sql:		module_def
 		{
-			yyerror("Module definition not supported");
+			yyerror(root, "Module definition not supported");
 		}
 	;
 
@@ -612,7 +614,7 @@ cursor_def:
 opt_order_by_clause:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	ORDER BY ordering_spec_commalist
 		{
@@ -642,7 +644,7 @@ ordering_spec:
 			spec->colnum = NULL;
 			spec->pcolumn = (column_ref_t*)$1;
 			spec->ascdesc = (asc_desc_t)$2;
-			$$ = (int)spec;
+			$$ = (LITEM)spec;
 		}
 	|	INTNUM opt_asc_desc
 		{
@@ -650,7 +652,7 @@ ordering_spec:
 			spec->colnum = (char*)$1;
 			spec->pcolumn = NULL;
 			spec->ascdesc = (asc_desc_t)$2;
-			$$ = (int)spec;
+			$$ = (LITEM)spec;
 		}
 	;
 
@@ -709,7 +711,7 @@ sql:	manipulative_statement
 			sql_declare(sql_t, psql);
 			psql->which = 2;
 			psql->pstmt = (manipulative_statement_t*)$1;
-			$$ = (int)psql;
+			$$ = (LITEM)psql;
 		}
 	;
 
@@ -719,28 +721,28 @@ manipulative_statement:
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 0;
 			pstmt->pdelsearched = (delete_statement_searched_t*)$1;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	|	insert_statement
 		{
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 1;
 			pstmt->pinsert = (insert_statement_t*)$1;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	|	select_statement
 		{
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 2;
 			pstmt->pselect = (select_statement_t*)$1;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	|	update_statement_searched
 		{
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 3;
 			pstmt->pupdatesearched = (update_statement_searched_t*)$1;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	|	close_statement
 	|	commit_statement
@@ -771,7 +773,7 @@ delete_statement_searched:
 			sql_declare(delete_statement_searched_t, pstmt);
 			pstmt->ptable = (table_t*)$3;
 			pstmt->pwhere = (where_clause_t*)$4;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	|
 		DELETE2 table opt_where_clause
@@ -779,7 +781,7 @@ delete_statement_searched:
 			sql_declare(delete_statement_searched_t, pstmt);
 			pstmt->ptable = (table_t*)$2;
 			pstmt->pwhere = (where_clause_t*)$3;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	;
 
@@ -794,7 +796,7 @@ insert_statement:
 			pstmt->ptable = (table_t*)$3;
 			pstmt->pcommalist = $4;
 			pstmt->pvalues = (values_or_query_spec_t*)$5;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	;
 
@@ -804,14 +806,14 @@ values_or_query_spec:
 			sql_declare(values_or_query_spec_t, pvalues);
 			pvalues->which = 0;
 			pvalues->patoms = $3;
-			$$ = (int)pvalues;
+			$$ = (LITEM)pvalues;
 		}
 	|	query_spec
 		{
 			sql_declare(values_or_query_spec_t, pvalues);
 			pvalues->which = 1;
 			pvalues->pquery = (query_spec_t*)$1;
-			$$ = (int)pvalues;
+			$$ = (LITEM)pvalues;
 		}
 	;
 
@@ -835,7 +837,7 @@ insert_atom:
 		}
 	|	NULLX
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	;
 
@@ -857,7 +859,7 @@ select_statement:
 			pstmt->pselection = (selection_t*)$3;
 			pstmt->pcommalist = $5;
 			pstmt->ptable = (table_exp_t*)$6;
-			$$ = (int)pstmt;
+			$$ = (LITEM)pstmt;
 		}
 	;
 
@@ -900,14 +902,14 @@ assignment:
 			sql_declare(assignment_t, pass);
 			pass->pcolumn = (column_t)$1;
 			pass->pscalar = (scalar_exp_t*)$3;
-			$$ = (int)pass;
+			$$ = (LITEM)pass;
 		}
 	|	column EQUALS NULLX
 		{
 			sql_declare(assignment_t, pass);
 			pass->pcolumn = (column_t)$1;
 			pass->pscalar = (scalar_exp_t*)NULL;
-			$$ = (int)pass;
+			$$ = (LITEM)pass;
 		}
 	;
 
@@ -918,7 +920,7 @@ update_statement_searched:
 			pupdate->ptable = (table_t*)$2;
 			pupdate->plist = $4;
 			pupdate->pwhereclause = (where_clause_t*)$5;
-			$$ = (int)pupdate;
+			$$ = (LITEM)pupdate;
 		}
 	;
 
@@ -945,7 +947,7 @@ target:
 opt_where_clause:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	where_clause
 		{
@@ -960,7 +962,7 @@ sql:	query_spec
 			sql_declare(sql_t, psql);
 			psql->which = 3;
 			psql->pquery = (query_spec_t*)$1;
-			$$ = (int)psql;
+			$$ = (LITEM)psql;
 		}
 	;
 
@@ -969,21 +971,21 @@ query_exp:
 		{
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)$1;
-			$$ = (int)pquery;
+			$$ = (LITEM)pquery;
 		}
 	|	query_exp UNION query_term
 		{
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)$3;
 			pquery->pexp = (query_exp_t*)$1;
-			$$ = (int)pquery;
+			$$ = (LITEM)pquery;
 		}
 	|	query_exp UNION ALL query_term
 		{
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)$4;
 			pquery->pexp = (query_exp_t*)$1;
-			$$ = (int)pquery;
+			$$ = (LITEM)pquery;
 		}
 	;
 
@@ -993,14 +995,14 @@ query_term:
 			sql_declare(query_term_t, pterm);
 			pterm->which = 0;
 			pterm->pspec = (query_spec_t*)$1;
-			$$ = (int)pterm;
+			$$ = (LITEM)pterm;
 		}
 	|	'(' query_exp ')'
 		{
 			sql_declare(query_term_t, pterm);
 			pterm->which = 1;
 			pterm->pexp = (void*)$2;
-			$$ = (int)pterm;
+			$$ = (LITEM)pterm;
 		}
 			
 	;
@@ -1013,7 +1015,7 @@ query_spec:
 			pspec->pselection = $3;
 			pspec->pexp = (table_exp_t*)$4;
 			pspec->porderby = $5;
-			$$ = (int)pspec;
+			$$ = (LITEM)pspec;
 		}
 	;
 
@@ -1035,7 +1037,7 @@ table_exp:
 			ptable->pwhere = (void*)$2;
 			ptable->pgroup = $3;
 			ptable->phaving = (having_clause_t*)$4;
-			$$ = (int)ptable;
+			$$ = (LITEM)ptable;
 		}
 	;
 
@@ -1045,7 +1047,7 @@ from_clause:
 			sql_declare(from_clause_t, pfrom);
 			pfrom->which = 0;
 			pfrom->plist = $2;
-			$$ = (int)pfrom;
+			$$ = (LITEM)pfrom;
 		}
 	|	FROM table_ref join_ref
 		{
@@ -1054,7 +1056,7 @@ from_clause:
 			pfrom->pjoin = sql_alloc(table_join_t);
 			pfrom->pjoin->ptable = (table_ref_t*)$2;
 			pfrom->pjoin->pjoin = (join_ref_t*)$3;
-			$$ = (int)pfrom;
+			$$ = (LITEM)pfrom;
 		}
 	;
 
@@ -1064,26 +1066,26 @@ join_ref:
 		{
 			join_ref_t *pref = (join_ref_t*)$2;
 			pref->type = JOIN_INNER;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	LEFT OUTER join_ref
 		{
 			join_ref_t *pref = (join_ref_t*)$3;
 			pref->type = JOIN_LEFT_OUTER;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	RIGHT OUTER join_ref
 		{
 			join_ref_t *pref = (join_ref_t*)$3;
 			pref->type = JOIN_RIGHT_OUTER;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	JOIN table_ref
 		{
 			sql_declare(join_ref_t, pref);
 			pref->type = JOIN_INNER;
 			pref->ptable = (table_ref_t*)$2;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	JOIN table_ref join_ref
 		{
@@ -1091,7 +1093,7 @@ join_ref:
 			pref->type = JOIN_INNER;
 			pref->ptable = (table_ref_t*)$2;
 			pref->pjoin = (join_ref_t*)$3;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	JOIN table_ref ON search_condition
 		{
@@ -1099,7 +1101,7 @@ join_ref:
 			pref->type = JOIN_INNER;
 			pref->ptable = (table_ref_t*)$2;
 			pref->psearch = (void*)$4;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	JOIN table_ref ON search_condition join_ref
 		{
@@ -1108,7 +1110,7 @@ join_ref:
 			pref->ptable = (table_ref_t*)$2;
 			pref->psearch = (void*)$4;
 			pref->pjoin = (join_ref_t*)$5;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	;
 
@@ -1131,7 +1133,7 @@ table_ref:
 			sql_declare(table_ref_t, pref);
 			pref->ptable = (table_t*)$1;
 			pref->which = -1;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	table NAME
 		{
@@ -1139,7 +1141,7 @@ table_ref:
 			pref->ptable = (table_t*)$1;
 			pref->which = 0;
 			pref->alias = (char*)$2;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	table AS NAME
 		{
@@ -1147,7 +1149,7 @@ table_ref:
 			pref->ptable = (table_t*)$1;
 			pref->which = 0;
 			pref->alias = (char*)$3;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	|	table range_variable
 		{
@@ -1155,7 +1157,7 @@ table_ref:
 			pref->ptable = (table_t*)$1;
 			pref->which = 1;
 			pref->prange = (range_variable_t)$2;
-			$$ = (int)pref;
+			$$ = (LITEM)pref;
 		}
 	;
 
@@ -1169,7 +1171,7 @@ where_clause:
 opt_group_by_clause:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	GROUP BY column_ref_commalist
 		{
@@ -1193,7 +1195,7 @@ column_ref_commalist:
 opt_having_clause:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	HAVING search_condition
 		{
@@ -1210,7 +1212,7 @@ search_condition:
 			psearch->psearch1 = (search_condition_t*)$1;
 			psearch->psearch2 = (search_condition_t*)$3;
 			psearch->searchop = SEARCHOP_OR;
-			$$ = (int)psearch;
+			$$ = (LITEM)psearch;
 		}
 	|	search_condition AND search_condition
 		{
@@ -1218,27 +1220,27 @@ search_condition:
 			psearch->psearch1 = (search_condition_t*)$1;
 			psearch->psearch2 = (search_condition_t*)$3;
 			psearch->searchop = SEARCHOP_AND;
-			$$ = (int)psearch;
+			$$ = (LITEM)psearch;
 		}
 	|	NOT search_condition
 		{
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch2 = (search_condition_t*)$2;
 			psearch->searchop = SEARCHOP_NOT;
-			$$ = (int)psearch;
+			$$ = (LITEM)psearch;
 		}
 	|	'(' search_condition ')'
 		{
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch1 = (search_condition_t*)$2;
 			psearch->useparens = 1;
-			$$ = (int)psearch;
+			$$ = (LITEM)psearch;
 		}
 	|	predicate
 		{
 			sql_declare(search_condition_t, psearch);
 			psearch->ppredicate = (predicate_t*)$1;
-			$$ = (int)psearch;
+			$$ = (LITEM)psearch;
 		}
 	;
 
@@ -1248,49 +1250,49 @@ predicate:
 			sql_declare(predicate_t, ppred);
 			ppred->which = 0;
 			ppred->pcomparison = (comparison_predicate_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	in_predicate
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 1;
 			ppred->pin = (in_predicate_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	test_for_null
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 2;
 			ppred->ptestnull = (test_for_null_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	existence_test
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 3;
 			ppred->pexisttest = (existence_test_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	between_predicate
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 4;
 			ppred->pbetween = (between_predicate_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	like_predicate
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 5;
 			ppred->plike = (like_predicate_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	all_or_any_predicate 
 		{
 			sql_declare(predicate_t, ppred);
 			ppred->which = 6;
 			ppred->panyorall = (any_or_all_predicate_t*)$1;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	;
 
@@ -1302,7 +1304,7 @@ comparison_predicate:
 			ppred->pcomparison = (char*)$2;
 			ppred->pscalar2 = (scalar_exp_t*)$3;
 			ppred->join_type = JOIN_INNER;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	scalar_exp comparison subquery
 		{
@@ -1311,7 +1313,7 @@ comparison_predicate:
 			ppred->pcomparison = (char*)$2;
 			ppred->psubquery = (subquery_t*)$3;
 			ppred->join_type = JOIN_INNER;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	;
 
@@ -1323,7 +1325,7 @@ between_predicate:
 			ppred->not = 1;
 			ppred->pscalar2 = (scalar_exp_t*)$4;
 			ppred->pscalar3 = (scalar_exp_t*)$6;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	scalar_exp BETWEEN scalar_exp AND scalar_exp
 		{
@@ -1332,7 +1334,7 @@ between_predicate:
 			ppred->not = 0;
 			ppred->pscalar2 = (scalar_exp_t*)$3;
 			ppred->pscalar3 = (scalar_exp_t*)$5;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	;
 
@@ -1344,7 +1346,7 @@ like_predicate:
 			ppred->not = 1;
 			ppred->patom = (atom_t*)$4;
 			ppred->pescape = (atom_t*)$5;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	|	scalar_exp LIKE atom opt_escape
 		{
@@ -1353,14 +1355,14 @@ like_predicate:
 			ppred->not = 0;
 			ppred->patom = (atom_t*)$3;
 			ppred->pescape = (atom_t*)$4;
-			$$ = (int)ppred;
+			$$ = (LITEM)ppred;
 		}
 	;
 
 opt_escape:
 		/* empty */
 		{
-			$$ = (int)NULL;
+			$$ = (LITEM)NULL;
 		}
 	|	ESCAPE atom
 		{
@@ -1374,14 +1376,14 @@ test_for_null:
 			sql_declare(test_for_null_t, ptest);
 			ptest->pcolumn = (column_ref_t*)$1;
 			ptest->isnull = 0;
-			$$ = (int)ptest;
+			$$ = (LITEM)ptest;
 		}
 	|	column_ref IS NULLX
 		{
 			sql_declare(test_for_null_t, ptest);
 			ptest->pcolumn = (column_ref_t*)$1;
 			ptest->isnull = 1;
-			$$ = (int)ptest;
+			$$ = (LITEM)ptest;
 		}
 	;
 
@@ -1393,7 +1395,7 @@ in_predicate:
 			pin->not = 1; 
 			pin->which = 0;
 			pin->psubquery = (subquery_t*)$4;
-			$$ = (int)pin;
+			$$ = (LITEM)pin;
 		}
 	|	scalar_exp IN2 subquery
 		{
@@ -1402,7 +1404,7 @@ in_predicate:
 			pin->not = 0; 
 			pin->which = 0;
 			pin->psubquery = (subquery_t*)$3;
-			$$ = (int)pin;
+			$$ = (LITEM)pin;
 		}
 	|	scalar_exp NOT IN2 '(' atom_commalist ')'
 		{
@@ -1411,7 +1413,7 @@ in_predicate:
 			pin->not = 1; 
 			pin->which = 1;
 			pin->patomlist = $5;
-			$$ = (int)pin;
+			$$ = (LITEM)pin;
 		}
 	|	scalar_exp IN2 '(' atom_commalist ')'
 		{
@@ -1420,7 +1422,7 @@ in_predicate:
 			pin->not = 1; 
 			pin->which = 1;
 			pin->patomlist = $4;
-			$$ = (int)pin;
+			$$ = (LITEM)pin;
 		}
 	;
 
@@ -1445,7 +1447,7 @@ all_or_any_predicate:
 			pall->comparison = (char*)$2;
 			pall->anyallsome = $3;
 			pall->psubquery = (subquery_t*)$4;
-			$$ = (int)pall;
+			$$ = (LITEM)pall;
 		}
 	;
 			
@@ -1489,7 +1491,7 @@ scalar_exp:
 			tmp = __sql_alloc(strlen((char*)$2) + 3);
 			sprintf(tmp, "%s", (char*)$2);
 			pscalar->name = tmp;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	scalar_exp AS NAME
 		{
@@ -1499,7 +1501,7 @@ scalar_exp:
 			tmp = __sql_alloc(strlen((char*)$3) + 3);
 			sprintf(tmp, "%s", (char*)$3);
 			pscalar->name = tmp;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	scalar_exp '+' scalar_exp
 		{
@@ -1507,7 +1509,7 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$1;
 			pscalar->mathop = MATHOP_PLUS;
 			pscalar->pscalar2 = (scalar_exp_t*)$3;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	scalar_exp '-' scalar_exp
 		{
@@ -1515,7 +1517,7 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$1;
 			pscalar->mathop = MATHOP_MINUS;
 			pscalar->pscalar2 = (scalar_exp_t*)$3;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	scalar_exp '*' scalar_exp
 		{
@@ -1523,7 +1525,7 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$1;
 			pscalar->mathop = MATHOP_MULT;
 			pscalar->pscalar2 = (scalar_exp_t*)$3;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	scalar_exp '/' scalar_exp
 		{
@@ -1531,7 +1533,7 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$1;
 			pscalar->mathop = MATHOP_DIVIDE;
 			pscalar->pscalar2 = (scalar_exp_t*)$3;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	'+' scalar_exp %prec UMINUS
 		{
@@ -1539,7 +1541,7 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$2;
 			pscalar->mathop = MATHOP_PLUS;
 			pscalar->unary = 1;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	'-' scalar_exp %prec UMINUS
 		{
@@ -1547,31 +1549,31 @@ scalar_exp:
 			pscalar->pscalar1 = (scalar_exp_t*)$2;
 			pscalar->mathop = MATHOP_MINUS;
 			pscalar->unary = 1;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	literal
 		{
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pliteral = (literal_t*)$1;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	column_ref
 		{
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pcolumnref = (column_ref_t*)$1;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	function_ref
 		{
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pfunction_ref = (function_ref_t*)$1;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	|	'(' scalar_exp ')'
 		{
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)$2;
-			$$ = (int)pscalar;
+			$$ = (LITEM)pscalar;
 		}
 	;
 	
@@ -1594,21 +1596,21 @@ atom:
 			sql_declare(atom_t, patom);
 			patom->which = 0;
 			patom->pparam = (parameter_ref_t*)$1;
-			$$ = (int)patom;
+			$$ = (LITEM)patom;
 		}
 	|	literal
 		{
 			sql_declare(atom_t, patom);
 			patom->which = 1;
 			patom->pliteral = (literal_t*)$1;
-			$$ = (int)patom;
+			$$ = (LITEM)patom;
 		}
 	|	USER
 		{
 			sql_declare(atom_t, patom);
 			patom->which = 2;
 			patom->user = 1;
-			$$ = (int)patom;
+			$$ = (LITEM)patom;
 		}
 	;
 
@@ -1624,7 +1626,7 @@ function_ref:
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)$1;
 			pfunc->asterisk = 1;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	|	AMMSC '(' DISTINCT column_ref ')'
 		{
@@ -1632,14 +1634,14 @@ function_ref:
 			pfunc->name = (char*)$1;
 			pfunc->distinct = 1;
 			pfunc->pcolumn = (column_ref_t*)$4;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	|	AMMSC '(' column_ref ')'
 		{
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)$1;
 			pfunc->pcolumn = (column_ref_t*)$3;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	|	AMMSC '(' ALL scalar_exp ')'
 		{
@@ -1647,20 +1649,20 @@ function_ref:
 			pfunc->name = (char*)$1;
 			pfunc->all = 1;
 			pfunc->pscalar = (column_ref_t*)$4;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	|	AMMSC '(' scalar_exp ')'
 		{
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)$1;
 			pfunc->pscalar = (column_ref_t*)$3;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	|	AMMSC '(' ')'
 		{
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)$1;
-			$$ = (int)pfunc;
+			$$ = (LITEM)pfunc;
 		}
 	;
 
@@ -1674,42 +1676,42 @@ literal:
 			sql_declare(literal_t, plit);
 			plit->l = atoi((const char*)$1);
 			plit->which = 1;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|	APPROXNUM
 		{
 			sql_declare(literal_t, plit);
 			plit->d = atof((const char *)$1);
 			plit->which = 2;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|	'*'
 		{
 			sql_declare(literal_t, plit);
 			plit->string = (char*)$1;
 			plit->which = 3;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|	NAME '.' '*'
 		{
 			sql_declare(literal_t, plit);
 			plit->string = (char*)$1;
 			plit->which = 4;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|	DATE_LITERAL
 		{
 			sql_declare(literal_t, plit);
 			plit->string = (char*)$1;
 			plit->which = 5;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|	TIME_LITERAL
 		{
 			sql_declare(literal_t, plit);
 			plit->string = (char*)$1;
 			plit->which = 6;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	;
 
@@ -1720,7 +1722,7 @@ string_literal:
 			sql_declare(literal_t, plit);
 			plit->string = (char*)$1;
 			plit->which = 0;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 	|
 		string_literal STRING
@@ -1729,7 +1731,7 @@ string_literal:
 			char *tmp = __sql_alloc(strlen((char*)plit->string) + strlen((char*)$2) + 1);
 			sprintf(tmp, "%s%s", plit->string, (char*)$2);
 			plit->string = tmp;
-			$$ = (int)plit;
+			$$ = (LITEM)plit;
 		}
 ;
 	/* miscellaneous */
@@ -1739,14 +1741,14 @@ table:
 		{
 			sql_declare(table_t, ptable);
 			ptable->table = (char*)$1;
-			$$ = (int)ptable;
+			$$ = (LITEM)ptable;
 		}
 	|	NAME '.' NAME   
 		{
 			sql_declare(table_t, ptable);
 			ptable->owner = (char*)$1;
 			ptable->table = (char*)$3;
-			$$ = (int)ptable;
+			$$ = (LITEM)ptable;
 		}
 	;
 
@@ -1755,14 +1757,14 @@ trigger_name:
 		{
 			trigger_name_t *pname = sql_alloc(trigger_name_t);
 			pname->trigger = (char*)$1;
-			$$ = (int)pname;
+			$$ = (LITEM)pname;
 		}
 	|	NAME '.' NAME
 		{
 			trigger_name_t *pname = sql_alloc(trigger_name_t);
 			pname->trigger = (char*)$1;
 			pname->owner = (char*)$3;
-			$$ = (int)pname;
+			$$ = (LITEM)pname;
 		}
 		;
 
@@ -1771,7 +1773,7 @@ column_ref:
 		{
 			sql_declare(column_ref_t, pcol);
 			pcol->column = (char*)$1;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME NAME
 		{
@@ -1781,7 +1783,7 @@ column_ref:
 			tmp = __sql_alloc(strlen((char*)$2) + 3);
 			sprintf(tmp, "%s", (char*)$2);
 			pcol->alias = tmp;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME AS NAME
 		{
@@ -1791,14 +1793,14 @@ column_ref:
 			tmp = __sql_alloc(strlen((char*)$3) + 3);
 			sprintf(tmp, "%s", (char*)$3);
 			pcol->alias = tmp;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME '.' NAME
 		{
 			sql_declare(column_ref_t, pcol);
 			pcol->tablename = (char*)$1;
 			pcol->column = (char*)$3;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME '.' NAME NAME
 		{
@@ -1809,7 +1811,7 @@ column_ref:
 			tmp = __sql_alloc(strlen((char*)$4) + 3);
 			sprintf(tmp, "%s", (char*)$4);
 			pcol->alias = tmp;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME '.' NAME AS NAME
 		{
@@ -1820,7 +1822,7 @@ column_ref:
 			tmp = __sql_alloc(strlen((char*)$5) + 3);
 			sprintf(tmp, "%s", (char*)$5);
 			pcol->alias = tmp;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	|	NAME '.' NAME '.' NAME    
 		{
@@ -1828,7 +1830,7 @@ column_ref:
 			pcol->tablename = (char*)$1;
 			pcol->column = (char*)$3;
 			pcol->alias = (char*)$5;
-			$$ = (int)pcol;
+			$$ = (LITEM)pcol;
 		}
 	;
 
@@ -1847,27 +1849,27 @@ data_type:
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_CHAR;
 			ptype->scale = 1;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	CHARACTER '(' INTNUM ')'
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_CHAR;
 			ptype->scale = atoi((char*)$3);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	NUMERIC
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_NUMERIC;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	NUMERIC '(' INTNUM ')'
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_NUMERIC;
 			ptype->scale = atoi((char*)$3);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	NUMERIC '(' INTNUM ',' INTNUM ')'
 		{
@@ -1875,20 +1877,20 @@ data_type:
 			ptype->type = DT_NUMERIC;
 			ptype->scale = atoi((char*)$3);
 			ptype->precision = atoi((char*)$5);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	DECIMAL2
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DECIMAL;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	DECIMAL2 '(' INTNUM ')'
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DECIMAL;
 			ptype->scale = atoi((char*)$3);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	DECIMAL2 '(' INTNUM ',' INTNUM ')'
 		{
@@ -1896,51 +1898,51 @@ data_type:
 			ptype->type = DT_DECIMAL;
 			ptype->scale = atoi((char*)$3);
 			ptype->precision = atoi((char*)$5);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	INTEGER
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_INTEGER;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	SMALLINT
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_SMALLINT;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	FLOAT2
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_FLOAT;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	REAL
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_REAL;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	DOUBLE2 PRECISION
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DOUBLE;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	VARCHAR
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_VARCHAR;
 			ptype->scale = 1;
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	|	VARCHAR '(' INTNUM ')'
 		{
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_VARCHAR;
 			ptype->scale = atoi((char*)$3);
-			$$ = (int)ptype;
+			$$ = (LITEM)ptype;
 		}
 	;
 

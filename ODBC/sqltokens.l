@@ -2,6 +2,7 @@
 
 
 #include "sqlgrammar.h"
+#include "sqlstructs.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,8 +10,9 @@
 #pragma warning (disable:4013)
 
 int sql_lineno = 1;
-void yyerror(char *s);
+void yyerror(void *, char *s);
 int nesting_level = 0;
+extern void *  __sql_alloc(size_t size);
 %}
 	/* MKS needs the next line to increase the NFA table */
 %e 1200
@@ -26,32 +28,32 @@ ALL		{ return ALL; }
 AND		{ return AND; }
 AVG		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 MIN		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 MAX		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 SUM		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 COUNT		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 SYSDATE		{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int) str;
+			yylval = (YYSTYPE) str;
 			return AMMSC;
 		}
 
@@ -147,44 +149,44 @@ WORK		{ return WORK; }
 
 "="		{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return EQUALS; 
 		}
 
 "<>" | 
 "!="	{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return NOT_EQUALS; 
 		}
 
 "<"		{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return LESS_THAN; 
 		}
 
 ">"		{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return GREATER_THAN; 
 		}
 
 "<="	{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return LESS_THAN_EQ; 
 		}
 
 ">="	{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return GREATER_THAN_EQ; 
 		}
 
 [-+*/:(),.;]	{ 
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return yytext[0]; 
 		}
 
@@ -192,7 +194,7 @@ WORK		{ return WORK; }
 
 [A-Za-z][A-Za-z0-9_]* {
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return NAME;
 		}
 
@@ -200,7 +202,7 @@ WORK		{ return WORK; }
 
 [+-]?[0-9]+	{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return INTNUM;
  		}
 
@@ -210,7 +212,7 @@ WORK		{ return WORK; }
 [+-]?[0-9]+"."[0-9]*[eE][+-]?[0-9]+ |
 [+-]?"."[0-9]*[eE][+-]?[0-9]+	{
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return APPROXNUM;
  		}
 
@@ -219,21 +221,21 @@ WORK		{ return WORK; }
 '[1-2][0-9]{3}-[ ]*[0-9]{1,2}-[ ]*[0-9]{1,2}' |
 ~[1-2][0-9]{3}-[ ]*[0-9]{1,2}-[ ]*[0-9]{1,2}~ {
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return DATE_LITERAL;
 		}
 			
 '[1-2][0-9]{3}-[ ]*[0-9]{1,2}-[ ]*[0-9]{1,2}[ ][0-9][0-9]:[ ]*[0-9][0-9]:[ ]*[0-9][0-9]' |
 ~[1-2][0-9]{3}-[ ]*[0-9]{1,2}-[ ]*[0-9]{1,2}[ ][0-9][0-9]:[ ]*[0-9][0-9]:[ ]*[0-9][0-9]~ {
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return TIME_LITERAL;
 		}
 			
 '[^']*' |
 ~[^~]*~ {
 			char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-			yylval = (int)str;
+			yylval = (YYSTYPE)str;
 			return STRING;
 		}
 
@@ -254,7 +256,7 @@ WORK		{ return WORK; }
 				yymore();
 			else {
 				char	*str = strcpy((char*)__sql_alloc(strlen(yytext) + 1), yytext);
-				yylval = (int)str;
+				yylval = (YYSTYPE)str;
 				BEGIN(INITIAL);
 				return STRING;
 			}
@@ -262,7 +264,7 @@ WORK		{ return WORK; }
 		
 	
 '[^']*$ { 
-			yyerror("Unterminated string"); 
+			yyerror(NULL, "Unterminated string"); 
 		}
 
 \n		{

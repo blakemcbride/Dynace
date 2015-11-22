@@ -23,7 +23,7 @@ BINDIR = ..\bin
 LIBDIR = ..\lib
 INCDIR = ..\include
 
-CFEXTRA += -MT
+CFEXTRA += -MT -DYY_NO_UNISTD_H
 
 .IF $(NATIVE_THREADS)
 CFEXTRA += -DNATIVE_THREADS
@@ -107,7 +107,7 @@ newgens :
 makegens:
 	$(BINDIR)\dpp $(STRAT) -C -g $(INCDIR)\generics.h -h $(INCDIR)\generics.h -s @$(mktmp $(CLASS_SRC:t"\n")\n)
 
-sqlgrammar.c sqlgrammar.h:	sqlgrammar.y sqlstructs.h
+sqlgrammar.c sqlgrammar.h: sqlgrammar.y sqlstructs.h
 	${YACC} -tvd sqlgrammar.y
 	mv sqlgrammar.tab.h sqlgrammar.h
 	mv sqlgrammar.tab.c sqlgrammar.c

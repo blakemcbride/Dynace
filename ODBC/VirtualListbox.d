@@ -70,7 +70,7 @@ private	imeth	char	*pBuildSelect(object self, int desc);
 private	imeth	int	pGroupFun(object self, int lessThan, object stmt, object ll);
 private	imeth	object	pReadRecs(object self, int desc);
 
-static	long	process_wm_keydown(object	lb, 
+static	LRESULT	process_wm_keydown(object	lb, 
 				   HWND		hwnd, 
 				   UINT		mMsg, 
 				   WPARAM	wParam, 
@@ -599,7 +599,7 @@ static	char	*formatDataForSelect(object data, char *buf)
 	return buf;
 }
 
-static	long	process_wm_keydown(object	lb, 
+static	LRESULT	process_wm_keydown(object	lb, 
 				   HWND		hwnd, 
 				   UINT		mMsg, 
 				   WPARAM	wParam, 

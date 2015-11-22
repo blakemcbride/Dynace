@@ -85,9 +85,9 @@ imeth	int	gExecuteFunctionsObjObj(object ctl, object dlg)
 		else if (SchemeClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == String) {
 			char	cmd[100], ns[80];
 			object	ret;
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object) obj),
-				(long) ctl, (long) dlg);
+				(long long) ctl, (long long) dlg);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 						  cmd);
@@ -98,7 +98,7 @@ imeth	int	gExecuteFunctionsObjObj(object ctl, object dlg)
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)obj), (long) ctl, (long) dlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)obj), (long long) ctl, (long long) dlg);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)
@@ -128,8 +128,8 @@ imeth	int	gExecuteFunctionsObj(object dlg)
 		else if (SchemeClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == String) {
 			char	cmd[100], ns[80];
 			object	ret;
-			sprintf(cmd, "(%s (int->object %ld))",
-				gFunctionName(SchemeClassSurrogate, (object) obj), (long) dlg);
+			sprintf(cmd, "(%s (int->object %lld))",
+				gFunctionName(SchemeClassSurrogate, (object) obj), (long long) dlg);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 						  cmd);
@@ -140,7 +140,7 @@ imeth	int	gExecuteFunctionsObj(object dlg)
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"))", gStringValue((object)obj), (long) dlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"))", gStringValue((object)obj), (long long) dlg);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)
@@ -169,8 +169,8 @@ imeth	int	gExecuteFunctionsObjHANDLE(object dlg, HANDLE hwnd)
 		if (SchemeClassSurrogate  &&  IsObj((object) obj)  &&  ClassOf(obj) == String) {
 			char	cmd[100], ns[80];
 			object	ret;
-			sprintf(cmd, "(%s (int->object %ld))",
-				gFunctionName(SchemeClassSurrogate, (object) obj), (long) dlg);
+			sprintf(cmd, "(%s (int->object %lld))",
+				gFunctionName(SchemeClassSurrogate, (object) obj), (long long) dlg);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 						  cmd);
@@ -181,7 +181,7 @@ imeth	int	gExecuteFunctionsObjHANDLE(object dlg, HANDLE hwnd)
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToPointer(\"%ld\"))", gStringValue((object)obj), (long) dlg, (long) hwnd);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToPointer(\"%lld\"))", gStringValue((object)obj), (long long) dlg, (long long) hwnd);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)
@@ -211,8 +211,8 @@ imeth	int	gExecuteFunctionsObjInt(object dlg, int res)
 		else if (SchemeClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == String) {
 			char	cmd[100], ns[80];
 			object	ret;
-			sprintf(cmd, "(%s (int->object %ld) %d)",
-				gFunctionName(SchemeClassSurrogate, (object) obj), (long) dlg, res);
+			sprintf(cmd, "(%s (int->object %lld) %d)",
+				gFunctionName(SchemeClassSurrogate, (object) obj), (long long) dlg, res);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 						  cmd);
@@ -223,7 +223,7 @@ imeth	int	gExecuteFunctionsObjInt(object dlg, int res)
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), %ld)", gStringValue((object)obj), (long) dlg, (long) res);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)obj), (long long) dlg, (long long) res);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)

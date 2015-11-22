@@ -55,7 +55,7 @@ defclass  Printer : Stream  {
 	int	iError;		/*  printing error occured  	*/
 	int	iAbort;		/*  printing aborted	    	*/
 
-	FARPROC	iProcIns;	/*  abort proc instance	    	*/
+	ABORTPROC iProcIns;	/*  abort proc instance	    	*/
 
 	iPWind;			/*  parent window	    	*/
 

@@ -53,7 +53,7 @@ defclass  PushButton : Control  {
 private imeth int pFormatAndPrintText(HDC hdcPrinter, double dScaleX, double dScaleY, const RECT *pRect);
 
 
-private	imeth	long	process_wm_setfocus(object	self, 
+private	imeth	LRESULT	process_wm_setfocus(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -64,7 +64,7 @@ private	imeth	long	process_wm_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_killfocus(object	self, 
+private	imeth	LRESULT	process_wm_killfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -75,7 +75,7 @@ private	imeth	long	process_wm_killfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_char(object	self, 
+private	imeth	LRESULT	process_wm_char(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -97,7 +97,7 @@ private	imeth	long	process_wm_char(object	self,
 	return gCallDefaultProc(self, mMsg, wParam, lParam);
 }
 
-private	imeth	long	process_wm_lbuttondblclk(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondblclk(object	self, 
 						 HWND	hwnd, 
 						 UINT	mMsg, 
 						 WPARAM	wParam, 
@@ -107,9 +107,9 @@ private	imeth	long	process_wm_lbuttondblclk(object	self,
 		if (SchemeClassSurrogate  &&  IsObj((object)iDCFun)  &&  ClassOf(iDCFun) == String) {
 			char	cmd[100], ns[80];
 
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iDCFun),
-				(long) self, (long) iDlg);
+				(long long) self, (long long) iDlg);
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object)iDCFun, ns), 
 					      cmd);
@@ -117,7 +117,7 @@ private	imeth	long	process_wm_lbuttondblclk(object	self,
 			gPerformJavaObjCallback((object)iDCFun, iDlg);
 		else if (JavaScriptClassSurrogate  &&  IsObj((object)iDCFun)  &&  ClassOf(iDCFun) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iDCFun), (long) self, (long) iDlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iDCFun), (long long) self, (long long) iDlg);
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else
 			iDCFun(self, iDlg);

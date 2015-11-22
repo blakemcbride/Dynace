@@ -64,21 +64,21 @@ imeth	object	gDispose, gDeepDispose ()
 	return gDeepDispose(super);
 }
 
-imeth	gAddWindowHandlerAfter(long (*fun)())
+imeth	gAddWindowHandlerAfter(LRESULT (*fun)())
 {
 	gAddLast(iHandlers, gNewWithObj(LinkValue, gNewWithPtr(Pointer, fun)));
 	return self;
 }
 
-imeth	gAddWindowHandlerBefore(long (*fun)())
+imeth	gAddWindowHandlerBefore(LRESULT (*fun)())
 {
 	gAddFirst(iHandlers, gNewWithObj(LinkValue, gNewWithPtr(Pointer, fun)));
 	return self;
 }
 
-typedef	long (*lfun)();
+typedef	LRESULT (*lfun)();
 
-imeth	long	gProcessWindowMsg(object	wind,
+imeth	LRESULT	gProcessWindowMsg(object	wind,
 				  HWND		hwnd, 
 				  UINT		mMsg, 
 				  WPARAM	wParam, 

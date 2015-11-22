@@ -76,31 +76,31 @@ static int matchLogfontForOneToken(HDC hdcPrinter, LOGFONT *pLogfont, const RECT
 static int matchLogfontForTheLineOfTextOfMetaFile(HDC hdcView, double dScaleX, HDC hdcMetafile, LOGFONT *pLogfont, 
                              const RECT *pRectLine, char *lineOfText, int nAlign);
 
-private	imeth	long	process_wm_lbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
 					      LPARAM	lParam);
 
-private	imeth	long	process_wm_rbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_rbuttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
 					      LPARAM	lParam);
 
-private	imeth	long	process_wm_mousemove(object	self, 
+private	imeth	LRESULT	process_wm_mousemove(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
 					     LPARAM	lParam);  // Yanghui
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
 					   LPARAM	lParam);
 
-private	imeth	long	process_wm_getdlgcode(object	self, 
+private	imeth	LRESULT	process_wm_getdlgcode(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -157,13 +157,13 @@ cmeth	gNewCont(char *name, char *class, parent)
 }
 
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
 					   LPARAM	lParam)
 {
-	long rval = 0;
+	LRESULT rval = 0;
 	object	parent;
 
 	if (parent=gGetParent(self))
@@ -174,13 +174,13 @@ private	imeth	long	process_wm_keydown(object	self,
 	return rval;
 }
 
-private	imeth	long	process_wm_getdlgcode(object	self, 
+private	imeth	LRESULT	process_wm_getdlgcode(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
 					    LPARAM	lParam)
 {
-	long rval = DLGC_WANTARROWS | DLGC_WANTCHARS | DLGC_RADIOBUTTON;
+	LRESULT rval = DLGC_WANTARROWS | DLGC_WANTCHARS | DLGC_RADIOBUTTON;
 
 	MSG* pMsg = NULL;
 	if (lParam) {
@@ -544,7 +544,7 @@ imeth	ofun	gSetMouseFunction(unsigned button, ifun fun)
 }
 
 
-private	imeth	long	process_wm_lbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -585,7 +585,7 @@ private	imeth	long	process_wm_lbuttondown(object	self,
 
 
 // Yanghui:
-private	imeth	long	process_wm_mousemove(object	self, 
+private	imeth	LRESULT	process_wm_mousemove(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -603,7 +603,7 @@ private	imeth	long	process_wm_mousemove(object	self,
 // Yanghui
 
 
-private	imeth	long	process_wm_rbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_rbuttondown(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 

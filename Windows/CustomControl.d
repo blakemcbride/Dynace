@@ -48,7 +48,7 @@ defclass  CustomControl : Control  {
 #include <ctype.h>
 
 
-private	imeth	long	process_wm_setfocus(object	self, 
+private	imeth	LRESULT	process_wm_setfocus(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -59,7 +59,7 @@ private	imeth	long	process_wm_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_killfocus(object	self, 
+private	imeth	LRESULT	process_wm_killfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -165,9 +165,9 @@ imeth	int	gCheckValue()
 			char	cmd[100], ns[80];
 			object	ret;
 
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long) self, (long) 0);
+				(long long) self, (long long) 0);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -179,7 +179,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) { 
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iAcf), (long) self, (long) 0);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), (long long) self, (long long) 0);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)

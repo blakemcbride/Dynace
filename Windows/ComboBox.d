@@ -114,7 +114,7 @@ LRESULT	CALLBACK  EdtWindowProc(HWND	hwnd,
 	return 0L;
 }
 
-private	imeth	long	process_wm_char(object	self, 
+private	imeth	LRESULT	process_wm_char(object	self, 
 					HWND	hwnd, 
 					UINT	mMsg, 
 					WPARAM	wParam, 
@@ -136,7 +136,7 @@ private	imeth	long	process_wm_char(object	self,
 	return gCallDefaultProc(self, mMsg, wParam, lParam);
 }
 
-private	imeth	long	process_wm_setfocus(object	self, 
+private	imeth	LRESULT	process_wm_setfocus(object	self, 
 					    HWND	hwnd, 
 					    UINT	mMsg, 
 					    WPARAM	wParam, 
@@ -147,7 +147,7 @@ private	imeth	long	process_wm_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_keydown(object	self, 
+private	imeth	LRESULT	process_wm_keydown(object	self, 
 					   HWND		hwnd, 
 					   UINT		mMsg, 
 					   WPARAM	wParam, 
@@ -164,7 +164,7 @@ private	imeth	long	process_wm_keydown(object	self,
 	}
 }
 
-private	imeth	long	process_wm_killfocus(object	self, 
+private	imeth	LRESULT	process_wm_killfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -187,7 +187,7 @@ private	imeth	long	process_wm_killfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_color(object	self, 
+private	imeth	LRESULT	process_wm_color(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -209,10 +209,10 @@ private	imeth	long	process_wm_color(object	self,
 	}
 	SetBkColor((HDC) wParam, gColor(bb));
 	SetTextColor((HDC) wParam, gColor(tb));
-	return (long) gHandle(bb);    /*  ???  */
+	return (LRESULT) gHandle(bb);    /*  ???  */
 }
 
-private	imeth	long	process_edt_char(object	self, 
+private	imeth	LRESULT	process_edt_char(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -231,7 +231,7 @@ private	imeth	long	process_edt_char(object	self,
 	return DFLT;
 }
 
-private	imeth	long	process_edt_setfocus(object	self, 
+private	imeth	LRESULT	process_edt_setfocus(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -242,7 +242,7 @@ private	imeth	long	process_edt_setfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_edt_killfocus(object	self, 
+private	imeth	LRESULT	process_edt_killfocus(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -265,7 +265,7 @@ private	imeth	long	process_edt_killfocus(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_edt_setcursor(object	self, 
+private	imeth	LRESULT	process_edt_setcursor(object	self, 
 					      HWND	hwnd, 
 					      UINT	mMsg, 
 					      WPARAM	wParam, 
@@ -276,7 +276,7 @@ private	imeth	long	process_edt_setcursor(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_rbuttondown(object	self, 
+private	imeth	LRESULT	process_wm_rbuttondown(object	self, 
 					       HWND	hwnd, 
 					       UINT	mMsg, 
 					       WPARAM	wParam, 
@@ -288,7 +288,7 @@ private	imeth	long	process_wm_rbuttondown(object	self,
 		return gCallDefaultProc(self, mMsg, wParam, lParam);
 }
 
-private	imeth	long	process_wm_rbuttonup(object	self, 
+private	imeth	LRESULT	process_wm_rbuttonup(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -300,7 +300,7 @@ private	imeth	long	process_wm_rbuttonup(object	self,
 		return gCallDefaultProc(self, mMsg, wParam, lParam);
 }
 
-private	imeth	long	process_wm_lbuttondblclk(object	self, 
+private	imeth	LRESULT	process_wm_lbuttondblclk(object	self, 
 						 HWND	hwnd, 
 						 UINT	mMsg, 
 						 WPARAM	wParam, 
@@ -314,7 +314,7 @@ private	imeth	long	process_wm_lbuttondblclk(object	self,
 	return 0L;
 }
 
-private	imeth	long	process_wm_mousemove(object	self, 
+private	imeth	LRESULT	process_wm_mousemove(object	self, 
 					     HWND	hwnd, 
 					     UINT	mMsg, 
 					     WPARAM	wParam, 
@@ -740,9 +740,9 @@ imeth	int	gCheckValue()
 			char	cmd[100], ns[80];
 			object	ret;
 			int	res;
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long) self, (long) iValue);
+				(long long) self, (long long) iValue);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -754,7 +754,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iAcf), (long) self, (long) iValue);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), (long long) self, (long long) iValue);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)
@@ -1068,7 +1068,7 @@ imeth	HANDLE	gEditHandle()
 	return (HANDLE) iEdit;
 }
 
-imeth	gAddEdtHandlerAfter(unsigned msg, long (*fun)())
+imeth	gAddEdtHandlerAfter(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -1080,7 +1080,7 @@ imeth	gAddEdtHandlerAfter(unsigned msg, long (*fun)())
 	return self;
 }
 
-imeth	gAddEdtHandlerBefore(unsigned msg, long (*fun)())
+imeth	gAddEdtHandlerBefore(unsigned msg, LRESULT (*fun)())
 {
 	object	h;
 	h = gFindValueInt(iMessageHandlers, msg);
@@ -1202,9 +1202,9 @@ imeth	int	gPerformChg()
 			char	cmd[100], ns[80];
 			object	ret;
 			int	res=0;
-			sprintf(cmd, "(%s (int->object %ld) (int->object %ld))",
+			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iChgFun),
-				(long) self, (long) iDlg);
+				(long long) self, (long long) iDlg);
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iChgFun, ns), 
 						  cmd);
@@ -1217,7 +1217,7 @@ imeth	int	gPerformChg()
 			int	res = 0;
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%ld\"), StringToObject(\"%ld\"))", gStringValue((object)iChgFun), (long) self, (long) iDlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iChgFun), (long long) self, (long long) iDlg);
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)

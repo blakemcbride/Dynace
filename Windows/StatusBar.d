@@ -48,7 +48,7 @@ defclass  StatusBar : ChildWindow  {
  init:	init_class;
 };
 
-static	long	process_wm_paint(object	self, 
+static	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 
@@ -136,7 +136,7 @@ static	void	paint_section(ivType *iv, HDC dc, int i, int wth)
 	SetBkMode(dc, pm);
 }
 
-private	imeth	long	process_wm_paint(object	self, 
+private	imeth	LRESULT	process_wm_paint(object	self, 
 					 HWND	hwnd, 
 					 UINT	mMsg, 
 					 WPARAM	wParam, 

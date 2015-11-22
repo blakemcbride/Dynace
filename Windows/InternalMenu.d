@@ -68,7 +68,7 @@ imeth	int	gAddMenuOption(char *title, void (*fun)())
 imeth	gAddPopupMenu(char *title, menu)
 {
 	ChkArg(menu, 2);
-	AppendMenu(gHandle(self), MF_POPUP, (UINT) gHandle(menu), title);
+	AppendMenu(gHandle(self), MF_POPUP, (UINT_PTR) gHandle(menu), title);
 	gAddLast(iPopups, menu);
 	return self;
 }

@@ -413,7 +413,7 @@ imeth	gAddStatement(stmt)
 	char	buf[25];
 	object	wp = gNewWithObj(WeakPointer, stmt);
 
-	sprintf(buf, "%ld", stmt);
+	sprintf(buf, "%p", stmt);
 	gDeepDisposeStr(iStatements, buf);
 	gAddStr(iStatements, buf, wp);
 	return self;
@@ -425,7 +425,7 @@ imeth	gRemoveStatement(stmt)
 	object	wp;
 
 	if (!iDisposing) {
-		sprintf(buf, "%ld", stmt);
+		sprintf(buf, "%p", stmt);
 		wp = gFindValueStr(iStatements, buf);
 		if (wp) {
 			gDispose(wp);
@@ -564,18 +564,18 @@ private	imeth	object	pReadAllTables(object self)
 		SDWORD	len;
 		SWORD	scale;
 		SWORD	nullable;
-		long	pcbValueOwner;
-		long	pcbValueTypeName;
-		long	pcbValueLength;
-		long	pcbValueScale;
-		long	pcbValueNullable;
+		SQLLEN	pcbValueOwner;
+		SQLLEN	pcbValueTypeName;
+		SQLLEN	pcbValueLength;
+		SQLLEN	pcbValueScale;
+		SQLLEN	pcbValueNullable;
 		object	tobj;
 
-		r = SQLBindCol(stmt,  2, SQL_C_CHAR, owner, sizeof(owner) - 1, &pcbValueOwner);
+		r = SQLBindCol(stmt,  2, SQL_C_CHAR, owner, (int)sizeof(owner) - 1, &pcbValueOwner);
 		r = SQLBindCol(stmt,  3, SQL_C_CHAR, tname, 129, NULL);
 		r = SQLBindCol(stmt,  4, SQL_C_CHAR, name, 129, NULL);
 		r = SQLBindCol(stmt,  5, SQL_C_SHORT, &type, 0, NULL);
-		r = SQLBindCol(stmt,  6, SQL_C_CHAR, typebuf, sizeof(typebuf) - 1, &pcbValueTypeName);
+		r = SQLBindCol(stmt,  6, SQL_C_CHAR, typebuf, (int)sizeof(typebuf) - 1, &pcbValueTypeName);
 		r = SQLBindCol(stmt,  7, SQL_C_LONG, &len, 0, &pcbValueLength);
 		r = SQLBindCol(stmt,  9, SQL_C_SHORT, &scale, 0, &pcbValueScale);
 		r = SQLBindCol(stmt, 11, SQL_C_SHORT, &nullable, 0, &pcbValueNullable);

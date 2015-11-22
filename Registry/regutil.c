@@ -86,7 +86,7 @@ static	LONG	setValue(char *key, char *value, FILE *fp)
 		return 0L;
 	} else
 #ifdef	USEREG
-		return RegSetValue(HKEY_CLASSES_ROOT, key, REG_SZ, value, strlen(value));
+		return RegSetValue(HKEY_CLASSES_ROOT, key, REG_SZ, value, (DWORD)strlen(value));
 #else
 		return 0L;
 #endif
@@ -104,7 +104,7 @@ static	LONG	delKey(char *key)
 long	SetSystemEnvironmentVariable(int global, char *var, char *val)
 {
 	HKEY	h;
-	DWORD	r;
+	DWORD_PTR	r;
 
 	SetEnvironmentVariable(var, val);
 	if (global)
@@ -112,7 +112,7 @@ long	SetSystemEnvironmentVariable(int global, char *var, char *val)
 	else
 		RegOpenKeyEx(HKEY_CURRENT_USER, "Environment", 0, KEY_ALL_ACCESS, &h);
 	if (val)
-		RegSetValueEx(h, var, 0, REG_SZ, val, strlen(val)+1);
+		RegSetValueEx(h, var, 0, REG_SZ, val, (DWORD)strlen(val)+1);
 	else
 		RegDeleteValue(h, var);
 	RegCloseKey(h);

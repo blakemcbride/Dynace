@@ -2674,7 +2674,7 @@ imeth	int	gFldSetBinary(char *fld, long size, char *val)
 	free(cmd);
 	free(t);
 	if (!r) {
-		SDWORD	pcbVal = SQL_LEN_DATA_AT_EXEC(size);
+		SQLLEN	pcbVal = SQL_LEN_DATA_AT_EXEC(size);
 		PTR	pToken;
 		
 		r = SQLBindParameter(h, (UWORD) 1, SQL_PARAM_INPUT, SQL_C_BINARY, SQL_LONGVARBINARY, 0, 0, (PTR) 1, 0, &pcbVal);
@@ -2707,7 +2707,7 @@ imeth	int	gFldGetBinary(char *fld, long *size, char **val)
 	char	*cmd, c;
 	int	r, fn;
 	HSTMT	h;
-	SDWORD	pcbVal;
+	SQLLEN	pcbVal;
 	static	char	fun[] = "gFldGetBinary";
 	char * t;
 

@@ -177,7 +177,7 @@ imeth	int	gSendMail(pwind)
 	iMessage.lpszNoteText = iText ? gStringValue(iText) : "";
 	iMessage.lpszSubject = iSubject ? gStringValue(iSubject) : "";
 		
-	r = cMAPISendMail(0, (ULONG) pwind, &iMessage, MAPI_LOGON_UI, 0);
+	r = cMAPISendMail(0, (ULONG_PTR) pwind, &iMessage, MAPI_LOGON_UI, 0);
 
 	pFree(self);
 

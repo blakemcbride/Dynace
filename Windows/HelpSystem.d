@@ -88,7 +88,7 @@ cmeth	gHelpTopic(char *topic)
 	if (cFile  &&  cMainWindow)  {
 		sprintf(cmd, "JumpID(\"%s\",\"%s\")", file=gStringValue(cFile), topic);
 		WinHelp(gHandle(cMainWindow), file, HELP_FORCEFILE, 0L);
-		r = WinHelp(gHandle(cMainWindow), file, HELP_COMMAND, (DWORD) cmd);
+		r = WinHelp(gHandle(cMainWindow), file, HELP_COMMAND, (ULONG_PTR)cmd);
 		cUsed = 1;
 	}
 	return r ? self : NULL;

@@ -57,14 +57,21 @@ typedef struct
 	strcat(sqlstr.buf, str);\
 }
 
-typedef int LLIST;
-typedef int LITEM;
+#ifdef _M_X64
+typedef long long LLIST;
+typedef long long LITEM;
+#else
+typedef long LLIST;
+typedef long LITEM;
+#endif
+/*typedef LLIST YYSTYPE;*/
+#define YYSTYPE LLIST
 
 typedef struct sql_list_element_s
 {
 	struct sql_list_element_s *pnext;
 	struct sql_list_element_s *pprev;
-	int pdata;
+	LITEM pdata;
 } sql_list_element;
 
 typedef struct 
