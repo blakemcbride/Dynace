@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "dlginfo.h"
 #pragma pack(1)
-char *NameOrdCpyW(LPTSTR pNameOrdDest,LPTSTR pNameOrdSrc);
+
 static BYTE abResource32[] = {
     0x00, 0x00, 0x00, 0x00,                 // DataSize (0 bytes).
     0x20, 0x00, 0x00, 0x00,                 // HeaderSize (32 bytes).

@@ -98,14 +98,6 @@ typedef struct _infdialog {
 } GlobalDlgInfo;
 
 extern GlobalDlgInfo thisDialog;
-int IsOrd(char *psz);
-char *NameOrdCpyW(LPTSTR pNameOrdDest,LPTSTR pNameOrdSrc);
-PBYTE SkipResHeader(PRES pRes);
-char *ResourceType(PRES pRes);
-DWORD ResourceSize(PRES pRes);
-char *ResourceName(PRES pRes);
-void ConvertWideString(char *src,char *dst);
-VOID DWordAlign(char **ppb);
 typedef void (*WorkFn)(char *,int,HWND);
 void DumpResourceFile(char *start,int size,HWND hwnd);
 int DumpResFile(char *filename,HWND h,WorkFn fn);

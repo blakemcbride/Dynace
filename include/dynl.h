@@ -92,7 +92,7 @@
 
 /* int to pointer conversion  */
 /* turns out, this is already defined in Windows  */
-#ifndef _MSC_VER
+#if !defined(_MSC_VER)  &&  !defined(__WINE__)
 #ifdef _M_X64
 typedef long long  INT_PTR;
 #else
