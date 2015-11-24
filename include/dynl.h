@@ -100,6 +100,9 @@ typedef unsigned long  INT_PTR;
 #endif
 #endif
 
+/* pointer to long long  */
+#define PTOLL(p)	((long long)(INT_PTR)p)
+
 #ifdef	PLAN9
 #include "plan9.h"
 #endif
@@ -222,6 +225,7 @@ typedef	struct	_Object_iv_t	 *objrtn;
 
 typedef	objrtn	(*ofun)();
 typedef	int	(*ifun)();
+typedef void	(*vfun)();
 
 void	InitDynace(void *);
 void	InitKernel(void *, int);

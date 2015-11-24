@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef unix
+#if defined(unix)  &&  !defined(__WINE__)
 #include <unistd.h>
 #define	O_BINARY	0
 #else
@@ -958,7 +958,7 @@ imeth	gTPDump(char *file)
 	object s;
 	object obj, stream = NULL;
 	long	bytesReadAtStart;
-	long		dataLen;
+	int	dataLen;
 
 	if (!fp)
 		gError(Object, "Can't open TPDump file");

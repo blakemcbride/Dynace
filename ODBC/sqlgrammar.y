@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sqlstructs.h"
 
 #define YYERROR_VERBOSE

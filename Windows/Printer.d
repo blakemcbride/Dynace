@@ -1030,7 +1030,7 @@ typedef struct  {
 static	void  ScaleMetafile(ivType *iv, HDC hdc, APM *mfHdr);
 static	void  ScaleMetafile2(ivType *iv, HDC hdc, APM *mfHdr);
 
-#ifdef unix
+#if defined(unix) && !defined(__WINE__)
 #define _O_BINARY	0
 #endif
 

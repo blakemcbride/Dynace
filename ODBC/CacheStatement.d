@@ -2350,8 +2350,9 @@ imeth	gFldSetFromFile(char *fld, char *file)
 
 imeth	gFldSetDateTime(char *fld, long dt, long tm)
 {
-	object	si=NULL;
-	int oldDt,oldTm,status=0;
+	object	si = NULL;
+	long oldDt, oldTm;
+	int status=0;
 
 	if (!iUsingCache)
 		return gFldSetDateTime(iStatement,fld,dt,tm);
@@ -2359,17 +2360,16 @@ imeth	gFldSetDateTime(char *fld, long dt, long tm)
 	if (iErrorState)
 		return self;
 
-	gFldGetDateTime(self,fld,&oldDt, &oldTm);
+	gFldGetDateTime(self, fld, &oldDt, &oldTm);
 
-	if (dt==oldDt&&tm==oldTm)  //if the set didn't change anything just return
+	if (dt == oldDt  &&  tm == oldTm)  //if the set didn't change anything just return
 		return self;
 
 	if (!iLoadedCurrentRow)
-		status=selectCurrentRow(self,iTable);
+		status = selectCurrentRow(self,iTable);
 
 	if (!status)
 		gFldSetDateTime(iStatement,fld,dt,tm);
-
 
 	LAZY_LOAD;
 	

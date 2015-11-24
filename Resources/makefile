@@ -28,4 +28,4 @@ curlib :  $(OBJ)
 
 
 clean realclean:
-	-rm -f *.obj *.exe generics.* *.o core *~ *.pdb curlib allok *.c
+	-rm -f *.obj *.exe generics.* *.o core *~ *.pdb curlib allok

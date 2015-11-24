@@ -144,7 +144,7 @@ imeth	int	gCheckValue()
 			int	res;
 			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long long) self, (long long) 0);
+				PTOLL(self), PTOLL(0));
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -156,7 +156,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)iAcf), (long long) self, (long long) 0);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)iAcf), PTOLL(self), PTOLL(0));
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)

@@ -421,13 +421,13 @@ private	imeth	LRESULT	process_wm_timer(object	self,
 			
 			sprintf(cmd, "(%s (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object) obj),
-				(long long) self);
+				PTOLL(self));
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object) obj, ns), 
 					      cmd);
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)obj)  &&  ClassOf(obj) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"))", gStringValue((object)obj), (long long) self);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"))", gStringValue((object)obj), PTOLL(self));
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else {
 			ifun	fun = (ifun) gPointerValue(obj);
@@ -1440,7 +1440,7 @@ private	imeth	LRESULT	process_wm_buttonup(object	self,
 		gSetParent(menu, self);
 
 		for (seq = gSequence(iShortcutFunctions); obj = gNext(seq); )
-			gAssociate(menu, gIntKey(obj), (ifun) gPointerValue(gValue(obj)));
+			gAssociate(menu, gIntKey(obj), (vfun) gPointerValue(gValue(obj)));
 		
 		gPerform(menu);
 
@@ -1808,7 +1808,7 @@ private	imeth	LRESULT	process_wm_command(object	self,
 					long	res = 0;
 					sprintf(cmd, "(%s (int->object %lld) %u)",
 						gFunctionName(SchemeClassSurrogate, (object)fp),
-						(long long) self, id);
+						PTOLL(self), id);
 					ret = gExecuteInNamespace(SchemeClassSurrogate,
 								  gNamespaceName(SchemeClassSurrogate, (object)fp, ns), 
 								  cmd);
@@ -1822,7 +1822,7 @@ private	imeth	LRESULT	process_wm_command(object	self,
 					object	ret;
 					char	cmd[128];
 					
-					sprintf(cmd, "%s(StringToObject(\"%lld\"), %ld)", gStringValue((object)fp), (long long) self, (long) id);
+					sprintf(cmd, "%s(StringToObject(\"%lld\"), %ld)", gStringValue((object)fp), PTOLL(self), (long) id);
 					ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 					if (IsObj(ret)) {
 						if (ClassOf(ret) == LongInteger)
@@ -2221,7 +2221,7 @@ cmeth	gNewWithStr : newWithClass (char *class_name)		/*  should only be called b
 	else {
 		static	long	cn = 1L;
 		char	className[40];
-		sprintf(className, "Dynace-%lld-%lu", (long long) gInstance(Application), cn++);
+		sprintf(className, "Dynace-%lld-%lu", PTOLL(gInstance(Application)), cn++);
 		iClassName = gNewWithStr(String, className);
 	}
 	

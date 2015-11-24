@@ -51,13 +51,13 @@ static int scrollFunction(object ctl, unsigned code, unsigned npos)
 				char	cmd[100], ns[80];
 				sprintf(cmd, "(%s (int->object %lld) (int->object %lld) 1)",
 					gFunctionName(SchemeClassSurrogate, (object)iIncFunc),
-					(long long) self, (long long) dlg);
+					PTOLL(self), PTOLL(dlg));
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 							  gNamespaceName(SchemeClassSurrogate, (object)iIncFunc, ns), 
 							  cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), 1)", gStringValue((object)iIncFunc), (long long) self, (long long) dlg);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), 1)", gStringValue((object)iIncFunc), PTOLL(self), PTOLL(dlg));
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				iIncFunc(self, dlg, 1);
@@ -70,13 +70,13 @@ static int scrollFunction(object ctl, unsigned code, unsigned npos)
 				char	cmd[100], ns[80];
 				sprintf(cmd, "(%s (int->object %lld) (int->object %lld) -1)",
 					gFunctionName(SchemeClassSurrogate, (object)iIncFunc),
-					(long long) self, (long long) dlg);
+					PTOLL(self), PTOLL(dlg));
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 							  gNamespaceName(SchemeClassSurrogate, (object)iIncFunc, ns), 
 							  cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)iIncFunc)  &&  ClassOf(iIncFunc) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), -1)", gStringValue((object)iIncFunc), (long long) self, (long long) dlg);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"), -1)", gStringValue((object)iIncFunc), PTOLL(self), PTOLL(dlg));
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				iIncFunc(self, dlg, -1);

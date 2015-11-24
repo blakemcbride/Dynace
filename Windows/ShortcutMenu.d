@@ -165,13 +165,13 @@ imeth	int	gPerform()
 
 				sprintf(cmd, "(%s (int->object %lld) %u)",
 					gFunctionName(SchemeClassSurrogate, (object)fp),
-					(long long) wind, id);
+					PTOLL(wind), id);
 				gExecuteInNamespaceNR(SchemeClassSurrogate,
 						      gNamespaceName(SchemeClassSurrogate, (object)fp, ns), 
 						      cmd);
 			} else if (JavaScriptClassSurrogate  &&  IsObj((object)fp)  &&  ClassOf(fp) == JavaScriptString) {
 				char	cmd[128];
-				sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fp), (long long) wind, (long long) id);
+				sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fp), PTOLL(wind), PTOLL(id));
 				gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 			} else
 				fp(wind, id);

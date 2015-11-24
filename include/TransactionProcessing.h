@@ -60,7 +60,7 @@ typedef	struct 	_Field {
 }	Field;
 
 typedef	struct {
-	char	sig[4]  ALIGN2;
+	char	sig[4];
 	long	version  ALIGN2;
 	long	time  ALIGN2;		/*  time files combined	*/
 	long	tlen  ALIGN2;

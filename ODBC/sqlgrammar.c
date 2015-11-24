@@ -68,6 +68,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sqlstructs.h"
 
 #define YYERROR_VERBOSE
@@ -117,7 +118,7 @@ int yyerror(void *root, char const *msg)
 	return 1;
 }
 
-#line 121 "sqlgrammar.tab.c" /* yacc.c:339  */
+#line 122 "sqlgrammar.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -276,7 +277,7 @@ int yyparse (void *root);
 
 /* Copy the second part of user declarations.  */
 
-#line 280 "sqlgrammar.tab.c" /* yacc.c:358  */
+#line 281 "sqlgrammar.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -584,35 +585,35 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    98,    98,   105,   110,   115,   124,   132,   142,   151,
-     153,   160,   165,   173,   180,   187,   194,   202,   212,   219,
-     226,   236,   241,   249,   256,   266,   278,   281,   289,   296,
-     303,   310,   319,   328,   337,   344,   352,   364,   371,   378,
-     389,   401,   411,   416,   424,   437,   440,   448,   451,   458,
-     471,   474,   481,   488,   495,   505,   510,   518,   523,   528,
-     533,   538,   548,   553,   561,   565,   572,   579,   586,   588,
-     592,   593,   594,   595,   596,   597,   600,   602,   606,   607,
-     611,   616,   619,   627,   632,   641,   649,   661,   664,   668,
-     675,   676,   680,   685,   690,   698,   699,   703,   704,   709,
-     719,   726,   733,   740,   747,   748,   749,   750,   751,   752,
-     753,   757,   761,   765,   767,   771,   779,   789,   793,   804,
-     811,   821,   826,   834,   838,   845,   849,   853,   868,   871,
-     875,   882,   886,   887,   892,   900,   907,   917,   928,   933,
-     941,   949,   952,   960,   970,   976,   983,   993,  1000,  1011,
-    1023,  1030,  1045,  1052,  1065,  1071,  1077,  1083,  1090,  1098,
-    1106,  1118,  1123,  1131,  1138,  1146,  1154,  1165,  1173,  1176,
-    1183,  1188,  1197,  1200,  1209,  1217,  1225,  1232,  1239,  1248,
-    1255,  1262,  1269,  1276,  1283,  1290,  1300,  1309,  1321,  1330,
-    1342,  1351,  1364,  1367,  1374,  1381,  1391,  1400,  1409,  1418,
-    1430,  1435,  1443,  1455,  1459,  1463,  1470,  1477,  1486,  1496,
-    1506,  1514,  1522,  1530,  1538,  1546,  1554,  1560,  1566,  1572,
-    1581,  1586,  1594,  1601,  1608,  1618,  1619,  1620,  1624,  1631,
-    1639,  1646,  1654,  1661,  1670,  1674,  1681,  1688,  1695,  1702,
-    1709,  1720,  1728,  1740,  1746,  1756,  1762,  1772,  1778,  1788,
-    1798,  1805,  1816,  1827,  1838,  1839,  1840,  1841,  1842,  1843,
-    1847,  1854,  1861,  1867,  1874,  1882,  1888,  1895,  1903,  1909,
-    1915,  1921,  1927,  1933,  1940,  1951,  1957,  1963,  1970,  1976,
-    1982,  1988
+       0,    99,    99,   106,   111,   116,   125,   133,   143,   152,
+     154,   161,   166,   174,   181,   188,   195,   203,   213,   220,
+     227,   237,   242,   250,   257,   267,   279,   282,   290,   297,
+     304,   311,   320,   329,   338,   345,   353,   365,   372,   379,
+     390,   402,   412,   417,   425,   438,   441,   449,   452,   459,
+     472,   475,   482,   489,   496,   506,   511,   519,   524,   529,
+     534,   539,   549,   554,   562,   566,   573,   580,   587,   589,
+     593,   594,   595,   596,   597,   598,   601,   603,   607,   608,
+     612,   617,   620,   628,   633,   642,   650,   662,   665,   669,
+     676,   677,   681,   686,   691,   699,   700,   704,   705,   710,
+     720,   727,   734,   741,   748,   749,   750,   751,   752,   753,
+     754,   758,   762,   766,   768,   772,   780,   790,   794,   805,
+     812,   822,   827,   835,   839,   846,   850,   854,   869,   872,
+     876,   883,   887,   888,   893,   901,   908,   918,   929,   934,
+     942,   950,   953,   961,   971,   977,   984,   994,  1001,  1012,
+    1024,  1031,  1046,  1053,  1066,  1072,  1078,  1084,  1091,  1099,
+    1107,  1119,  1124,  1132,  1139,  1147,  1155,  1166,  1174,  1177,
+    1184,  1189,  1198,  1201,  1210,  1218,  1226,  1233,  1240,  1249,
+    1256,  1263,  1270,  1277,  1284,  1291,  1301,  1310,  1322,  1331,
+    1343,  1352,  1365,  1368,  1375,  1382,  1392,  1401,  1410,  1419,
+    1431,  1436,  1444,  1456,  1460,  1464,  1471,  1478,  1487,  1497,
+    1507,  1515,  1523,  1531,  1539,  1547,  1555,  1561,  1567,  1573,
+    1582,  1587,  1595,  1602,  1609,  1619,  1620,  1621,  1625,  1632,
+    1640,  1647,  1655,  1662,  1671,  1675,  1682,  1689,  1696,  1703,
+    1710,  1721,  1729,  1741,  1747,  1757,  1763,  1773,  1779,  1789,
+    1799,  1806,  1817,  1828,  1839,  1840,  1841,  1842,  1843,  1844,
+    1848,  1855,  1862,  1868,  1875,  1883,  1889,  1896,  1904,  1910,
+    1916,  1922,  1928,  1934,  1941,  1952,  1958,  1964,  1971,  1977,
+    1983,  1989
 };
 #endif
 
@@ -1804,223 +1805,223 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 99 "sqlgrammar.y" /* yacc.c:1646  */
+#line 100 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			*((sql_list_t**)root) = (sql_list_t*)(yyvsp[0]);
 		}
-#line 1812 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1813 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 106 "sqlgrammar.y" /* yacc.c:1646  */
+#line 107 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[-1]));
 		}
-#line 1821 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1822 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 111 "sqlgrammar.y" /* yacc.c:1646  */
+#line 112 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[-1])); 
 			(yyval) = (yyvsp[-2]);
 		}
-#line 1830 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1831 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 116 "sqlgrammar.y" /* yacc.c:1646  */
+#line 117 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 1839 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1840 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 125 "sqlgrammar.y" /* yacc.c:1646  */
+#line 126 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				sql_declare(sql_t, psql);
 				psql->which = 0;
 				psql->pschema = (schema_t*)(yyvsp[0]);
 				(yyval) = (LITEM)psql;
 			}
-#line 1850 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1851 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 133 "sqlgrammar.y" /* yacc.c:1646  */
+#line 134 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				sql_declare(sql_t, psql);
 				psql->which = 4;
 				psql->pschema_element = (schema_element_t*)(yyvsp[0]);
 				(yyval) = (LITEM)psql;
 			}
-#line 1861 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1862 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 143 "sqlgrammar.y" /* yacc.c:1646  */
+#line 144 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_t *pschema = sql_alloc(schema_t);
 			pschema->puser = (user_t*)(yyvsp[-1]);
 			pschema->plist = (yyvsp[0]);
 			(yyval) = (LITEM)pschema;
 		}
-#line 1872 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1873 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 154 "sqlgrammar.y" /* yacc.c:1646  */
+#line 155 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 1880 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1881 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 161 "sqlgrammar.y" /* yacc.c:1646  */
+#line 162 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 1889 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1890 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 166 "sqlgrammar.y" /* yacc.c:1646  */
+#line 167 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-1]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-1]);
 		}
-#line 1898 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1899 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 174 "sqlgrammar.y" /* yacc.c:1646  */
+#line 175 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 0;
 			pelement->ptabledef = (base_table_def_t *)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 1909 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1910 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 181 "sqlgrammar.y" /* yacc.c:1646  */
+#line 182 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 1;
 			pelement->pviewdef = (view_def_t *)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 1920 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1921 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 188 "sqlgrammar.y" /* yacc.c:1646  */
+#line 189 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 2;
 			pelement->pprivilegedef = (privilege_def_t *)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 1931 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1932 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 195 "sqlgrammar.y" /* yacc.c:1646  */
+#line 196 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 3;
 			pelement->pdroptrigger = (drop_trigger_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 1942 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1943 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 203 "sqlgrammar.y" /* yacc.c:1646  */
+#line 204 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			schema_element_t *pelement = sql_alloc(schema_element_t);
 			pelement->which = 4;
 			pelement->pdroptable = (drop_table_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 1953 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1954 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 213 "sqlgrammar.y" /* yacc.c:1646  */
+#line 214 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 1961 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1962 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 220 "sqlgrammar.y" /* yacc.c:1646  */
+#line 221 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 1969 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1970 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 227 "sqlgrammar.y" /* yacc.c:1646  */
+#line 228 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			base_table_def_t *pdef = sql_alloc(base_table_def_t);
 			pdef->ptable = (table_t*)(yyvsp[-3]);
 			pdef->plist = (yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 1980 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1981 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 237 "sqlgrammar.y" /* yacc.c:1646  */
+#line 238 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 1989 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1990 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 242 "sqlgrammar.y" /* yacc.c:1646  */
+#line 243 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-2]);
 		}
-#line 1998 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 1999 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 250 "sqlgrammar.y" /* yacc.c:1646  */
+#line 251 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(base_table_element_t, pelement);
 			pelement->which = 0;
 			pelement->pcolumn = (column_def_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 2009 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2010 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 257 "sqlgrammar.y" /* yacc.c:1646  */
+#line 258 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(base_table_element_t, pelement);
 			pelement->which = 1;
 			pelement->pconstraint = (table_constraint_def_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pelement;
 		}
-#line 2020 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2021 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 267 "sqlgrammar.y" /* yacc.c:1646  */
+#line 268 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_t, pcolumn);
 			pcolumn->pcolumn = (column_t)(yyvsp[-2]);
@@ -2028,61 +2029,61 @@ yyreduce:
 			pcolumn->popt = (yyvsp[0]);
 			(yyval) = (LITEM)pcolumn;
 		}
-#line 2032 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2033 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 278 "sqlgrammar.y" /* yacc.c:1646  */
+#line 279 "sqlgrammar.y" /* yacc.c:1646  */
     {
 		(yyval) = (LITEM)NULL;
 	}
-#line 2040 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2041 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 282 "sqlgrammar.y" /* yacc.c:1646  */
+#line 283 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-1]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-1]);
 	}
-#line 2049 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2050 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 290 "sqlgrammar.y" /* yacc.c:1646  */
+#line 291 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX;
 			(yyval) = (LITEM)pdef;
 		}
-#line 2060 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2061 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 297 "sqlgrammar.y" /* yacc.c:1646  */
+#line 298 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX_UNIQUE;
 			(yyval) = (LITEM)pdef;
 		}
-#line 2071 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2072 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 304 "sqlgrammar.y" /* yacc.c:1646  */
+#line 305 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 0;
 			pdef->notnull = NOT_NULLX_PKEY;
 			(yyval) = (LITEM)pdef;
 		}
-#line 2082 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2083 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 311 "sqlgrammar.y" /* yacc.c:1646  */
+#line 312 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 1;
@@ -2091,11 +2092,11 @@ yyreduce:
 			pdef->pdefault->pliteral = (literal_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2095 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2096 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 320 "sqlgrammar.y" /* yacc.c:1646  */
+#line 321 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 1;
@@ -2104,11 +2105,11 @@ yyreduce:
 			pdef->pdefault->nullx = IS_NULLX;
 			(yyval) = (LITEM)pdef;
 		}
-#line 2108 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2109 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 329 "sqlgrammar.y" /* yacc.c:1646  */
+#line 330 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 1;
@@ -2117,22 +2118,22 @@ yyreduce:
 			pdef->pdefault->puser = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2121 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2122 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 338 "sqlgrammar.y" /* yacc.c:1646  */
+#line 339 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 2;
 			pdef->psearch = (search_condition_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2132 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2133 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 345 "sqlgrammar.y" /* yacc.c:1646  */
+#line 346 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 3;
@@ -2140,11 +2141,11 @@ yyreduce:
 			pdef->preferences->ptable = (table_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2144 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2145 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 353 "sqlgrammar.y" /* yacc.c:1646  */
+#line 354 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_def_opt_t, pdef);
 			pdef->which = 3;
@@ -2153,33 +2154,33 @@ yyreduce:
 			pdef->preferences->pcolumns = (yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2157 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2158 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 365 "sqlgrammar.y" /* yacc.c:1646  */
+#line 366 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 0;
 			pdef->punique = (yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2168 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2169 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 372 "sqlgrammar.y" /* yacc.c:1646  */
+#line 373 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 1;
 			pdef->pprimarykeys = (yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2179 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2180 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 380 "sqlgrammar.y" /* yacc.c:1646  */
+#line 381 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 2;
@@ -2189,11 +2190,11 @@ yyreduce:
 			pdef->pforeignkey->preferences->ptable = (table_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2193 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2194 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 391 "sqlgrammar.y" /* yacc.c:1646  */
+#line 392 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 2;
@@ -2204,40 +2205,40 @@ yyreduce:
 			pdef->pforeignkey->preferences->pcolumns = (yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2208 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2209 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 402 "sqlgrammar.y" /* yacc.c:1646  */
+#line 403 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_constraint_def_t, pdef);
 			pdef->which = 3;
 			pdef->pcheck = (search_condition_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pdef;
 		}
-#line 2219 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2220 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 412 "sqlgrammar.y" /* yacc.c:1646  */
+#line 413 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2228 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2229 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 417 "sqlgrammar.y" /* yacc.c:1646  */
+#line 418 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2237 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2238 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 426 "sqlgrammar.y" /* yacc.c:1646  */
+#line 427 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(view_def_t, pdef);
 			pdef->ptable = (table_t*)(yyvsp[-4]);
@@ -2245,43 +2246,43 @@ yyreduce:
 			pdef->pquery = (query_spec_t*)(yyvsp[-1]);
 			pdef->withcheck = (yyvsp[0]);
 		}
-#line 2249 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2250 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 437 "sqlgrammar.y" /* yacc.c:1646  */
+#line 438 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = 0;
 		}
-#line 2257 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2258 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 441 "sqlgrammar.y" /* yacc.c:1646  */
+#line 442 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = 1;
 		}
-#line 2265 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2266 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 448 "sqlgrammar.y" /* yacc.c:1646  */
+#line 449 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 2273 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2274 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 452 "sqlgrammar.y" /* yacc.c:1646  */
+#line 453 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[-1]);
 		}
-#line 2281 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2282 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 460 "sqlgrammar.y" /* yacc.c:1646  */
+#line 461 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(privilege_def_t, pdef);
 			pdef->pprivs = (privileges_t*)(yyvsp[-5]);
@@ -2289,200 +2290,200 @@ yyreduce:
 			pdef->pgrantees = (yyvsp[-1]);
 			pdef->withgrant = (yyvsp[0]);
 		}
-#line 2293 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2294 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 471 "sqlgrammar.y" /* yacc.c:1646  */
+#line 472 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = 0;
 		}
-#line 2301 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2302 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 475 "sqlgrammar.y" /* yacc.c:1646  */
+#line 476 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = 1;
 		}
-#line 2309 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2310 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 482 "sqlgrammar.y" /* yacc.c:1646  */
+#line 483 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 0;
 			pprivs->all = 1;
 			(yyval) = (LITEM)pprivs;
 		}
-#line 2320 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2321 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 489 "sqlgrammar.y" /* yacc.c:1646  */
+#line 490 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 0;
 			pprivs->all = 1;
 			(yyval) = (LITEM)pprivs;
 		}
-#line 2331 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2332 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 496 "sqlgrammar.y" /* yacc.c:1646  */
+#line 497 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(privileges_t, pprivs);
 			pprivs->which = 1;
 			pprivs->pops = (yyvsp[0]);
 			(yyval) = (LITEM)pprivs;
 		}
-#line 2342 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2343 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 506 "sqlgrammar.y" /* yacc.c:1646  */
+#line 507 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2351 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2352 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 511 "sqlgrammar.y" /* yacc.c:1646  */
+#line 512 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2360 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2361 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 519 "sqlgrammar.y" /* yacc.c:1646  */
+#line 520 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(operation_t, op);
 			op->type = OP_SELECT;	
 		}
-#line 2369 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2370 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 524 "sqlgrammar.y" /* yacc.c:1646  */
+#line 525 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(operation_t, op);
 			op->type = OP_INSERT;	
 		}
-#line 2378 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2379 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 529 "sqlgrammar.y" /* yacc.c:1646  */
+#line 530 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(operation_t, op);
 			op->type = OP_DELETE;	
 		}
-#line 2387 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2388 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 534 "sqlgrammar.y" /* yacc.c:1646  */
+#line 535 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(operation_t, op);
 			op->type = OP_UPDATE;	
 		}
-#line 2396 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2397 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 539 "sqlgrammar.y" /* yacc.c:1646  */
+#line 540 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(operation_t, op);
 			op->type = OP_REFERENCES;	
 			op->pcolumns = (yyvsp[0]);
 		}
-#line 2406 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2407 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 549 "sqlgrammar.y" /* yacc.c:1646  */
+#line 550 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2415 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2416 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 554 "sqlgrammar.y" /* yacc.c:1646  */
+#line 555 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0])); 
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2424 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2425 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 562 "sqlgrammar.y" /* yacc.c:1646  */
+#line 563 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 2432 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2433 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 566 "sqlgrammar.y" /* yacc.c:1646  */
+#line 567 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2440 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2441 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 573 "sqlgrammar.y" /* yacc.c:1646  */
+#line 574 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			yyerror(root, "Module definition not supported");
 		}
-#line 2448 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2449 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 616 "sqlgrammar.y" /* yacc.c:1646  */
+#line 617 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 2456 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2457 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 620 "sqlgrammar.y" /* yacc.c:1646  */
+#line 621 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2464 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2465 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 628 "sqlgrammar.y" /* yacc.c:1646  */
+#line 629 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2473 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2474 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 633 "sqlgrammar.y" /* yacc.c:1646  */
+#line 634 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2482 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2483 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 642 "sqlgrammar.y" /* yacc.c:1646  */
+#line 643 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(ordering_spec_t, spec);
 			spec->colnum = NULL;
@@ -2490,11 +2491,11 @@ yyreduce:
 			spec->ascdesc = (asc_desc_t)(yyvsp[0]);
 			(yyval) = (LITEM)spec;
 		}
-#line 2494 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2495 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 650 "sqlgrammar.y" /* yacc.c:1646  */
+#line 651 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(ordering_spec_t, spec);
 			spec->colnum = (char*)(yyvsp[-1]);
@@ -2502,130 +2503,130 @@ yyreduce:
 			spec->ascdesc = (asc_desc_t)(yyvsp[0]);
 			(yyval) = (LITEM)spec;
 		}
-#line 2506 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2507 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 661 "sqlgrammar.y" /* yacc.c:1646  */
+#line 662 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = ORDER_NOT_SPECIFIED;
 		}
-#line 2514 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2515 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 665 "sqlgrammar.y" /* yacc.c:1646  */
+#line 666 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = ORDER_ASC;
 		}
-#line 2522 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2523 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 669 "sqlgrammar.y" /* yacc.c:1646  */
+#line 670 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = ORDER_DESC;
 		}
-#line 2530 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2531 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 686 "sqlgrammar.y" /* yacc.c:1646  */
+#line 687 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2539 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2540 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 691 "sqlgrammar.y" /* yacc.c:1646  */
+#line 692 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-1]), (yyvsp[0]));
 			(yyval) = (yyvsp[-1]);
 		}
-#line 2548 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2549 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 710 "sqlgrammar.y" /* yacc.c:1646  */
+#line 711 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(sql_t, psql);
 			psql->which = 2;
 			psql->pstmt = (manipulative_statement_t*)(yyvsp[0]);
 			(yyval) = (LITEM)psql;
 		}
-#line 2559 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2560 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 720 "sqlgrammar.y" /* yacc.c:1646  */
+#line 721 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 0;
 			pstmt->pdelsearched = (delete_statement_searched_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2570 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2571 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 727 "sqlgrammar.y" /* yacc.c:1646  */
+#line 728 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 1;
 			pstmt->pinsert = (insert_statement_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2581 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2582 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 734 "sqlgrammar.y" /* yacc.c:1646  */
+#line 735 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 2;
 			pstmt->pselect = (select_statement_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2592 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2593 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 741 "sqlgrammar.y" /* yacc.c:1646  */
+#line 742 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(manipulative_statement_t, pstmt);
 			pstmt->which = 3;
 			pstmt->pupdatesearched = (update_statement_searched_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2603 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2604 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 772 "sqlgrammar.y" /* yacc.c:1646  */
+#line 773 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(delete_statement_searched_t, pstmt);
 			pstmt->ptable = (table_t*)(yyvsp[-1]);
 			pstmt->pwhere = (where_clause_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2614 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2615 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 780 "sqlgrammar.y" /* yacc.c:1646  */
+#line 781 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(delete_statement_searched_t, pstmt);
 			pstmt->ptable = (table_t*)(yyvsp[-1]);
 			pstmt->pwhere = (where_clause_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2625 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2626 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 794 "sqlgrammar.y" /* yacc.c:1646  */
+#line 795 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(insert_statement_t, pstmt);
 			pstmt->ptable = (table_t*)(yyvsp[-2]);
@@ -2633,67 +2634,67 @@ yyreduce:
 			pstmt->pvalues = (values_or_query_spec_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2637 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2638 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 805 "sqlgrammar.y" /* yacc.c:1646  */
+#line 806 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(values_or_query_spec_t, pvalues);
 			pvalues->which = 0;
 			pvalues->patoms = (yyvsp[-1]);
 			(yyval) = (LITEM)pvalues;
 		}
-#line 2648 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2649 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 812 "sqlgrammar.y" /* yacc.c:1646  */
+#line 813 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(values_or_query_spec_t, pvalues);
 			pvalues->which = 1;
 			pvalues->pquery = (query_spec_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pvalues;
 		}
-#line 2659 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2660 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 822 "sqlgrammar.y" /* yacc.c:1646  */
+#line 823 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2668 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2669 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 827 "sqlgrammar.y" /* yacc.c:1646  */
+#line 828 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2677 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2678 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 835 "sqlgrammar.y" /* yacc.c:1646  */
+#line 836 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2685 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2686 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 839 "sqlgrammar.y" /* yacc.c:1646  */
+#line 840 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 2693 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2694 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 127:
-#line 856 "sqlgrammar.y" /* yacc.c:1646  */
+#line 857 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(select_statement_t, pstmt);
 			pstmt->alldistinct = (yyvsp[-4]);
@@ -2702,75 +2703,75 @@ yyreduce:
 			pstmt->ptable = (table_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pstmt;
 		}
-#line 2706 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2707 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 128:
-#line 868 "sqlgrammar.y" /* yacc.c:1646  */
+#line 869 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = SEL_NOT_SPECIFIED;
 		}
-#line 2714 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2715 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 129:
-#line 872 "sqlgrammar.y" /* yacc.c:1646  */
+#line 873 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = SEL_ALL;
 		}
-#line 2722 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2723 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 130:
-#line 876 "sqlgrammar.y" /* yacc.c:1646  */
+#line 877 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = SEL_DISTINCT;
 		}
-#line 2730 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2731 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 133:
-#line 888 "sqlgrammar.y" /* yacc.c:1646  */
+#line 889 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2739 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2740 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 134:
-#line 893 "sqlgrammar.y" /* yacc.c:1646  */
+#line 894 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2748 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2749 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 135:
-#line 901 "sqlgrammar.y" /* yacc.c:1646  */
+#line 902 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(assignment_t, pass);
 			pass->pcolumn = (column_t)(yyvsp[-2]);
 			pass->pscalar = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pass;
 		}
-#line 2759 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2760 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 136:
-#line 908 "sqlgrammar.y" /* yacc.c:1646  */
+#line 909 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(assignment_t, pass);
 			pass->pcolumn = (column_t)(yyvsp[-2]);
 			pass->pscalar = (scalar_exp_t*)NULL;
 			(yyval) = (LITEM)pass;
 		}
-#line 2770 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2771 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 137:
-#line 918 "sqlgrammar.y" /* yacc.c:1646  */
+#line 919 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(update_statement_searched_t, pupdate);
 			pupdate->ptable = (table_t*)(yyvsp[-3]);
@@ -2778,118 +2779,118 @@ yyreduce:
 			pupdate->pwhereclause = (where_clause_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pupdate;
 		}
-#line 2782 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2783 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 138:
-#line 929 "sqlgrammar.y" /* yacc.c:1646  */
+#line 930 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 2791 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2792 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 139:
-#line 934 "sqlgrammar.y" /* yacc.c:1646  */
+#line 935 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 2800 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2801 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 140:
-#line 942 "sqlgrammar.y" /* yacc.c:1646  */
+#line 943 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2808 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2809 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 141:
-#line 949 "sqlgrammar.y" /* yacc.c:1646  */
+#line 950 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 2816 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2817 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 142:
-#line 953 "sqlgrammar.y" /* yacc.c:1646  */
+#line 954 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2824 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2825 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 143:
-#line 961 "sqlgrammar.y" /* yacc.c:1646  */
+#line 962 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(sql_t, psql);
 			psql->which = 3;
 			psql->pquery = (query_spec_t*)(yyvsp[0]);
 			(yyval) = (LITEM)psql;
 		}
-#line 2835 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2836 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 144:
-#line 971 "sqlgrammar.y" /* yacc.c:1646  */
+#line 972 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pquery;
 		}
-#line 2845 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2846 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 145:
-#line 977 "sqlgrammar.y" /* yacc.c:1646  */
+#line 978 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)(yyvsp[0]);
 			pquery->pexp = (query_exp_t*)(yyvsp[-2]);
 			(yyval) = (LITEM)pquery;
 		}
-#line 2856 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2857 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 146:
-#line 984 "sqlgrammar.y" /* yacc.c:1646  */
+#line 985 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_exp_t, pquery);
 			pquery->pterm = (query_term_t*)(yyvsp[0]);
 			pquery->pexp = (query_exp_t*)(yyvsp[-3]);
 			(yyval) = (LITEM)pquery;
 		}
-#line 2867 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2868 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 147:
-#line 994 "sqlgrammar.y" /* yacc.c:1646  */
+#line 995 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_term_t, pterm);
 			pterm->which = 0;
 			pterm->pspec = (query_spec_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pterm;
 		}
-#line 2878 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2879 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 148:
-#line 1001 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1002 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_term_t, pterm);
 			pterm->which = 1;
 			pterm->pexp = (void*)(yyvsp[-1]);
 			(yyval) = (LITEM)pterm;
 		}
-#line 2889 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2890 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 149:
-#line 1012 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1013 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(query_spec_t, pspec);
 			pspec->alldistinct = (yyvsp[-3]);
@@ -2898,19 +2899,19 @@ yyreduce:
 			pspec->porderby = (yyvsp[0]);
 			(yyval) = (LITEM)pspec;
 		}
-#line 2902 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2903 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 150:
-#line 1024 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1025 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 2910 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2911 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 151:
-#line 1034 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1035 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_exp_t, ptable);
 			ptable->pfrom = (from_clause_t*)(yyvsp[-3]);
@@ -2919,22 +2920,22 @@ yyreduce:
 			ptable->phaving = (having_clause_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ptable;
 		}
-#line 2923 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2924 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 152:
-#line 1046 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1047 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(from_clause_t, pfrom);
 			pfrom->which = 0;
 			pfrom->plist = (yyvsp[0]);
 			(yyval) = (LITEM)pfrom;
 		}
-#line 2934 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2935 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 153:
-#line 1053 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1054 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(from_clause_t, pfrom);
 			pfrom->which = 1;
@@ -2943,52 +2944,52 @@ yyreduce:
 			pfrom->pjoin->pjoin = (join_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pfrom;
 		}
-#line 2947 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2948 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 154:
-#line 1066 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1067 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			join_ref_t *pref = (join_ref_t*)(yyvsp[0]);
 			pref->type = JOIN_INNER;
 			(yyval) = (LITEM)pref;
 		}
-#line 2957 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2958 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 155:
-#line 1072 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1073 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			join_ref_t *pref = (join_ref_t*)(yyvsp[0]);
 			pref->type = JOIN_LEFT_OUTER;
 			(yyval) = (LITEM)pref;
 		}
-#line 2967 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2968 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 156:
-#line 1078 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1079 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			join_ref_t *pref = (join_ref_t*)(yyvsp[0]);
 			pref->type = JOIN_RIGHT_OUTER;
 			(yyval) = (LITEM)pref;
 		}
-#line 2977 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2978 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 157:
-#line 1084 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1085 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(join_ref_t, pref);
 			pref->type = JOIN_INNER;
 			pref->ptable = (table_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 2988 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 2989 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 158:
-#line 1091 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1092 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(join_ref_t, pref);
 			pref->type = JOIN_INNER;
@@ -2996,11 +2997,11 @@ yyreduce:
 			pref->pjoin = (join_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3000 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3001 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 159:
-#line 1099 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1100 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(join_ref_t, pref);
 			pref->type = JOIN_INNER;
@@ -3008,11 +3009,11 @@ yyreduce:
 			pref->psearch = (void*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3012 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3013 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 160:
-#line 1107 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1108 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(join_ref_t, pref);
 			pref->type = JOIN_INNER;
@@ -3021,40 +3022,40 @@ yyreduce:
 			pref->pjoin = (join_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3025 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3026 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 161:
-#line 1119 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1120 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 3034 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3035 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 162:
-#line 1124 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1125 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 3043 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3044 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 163:
-#line 1132 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1133 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_ref_t, pref);
 			pref->ptable = (table_t*)(yyvsp[0]);
 			pref->which = -1;
 			(yyval) = (LITEM)pref;
 		}
-#line 3054 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3055 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 164:
-#line 1139 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1140 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_ref_t, pref);
 			pref->ptable = (table_t*)(yyvsp[-1]);
@@ -3062,11 +3063,11 @@ yyreduce:
 			pref->alias = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3066 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3067 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 165:
-#line 1147 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1148 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_ref_t, pref);
 			pref->ptable = (table_t*)(yyvsp[-2]);
@@ -3074,11 +3075,11 @@ yyreduce:
 			pref->alias = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3078 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3079 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 166:
-#line 1155 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1156 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_ref_t, pref);
 			pref->ptable = (table_t*)(yyvsp[-1]);
@@ -3086,69 +3087,69 @@ yyreduce:
 			pref->prange = (range_variable_t)(yyvsp[0]);
 			(yyval) = (LITEM)pref;
 		}
-#line 3090 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3091 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 167:
-#line 1166 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1167 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3098 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3099 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 168:
-#line 1173 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1174 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 3106 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3107 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 169:
-#line 1177 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1178 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3114 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3115 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 170:
-#line 1184 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1185 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 3123 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3124 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 171:
-#line 1189 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1190 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 3132 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3133 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 172:
-#line 1197 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1198 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 3140 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3141 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 173:
-#line 1201 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1202 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3148 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3149 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 174:
-#line 1210 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1211 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch1 = (search_condition_t*)(yyvsp[-2]);
@@ -3156,11 +3157,11 @@ yyreduce:
 			psearch->searchop = SEARCHOP_OR;
 			(yyval) = (LITEM)psearch;
 		}
-#line 3160 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3161 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 175:
-#line 1218 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1219 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch1 = (search_condition_t*)(yyvsp[-2]);
@@ -3168,120 +3169,120 @@ yyreduce:
 			psearch->searchop = SEARCHOP_AND;
 			(yyval) = (LITEM)psearch;
 		}
-#line 3172 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3173 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 176:
-#line 1226 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1227 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch2 = (search_condition_t*)(yyvsp[0]);
 			psearch->searchop = SEARCHOP_NOT;
 			(yyval) = (LITEM)psearch;
 		}
-#line 3183 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3184 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 177:
-#line 1233 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1234 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(search_condition_t, psearch);
 			psearch->psearch1 = (search_condition_t*)(yyvsp[-1]);
 			psearch->useparens = 1;
 			(yyval) = (LITEM)psearch;
 		}
-#line 3194 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3195 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 178:
-#line 1240 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1241 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(search_condition_t, psearch);
 			psearch->ppredicate = (predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)psearch;
 		}
-#line 3204 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3205 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 179:
-#line 1249 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1250 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 0;
 			ppred->pcomparison = (comparison_predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3215 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3216 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 180:
-#line 1256 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1257 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 1;
 			ppred->pin = (in_predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3226 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3227 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 181:
-#line 1263 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1264 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 2;
 			ppred->ptestnull = (test_for_null_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3237 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3238 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 182:
-#line 1270 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1271 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 3;
 			ppred->pexisttest = (existence_test_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3248 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3249 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 183:
-#line 1277 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1278 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 4;
 			ppred->pbetween = (between_predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3259 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3260 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 184:
-#line 1284 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1285 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 5;
 			ppred->plike = (like_predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3270 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3271 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 185:
-#line 1291 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1292 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(predicate_t, ppred);
 			ppred->which = 6;
 			ppred->panyorall = (any_or_all_predicate_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3281 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3282 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 186:
-#line 1301 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1302 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(comparison_predicate_t, ppred);
 			ppred->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3290,11 +3291,11 @@ yyreduce:
 			ppred->join_type = JOIN_INNER;
 			(yyval) = (LITEM)ppred;
 		}
-#line 3294 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3295 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 187:
-#line 1310 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1311 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(comparison_predicate_t, ppred);
 			ppred->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3303,11 +3304,11 @@ yyreduce:
 			ppred->join_type = JOIN_INNER;
 			(yyval) = (LITEM)ppred;
 		}
-#line 3307 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3308 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 188:
-#line 1322 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1323 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(between_predicate_t, ppred);
 			ppred->pscalar1 = (scalar_exp_t*)(yyvsp[-5]);
@@ -3316,11 +3317,11 @@ yyreduce:
 			ppred->pscalar3 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3320 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3321 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 189:
-#line 1331 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1332 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(between_predicate_t, ppred);
 			ppred->pscalar1 = (scalar_exp_t*)(yyvsp[-4]);
@@ -3329,11 +3330,11 @@ yyreduce:
 			ppred->pscalar3 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3333 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3334 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 190:
-#line 1343 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1344 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(like_predicate_t, ppred);
 			ppred->pscalar = (scalar_exp_t*)(yyvsp[-4]);
@@ -3342,11 +3343,11 @@ yyreduce:
 			ppred->pescape = (atom_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3346 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3347 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 191:
-#line 1352 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1353 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(like_predicate_t, ppred);
 			ppred->pscalar = (scalar_exp_t*)(yyvsp[-3]);
@@ -3355,49 +3356,49 @@ yyreduce:
 			ppred->pescape = (atom_t*)(yyvsp[0]);
 			(yyval) = (LITEM)ppred;
 		}
-#line 3359 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3360 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 192:
-#line 1364 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1365 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (LITEM)NULL;
 		}
-#line 3367 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3368 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 193:
-#line 1368 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1369 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3375 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3376 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 194:
-#line 1375 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1376 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(test_for_null_t, ptest);
 			ptest->pcolumn = (column_ref_t*)(yyvsp[-3]);
 			ptest->isnull = 0;
 			(yyval) = (LITEM)ptest;
 		}
-#line 3386 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3387 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 195:
-#line 1382 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1383 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(test_for_null_t, ptest);
 			ptest->pcolumn = (column_ref_t*)(yyvsp[-2]);
 			ptest->isnull = 1;
 			(yyval) = (LITEM)ptest;
 		}
-#line 3397 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3398 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 196:
-#line 1392 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1393 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(in_predicate_t, pin);
 			pin->pscalar = (scalar_exp_t*)(yyvsp[-3]);
@@ -3406,11 +3407,11 @@ yyreduce:
 			pin->psubquery = (subquery_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pin;
 		}
-#line 3410 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3411 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 197:
-#line 1401 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1402 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(in_predicate_t, pin);
 			pin->pscalar = (scalar_exp_t*)(yyvsp[-2]);
@@ -3419,11 +3420,11 @@ yyreduce:
 			pin->psubquery = (subquery_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pin;
 		}
-#line 3423 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3424 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 198:
-#line 1410 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1411 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(in_predicate_t, pin);
 			pin->pscalar = (scalar_exp_t*)(yyvsp[-5]);
@@ -3432,11 +3433,11 @@ yyreduce:
 			pin->patomlist = (yyvsp[-1]);
 			(yyval) = (LITEM)pin;
 		}
-#line 3436 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3437 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 199:
-#line 1419 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1420 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(in_predicate_t, pin);
 			pin->pscalar = (scalar_exp_t*)(yyvsp[-4]);
@@ -3445,29 +3446,29 @@ yyreduce:
 			pin->patomlist = (yyvsp[-1]);
 			(yyval) = (LITEM)pin;
 		}
-#line 3449 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3450 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 200:
-#line 1431 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1432 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 3458 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3459 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 201:
-#line 1436 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1437 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 3467 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3468 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 202:
-#line 1444 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1445 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(any_or_all_predicate_t, pall);
 			pall->pscalar = (scalar_exp_t*)(yyvsp[-3]);
@@ -3476,51 +3477,51 @@ yyreduce:
 			pall->psubquery = (subquery_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pall;
 		}
-#line 3480 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3481 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 203:
-#line 1456 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1457 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = PRED_ANY;
 		}
-#line 3488 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3489 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 204:
-#line 1460 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1461 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = PRED_ALL;
 		}
-#line 3496 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3497 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 205:
-#line 1464 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1465 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = PRED_SOME;
 		}
-#line 3504 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3505 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 206:
-#line 1471 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1472 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3512 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3513 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 207:
-#line 1478 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1479 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[-1]);
 		}
-#line 3520 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3521 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 208:
-#line 1487 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1488 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(scalar_exp_t, pscalar);
@@ -3530,11 +3531,11 @@ yyreduce:
 			pscalar->name = tmp;
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3534 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3535 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 209:
-#line 1497 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1498 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(scalar_exp_t, pscalar);
@@ -3544,11 +3545,11 @@ yyreduce:
 			pscalar->name = tmp;
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3548 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3549 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 210:
-#line 1507 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1508 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3556,11 +3557,11 @@ yyreduce:
 			pscalar->pscalar2 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3560 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3561 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 211:
-#line 1515 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1516 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3568,11 +3569,11 @@ yyreduce:
 			pscalar->pscalar2 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3572 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3573 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 212:
-#line 1523 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1524 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3580,11 +3581,11 @@ yyreduce:
 			pscalar->pscalar2 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3584 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3585 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 213:
-#line 1531 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1532 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[-2]);
@@ -3592,11 +3593,11 @@ yyreduce:
 			pscalar->pscalar2 = (scalar_exp_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3596 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3597 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 214:
-#line 1539 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1540 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[0]);
@@ -3604,11 +3605,11 @@ yyreduce:
 			pscalar->unary = 1;
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3608 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3609 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 215:
-#line 1547 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1548 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[0]);
@@ -3616,113 +3617,113 @@ yyreduce:
 			pscalar->unary = 1;
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3620 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3621 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 216:
-#line 1555 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1556 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pliteral = (literal_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3630 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3631 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 217:
-#line 1561 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1562 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pcolumnref = (column_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3640 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3641 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 218:
-#line 1567 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1568 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pfunction_ref = (function_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3650 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3651 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 219:
-#line 1573 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1574 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(scalar_exp_t, pscalar);
 			pscalar->pscalar1 = (scalar_exp_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pscalar;
 		}
-#line 3660 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3661 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 220:
-#line 1582 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1583 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = _sql_create_list();
 			_sql_add_tail((yyval), (yyvsp[0]));
 		}
-#line 3669 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3670 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 221:
-#line 1587 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1588 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			_sql_add_tail((yyvsp[-2]), (yyvsp[0]));
 			(yyval) = (yyvsp[-2]);
 		}
-#line 3678 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3679 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 222:
-#line 1595 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1596 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(atom_t, patom);
 			patom->which = 0;
 			patom->pparam = (parameter_ref_t*)(yyvsp[0]);
 			(yyval) = (LITEM)patom;
 		}
-#line 3689 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3690 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 223:
-#line 1602 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1603 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(atom_t, patom);
 			patom->which = 1;
 			patom->pliteral = (literal_t*)(yyvsp[0]);
 			(yyval) = (LITEM)patom;
 		}
-#line 3700 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3701 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 224:
-#line 1609 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1610 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(atom_t, patom);
 			patom->which = 2;
 			patom->user = 1;
 			(yyval) = (LITEM)patom;
 		}
-#line 3711 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3712 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 228:
-#line 1625 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1626 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-3]);
 			pfunc->asterisk = 1;
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3722 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3723 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 229:
-#line 1632 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1633 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-4]);
@@ -3730,22 +3731,22 @@ yyreduce:
 			pfunc->pcolumn = (column_ref_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3734 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3735 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 230:
-#line 1640 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1641 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-3]);
 			pfunc->pcolumn = (column_ref_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3745 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3746 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 231:
-#line 1647 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1648 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-4]);
@@ -3753,117 +3754,117 @@ yyreduce:
 			pfunc->pscalar = (column_ref_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3757 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3758 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 232:
-#line 1655 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1656 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-3]);
 			pfunc->pscalar = (column_ref_t*)(yyvsp[-1]);
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3768 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3769 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 233:
-#line 1662 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1663 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(function_ref_t, pfunc);
 			pfunc->name = (char*)(yyvsp[-2]);
 			(yyval) = (LITEM)pfunc;
 		}
-#line 3778 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3779 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 234:
-#line 1671 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1672 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			(yyval) = (yyvsp[0]);
 		}
-#line 3786 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3787 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 235:
-#line 1675 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1676 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->l = atoi((const char*)(yyvsp[0]));
 			plit->which = 1;
 			(yyval) = (LITEM)plit;
 		}
-#line 3797 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3798 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 236:
-#line 1682 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1683 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->d = atof((const char *)(yyvsp[0]));
 			plit->which = 2;
 			(yyval) = (LITEM)plit;
 		}
-#line 3808 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3809 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 237:
-#line 1689 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1690 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->string = (char*)(yyvsp[0]);
 			plit->which = 3;
 			(yyval) = (LITEM)plit;
 		}
-#line 3819 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3820 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 238:
-#line 1696 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1697 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->string = (char*)(yyvsp[-2]);
 			plit->which = 4;
 			(yyval) = (LITEM)plit;
 		}
-#line 3830 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3831 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 239:
-#line 1703 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1704 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->string = (char*)(yyvsp[0]);
 			plit->which = 5;
 			(yyval) = (LITEM)plit;
 		}
-#line 3841 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3842 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 240:
-#line 1710 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1711 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->string = (char*)(yyvsp[0]);
 			plit->which = 6;
 			(yyval) = (LITEM)plit;
 		}
-#line 3852 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3853 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 241:
-#line 1721 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1722 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(literal_t, plit);
 			plit->string = (char*)(yyvsp[0]);
 			plit->which = 0;
 			(yyval) = (LITEM)plit;
 		}
-#line 3863 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3864 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 242:
-#line 1729 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1730 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			literal_t *plit = (literal_t*)(yyvsp[-1]);
 			char *tmp = __sql_alloc(strlen((char*)plit->string) + strlen((char*)(yyvsp[0])) + 1);
@@ -3871,63 +3872,63 @@ yyreduce:
 			plit->string = tmp;
 			(yyval) = (LITEM)plit;
 		}
-#line 3875 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3876 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 243:
-#line 1741 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1742 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_t, ptable);
 			ptable->table = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)ptable;
 		}
-#line 3885 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3886 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 244:
-#line 1747 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1748 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(table_t, ptable);
 			ptable->owner = (char*)(yyvsp[-2]);
 			ptable->table = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)ptable;
 		}
-#line 3896 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3897 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 245:
-#line 1757 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1758 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			trigger_name_t *pname = sql_alloc(trigger_name_t);
 			pname->trigger = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pname;
 		}
-#line 3906 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3907 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 246:
-#line 1763 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1764 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			trigger_name_t *pname = sql_alloc(trigger_name_t);
 			pname->trigger = (char*)(yyvsp[-2]);
 			pname->owner = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pname;
 		}
-#line 3917 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3918 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 247:
-#line 1773 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1774 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_ref_t, pcol);
 			pcol->column = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pcol;
 		}
-#line 3927 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3928 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 248:
-#line 1779 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1780 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(column_ref_t, pcol);
@@ -3937,11 +3938,11 @@ yyreduce:
 			pcol->alias = tmp;
 			(yyval) = (LITEM)pcol;
 		}
-#line 3941 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3942 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 249:
-#line 1789 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1790 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(column_ref_t, pcol);
@@ -3951,22 +3952,22 @@ yyreduce:
 			pcol->alias = tmp;
 			(yyval) = (LITEM)pcol;
 		}
-#line 3955 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3956 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 250:
-#line 1799 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1800 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_ref_t, pcol);
 			pcol->tablename = (char*)(yyvsp[-2]);
 			pcol->column = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pcol;
 		}
-#line 3966 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3967 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 251:
-#line 1806 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1807 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(column_ref_t, pcol);
@@ -3977,11 +3978,11 @@ yyreduce:
 			pcol->alias = tmp;
 			(yyval) = (LITEM)pcol;
 		}
-#line 3981 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3982 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 252:
-#line 1817 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1818 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			char *tmp;
 			sql_declare(column_ref_t, pcol);
@@ -3992,11 +3993,11 @@ yyreduce:
 			pcol->alias = tmp;
 			(yyval) = (LITEM)pcol;
 		}
-#line 3996 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 3997 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 253:
-#line 1828 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1829 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(column_ref_t, pcol);
 			pcol->tablename = (char*)(yyvsp[-4]);
@@ -4004,54 +4005,54 @@ yyreduce:
 			pcol->alias = (char*)(yyvsp[0]);
 			(yyval) = (LITEM)pcol;
 		}
-#line 4008 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4009 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 260:
-#line 1848 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1849 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_CHAR;
 			ptype->scale = 1;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4019 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4020 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 261:
-#line 1855 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1856 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_CHAR;
 			ptype->scale = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4030 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4031 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 262:
-#line 1862 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1863 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_NUMERIC;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4040 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4041 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 263:
-#line 1868 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1869 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_NUMERIC;
 			ptype->scale = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4051 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4052 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 264:
-#line 1875 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1876 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_NUMERIC;
@@ -4059,32 +4060,32 @@ yyreduce:
 			ptype->precision = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4063 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4064 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 265:
-#line 1883 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1884 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DECIMAL;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4073 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4074 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 266:
-#line 1889 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1890 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DECIMAL;
 			ptype->scale = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4084 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4085 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 267:
-#line 1896 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1897 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DECIMAL;
@@ -4092,139 +4093,139 @@ yyreduce:
 			ptype->precision = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4096 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4097 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 268:
-#line 1904 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1905 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_INTEGER;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4106 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4107 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 269:
-#line 1910 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1911 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_SMALLINT;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4116 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4117 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 270:
-#line 1916 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1917 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_FLOAT;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4126 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4127 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 271:
-#line 1922 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1923 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_REAL;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4136 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4137 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 272:
-#line 1928 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1929 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_DOUBLE;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4146 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4147 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 273:
-#line 1934 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1935 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_VARCHAR;
 			ptype->scale = 1;
 			(yyval) = (LITEM)ptype;
 		}
-#line 4157 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4158 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 274:
-#line 1941 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1942 "sqlgrammar.y" /* yacc.c:1646  */
     {
 			sql_declare(data_type_t, ptype);
 			ptype->type = DT_VARCHAR;
 			ptype->scale = atoi((char*)(yyvsp[-1]));
 			(yyval) = (LITEM)ptype;
 		}
-#line 4168 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4169 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 275:
-#line 1952 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1953 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4176 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4177 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 276:
-#line 1958 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1959 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4184 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4185 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 277:
-#line 1964 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1965 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4192 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4193 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 278:
-#line 1971 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1972 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4200 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4201 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 279:
-#line 1977 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1978 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4208 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4209 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 280:
-#line 1983 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1984 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4216 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4217 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 281:
-#line 1989 "sqlgrammar.y" /* yacc.c:1646  */
+#line 1990 "sqlgrammar.y" /* yacc.c:1646  */
     {
 				(yyval) = (yyvsp[0]);
 			}
-#line 4224 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4225 "sqlgrammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 4228 "sqlgrammar.tab.c" /* yacc.c:1646  */
+#line 4229 "sqlgrammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -4452,5 +4453,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1994 "sqlgrammar.y" /* yacc.c:1906  */
+#line 1995 "sqlgrammar.y" /* yacc.c:1906  */
 

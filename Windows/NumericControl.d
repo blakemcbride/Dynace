@@ -228,7 +228,7 @@ private	imeth	LRESULT	process_wm_lbuttondblclk(object	self,
 			char	cmd[100], ns[80];
 			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iDCFun),
-				(long long) self, (long long) iDlg);
+				PTOLL(self), PTOLL(iDlg));
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object)iDCFun, ns), 
 					      cmd);
@@ -236,7 +236,7 @@ private	imeth	LRESULT	process_wm_lbuttondblclk(object	self,
 			gPerformJavaObjCallback((object)iDCFun, iDlg);
 		else if (JavaScriptClassSurrogate  &&  IsObj((object)iDCFun)  &&  ClassOf(iDCFun) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iDCFun), (long long) self, (long long) iDlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iDCFun), PTOLL(self), PTOLL(iDlg));
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else
 			iDCFun(self, iDlg);
@@ -691,7 +691,7 @@ imeth	int	gCheckValue()
 
 			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long long) self, (long long) iValue);
+				PTOLL(self), PTOLL(iValue));
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -703,7 +703,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), (long long) self, (long long) iValue);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), PTOLL(self), PTOLL(iValue));
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)

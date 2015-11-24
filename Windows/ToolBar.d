@@ -532,7 +532,7 @@ private	imeth	LRESULT	process_wm_lbuttonup(object	self,
 
 			sprintf(cmd, "(%s (int->object %lld) %lld)",
 				gFunctionName(SchemeClassSurrogate, (object)fun),
-				(long long) iParent, (long long) iID[i]);
+				PTOLL(iParent), PTOLL(iID[i]));
 			gExecuteInNamespaceNR(SchemeClassSurrogate,
 					      gNamespaceName(SchemeClassSurrogate, (object)fun, ns), 
 					      cmd);
@@ -540,7 +540,7 @@ private	imeth	LRESULT	process_wm_lbuttonup(object	self,
 			return gPerformJavaMenuCallback((object)fun, iParent, iID[i]);
 		else if (JavaScriptClassSurrogate  &&  IsObj((object)fun)  &&  ClassOf(fun) == JavaScriptString) {
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fun), (long long) iParent, (long long) iID[i]);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), %lld)", gStringValue((object)fun), PTOLL(iParent), PTOLL(iID[i]));
 			gExecuteStringNR(JavaScriptClassSurrogate, cmd);
 		} else
 			fun(iParent, iID[i]);

@@ -89,7 +89,7 @@ private	imeth int createTableIfNeeded(sqlite3 *db);
 	query - the load query
 	group - precache group id, used to load groups of tables with the same key
 */
-cvmeth	gNewCachedTable(object dyndb, short cache, int threshold, char *name, char *query, int group, void *sqllite)
+cvmeth	gNewCachedTable(object dyndb, int cache, int threshold, char *name, char *query, int group, void *sqllite)
 {
 	object	obj = gNew(super);
 	ivType	*iv = ivPtr(obj);

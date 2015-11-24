@@ -206,7 +206,7 @@ Scheme_Object	*scheme_make_string2(char *str)
 	return scheme_make_string(str ? str : "");
 }
 
-static	int	wds_printf(char *fmt, ...)
+static	void	wds_printf(char *fmt, ...)
 {
 	char	buf[400];
 
@@ -216,7 +216,6 @@ static	int	wds_printf(char *fmt, ...)
 	va_end(marker);
 //	gError(Application, buf);
 	gMessage(Application, buf);
-	return 1;
 }
 
 Scheme_Object	*scheme_new_dynace_object(object obj)

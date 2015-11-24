@@ -167,7 +167,7 @@ static char *SkipSz(LPTSTR pNameOrd)
 	return (char *) pNameOrd;
 }
 
-static VOID DWordAlign(char **ppb)
+static VOID DWordAlign(unsigned char **ppb)
 {
     *ppb += (4 - (((INT_PTR)*ppb) & 3)) % 4;
 }

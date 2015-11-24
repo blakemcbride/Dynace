@@ -45,7 +45,7 @@ defclass  ColumnInfo {
 };
 
 
-cvmeth	vNew(char *name, SWORD type, char *typebuf, SDWORD len, int nullable, int n, int scale)
+cvmeth	vNew(char *name, int type, char *typebuf, SDWORD len, int nullable, int n, int scale)
 {
 	object	obj = gNew(super);
 	ivType	*iv = ivPtr(obj);

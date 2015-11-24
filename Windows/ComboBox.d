@@ -742,7 +742,7 @@ imeth	int	gCheckValue()
 			int	res;
 			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iAcf),
-				(long long) self, (long long) iValue);
+				PTOLL(self), PTOLL(iValue));
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iAcf, ns), 
 						  cmd);
@@ -754,7 +754,7 @@ imeth	int	gCheckValue()
 		} else if (JavaScriptClassSurrogate  &&  IsObj((object)iAcf)  &&  ClassOf(iAcf) == JavaScriptString) {
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), (long long) self, (long long) iValue);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iAcf), PTOLL(self), PTOLL(iValue));
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (r = ClassOf(ret) == String)
@@ -1204,7 +1204,7 @@ imeth	int	gPerformChg()
 			int	res=0;
 			sprintf(cmd, "(%s (int->object %lld) (int->object %lld))",
 				gFunctionName(SchemeClassSurrogate, (object)iChgFun),
-				(long long) self, (long long) iDlg);
+				PTOLL(self), PTOLL(iDlg));
 			ret = gExecuteInNamespace(SchemeClassSurrogate,
 						  gNamespaceName(SchemeClassSurrogate, (object)iChgFun, ns), 
 						  cmd);
@@ -1217,7 +1217,7 @@ imeth	int	gPerformChg()
 			int	res = 0;
 			object	ret;
 			char	cmd[128];
-			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iChgFun), (long long) self, (long long) iDlg);
+			sprintf(cmd, "%s(StringToObject(\"%lld\"), StringToObject(\"%lld\"))", gStringValue((object)iChgFun), PTOLL(self), PTOLL(iDlg));
 			ret = gExecuteString(JavaScriptClassSurrogate, cmd);
 			if (IsObj(ret)) {
 				if (ClassOf(ret) == LongInteger)
