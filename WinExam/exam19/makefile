@@ -50,8 +50,11 @@ OBJS = $(CFILES:.c=.o) $(CLASSES:.d=.o)
 	$(CC) $(CFLAGS) $(DEBUG) -c $<
 
 
-$(TARGET) : generics.1 generics.h generics.o $(OBJS) main.res
+$(TARGET) : generics.1 algocorp.ico generics.h generics.o $(OBJS) main.res
 	$(CC) $(DEBUG) -o $(TARGET) $(OBJS) generics.o main.res $(LIBDIR)/wds.a $(LIBDIR)/dynace.a $(WINELIBS) -lm 
+
+algocorp.ico : ../setup/algocorp.ico
+	cp $^ $@
 
 generics.h : $(CLASSES)
 	$(BINDIR)/dpp -g -t -h -p $?

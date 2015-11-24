@@ -42,9 +42,12 @@ OBJS = $(CFILES:.c=.o)
 	$(CC) $(CFLAGS) $(DEBUG) -c $<
 
 
-$(TARGET) : $(OBJS) main.res
+$(TARGET) : $(OBJS) algocorp.ico main.res
 	$(CC) $(DEBUG) -o $(TARGET) $(OBJS) main.res $(LIBDIR)/wds.a $(LIBDIR)/dynace.a $(WINELIBS) -lm 
 	mv $(TARGET).exe $(TARGET)
+
+algocorp.ico : ../setup/algocorp.ico
+	cp $^ $@
 
 clean:
 	-rm -f *.obj *.exe generics.* *.o *~ main.res temp.rc
