@@ -317,7 +317,7 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 	}
 #else
 	{	//  set to non-blocking
-		unsigned long	flg = TRUE;
+		ULONG	flg = TRUE;
 		if (ioctlsocket(sockfd, FIONBIO, &flg) == SOCKET_ERROR) {
 			cError = 7;
 			sprintf(strBuf, "SOCKET_ERROR (cError=7) in gSocketConnect.");
@@ -1262,7 +1262,7 @@ imeth	gAccept()
 	}
 #else
 	{	//  set to non-blocking mode 
-		unsigned long	flg = TRUE;
+		ULONG	flg = TRUE;
 		if (ioctlsocket(newsock, FIONBIO, &flg) == SOCKET_ERROR) {
 			closesocket(newsock);
 			return NULL;

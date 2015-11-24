@@ -358,7 +358,7 @@ cmeth objrtn Socket_cm_gProxyConnect(object self, char *addr, int port, short in
 
 #line 319 "Socket.d"
 	{ 
-		unsigned long flg = TRUE; 
+		ULONG flg = TRUE; 
 		if (ioctlsocket(sockfd, FIONBIO, &flg) == SOCKET_ERROR) { 
 			Socket_cv->cError = 7; 
 			sprintf(strBuf, "SOCKET_ERROR (cError=7) in gSocketConnect."); 
@@ -1369,7 +1369,7 @@ imeth objrtn Socket_im_gAccept(object self)
 
 #line 1264 "Socket.d"
 	{ 
-		unsigned long flg = TRUE; 
+		ULONG flg = TRUE; 
 		if (ioctlsocket(newsock, FIONBIO, &flg) == SOCKET_ERROR) { 
 			closesocket(newsock); 
 			return NULL; 
