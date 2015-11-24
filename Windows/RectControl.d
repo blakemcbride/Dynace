@@ -1101,8 +1101,9 @@ cvmeth	vNew(UINT ctlID, char *name, dlg)
 	gAddHandlerAfter(obj, (unsigned) WM_SETFOCUS, process_wm_setfocus);
 	gAddHandlerAfter(obj, (unsigned) WM_KILLFOCUS, process_wm_killfocus);
 	gAddHandlerAfter(obj, (unsigned) WM_PAINT, process_wm_paint);
+#ifndef __WINE__
 	gAddHandlerAfter(obj, (unsigned) WM_ERASEBKGND, process_wm_erase);
-
+#endif
 	return obj;
 }
 
@@ -1167,8 +1168,9 @@ cmeth	gNewWindowControl(UINT ctlID, char *name, parent)
 	gDefaultProcessingMode(obj, (unsigned) WM_LBUTTONUP, 0);  // no auto default processing
 
 	gAddHandlerAfter(obj, (unsigned) WM_PAINT, process_wm_paint);
+#ifndef __WINE__
 	gAddHandlerAfter(obj, (unsigned) WM_ERASEBKGND, process_wm_erase);
-	
+#endif
 	return obj;
 }
 
