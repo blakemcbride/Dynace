@@ -111,7 +111,6 @@ makegens:
 ifdef WINE
 	cd Windows  ; $(MAKE) -f makefile newgens
 	cd ODBC     ; $(MAKE) -f makefile newgens
-	cd Resources  ; $(MAKE) -f makefile newgens
 	cd Java/Dynace  ; $(MAKE) -f makefile newgens
 endif
 newgens : makegens
@@ -122,7 +121,6 @@ newgens : makegens
 ifdef WINE
 	cd Windows  ; $(MAKE) -f makefile newgens
 	cd ODBC     ; $(MAKE) -f makefile newgens
-	cd Resources  ; $(MAKE) -f makefile newgens
 	cd Java/Dynace  ; $(MAKE) -f makefile newgens
 endif
 # The following target is used to convert an SVN checkout into a shippable distribution

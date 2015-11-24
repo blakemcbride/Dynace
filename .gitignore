@@ -2,4 +2,20 @@
 *.o
 *.bak
 *~
+bin/delcr
+bin/dpp
+dpp/dpp
+generics/curlib
+generics/generics.c
+generics/generics.h
+lib/
+setup.unx
+allok
+allok.nm
+allok.cm
+curlib
+curlib.nm
+curlib.cm
+generics.1
+
 
