@@ -1667,14 +1667,9 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 			obj = (object) *from;
 			if (obj->tag & OBJ_USED)
 				Dynace_cm_gMarkObject(Dynace_c, obj);
-#ifdef	ALIGN4
-		}
-		from = (char _HUGE_ **)((char _HUGE_ *) from + 4);
-#else
-			from = (char _HUGE_ **)((char _HUGE_ *) from + 4);
-		}  else
+			from = (char _HUGE_ **)((char _HUGE_ *) from + (int)sizeof(char *));
+		} else
 			from = (char _HUGE_ **)((char _HUGE_ *) from + 2);
-#endif
 	}
 #endif  /*  !BOEHM_GC   */
 }
@@ -2003,7 +1998,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	asm("t 3");	/* flush out registers onto the stack */
 #endif
 
-#if	defined(WIN32)  &&  !defined(BOEHM_GC)
+#if	0  &&  defined(WIN32)  &&  !defined(BOEHM_GC)
 	_register_global_memory();
 #endif
 
