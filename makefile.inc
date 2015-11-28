@@ -1,7 +1,13 @@
 
+ifdef	DEBUG
+OPT = -g
+else
+OPT = -O
+endif
 ifdef WINE
+OPT += -fPIC
 WINEINCPATH = /usr/include/wine
-THIRTYTWOBIT = true
+#THIRTYTWOBIT = true
 endif
 .SUFFIXES: .d .iv
 .PRECIOUS : %.c %.iv
@@ -11,11 +17,6 @@ INCDIR = ../include
 CC = gcc
 DPP = $(BINDIR)/dpp
 DPPOPTS = -C
-ifdef	DEBUG
-OPT = -g
-else
-OPT = -O
-endif
 ifdef THIRTYTWOBIT
 OPT += -m32
 endif
