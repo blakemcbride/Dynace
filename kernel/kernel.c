@@ -1620,14 +1620,9 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 				goto recurse;
 			}
  pop_recursion:
-#ifdef	ALIGN4
-		;}
-		sz -= 4;
-#else
-			sz -= 4;
-		}  else
+			sz -= (short)sizeof(char *);
+		} else
 			sz -= 2;
-#endif
 	}
 
 	if (!rtn)
@@ -1974,11 +1969,18 @@ LOCAL	void	get_mem_stats(void)
 #endif
 
 
-#if	defined(unix)  &&  defined(i386)
+#if defined(__GNUC__)
+#if defined(__i386__)
 #define MARK_REG(r)					\
 	__asm__	("movl %%" #r ",%0" : "=g" (c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
 		Dynace_cm_gMarkObject(Dynace_c, c)
+#elif defined(__amd64__)
+#define MARK_REG(r)					\
+	__asm__	("mov %%" #r ",%0" : "=g" (c));	\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+#endif
 #endif
 
 
@@ -2010,7 +2012,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
 	mark_non_collecting_classes();
-#if (defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)  ||  (defined(unix) && defined(i386))
+#if (defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)  ||  (defined(__GNUC__) && defined(__i386__))
 	MARK_REG(eax);
 	MARK_REG(ebx);
 	MARK_REG(ecx);
@@ -2018,6 +2020,23 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(esi);
 	MARK_REG(edi);
 	MARK_REG(ebp);
+#elif defined(__GNUC__)  &&  defined(__amd64__)
+	MARK_REG(rax);
+	MARK_REG(rbx);
+	MARK_REG(rcx);
+	MARK_REG(rdx);
+	MARK_REG(rbp);
+	MARK_REG(rsp);
+	MARK_REG(rsi);
+	MARK_REG(rdi);
+	MARK_REG(r8);
+	MARK_REG(r9);
+	MARK_REG(r10);
+	MARK_REG(r11);
+	MARK_REG(r12);
+	MARK_REG(r13);
+	MARK_REG(r14);
+	MARK_REG(r15);
 #endif
 
 	for (p=LGMR ; p ; p=p->next)
