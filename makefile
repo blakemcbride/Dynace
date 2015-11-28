@@ -55,7 +55,7 @@ realclean : clean
 	rm -f bin/delcr
 	rm -f bin/delcr.exe
 	rm -f bin/addcr
-	rm -rf lib/dynace.a lib/wds.a
+	rm -rf lib/dynace.a lib/wds.a lib/dynlcm.lib
 ship-unix : realclean
 	find . -name '*.exe' -exec rm \{\} \;
 setup.unx :

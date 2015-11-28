@@ -144,7 +144,6 @@ static	HDC	GetHDC()
 static	HDC	GetHDC()
 {
 	char	buf[80], *dev, *drv, *out;
-	char	*strtok();
 
 	gMoreHandles(LowFile);
 	gMoreHandles(LowFile);
@@ -181,7 +180,6 @@ private	imeth	pGetDefaultPrinterInfo(object self)
 private	imeth	pGetDefaultPrinterInfo(object self)
 {
 	char	buf[256], *dev, *drv, *out;
-	char	*strtok();
 
 	gMoreHandles(LowFile);
 	gMoreHandles(LowFile);
@@ -239,7 +237,6 @@ static	HDC	GetHDCWithMode(long mode)
 	DEVMODE		*dm = NULL;
 	HDC		hdc = (HDC) 0;
 	char	buf[80], *dev, *drv, *out;
-	char	*strtok();
 
 #ifndef	_WIN32
 	gMoreHandles(LowFile);
@@ -935,7 +932,7 @@ imeth	gPlayMetaFile(char *file)
 		DeleteMetaFile(h);
 #endif
 	} else
-		h = (HANDLE) !PrintMetaFile(iv, file, iHDC);
+		h = (HANDLE)(INT_PTR) !PrintMetaFile(iv, file, iHDC);
 #else
 #define	TEMPP 0
 #if TEMPP  //  Windows 95 issues an error message if GetMetaFile fails (sometimes)

@@ -114,7 +114,7 @@ static void build_datatype(data_type_t *ptype, SQLContext *pcontext);
 static void build_column_def_opt_list(column_def_opt_list_t plist, SQLContext *pcontext);
 static void build_table_constraint_def(table_constraint_def_t *pdef, SQLContext *pcontext);
 
-char *TranslateToOracle(const char *pSql)
+char * _cdecl TranslateToOracle(const char *pSql)
 {
 	sql_list_t root;
 	SQLContext sqlctx;

@@ -1714,7 +1714,7 @@ static	HANDLE ReadDibBitmapInfo(INT fh)
 		bi.biClrUsed            = nNumColors;
 		bi.biClrImportant       = nNumColors;
 
-		_llseek(fh, (LONG)sizeof (BITMAPCOREHEADER) - sizeof (BITMAPINFOHEADER), (UINT)SEEK_CUR);
+		_llseek(fh, (LONG)sizeof(BITMAPCOREHEADER) - (LONG)sizeof(BITMAPINFOHEADER), (UINT)SEEK_CUR);
 		break;
 
         default:
