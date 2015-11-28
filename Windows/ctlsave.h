@@ -50,7 +50,9 @@
 #define ENGLISH				0
 #define	SPANISH				1
 #endif
- 
+
+
+#define	CTLSAVEINT4	int	/*  4 byte integer  */
 
 
 
@@ -88,7 +90,6 @@ typedef struct {
 	short	fontSize;
 }	CTLTYPE_STATIC_t;
 
-// Yanghui:
 typedef struct {
 	char     name[46];
 
@@ -172,7 +173,6 @@ typedef struct {
 	short    helpTopicLen;
 
 }	CTLTYPE_LINE_t;
-// Yanghui
 
 
 typedef struct {
@@ -191,7 +191,7 @@ typedef struct {
 	short	fontNameLen;
 	short	fontSize;
 
-	unsigned long	textCtlStyle;  // Yanghui
+	unsigned CTLSAVEINT4 textCtlStyle;
 }	CTLTYPE_TEXT_t;
 
 typedef struct {
@@ -225,9 +225,9 @@ typedef struct {
 	short	yPos;
 	char	hidden;
 	char	disabled;
-	long	minimum;
-	long	maximum;
-	long	defaultVal;
+	CTLSAVEINT4	minimum;
+	CTLSAVEINT4	maximum;
+	CTLSAVEINT4	defaultVal;
 	char	format[20];
 	short	helpTopicLen;
 	short	fontNameLen;
@@ -242,9 +242,9 @@ typedef struct {
 	short	yPos;
 	char	hidden;
 	char	disabled;
-	long	minimum;
-	long	maximum;
-	long	defaultVal;
+	CTLSAVEINT4	minimum;
+	CTLSAVEINT4	maximum;
+	CTLSAVEINT4	defaultVal;
 	char	format[20];
 	short	helpTopicLen;
 	short	fontNameLen;
