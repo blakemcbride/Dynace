@@ -7,7 +7,7 @@ endif
 ifdef WINE
 OPT += -fPIC
 WINEINCPATH = /usr/include/wine
-#THIRTYTWOBIT = true
+THIRTYTWOBIT = true
 endif
 .SUFFIXES: .d .iv
 .PRECIOUS : %.c %.iv
