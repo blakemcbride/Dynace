@@ -5,6 +5,7 @@
 #endif
 
 #include <stdio.h>
+#include <sys/stat.h>
 
 #ifndef PLAN9
 #include <string.h>
@@ -29,15 +30,16 @@ int main(int argc, char *argv[])
 {
 	FILE	*ffp, *tfp;
 	char	*ffile, tfile[20];
+	int	fd;
 
-	strcpy(tfile, "tfXXXXXX");
-	mktemp(tfile);
 	while (--argc)  {
 		if (NULL == (ffp = fopen(ffile=*++argv, RMODE)))  {
 			fprintf(stderr, "Can't open %s\n", ffile);
 			continue;
 		}
-		if (NULL == (tfp = fopen(tfile, WMODE)))  {
+		strcpy(tfile, "tfXXXXXX");
+		fd = mkstemp(tfile);
+		if (NULL == (tfp = fdopen(fd, WMODE)))  {
 			fprintf(stderr, "Can't create %s\n", tfile);
 			fclose(ffp);
 			continue;
@@ -47,6 +49,7 @@ int main(int argc, char *argv[])
 		fclose(tfp);
 		unlink(ffile);
 		rename(tfile, ffile);
+		chmod(ffile, S_IRUSR|S_IWUSR | S_IRGRP|S_IWGRP | S_IROTH|S_IWOTH);
 	}
 	exit(0);
 #ifdef PLAN9
