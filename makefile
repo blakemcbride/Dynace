@@ -5,7 +5,9 @@ all : setup.unx
 	cd kernel   ; $(MAKE) -f makefile
 	cd class    ; $(MAKE) -f makefile
 	cd threads  ; $(MAKE) -f makefile
+ifeq ($(CC),$(HCC))  # no need to make on cross-compile
 	cd dpp      ; $(MAKE) -f makefile install
+endif
 	cd generics ; $(MAKE) -f makefile
 ifdef WINE
 	cd Windows  ; $(MAKE) -f makefile
@@ -27,7 +29,9 @@ debug : setup.unx
 	cd kernel   ; $(MAKE) -f makefile DEBUG=1
 	cd class    ; $(MAKE) -f makefile DEBUG=1
 	cd threads  ; $(MAKE) -f makefile DEBUG=1
+ifeq ($(CC),$(HCC))  # no need to make on cross-compile
 	cd dpp      ; $(MAKE) -f makefile DEBUG=1 install
+endif
 	cd generics ; $(MAKE) -f makefile DEBUG=1
 clean :
 	cd kernel   ; $(MAKE) $@ -f makefile
@@ -50,17 +54,20 @@ endif
 	find examples -name 'main' -exec rm \{\} \;
 realclean : clean
 	rm -f setup.unx setup.dos setup.p9
+ifeq ($(CC),$(HCC))  # keep host dpp if we are cross compiling
+	echo $(CC) $(HCC)
 	rm -f bin/dpp
 	rm -f bin/dpp.exe
 	rm -f bin/delcr
 	rm -f bin/delcr.exe
 	rm -f bin/addcr
+endif
 	rm -rf lib/dynace.a lib/wds.a lib/dynlcm.lib lib/dynm32.pdb
 ship-unix : realclean
 	find . -name '*.exe' -exec rm \{\} \;
 setup.unx :
 	@-mkdir lib
-	cd bin ; $(CC) -o delcr -O delcr.c
+	cd bin ; $(HCC) -o delcr -O delcr.c
 	cd kernel   ; ../bin/delcr makefile README *.d
 	cd class    ; ../bin/delcr makefile README *.d
 	cd threads  ; ../bin/delcr makefile README *.d
@@ -117,7 +124,9 @@ newgens : makegens
 	cd kernel   ;  $(MAKE) -f makefile reallynewgens
 	cd class    ;  $(MAKE) -f makefile newgens
 	cd threads  ;  $(MAKE) -f makefile newgens
+ifeq ($(CC),$(HCC))  # not on cross-compile
 	cd dpp      ;  $(MAKE) -f makefile newgens  ;  $(MAKE) -f makefile generics.c
+endif
 ifdef WINE
 	cd Windows  ; $(MAKE) -f makefile newgens
 	cd ODBC     ; $(MAKE) -f makefile newgens

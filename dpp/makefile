@@ -19,7 +19,11 @@ $(TARGET) : generics.1 generics.h generics.o $(OBJS)
 	$(CC) $(OPT) -o $(TARGET) $(OBJS) generics.o $(LIBDIR)/dynace.a -lm
 
 install : $(TARGET)
+ifeq ($(CC),$(HCC))
 	cp $(TARGET) $(BINDIR)
+else
+	: do nothing
+endif
 
 generics.h : $(CLASSES)
 	$(DPP) $(DPPOPTS) -g -t -h -p $?
