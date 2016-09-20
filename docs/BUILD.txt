@@ -27,12 +27,13 @@ API for Unix))
 
 Build instructions:
 
-There are four sections labeled:
+There are five sections labeled:
 
     Windows
     Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
     Plan 9
     Minix
+    ARM
 
 The DOS port should still work but is no longer tested.
 
@@ -373,6 +374,28 @@ Lastly, all of the makefiles for the example programs (under the
 examples directory) use gcc by default.  You would have to change
 each one as you use them (from gcc to cc) if you want to use clang.
 
+
+================================================================================
+
+ARM
+
+The system has been enhanced to cross-compile from a Linux host to an
+ARM target.  The ARM processor targeted is the 32 bit ARM with
+software float.  Other cross-compile targets should be easy if you
+follow the single commit that shows what was changed to make this
+cross-compile work.
+
+Build instructions
+
+Basically it has to be built twice.  The first time builds the
+necessary host programs.  The second time builds the target libraries.
+It is expected that all builds will be done on the host but run on the
+target machine.
+
+	make realclean
+	make
+	make ARM32SF=1 realclean
+	make ARM32SF=1
 
 
 ================================================================================
