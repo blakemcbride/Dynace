@@ -36,6 +36,7 @@ Dynace Object-Oriented Extension to C
 * Solaris / OpenIndiana
 * Plan 9
 * Minix
+* ARM (cross-build)
 
 The main home for this system is:  https://github.com/blakemcbride/Dynace
 
