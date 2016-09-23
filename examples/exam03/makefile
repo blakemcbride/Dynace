@@ -8,6 +8,11 @@ else
 CC = gcc
 endif
 
+ifdef TCC # target compiler
+CC = $(TCC) 
+GCC = $(TCC)
+endif
+
 DYNACE_PATH = ../..
 
 BINDIR = $(DYNACE_PATH)/bin

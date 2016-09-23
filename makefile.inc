@@ -17,8 +17,10 @@ BINDIR = ../bin
 LIBDIR = ../lib
 INCDIR = ../include
 
-ifdef ARM32SF  # 32 bit ARM processor with software float
-CC = arm-linux-gnueabi-gcc
+# 32 bit ARM processor with software float
+# I had to use -D_FORTIFY_SOURCE=0 because the target system had an old GLIBC
+ifdef ARM32SF  
+CC = arm-linux-gnueabi-gcc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
 HCC = gcc # for the host
 else
 CC = gcc
