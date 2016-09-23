@@ -397,6 +397,9 @@ target machine.
 	make ARM32SF=1 realclean
 	make ARM32SF=1
 
+Building the examples.  Use:
+
+	 make TCC=arm-linux-gnueabi-gcc
 
 ================================================================================
 
