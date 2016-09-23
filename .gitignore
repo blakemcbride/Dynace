@@ -17,5 +17,8 @@ curlib
 curlib.nm
 curlib.cm
 generics.1
+examples/**/main
+examples/**/generics.c
+examples/**/generics.h
 
 
