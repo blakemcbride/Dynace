@@ -46,7 +46,9 @@
 
 /*  #define	NO_CACHE  */
 
-
+#if defined(NATIVE_THREADS) &&  defined(__unix__)
+pthread_mutexattr_t _mutex_attr;
+#endif
 
 #define ALIGN2
 #define ALIGNMENT (2)
@@ -2238,6 +2240,10 @@ cmeth	int	Dynace_cm_gTrace(object self, int mode)
 
 LOCAL	void	init_critical_sections(void)
 {
+#if defined(NATIVE_THREADS) &&  defined(__unix__)
+	pthread_mutexattr_init(&_mutex_attr);
+	pthread_mutexattr_settype(&_mutex_attr, PTHREAD_MUTEX_RECURSIVE);
+#endif
 	INITIALIZECRITICALSECTION(_CI_CS_);
 	INITIALIZECRITICALSECTION(MCL_CS);
 	INITIALIZECRITICALSECTION(MGL_CS);

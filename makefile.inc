@@ -44,6 +44,13 @@ endif
 
 CFLAGS = -I$(INCDIR) $(OPT) -Wno-parentheses
 
+LDFLAGS = -lm
+
+ifdef NATIVE_THREADS
+CFLAGS += -DNATIVE_THREADS
+LDFLAGS += -lpthread
+endif
+
 ifdef NO_CYGWIN
 EXE = .exe
 CFLAGS += -mno-cygwin

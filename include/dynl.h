@@ -187,17 +187,27 @@ typedef struct StrPrint	WP_PRINT_LIST;
 #endif
 
 #ifdef	NATIVE_THREADS
-typedef	CRITICAL_SECTION	CRITICALSECTION;
-#define	INITIALIZECRITICALSECTION(cs)	InitializeCriticalSection(&cs)
-#define	DELETECRITICALSECTION(cs)	DeleteCriticalSection(&cs)
-#define	ENTERCRITICALSECTION(cs)	EnterCriticalSection(&cs)
-#define	LEAVECRITICALSECTION(cs)	LeaveCriticalSection(&cs)
+#ifdef  __unix__
+	#include <pthread.h>
+	typedef pthread_mutex_t			CRITICALSECTION;
+	extern pthread_mutexattr_t _mutex_attr;
+	#define	INITIALIZECRITICALSECTION(cs)	pthread_mutex_init(&cs, &_mutex_attr)
+	#define	DELETECRITICALSECTION(cs)	pthread_mutex_destroy(&cs)
+	#define	ENTERCRITICALSECTION(cs)	pthread_mutex_lock(&cs)
+	#define	LEAVECRITICALSECTION(cs)	pthread_mutex_unlock(&cs)
 #else
-typedef	int	CRITICALSECTION;
-#define	INITIALIZECRITICALSECTION(cs)	USE(cs)
-#define	DELETECRITICALSECTION(cs)	USE(cs)
-#define	ENTERCRITICALSECTION(cs)	USE(cs)
-#define	LEAVECRITICALSECTION(cs)	USE(cs)
+	typedef	CRITICAL_SECTION		CRITICALSECTION;
+	#define	INITIALIZECRITICALSECTION(cs)	InitializeCriticalSection(&cs)
+	#define	DELETECRITICALSECTION(cs)	DeleteCriticalSection(&cs)
+	#define	ENTERCRITICALSECTION(cs)	EnterCriticalSection(&cs)
+	#define	LEAVECRITICALSECTION(cs)	LeaveCriticalSection(&cs)
+#endif
+#else
+	typedef	int	CRITICALSECTION;
+	#define	INITIALIZECRITICALSECTION(cs)	USE(cs)
+	#define	DELETECRITICALSECTION(cs)	USE(cs)
+	#define	ENTERCRITICALSECTION(cs)	USE(cs)
+	#define	LEAVECRITICALSECTION(cs)	USE(cs)
 #endif
 
 #include "findfile.h"

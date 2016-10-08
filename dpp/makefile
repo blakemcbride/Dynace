@@ -16,7 +16,7 @@ CFILES = dpp.c
 OBJS = $(CFILES:.c=.o) $(CLASSES:.d=.o)
 
 $(TARGET) : generics.1 generics.h generics.o $(OBJS)
-	$(CC) $(OPT) -o $(TARGET) $(OBJS) generics.o $(LIBDIR)/dynace.a -lm
+	$(CC) $(OPT) -o $(TARGET) $(OBJS) generics.o $(LIBDIR)/dynace.a $(LDFLAGS)
 
 install : $(TARGET)
 ifeq ($(CC),$(HCC))
