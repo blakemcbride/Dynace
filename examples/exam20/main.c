@@ -62,7 +62,7 @@ static	int	myThread(char *arg)
 	object	 obj;
 
 	obj = gNewWithLong(LongInteger, 0L);
-	for (i=0L ; i++ != 1000L ; )  {
+	for (i=0L ; i++ != 100000L ; )  {
 		gChangeLongValue(obj, i);
 		gPrintValue(obj, stdoutStream);
 		printf(" - %s\n", arg);

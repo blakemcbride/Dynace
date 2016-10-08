@@ -10,6 +10,11 @@ CC = gcc
 GCC = $(CC)
 endif
 
+ifdef TCC # target compiler
+CC = $(TCC)
+GCC = $(TCC)
+endif
+
 .SUFFIXES: .d
 
 

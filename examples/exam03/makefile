@@ -9,7 +9,7 @@ CC = gcc
 endif
 
 ifdef TCC # target compiler
-CC = $(TCC) 
+CC = $(TCC)
 GCC = $(TCC)
 endif
 

@@ -26,6 +26,11 @@ CFLAGS = -I$(INCDIR)
 GFLAGS = -I$(INCDIR) -O -w
 endif
 
+ifdef TCC # target compiler
+CC = $(TCC)
+GCC = $(TCC)
+endif
+
 TARGET = main
 
 CFILES = main.c
