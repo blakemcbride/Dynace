@@ -49,7 +49,7 @@ static  void  catch_timer(int sig)
 #ifdef	DJGPP
 	signal(SIGALRM, catch_timer);
 #else
-	signal(SIGVTALRM, catch_timer);
+	signal(SIGPROF, catch_timer);
 #endif
 }
 
@@ -57,26 +57,25 @@ static  void  catch_timer(int sig)
 void _start_timer(void)
 {
 	struct itimerval tval;
-
 #ifdef	DJGPP
 	signal(SIGALRM, catch_timer);
 #else
-	signal(SIGVTALRM, catch_timer);
+	signal(SIGPROF, catch_timer);
 #endif
 	tval.it_interval.tv_sec = 0L;
-	tval.it_interval.tv_usec = 54645L; /*  ~ 18/sec (single clock tick  */
+	tval.it_interval.tv_usec = 10000L; /*  ~ 100/sec (single clock tick)  */
 	tval.it_value = tval.it_interval;
 #ifdef	DJGPP
 	setitimer(ITIMER_REAL, &tval, NULL);
 #else
-	setitimer(ITIMER_VIRTUAL, &tval, NULL);
+	setitimer(ITIMER_PROF, &tval, NULL);
 #endif
 }
 
 
 #ifdef TEST
 
-main()
+int main()
 {
 	int n;
 	long i;
@@ -84,9 +83,9 @@ main()
 	_start_timer();
 	for (n=0 ; n++ != 10 ; )  {
 		fprintf(stderr, "Timer = %d\n", _tick_count);
-		for (i=0L ; i++ != 1000000 ; );
+		for (i=0L ; i++ != 100000000 ; );
 	}
-	return(0);
+	return 0;
 }
 
 #endif
