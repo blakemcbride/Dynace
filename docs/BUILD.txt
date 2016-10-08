@@ -400,6 +400,24 @@ target machine.
 Building the examples.  Use:
 
 	 make TCC=arm-linux-gnueabi-gcc
+	 
+================================================================================
+
+Dynace supports native threads under Windows, and Posix/Linux/Mac
+using pthreads - as an alternative to the Dynace supplied cooperative
+threading system.  Dynace's supplied cooperative threading system only
+uses a single OS thread - a single CPU.  Native threads allows your
+system to take advantage of the multiple CPU's.
+
+To build with native thread support, add "NATIVE_THREADS=1" to the make lines.
+For example:
+
+	make NATIVE_THREADS=1
+	
+What this does is make the Dynace kernel and classes thread safe.  Once this
+is done, you would use the environment-supplied method of creating and using
+threads.  In other words, don't use Dynace's cooperative threads to create and
+manage threads.  Use the native mechanisms.  Dynace will be native thread safe.
 
 ================================================================================
 
