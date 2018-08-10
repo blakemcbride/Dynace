@@ -2,6 +2,7 @@
 *.o
 *.bak
 *~
+TAGS
 bin/delcr
 bin/dpp
 dpp/dpp
@@ -20,5 +21,15 @@ generics.1
 examples/**/main
 examples/**/generics.c
 examples/**/generics.h
-
+manual/*.aux
+manual/*.cp
+manual/*.dvi
+manual/*.fn
+manual/*.fns
+manual/*.ky
+manual/*.log
+manual/*.pg
+manual/*.toc
+manual/*.tp
+manual/*.vr
 

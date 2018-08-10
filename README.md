@@ -21,7 +21,7 @@ Dynace Object-Oriented Extension to C
 ### Dynace:
 
 * written in standard C
-* includes a 350+ page user manual and reference
+* includes over 600 pages of documentation in two user manuals
 * tutorial
 * using classes involves no new syntax elements to standard C
 * easily added to existing C code
