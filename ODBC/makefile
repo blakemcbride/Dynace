@@ -69,10 +69,10 @@ sqltokens.c:	sqltokens.l sqlgrammar.h
 	mv lex.yy.c sqltokens.c
 
 sqltokens.o : sqltokens.c
-	$(CC) -c -D_CRT_SECURE_NO_DEPRECATE -D_POSIX_ $<
+	$(CC) -c $(CFLAGS) -D_CRT_SECURE_NO_DEPRECATE -D_POSIX_ $<
 
 sqlgrammar.o : sqlgrammar.c
-	$(CC) -c -D_CRT_SECURE_NO_DEPRECATE -D_POSIX_ $<
+	$(CC) -c $(CFLAGS) -D_CRT_SECURE_NO_DEPRECATE -D_POSIX_ $<
 
 generics.c : generics.h
 	$(BINDIR)/dpp -g -c

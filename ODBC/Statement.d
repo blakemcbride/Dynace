@@ -3391,7 +3391,7 @@ static	char	*fix_statement(char *s, int dbms)
 	char tmpBuf[16];
 	
 	char *t=malloc(strlen(s) * 2);//Don't change s!
-	Strcpy(t,s);
+	strcpy(t, s);
 	s=t;
 
 	b=s;

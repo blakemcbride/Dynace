@@ -215,11 +215,18 @@ cmeth	gNewTP(char type, char *file, long station, long user)
 	else
 		iMode = 'R';
 	
+#ifdef __WINE__
+	envptr = NULL;
+#else
 	envptr = Getenv("DATASYNC_SERVER_HOST");
-	
+#endif	
 	if (envptr && iMode == 'W') {
 		object socketstream;
+#ifdef __WINE__
+		char	*envAndTran = NULL;
+#else
 		char	*envAndTran = Getenv("DATASYNC_SERVER_AND_TRANFILE");
+#endif
 		if (!(envAndTran && (*envAndTran == 'Y' || *envAndTran == 'y')))
 			useTranFile = 0;
 		

@@ -16,7 +16,7 @@ INCDIR = $(DYNACE_PATH)/include
 WINEINC = -I$(WINEINCPATH)/windows -I$(WINEINCPATH)/msvcrt
 
 
-WINELIBS = -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lcomctl32 -ladvapi32 -lshell32 -lmpr -lwine -lmsvcrt -lmsimg32
+WINELIBS = -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lcomctl32 -ladvapi32 -lshell32 -lmpr -lwine -lmsvcrt -lmsimg32 -lodbc32 -lwsock32 -lrpcrt4
 
 DEBUG = -g
 #DEBUG = -O
