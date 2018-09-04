@@ -23,7 +23,7 @@ $(LIBDIR)/dynace.a :  $(OBJ)
 
 # Turn off optimization to compensate for some sort of bug in GCC 5.4.0
 Thread.o : Thread.c
-	$(CC) -c -I$(INCDIR) $<
+	$(CC) -c $(CFLAGS) -O0 $<
 
 newgens:
 	$(DPP) $(DPPOPTS) -p $(CLASSES) -h $(INCDIR)/generics.h
