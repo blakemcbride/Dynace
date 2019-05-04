@@ -28,14 +28,12 @@
 
 
 @chapter Concepts
-@pdfchapter{Concepts}
 
 The Windows environment has its own lexicon and way of doing things.
 This chapter is designed to explain that lexicon and give the programmer
 a certain comfort level with respect to elements of Windows programming.
 
 @section Windows
-@pdfsection{Windows}
 Windows are the rectangular region on your screen where a user interacts
 with the application.  There are many things which may be done with a window.
 Typically, a user may move, resize or change a window into an icon.  Actually,
@@ -53,7 +51,6 @@ There are three main window types: main, child and popup.
 
 
 @subsection Main Window
-@pdfsubsection{Main Window}
 There is normally exactly one main window associated with any given
 application.  This is the first window which comes up when an application
 starts up, the one which acts as the fulcrum for all the facilities of
@@ -63,7 +60,6 @@ associated with it.  This is so when the application is iconized the
 appropriate icon will displayed.
 
 @subsection Child Window
-@pdfsubsection{Child Window}
 In addition to the main window, there are child windows.  A child window
 is a rectangular region or window which is directly associated with
 some other (parent) window.  Child windows are always restricted to being
@@ -75,7 +71,6 @@ in their parent remains constant.  When a child window is created it
 is positioned relative to its parent.  
 
 @subsection Popup Window
-@pdfsubsection{Popup Window}
 In addition to child windows, the system also supports popup windows.  A
 popup window is a rectangular region which acts, to a greater or lesser
 extent, independently of any other window.  A popup window may exist
@@ -88,7 +83,6 @@ independent of other windows, they are created with positions which are
 relative to the entire screen.
 
 @section Menus
-@pdfsection{Menus}
 Menus are the words or labels which typically appear at the top of the
 main window associated with an application.  The user is able to select
 various application functions by selecting the appropriate menu option.
@@ -96,7 +90,6 @@ Each menu option may also present the user with additional menu options
 down to a number of levels.
 
 @section Dialogs
-@pdfsection{Dialogs}
 Once a user selects a particular application function through the
 application menu, an applications principal method of providing the user
 with information, or obtaining information from, is through dialogs.  A
@@ -106,7 +99,6 @@ contains various display information and input fields (controls).
 There are two fundamental dialog types: model and modeless.
 
 @subsection Modal Dialogs
-@pdfsubsection{Modal Dialogs}
 A modal dialog is one which must be completed or canceled prior to
 accessing any other part of a given application.  If the user is
 presented with a modal dialog and attempts to activate another window
@@ -119,7 +111,6 @@ would grow tremendously if the user were allowed to be in multiple parts
 of the same application at the same time.
 
 @subsection Modeless Dialogs
-@pdfsubsection{Modeless Dialogs}
 Modeless dialogs allow the user to switch from one part of a particular
 application to another without completing or canceling the modeless dialog.
 The user may switch to another part of an application, obtain additional
@@ -130,7 +121,6 @@ Modeless dialogs are more complex and less frequently used than modal
 dialogs.
 
 @section Controls
-@pdfsection{Controls}
 Controls are the primary method of obtaining information from the user.
 They are the input fields, push buttons, selection boxes, scroll bars,
 etc.  Although Windows supports a group of standard controls, there is
@@ -139,64 +129,53 @@ standard Windows controls in addition to providing several additional
 ones and enhancements to the standard ones.
 
 @subsection Text Control
-@pdfsubsection{Text Control}
 Text controls are used to obtain textual information in the form
 of character strings.  WDS provides a variety of enhancements to
 the standard Windows text controls.
 
 
 @subsection Numeric Control
-@pdfsubsection{Numeric Control}
 Numeric controls are a WDS supplied control used to obtain numeric
 data from the user.
 
 @subsection Date Control
-@pdfsubsection{Date Control}
 Date controls are a WDS supplied control used to obtain date information
 from the user.
 
 @subsection Push Button
-@pdfsubsection{Push Button}
 Push buttons are Windows supplied, WDS enhanced, controls which allow
 the user to evoke an immediate action function.  For example, the
 common ``OK'' and ``CANCEL'' buttons are push buttons.  The user
 clicks on the button and some action gets evoked.
 
 @subsection Check Box
-@pdfsubsection{Check Box}
 Check boxes are Windows supplied, WDS enhanced, controls which allow
 the user to select among non-exclusive yes/no, on/off type options.
 
 @subsection Radio Button
-@pdfsubsection{Radio Button}
 Radio buttons are Windows supplied, WDS enhanced, controls which allow
 the user to select one option among a group of mutually exclusive options.
 
 @subsection List Box
-@pdfsubsection{List Box}
 List boxes allow the user to select items from a list of options.  The
 list may be fully displayed, scrollable or drop down in nature.
 
 @subsection Combo Box
-@pdfsubsection{Combo Box}
 Combo boxes are a combination of the text control and the list box.
 With combo boxes, a user my select among a list of options or type
 in a new item.
 
 @subsection Scroll Bar
-@pdfsubsection{Scroll Bar}
 Scroll bars allow the user to visually select a position within some
 application specific range via the mouse.
 
 @section Help System
-@pdfsection{Help System}
 Windows provides a powerful help system which enables the user to obtain
 interactive application specific help information via a ``Help'' menu
 option or within a specific context via the ``F1'' key.  WDS supports
 and makes it easy to use all capabilities of the Windows help system.
 
 @section Cursors
-@pdfsection{Cursors}
 Cursors are the visual elements which indicate where a users input focus
 is or where he wishes it to be.  Cursors can also be used to indicate
 something about the input mode or system status (for example the hour
@@ -204,62 +183,52 @@ glass is used to indicate that the system is busy).  Common cursors are
 the underscore, the arrow, the ibeam, and the hour glass.
 
 @subsection System Cursors
-@pdfsubsection{System Cursors}
 System cursors are common cursors which are predefined by the system.
 These include most of the cursors most applications would need (such as
 the underscore, the arrow, the ibeam, and the hour glass) and are easy to
 select and use.
 
 @subsection External Cursors
-@pdfsubsection{External Cursors}
 External cursors are cursors which are application specific and
 created by the programmer.  These cursors may look like virtually
 anything.
 
 @section Icons
-@pdfsection{Icons}
 Icons are those little picture boxes which are left when an application
 is minimized.  It is normally something the user can identify the
 application with in order to reactive it.
 
 @subsection System Icons
-@pdfsubsection{System Icons}
 System icons are those generic icons which are predefined by Windows.
 These system defined icons are easy to select and use, but are of a bit
 less value since they have little to do with any specific application.
 
 @subsection External Icons
-@pdfsubsection{External Icons}
 External icons are application specific and programmer created icons.
 They must be designed by the programmer prior to use, but are very
 flexible, easy to design, and help the user identify the application.
 
 @section Fonts
-@pdfsection{Fonts}
 Fonts are the types (such as Helvetica or times) and size (i.e. 10pt)
 of the characters which appear within an application.  There are
 literally thousands to choose from.  Fortunately, however, the system
 defaults are often sufficient.
 
 @subsection System Fonts
-@pdfsubsection{System Fonts}
 The system fonts are those fonts which the user has configured his
 system to use on a global basis.  Use of these fonts makes an
 application have a familiar look and feel when compared to the rest of
 the apps on the users machine.
 
 @subsection External Fonts
-@pdfsubsection{External Fonts}
 External fonts are programmer selectable fonts and may be any of the
 many fonts available to the Windows system.
 
 @section Brushes
-@pdfsection{Brushes}
 Brushes specify the color and pattern which appears in a window background,
 in text and graphics.
 
 @subsection System Brushes
-@pdfsubsection{System Brushes}
 System brushes are those colors which were selected by the user as
 global to their Windows environment.  The programmer may select, for
 example, the color the user chose for background windows.  The
@@ -268,73 +237,60 @@ to seeing in other applications on their system.  System brushes are
 used most often.
 
 @subsection Stock Brushes
-@pdfsubsection{Stock Brushes}
 Stock brushes allow the programmer to select from a number of common,
 Windows defined, brushes.
 
 @subsection Solid Brushes
-@pdfsubsection{Solid Brushes}
 Solid brushes are arbitrary color solid brushes which may be selected
 by the programmer.
 
 @subsection Hatch Brushes
-@pdfsubsection{Hatch Brushes}
 Hatch brushes enable the programmer to select from any color and any of
 a number of Windows defined hatch patterns.
 
 @section Pens
-@pdfsection{Pens}
 Pens are used, principally in graphics, for drawing lines or providing
 the outline of a figure.  The attributes associated with a pen includes
 color of the line, width of the line, and its style.  Common styles
 include solid, dashed, doted, etc.
 
 @subsection Stock Pens
-@pdfsubsection{Stock Pens}
 Stock pens allows a programmer to select among a few, common, Windows
 defined pens.
 
 @subsection Custom Pens
-@pdfsubsection{Custom Pens}
 Using a custom pen allows the programmer to specify the exact attributes
 associated with a particular pen.
 
 @section Common Dialogs
-@pdfsection{Common Dialogs}
 Windows provides a few common dialogs in order to obtain frequently
 needed information in a uniform format.  Use of these dialogs when
 appropriate eases the programming normally associated with dialog
 creation and provides the user with a familiar interface.
 
 @subsection Color Dialog
-@pdfsubsection{Color Dialog}
 The color dialog provides a convenient method of requesting detailed
 color selection information from the user.
 
 @subsection Font Dialog
-@pdfsubsection{Font Dialog}
 The font dialog provides a convenient method of requesting detailed
 font selection information from the user.
 
 @subsection File Dialog
-@pdfsubsection{File Dialog}
 The file dialog provides a convenient method of allowing the user to
 view and select files.
 
 @subsection Print Dialog
-@pdfsubsection{Print Dialog}
 The print dialog provides a convenient method of selecting and configuring
 the printer.
 
 @section Printing
-@pdfsection{Printing}
 WDS provides many convenient and easy to use methods of selecting and
 configuring printers as well creating reports with a variety of fonts
 and graphics.
 
 
 @section Resources
-@pdfsection{Resources}
 Windows programs may use application specific icons, dialogs, menus and
 cursors.  These items are referred to as resources.  Each resource has a
 name and may be accessed by the application program.  Resources are
@@ -355,7 +311,6 @@ the @emph{WATCOM Resource Editor} and Borland calls theirs
 
 
 @section Dynamic Link Libraries (DLL)
-@pdfsection{Dynamic Link Libraries (DLL)}
 Normally, when a program is linked, all of the library code which is
 accessed gets copied to the executable being created.  Therefore, when
 the program is run, all the necessary routines are readily available in
@@ -412,7 +367,6 @@ This scenario is more common and troublesome than it may appear!
 
 
 @section Win16, Win32, Win32s
-@pdfsection{Win16, Win32, Win32s}
 Microsoft has two independent but similar models in which an application
 may run.  Each model has an associated application program interface
 (API) or library which it links with and uses in order to interface with
@@ -460,7 +414,6 @@ which are available under Win32s, therefore, WDS applications will
 run fine under Win32s.
 
 @section Message Passing Architecture
-@pdfsection{Message Passing Architecture}
 Most character based applications are pretty simple in the sense that
 they (in one form or another) basically get a key, perform some processing,
 get the next key, perform some more processing, etc.  In a graphical

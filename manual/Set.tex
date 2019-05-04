@@ -1,7 +1,6 @@
 @page
 
 @section Set Class
-@pdfsection{Set Class}
 The @code{Set} class is used to store a collection of objects which
 contain some means of unique identification for quick access.  The
 objects stored may be any Dynace object.  @code{gHash} and
@@ -21,13 +20,11 @@ use of the @code{Set}/@code{Dictionary} related classes.
 
 
 @subsection Set Class Methods
-@pdfsubsection{Set Class Methods}
 The only class method used in this class is one to create instances of itself.
 
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Set
 @sp 2
 @example
@@ -60,7 +57,6 @@ See also:  @code{NewWithInt::Set, Resize::Set}
 
 
 
-@pdfsubsubsection {NewWithInt}
 @deffn {NewWithInt} NewWithInt::Set
 @sp 2
 @example
@@ -103,7 +99,6 @@ See also:  @code{New::Set, Resize::Set}
 
 
 @subsection Set Instance Methods
-@pdfsubsection{Set Instance Methods}
 The instance methods associated with this class provide all the means
 to add, inquire, remove and print instances of the @code{Set} class.
 
@@ -118,7 +113,6 @@ to add, inquire, remove and print instances of the @code{Set} class.
 
 
 
-@pdfsubsubsection {Add}
 @deffn {Add} Add::Set
 @sp 2
 @example
@@ -158,7 +152,6 @@ See also:  @code{Find::Set, FindAdd::Set, RemoveObj::Set}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Set
 @sp 2
 @example
@@ -200,7 +193,6 @@ See also:  @code{NewWithInt::Set, DeepCopy::Set}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Set
 @sp 2
 @example
@@ -238,7 +230,6 @@ See also:  @code{NewWithInt::Set, Copy::Set}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Set
 @sp 2
 @example
@@ -276,7 +267,6 @@ See also:  @code{Dispose::Set, Dispose1::Set, DisposeAllNodes::Set}
 
 
 
-@pdfsubsubsection {DeepDisposeAllNodes}
 @deffn {DeepDisposeAllNodes} DeepDisposeAllNodes::Set
 @sp 2
 @example
@@ -321,7 +311,6 @@ See also:  @code{DisposeAllNodes::Set, Dispose::Set, DisposeAllNodes1::Set}
 
 
 
-@pdfsubsubsection {DeepDisposeGroup}
 @deffn {DeepDisposeGroup} DeepDisposeGroup::Set
 @sp 2
 @example
@@ -360,7 +349,6 @@ See also:  @code{GroupRemove::Set, DisposeGroup::Set, DisposeAllNodes::Set}
 
 
 
-@pdfsubsubsection {DeepDisposeObj}
 @deffn {DeepDisposeObj} DeepDisposeObj::Set
 @sp 2
 @example
@@ -400,7 +388,6 @@ See also:  @code{RemoveObj::Set, DisposeObj::Set}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Set
 @sp 2
 @example
@@ -436,7 +423,6 @@ See also:  @code{DeepDispose::Set, Dispose1::Set, DisposeAllNodes::Set}
 
 
 
-@pdfsubsubsection {Dispose1}
 @deffn {Dispose1} Dispose1::Set
 @sp 2
 @example
@@ -474,7 +460,6 @@ See also:  @code{DeepDispose::Set, Dispose::Set, DisposeAllNodes1::Set}
 
 
 
-@pdfsubsubsection {DisposeAllNodes}
 @deffn {DisposeAllNodes} DisposeAllNodes::Set
 @sp 2
 @example
@@ -498,7 +483,10 @@ The value returned is always the instance passed.
 @c @end example
 @sp 1
 See also:  @code{DeepDisposeAllNodes::Set, DisposeAllNodes1::Set,}
-@hfil @break @hglue .64in      @code{Dispose::Set}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{Dispose::Set}
 @end deffn
 
 
@@ -518,7 +506,6 @@ See also:  @code{DeepDisposeAllNodes::Set, DisposeAllNodes1::Set,}
 
 
 
-@pdfsubsubsection {DisposeAllNodes1}
 @deffn {DisposeAllNodes1} DisposeAllNodes1::Set
 @sp 2
 @example
@@ -541,7 +528,10 @@ The value returned is always the instance passed.
 @c @end example
 @sp 1
 See also:  @code{DisposeAllNodes::Set, DeepDisposeAllNodes::Set,}
-@hfil @break @hglue .64in      @code{Dispose::Set}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{Dispose::Set}
 @end deffn
 
 
@@ -557,7 +547,6 @@ See also:  @code{DisposeAllNodes::Set, DeepDisposeAllNodes::Set,}
 
 
 
-@pdfsubsubsection {DisposeGroup}
 @deffn {DisposeGroup} DisposeGroup::Set
 @sp 2
 @example
@@ -598,7 +587,6 @@ See also:  @code{GroupRemove::Set, DeepDisposeGroup::Set}
 
 
 
-@pdfsubsubsection {DisposeObj}
 @deffn {DisposeObj} DisposeObj::Set
 @sp 2
 @example
@@ -646,7 +634,6 @@ See also:  @code{RemoveObj::Set, DeepDisposeObj::Set}
 
 
 
-@pdfsubsubsection {Find}
 @deffn {Find} Find::Set
 @sp 2
 @example
@@ -684,7 +671,6 @@ See also:  @code{Add::Set, FindAdd::Set, RemoveObj::Set}
 
 
 
-@pdfsubsubsection {FindAdd}
 @deffn {FindAdd} FindAdd::Set
 @sp 2
 @example
@@ -731,7 +717,6 @@ See also:  @code{Add::Set, Find::Set, RemoveObj::Set}
 
 
 
-@pdfsubsubsection {First}
 @deffn {First} First::Set
 @sp 2
 @example
@@ -774,7 +759,6 @@ See also:  @code{RemoveObj::Set, Sequence::Set}
 
 
 
-@pdfsubsubsection {ForAll}
 @deffn {ForAll} ForAll::Set
 @sp 2
 @example
@@ -823,7 +807,6 @@ See also:  @code{Sequence::Set}
 
 
 
-@pdfsubsubsection {GroupRemove}
 @deffn {GroupRemove} GroupRemove::Set
 @sp 2
 @example
@@ -865,7 +848,6 @@ See also:  @code{DisposeGroup::Set, DeepDisposeGroup::Set}
 
 
 
-@pdfsubsubsection {RemoveObj}
 @deffn {RemoveObj} RemoveObj::Set
 @sp 2
 @example
@@ -906,7 +888,6 @@ See also:  @code{DisposeObj::Set, DeepDisposeObj::Set}
 
 
 
-@pdfsubsubsection {Resize}
 @deffn {Resize} Resize::Set
 @sp 2
 @example
@@ -956,7 +937,6 @@ See also:  @code{NewWithInt::Set}
 
 
 
-@pdfsubsubsection {Sequence}
 @deffn {Sequence} Sequence::Set
 @sp 2
 @example
@@ -1012,7 +992,6 @@ See also:  @code{Next::SetSequence, First::Set}
 
 
 
-@pdfsubsubsection {Size}
 @deffn {Size} Size::Set
 @sp 2
 @example
@@ -1043,7 +1022,6 @@ This method is used to obtain the number of objects in the @code{Set}.
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::Set
 @sp 2
 @example

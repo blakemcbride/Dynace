@@ -1,7 +1,6 @@
 @page
 
 @section StringAssociation Class
-@pdfsection{StringAssociation Class}
 This class is a subclass of @code{Association} and is used to
 represent an association between a C language string and an arbitrary
 Dynace object.  It performs all the functions as the @code{LookupKey}
@@ -15,7 +14,6 @@ use of the @code{Set}/@code{Dictionary} related classes.
 
 
 @subsection StringAssociation Class Methods
-@pdfsubsection{StringAssociation Class Methods}
 The only class method associated with this class is one needed to create
 new instances of itself.
 
@@ -24,7 +22,6 @@ new instances of itself.
 
 
 
-@pdfsubsubsection {NewWithStrObj}
 @deffn {NewWithStrObj} NewWithStrObj::StringAssociation
 @sp 2
 @example
@@ -57,7 +54,6 @@ The new instance is returned.
 
 
 @subsection StringAssociation Instance Methods
-@pdfsubsection{StringAssociation Instance Methods}
 The instance methods associated with this class are used to obtain,
 change and print the key and value associated with the instance.
 Additional functionality, although implemented by this class, is documented
@@ -76,7 +72,6 @@ of @code{Association}.
 
 
 
-@pdfsubsubsection {ChangeStringKey}
 @deffn {ChangeStringKey} ChangeStringKey::StringAssociation
 @sp 2
 @example
@@ -98,7 +93,10 @@ returns @code{i}.
 @c @end example
 @sp 1
 See also:  @code{StringKey::StringAssociation,}
-@hfil @break @hglue .64in      @code{ChangeValue::StringAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeValue::StringAssociation}
 @end deffn
 
 
@@ -111,7 +109,6 @@ See also:  @code{StringKey::StringAssociation,}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::StringAssociation
 @sp 2
 @example
@@ -135,7 +132,10 @@ returns the old value being replaced.
 @c @end example
 @sp 1
 See also:  @code{Value::StringAssociation,}
-@hfil @break @hglue .64in      @code{ChangeStringKey::StringAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeStringKey::StringAssociation}
 @end deffn
 
 
@@ -152,7 +152,6 @@ See also:  @code{Value::StringAssociation,}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::StringAssociation
 @sp 2
 @example
@@ -188,7 +187,6 @@ See also:  @code{DeepCopy::StringAssociation}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::StringAssociation
 @sp 2
 @example
@@ -220,7 +218,6 @@ See also:  @code{Copy::StringAssociation}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::StringAssociation
 @sp 2
 @example
@@ -259,7 +256,6 @@ See also:  @code{Dispose::StringAssociation}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::StringAssociation
 @sp 2
 @example
@@ -294,7 +290,6 @@ See also:  @code{DeepDispose::StringAssociation}
 
 
 
-@pdfsubsubsection {Key}
 @deffn {Key} Key::StringAssociation
 @sp 2
 @example
@@ -325,7 +320,6 @@ See also:  @code{StringKey::StringAssociation}
 
 
 
-@pdfsubsubsection {StringKey}
 @deffn {StringKey} StringKey::StringAssociation
 @sp 2
 @example
@@ -345,7 +339,10 @@ This method is used to obtain the key associated with instance @code{i}.
 @c @end example
 @sp 1
 See also:  @code{Key::StringAssociation,}
-@hfil @break @hglue .64in      @code{ChangeStringKey::StringAssociation, Value::StringAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeStringKey::StringAssociation, Value::StringAssociation}
 @end deffn
 
 
@@ -353,7 +350,6 @@ See also:  @code{Key::StringAssociation,}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::StringAssociation
 @sp 2
 @example
@@ -390,7 +386,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::StringAssociation
 @sp 2
 @example
@@ -411,7 +406,10 @@ This method is used to obtain the value associated with
 @c @end example
 @sp 1
 See also:  @code{ChangeValue::StringAssociation,}
-@hfil @break @hglue .64in      @code{StringKey::StringAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{StringKey::StringAssociation}
 @end deffn
 
 

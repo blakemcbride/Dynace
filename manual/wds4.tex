@@ -27,7 +27,6 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Library Reference
-@pdfchapter{Library Reference}
 
 This chapter gives a detailed description of each WDS class.  It is
 organized by facility so that in order to look something up, you would
@@ -63,7 +62,6 @@ the appropriate section.
 
 
 @section A Note To Dynace Language Users
-@pdfsection{A Note To Dynace Language Users}
 In an effort to hide unnecessary details associated with class vs.
 instance methods from WDS users who don't care about the differences,
 these differences are not discussed or grouped as they are in the
@@ -78,7 +76,6 @@ extension to C, it is fully documented in its associated manual.
 
 
 @section Class Hierarchy
-@pdfsection{Class Hierarchy}
 This Dynace Windows Development System contains the following class
 hierarchy:
 
@@ -99,7 +96,6 @@ hierarchy:
 
 
 @section Application
-@pdfsection{Application}
 The @code{Application} class is the class used to control application
 wide defaults such as fonts, cursors, brushes and so on.  It is also
 the class which gets executed by Windows first and executes your
@@ -122,7 +118,6 @@ object @code{Application}.
 
 
 
-@pdfsubsection {CmdLine}
 @deffn {CmdLine} CmdLine::Application
 @sp 2
 @example
@@ -161,7 +156,6 @@ See also:  @code{Instance, Show, PrevInstance}
 
 
 
-@pdfsubsection {Error}
 @deffn {Error} Error::Application
 @sp 2
 @example
@@ -200,7 +194,6 @@ See also:  @code{QuitApplication}
 
 
 
-@pdfsubsection {GetBackBrush}
 @deffn {GetBackBrush} GetBackBrush::Application
 @sp 2
 @example
@@ -254,7 +247,6 @@ See also:  @code{GetTextBrush, SetBackBrush}
 
 
 
-@pdfsubsection {GetCursor}
 @deffn {GetCursor} GetCursor::Application
 @sp 2
 @example
@@ -301,7 +293,6 @@ See also:  @code{SetCursor}
 
 
 
-@pdfsubsection {GetFont}
 @deffn {GetFont} GetFont::Application
 @sp 2
 @example
@@ -348,7 +339,6 @@ See also:  @code{SetFont}
 
 
 
-@pdfsubsection {GetIcon}
 @deffn {GetIcon} GetIcon::Application
 @sp 2
 @example
@@ -394,7 +384,6 @@ See also:  @code{SetIcon}
 
 
 
-@pdfsubsection {GetName}
 @deffn {GetName} GetName::Application
 @sp 2
 @example
@@ -429,7 +418,6 @@ See also:  @code{SetName}
 
 
 
-@pdfsubsection {GetTextBrush}
 @deffn {GetTextBrush} GetTextBrush::Application
 @sp 2
 @example
@@ -475,7 +463,6 @@ See also:  @code{GetBackBrush, SetTextBrush}
 
 
 
-@pdfsubsection {GetScalingMode}
 @deffn {GetScalingMode} GetScalingMode::Application
 @sp 2
 @example
@@ -515,7 +502,6 @@ See also:  @code{SetScalingMode, ScaleToPixels, ScaleToCurrentMode}
 
 
 
-@pdfsubsection {GetSize}
 @deffn {GetSize} GetSize::Application
 @sp 2
 @example
@@ -555,7 +541,6 @@ See also:  @code{SetScalingMode, GetSize::Window}
 
 
 
-@pdfsubsection {Instance}
 @deffn {Instance} Instance::Application
 @sp 2
 @example
@@ -592,7 +577,6 @@ See also:  @code{PrevInstance, CmdLine, Show}
 
 
 
-@pdfsubsection {PrevInstance}
 @deffn {PrevInstance} PrevInstance::Application
 @sp 2
 @example
@@ -629,7 +613,6 @@ See also:  @code{Instance, CmdLine, Show}
 
 
 
-@pdfsubsection {QuitApplication}
 @deffn {QuitApplication} QuitApplication::Application
 @sp 2
 @example
@@ -663,7 +646,6 @@ See also:  @code{Error}
 
 
 
-@pdfsubsection {ScaleToCurrentMode}
 @deffn {ScaleToCurrentMode} ScaleToCurrentMode::Application
 @sp 2
 @example
@@ -718,7 +700,6 @@ See also:  @code{SetScalingMode, GetScalingMode, ScaleToPixels}
 
 
 
-@pdfsubsection {ScaleToPixels}
 @deffn {ScaleToPixels} ScaleToPixels::Application
 @sp 2
 @example
@@ -775,7 +756,6 @@ See also:  @code{SetScalingMode, GetScalingMode, ScaleToCurrentMode}
 
 
 
-@pdfsubsection {SetBackBrush}
 @deffn {SetBackBrush} SetBackBrush::Application
 @sp 2
 @example
@@ -820,7 +800,6 @@ See also:  @code{GetBackBrush, SetTextBrush}
 
 
 
-@pdfsubsection {SetCursor}
 @deffn {SetCursor} SetCursor::Application
 @sp 2
 @example
@@ -862,7 +841,6 @@ See also:  @code{GetCursor, LoadSys::SystemCursor, Load::ExternalCursor}
 
 
 
-@pdfsubsection {SetFont}
 @deffn {SetFont} SetFont::Application
 @sp 2
 @example
@@ -910,7 +888,6 @@ See also:  @code{GetFont, Load::SystemFont, New::ExternalFont}
 
 
 
-@pdfsubsection {SetIcon}
 @deffn {SetIcon} SetIcon::Application
 @sp 2
 @example
@@ -955,7 +932,6 @@ See also:  @code{GetIcon, LoadSys::SystemIcon, Load::ExternalIcon}
 
 
 
-@pdfsubsection {SetName}
 @deffn {SetName} SetName::Application
 @sp 2
 @example
@@ -993,7 +969,6 @@ See also:  @code{GetName}
 
 
 
-@pdfsubsection {SetScalingMode}
 @deffn {SetScalingMode} SetScalingMode::Application
 @sp 2
 @example
@@ -1049,7 +1024,6 @@ See also:  @code{GetScalingMode, ScaleToPixels, ScaleToCurrentMode}
 
 
 
-@pdfsubsection {SetTextBrush}
 @deffn {SetTextBrush} SetTextBrush::Application
 @sp 2
 @example
@@ -1092,7 +1066,6 @@ See also:  @code{GetTextBrush, SetBackBrush}
 
 
 
-@pdfsubsection {Show}
 @deffn {Show} Show::Application
 @sp 2
 @example
@@ -1130,7 +1103,6 @@ See also:  @code{Instance, CmdLine, PrevInstance}
 
 
 @section Windows
-@pdfsection{Windows}
 This section documents the @code{Window} class which contains all the
 functionality which is common to Main, Child, and Popup windows.  See
 chapter 2 of this manual for a description of the different window
@@ -1138,11 +1110,9 @@ types.
 
 
 
-@pdfsubsection {Common Window Functions}
 
 
 
-@pdfsubsubsection {AddHandlerAfter}
 @deffn {AddHandlerAfter} AddHandlerAfter::Window
 @sp 2
 @example
@@ -1232,7 +1202,6 @@ See also:  @code{DefaultProcessingMode, AddHandlerBefore}
 
 
 
-@pdfsubsubsection {AddHandlerBefore}
 @deffn {AddHandlerBefore} AddHandlerBefore::Window
 @sp 2
 @example
@@ -1261,7 +1230,6 @@ See also:  @code{AddHandlerAfter}
 
 
 
-@pdfsubsubsection {Associate}
 @deffn {Associate} Associate::Window
 @sp 2
 @example
@@ -1332,7 +1300,6 @@ See also:  @code{LoadMenu, MenuItemMode}
 
 
 
-@pdfsubsubsection {AutoDispose}
 @deffn {AutoDispose} AutoDispose::Window
 @sp 2
 @example
@@ -1379,7 +1346,6 @@ See also:  @code{Dispose}
 
 
 
-@pdfsubsubsection {AutoShow}
 @deffn {AutoShow} AutoShow::Window
 @sp 2
 @example
@@ -1420,7 +1386,6 @@ See also:  @code{Show}
 
 
 
-@pdfsubsubsection {BackBrush}
 @deffn {BackBrush} BackBrush::Window
 @sp 2
 @example
@@ -1464,7 +1429,6 @@ See also:  @code{TextBrush, Use, SetTextBrush::Application}
 
 
 
-@pdfsubsubsection {DefaultProcessingMode}
 @deffn {DefaultProcessingMode} DefaultProcessingMode::Window
 @sp 2
 @example
@@ -1523,7 +1487,6 @@ See also:  @code{AddHandlerAfter}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Window
 @sp 2
 @example
@@ -1563,7 +1526,6 @@ See also:  @code{AutoDispose, New::ChildWindow, New::PopupWindow}
 
 
 
-@pdfsubsubsection {Erase}
 @deffn {Erase} Erase::Window
 @sp 2
 @example
@@ -1605,7 +1567,6 @@ See also:  @code{EraseLines, EraseAll}
 
 
 
-@pdfsubsubsection {EraseAll}
 @deffn {EraseAll} EraseAll::Window
 @sp 2
 @example
@@ -1639,7 +1600,6 @@ See also:  @code{EraseLines, Erase}
 
 
 
-@pdfsubsubsection {EraseLines}
 @deffn {EraseLines} EraseLines::Window
 @sp 2
 @example
@@ -1677,7 +1637,6 @@ See also:  @code{Erase, EraseAll}
 
 
 
-@pdfsubsubsection {Getch}
 @deffn {Getch} Getch::Window
 @sp 2
 @example
@@ -1722,7 +1681,6 @@ See also:  @code{Kbhit, SetBlock, Gets}
 
 
 
-@pdfsubsubsection {GetName}
 @deffn {GetName} GetName::Window
 @sp 2
 @example
@@ -1764,7 +1722,6 @@ See also:  @code{New::MainWindow, SetName}
 
 
 
-@pdfsubsubsection {GetParent}
 @deffn {GetParent} GetParent::Window
 @sp 2
 @example
@@ -1804,7 +1761,6 @@ See also:  @code{SetParent, New::ChildWindow}
 
 
 
-@pdfsubsubsection {GetPostion}
 @deffn {GetPosition} GetPosition::Window
 @sp 2
 @example
@@ -1840,7 +1796,6 @@ See also:  @code{SetScalingMode::Application, GetSize, SetPosition}
 
 
 
-@pdfsubsubsection {Gets}
 @deffn {Gets} Gets::Window
 @sp 2
 @example
@@ -1890,7 +1845,6 @@ See also:  @code{SetBlock, SetRaw, Gets, Getch}
 
 
 
-@pdfsubsubsection {GetSize}
 @deffn {GetSize} GetSize::Window
 @sp 2
 @example
@@ -1918,7 +1872,10 @@ gGetSize(myWind, &y, &x);
 @end example
 @sp 1
 See also:  @code{SetScalingMode::Application, GetPosition, SetSize,}
-@hfil @break @hglue .63in @code{GetSize::Application}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{GetSize::Application}
 @end deffn
 
 
@@ -1930,7 +1887,6 @@ See also:  @code{SetScalingMode::Application, GetPosition, SetSize,}
 
 
 
-@pdfsubsubsection {GetTag}
 @deffn {GetTag} GetTag::Window
 @sp 2
 @example
@@ -1969,7 +1925,6 @@ See also:  @code{SetTag, SetTag::Dialog}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Window
 @sp 2
 @example
@@ -2007,7 +1962,6 @@ h = gHandle(myWind);
 
 
 
-@pdfsubsubsection {Kbhit}
 @deffn {Kbhit} Kbhit::Window
 @sp 2
 @example
@@ -2056,7 +2010,6 @@ See also:  @code{Getch, SetBlock, Gets}
 
 
 
-@pdfsubsubsection {LoadCursor}
 @deffn {LoadCursor} LoadCursor::Window
 @sp 2
 @example
@@ -2102,7 +2055,6 @@ See also:  @code{LoadSystemCursor, Load::ExternalCursor, Use}
 
 
 
-@pdfsubsubsection {LoadFont}
 @deffn {LoadFont} LoadFont::Window
 @sp 2
 @example
@@ -2150,7 +2102,6 @@ See also:  @code{LoadSystemFont, Indirect::ExternalFont, Use}
 
 
 
-@pdfsubsubsection {LoadIcon}
 @deffn {LoadIcon} LoadIcon::Window
 @sp 2
 @example
@@ -2193,7 +2144,6 @@ See also:  @code{LoadSystemIcon, Load::ExternalIcon, Use}
 
 
 
-@pdfsubsubsection {LoadMenu}
 @deffn {LoadMenu} LoadMenu::Window
 @sp 2
 @example
@@ -2244,7 +2194,6 @@ See also:  @code{Associate, PopMenu, LoadMenuStr, Load::ExternalMenu, Use}
 
 
 
-@pdfsubsubsection {LoadMenuStr}
 @deffn {LoadMenuStr} LoadMenuStr::Window
 @sp 2
 @example
@@ -2296,7 +2245,6 @@ See also:  @code{Associate, LoadMenu, LoadStr::ExternalMenu, Use}
 
 
 
-@pdfsubsubsection {LoadSystemCursor}
 @deffn {LoadSystemCursor} LoadSystemCursor::Window
 @sp 2
 @example
@@ -2343,7 +2291,6 @@ See also:  @code{LoadCursor, LoadSys::SystemCursor, Use}
 
 
 
-@pdfsubsubsection {LoadSystemFont}
 @deffn {LoadSystemFont} LoadSystemFont::Window
 @sp 2
 @example
@@ -2395,7 +2342,6 @@ See also:  @code{LoadFont, Load::SystemFont, Use}
 
 
 
-@pdfsubsubsection {LoadSystemIcon}
 @deffn {LoadSystemIcon} LoadSystemIcon::Window
 @sp 2
 @example
@@ -2445,7 +2391,6 @@ See also:  @code{LoadIcon, LoadSys::SystemIcon, Use}
 
 
 
-@pdfsubsubsection {MenuItemMode}
 @deffn {MenuItemMode} MenuItemMode::Window
 @sp 2
 @example
@@ -2492,7 +2437,6 @@ See also:  @code{LoadMenu, Associate}
 
 
 
-@pdfsubsubsection {Message}
 @deffn {Message} Message::Window
 @sp 2
 @example
@@ -2534,7 +2478,6 @@ See also:  @code{MessageWithTopic}
 
 
 
-@pdfsubsubsection {MessageWithTopic}
 @deffn {MessageWithTopic} MessageWithTopic::Window
 @sp 2
 @example
@@ -2579,7 +2522,6 @@ See also:  @code{Message} and the @code{HelpSystem} class.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Window
 @sp 2
 @example
@@ -2605,7 +2547,10 @@ myWind = vNew(Window);
 @end example
 @sp 1
 See also:  @code{New::MainWindow, New::ChildWindow, New::PopupWindow, Show}
-@hfil @break @hglue .63in   @code{Dispose}
+@iftex
+@hfil @break @hglue .63in   
+@end iftex
+@code{Dispose}
 @end deffn
 
 
@@ -2614,7 +2559,6 @@ See also:  @code{New::MainWindow, New::ChildWindow, New::PopupWindow, Show}
 
 
 
-@pdfsubsubsection {NewBuiltIn}
 @deffn {NewBuiltIn} NewBuiltIn::Window
 @sp 2
 @example
@@ -2659,7 +2603,6 @@ See also:  @code{New::ButtonWindow}
 
 
 
-@pdfsubsubsection {PopMenu}
 @deffn {PopMenu} PopMenu::Window
 @sp 2
 @example
@@ -2703,7 +2646,6 @@ See also:  @code{LoadMenu, Use}
 
 
 
-@pdfsubsubsection {Printf}
 @deffn {Printf} Printf::Window
 @sp 2
 @example
@@ -2759,7 +2701,6 @@ See also:  @code{TextOut, Puts, Write}
 
 
 
-@pdfsubsubsection {Puts}
 @deffn {Puts} Puts::Window
 @sp 2
 @example
@@ -2801,7 +2742,6 @@ See also:  @code{TextOut, Printf, Write}
 
 
 
-@pdfsubsubsection {Read}
 @deffn {Read} Read::Window
 @sp 2
 @example
@@ -2853,7 +2793,6 @@ See also:  @code{SetBlock, SetRaw, Gets, Getch}
 
 
 
-@pdfsubsubsection {ScrollHorz}
 @deffn {ScrollHorz} ScrollHorz::Window
 @sp 2
 @example
@@ -2900,7 +2839,6 @@ See also:  @code{ScrollVert, SetScalingMode::Application}
 
 
 
-@pdfsubsubsection {ScrollVert}
 @deffn {ScrollVert} ScrollVert::Window
 @sp 2
 @example
@@ -2946,7 +2884,6 @@ See also:  @code{ScrollHorz, VertShift, SetScalingMode::Application}
 
 
 
-@pdfsubsubsection {SetBlock}
 @deffn {SetBlock} SetBlock::Window
 @sp 2
 @example
@@ -2998,7 +2935,6 @@ See also:  @code{Getch, SetRaw, Gets}
 
 
 
-@pdfsubsubsection {SetMaxLines}
 @deffn {SetMaxLines} SetMaxLines::Window
 @sp 2
 @example
@@ -3056,7 +2992,6 @@ See also:  @code{VertShift}
 
 
 
-@pdfsubsubsection {SetName}
 @deffn {SetName} SetName::Window
 @sp 2
 @example
@@ -3099,7 +3034,6 @@ See also:  @code{New::MainWindow, GetName}
 
 
 
-@pdfsubsubsection {SetParent}
 @deffn {SetParent} SetParent::Window
 @sp 2
 @example
@@ -3148,7 +3082,6 @@ See also:  @code{GetParent}
 
 
 
-@pdfsubsubsection {SetPosition}
 @deffn {SetPosition} SetPosition::Window
 @sp 2
 @example
@@ -3192,7 +3125,6 @@ See also:  @code{SetScalingMode::Application, SetSize, GetPosition}
 
 
 
-@pdfsubsubsection {SetRaw}
 @deffn {SetRaw} SetRaw::Window
 @sp 2
 @example
@@ -3244,7 +3176,6 @@ See also:  @code{Getch, SetBlock, Gets}
 
 
 
-@pdfsubsubsection {SetSize}
 @deffn {SetSize} SetSize::Window
 @sp 2
 @example
@@ -3286,7 +3217,6 @@ See also:  @code{SetScalingMode::Application, SetPosition, GetSize}
 
 
 
-@pdfsubsubsection {SetStyle}
 @deffn {SetStyle} SetStyle::Window
 @sp 2
 @example
@@ -3327,7 +3257,6 @@ gSetStyle(myWind, WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL);
 
 
 
-@pdfsubsubsection {SetTag}
 @deffn {SetTag} SetTag::Window
 @sp 2
 @example
@@ -3373,7 +3302,6 @@ See also:  @code{GetTag, SetTag::Dialog}
 
 
 
-@pdfsubsubsection {SetTopic}
 @deffn {SetTopic} SetTopic::Window
 @sp 2
 @example
@@ -3420,7 +3348,6 @@ See also:  The @code{HelpSystem} class.
 
 
 
-@pdfsubsubsection {Show}
 @deffn {Show} Show::Window
 @sp 2
 @example
@@ -3456,7 +3383,6 @@ See also:  @code{AutoShow, ProcessMessages::MainWindow}
 
 
 
-@pdfsubsubsection {TextBrush}
 @deffn {TextBrush} TextBrush::Window
 @sp 2
 @example
@@ -3497,7 +3423,6 @@ See also:  @code{BackBrush, Use, SetBackBrush::Application}
 
 
 
-@pdfsubsubsection {TextOut}
 @deffn {TextOut} TextOut::Window
 @sp 2
 @example
@@ -3539,7 +3464,6 @@ See also:  @code{Write, Puts, Printf}
 
 
 
-@pdfsubsubsection {Update}
 @deffn {Update} Update::Window
 @sp 2
 @example
@@ -3578,7 +3502,6 @@ gUpdate(myWind);
 
 
 
-@pdfsubsubsection {Use}
 @deffn {Use} Use::Window
 @sp 2
 @example
@@ -3634,7 +3557,6 @@ See also:  @code{LoadFont, LoadIcon, LoadCursor, LoadMenu,}
 
 
 
-@pdfsubsubsection {VertShift}
 @deffn {VertShift} VertShift::Window
 @sp 2
 @example
@@ -3684,7 +3606,6 @@ See also:  @code{ScrollVert, SetMaxLines}
 
 
 
-@pdfsubsubsection {Write}
 @deffn {Write} Write::Window
 @sp 2
 @example
@@ -3731,7 +3652,6 @@ See also:  @code{TextOut, Puts, Printf}
 
 
 @subsection Main Window
-@pdfsubsection{Main Window}
 This class, named @code{MainWindow}, is used to create and manipulate an
 application's main window.  There is normally one main window associated
 with each application and this is the first window created.
@@ -3743,7 +3663,6 @@ to the @code{MainWindow} class.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::MainWindow
 @sp 2
 @example
@@ -3780,7 +3699,6 @@ See also:  @code{New::ChildWindow, New::PopupWindow,}
 
 
 
-@pdfsubsubsection {ProcessMessages}
 @deffn {ProcessMessages} ProcessMessages::MainWindow
 @sp 2
 @example
@@ -3825,7 +3743,6 @@ See also:  @code{New, Show::Window, ProcessMessages::MessageDispatcher}
 
 
 @subsection Child Windows
-@pdfsubsection{Child Windows}
 The Child Window class, called @code{ChildWindow}, is used in the creation
 of windows which are children of other windows.  As such, they can not
 be positioned outside of their parent window, and they get iconized along
@@ -3841,7 +3758,6 @@ to the @code{ChildWindow} class.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::ChildWindow
 @sp 2
 @example
@@ -3863,7 +3779,11 @@ in increments dictated by @code{SetScalingMode::Application}.
 
 The default style associated with the child window is
 @code{WS_CHILD | WS_VISIBLE} and may be changed with @code{SetStyle::Window}.
-The position may be set with @hfil @break @code{SetPosition::Window}.
+The position may be set with 
+@iftex
+@hfil @break 
+@end iftex
+@code{SetPosition::Window}.
 
 The value returned is the new window created.
 @example
@@ -3888,7 +3808,6 @@ See also:  @code{New::MainWindow, New::PopupWindow,}
 
 
 @subsection Popup Windows
-@pdfsubsection{Popup Windows}
 The @code{PopupWindow} class is used to create arbitrary windows which
 function independently of other windows.  That is, they may overlap or
 be moved outside of other windows and iconized independently of other
@@ -3906,7 +3825,6 @@ to the @code{PopupWindow} class.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::PopupWindow
 @sp 2
 @example
@@ -3928,9 +3846,16 @@ the window in are specified in increments dictated by
 
 The default style associated with the popup window is @code{WS_POPUP |
 WS_VISIBLE | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX |
-WS_MAXIMIZEBOX | WS_SYSMENU} @hfil @break and may be changed with
+WS_MAXIMIZEBOX | WS_SYSMENU} 
+@iftex
+@hfil @break 
+@end iftex
+and may be changed with
 @code{SetStyle::Window}.  The position may be set with
-@break @code{SetPosition::Window}.
+@iftex
+@break 
+@end iftex
+@code{SetPosition::Window}.
 
 The value returned is the new window created.
 @example
@@ -3951,7 +3876,6 @@ See also:  @code{New::MainWindow, New::ChildWindow,}
 
 
 @section Printing
-@pdfsection{Printing}
 The @code{Printer} class is used for all aspects of printing.
 It is a subclass of the Dynace @code{Stream} class and as
 such inherits all of its functionality.
@@ -3990,7 +3914,6 @@ an index origin of 0.
 
 
 
-@pdfsubsection {Arc}
 @deffn {Arc} Arc::Printer
 @sp 2
 @example
@@ -4031,7 +3954,10 @@ if (!gArc(pntr, 10, 10, 180, 140, 12, 12, 128, 135))
 @sp 1
 See also:  @code{NewPage, SetScale, Use,}
         @code{Line, Rectangle, Ellipse, RoundRect,}
-@hfil @break @hglue .63in @code{Chord, Pie}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{Chord, Pie}
 @end deffn
 
 
@@ -4045,7 +3971,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {Chord}
 @deffn {Chord} Chord::Printer
 @sp 2
 @example
@@ -4096,7 +4021,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Printer
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -4152,7 +4076,6 @@ pntr = gDispose(pntr);
 
 
 
-@pdfsubsection {Ellipse}
 @deffn {Ellipse} Ellipse::Printer
 @sp 2
 @example
@@ -4202,7 +4125,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {Handle}
 @deffn {Handle} Handle::Printer
 @sp 2
 @example
@@ -4245,7 +4167,6 @@ hdc = (HDC) gHandle(pntr);
 
 
 
-@pdfsubsection {Line}
 @deffn {Line} Line::Printer
 @sp 2
 @example
@@ -4292,7 +4213,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {LoadFont}
 @deffn {LoadFont} LoadFont::Printer
 @sp 2
 @example
@@ -4346,7 +4266,6 @@ See also:  @code{LoadSystemFont, Indirect::ExternalFont, Use}
 
 
 
-@pdfsubsection {LoadSystemFont}
 @deffn {LoadSystemFont} LoadSystemFont::Printer
 @sp 2
 @example
@@ -4399,7 +4318,6 @@ See also:  @code{LoadFont, Load::SystemFont, Use}
 
 
 
-@pdfsubsection {New}
 @deffn {New} New::Printer
 @sp 2
 @example
@@ -4448,7 +4366,6 @@ See also:  @code{QueryPrinter, NewWithHDC}
 
 
 
-@pdfsubsection {NewPage}
 @deffn {NewPage} NewPage::Printer
 @sp 2
 @example
@@ -4489,7 +4406,6 @@ if (!gNewPage(pntr))
 
 
 
-@pdfsubsection {NewWithHDC}
 @deffn {NewWithHDC} NewWithHDC::Printer
 @sp 2
 @example
@@ -4553,7 +4469,6 @@ See also:  @code{QueryPrinter, New}
 
 
 
-@pdfsubsection {Pie}
 @deffn {Pie} Pie::Printer
 @sp 2
 @example
@@ -4594,7 +4509,10 @@ if (!gPie(pntr, 10, 10, 180, 140, 12, 12, 128, 135))
 @sp 1
 See also:  @code{NewPage, SetScale, Use,}
         @code{Line, Rectangle, Ellipse, RoundRect,}
-@hfil @break @hglue .63in @code{Chord, Arc}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{Chord, Arc}
 @end deffn
 
 
@@ -4612,7 +4530,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {Printf}
 @deffn {Printf} Printf::Printer
 @sp 2
 @example
@@ -4670,7 +4587,6 @@ See also:  @code{TextOut, Puts}
 
 
 
-@pdfsubsection {Puts}
 @deffn {Puts} Puts::Printer
 @sp 2
 @example
@@ -4717,7 +4633,6 @@ See also:  @code{TextOut, Printf}
 
 
 
-@pdfsubsection {QueryPrinter}
 @deffn {QueryPrinter} QueryPrinter::Printer
 @sp 2
 @example
@@ -4774,7 +4689,6 @@ See also:  @code{New, NewWithHDC}
 
 
 
-@pdfsubsection {Rectangle}
 @deffn {Rectangle} Rectangle::Printer
 @sp 2
 @example
@@ -4826,7 +4740,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {RoundRect}
 @deffn {RoundRect} RoundRect::Printer
 @sp 2
 @example
@@ -4881,7 +4794,6 @@ See also:  @code{NewPage, SetScale, Use,}
 
 
 
-@pdfsubsection {SetScale}
 @deffn {SetScale} SetScale::Printer
 @sp 2
 @example
@@ -4926,7 +4838,6 @@ See also:  @code{TextOut}
 
 
 
-@pdfsubsection {TextOut}
 @deffn {TextOut} TextOut::Printer
 @sp 2
 @example
@@ -4970,7 +4881,6 @@ See also:  @code{NewPage, Printf, SetScale, LoadFont}
 
 
 
-@pdfsubsection {Use}
 @deffn {Use} Use::Printer
 @sp 2
 @example
@@ -5027,7 +4937,6 @@ See also:  @code{LoadFont} and the @code{Brush} and @code{Pen} classes.
 
 
 @section Menus
-@pdfsection{Menus}
 The @code{Menu} class, although not used directly by an application, is
 used to house the common functionality associated with the
 @code{ExternalMenu} and @code{InternalMenu} classes.  Most of the
@@ -5046,9 +4955,7 @@ their functionality from it.
 
 
 
-@pdfsubsection {Common Menu Functions}
 
-@pdfsubsubsection {Associate}
 @deffn {Associate} Associate::Menu
 @sp 2
 @example
@@ -5074,12 +4981,12 @@ the following structure:
 @example
 @group
 static  long    menu_option(object wind)
-{
+@{
            .
            .
            .
         return 0L;
-}
+@}
 @end group
 @end example
 Where @code{wind} is the window object which the menu is attached to.
@@ -5108,7 +5015,6 @@ See also:  @code{AddMenuOption::InternalMenu, AddMenuOption::PopupMenu}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Menu
 @sp 2
 @example
@@ -5151,7 +5057,6 @@ See also:  @code{Dispose, Push}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Menu
 @sp 2
 @example
@@ -5197,7 +5102,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Menu
 @sp 2
 @example
@@ -5236,7 +5140,6 @@ h = gHandle(myMenu);
 
 
 
-@pdfsubsubsection {MenuFunction}
 @deffn {MenuFunction} MenuFunction::Menu
 @sp 2
 @example
@@ -5265,7 +5168,6 @@ See also:  @code{Associate}
 
 
 
-@pdfsubsubsection {Pop}
 @deffn {Pop} Pop::Menu
 @sp 2
 @example
@@ -5300,7 +5202,6 @@ See also:  @code{Push, Use::Window, PopMenu::Window}
 
 
 
-@pdfsubsubsection {Push}
 @deffn {Push} Push::Menu
 @sp 2
 @example
@@ -5338,7 +5239,6 @@ See also:  @code{Pop, Use::Window, PopMenu::Window}
 
 
 
-@pdfsubsubsection {SetMode}
 @deffn {SetMode} SetMode::Menu
 @sp 2
 @example
@@ -5388,7 +5288,6 @@ See also:  @code{AddMenuOption::InternalMenu, AddMenuOption::PopupMenu}
 
 
 @subsection External Menus
-@pdfsubsection{External Menus}
 The @code{ExternalMenu} class is used to access menus which were defined
 using the resource editor.  Since this class is a subclass of @code{Menu},
 all of @code{Menu}'s functionality is accessible through instance of this
@@ -5400,7 +5299,6 @@ class.  Therefore, see the @code{Menu} class for additional functionality.
 
 
 
-@pdfsubsubsection {Load}
 @deffn {Load} Load::ExternalMenu
 @sp 2
 @example
@@ -5438,7 +5336,6 @@ See also:  @code{LoadStr, LoadMenu::Window, LoadMenuStr::Window}
 
 
 
-@pdfsubsubsection {LoadStr}
 @deffn {LoadStr} LoadStr::ExternalMenu
 @sp 2
 @example
@@ -5478,7 +5375,6 @@ See also:  @code{Load, LoadMenu::Window, LoadMenuStr::Window}
 
 
 @subsection Internal Menus
-@pdfsubsection{Internal Menus}
 The @code{InternalMenu} class is used to enable an application to create
 menus on the fly -- without the need to pre-specify the menu's structure
 with the resource editor.  Since this class is a subclass of
@@ -5493,7 +5389,6 @@ additional functionality.
 
 
 
-@pdfsubsubsection {AddMenuOption}
 @deffn {AddMenuOption} AddMenuOption::InternalMenu
 @sp 2
 @example
@@ -5566,7 +5461,6 @@ See also:  @code{AddPopupMenu}
 
 
 
-@pdfsubsubsection {AddPopupMenu}
 @deffn {AddPopupMenu} AddPopupMenu::InternalMenu
 @sp 2
 @example
@@ -5615,7 +5509,6 @@ See also:  @code{AddMenuOption, New::PopupMenu}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::InternalMenu
 @sp 2
 @example
@@ -5649,7 +5542,6 @@ See also:  @code{AddMenuOption, AddMenu, Use::Window, LoadMenu::Window}
 
 
 @section Popup Menus
-@pdfsection{Popup Menus}
 The @code{PopupMenu} class is used in conjunction with the
 @code{InternalMenu} class in order to provide a nested menu structure.
 Nesting of popup menus is supported to arbitrary levels.
@@ -5661,7 +5553,6 @@ Nesting of popup menus is supported to arbitrary levels.
 
 
 
-@pdfsubsection {AddMenuOption}
 @deffn {AddMenuOption} AddMenuOption::PopupMenu
 @sp 2
 @example
@@ -5693,7 +5584,6 @@ See also:  @code{AddPopupMenu, AddSeparator}
 
 
 
-@pdfsubsection {AddPopupMenu}
 @deffn {AddPopupMenu} AddPopupMenu::PopupMenu
 @sp 2
 @example
@@ -5729,7 +5619,6 @@ See also:  @code{AddMenuOption, AddSeparator}
 
 
 
-@pdfsubsection {AddSeparator}
 @deffn {AddSeparator} AddSeparator::PopupMenu
 @sp 2
 @example
@@ -5766,7 +5655,6 @@ See also:  @code{AddMenuOption}
 
 
 
-@pdfsubsection {Dispose}
 @deffn {Dispose} Dispose::PopupMenu
 @sp 2
 @example
@@ -5808,7 +5696,6 @@ See also:  @code{DeepDispose::Menu}
 
 
 
-@pdfsubsection {Handle}
 @deffn {Handle} Handle::PopupMenu
 @sp 2
 @example
@@ -5846,7 +5733,6 @@ h = gHandle(myMenu);
 
 
 
-@pdfsubsection {MenuFunction}
 @deffn {MenuFunction} MenuFunction::PopupMenu
 @sp 2
 @example
@@ -5876,7 +5762,6 @@ See also:  @code{AddMenuOption}
 
 
 
-@pdfsubsection {New}
 @deffn {New} New::PopupMenu
 @sp 2
 @example
@@ -5910,7 +5795,10 @@ gAddPopupMenu(myMenu, "&File", pm);
 @end example
 @sp 1
 See also:  @code{AddMenuOption, AddPopupMenu, AddSeparator,}
-@hfil @break @hglue .63in     @code{AddPopupMenu::InternalMenu}
+@iftex
+@hfil @break @hglue .63in     
+@end iftex
+@code{AddPopupMenu::InternalMenu}
 @end deffn
 
 
@@ -5920,14 +5808,12 @@ See also:  @code{AddMenuOption, AddPopupMenu, AddSeparator,}
 
 
 @section Dialogs
-@pdfsection{Dialogs}
 The @code{Dialog} class implements all the functionality which is common
 to the @code{ModalDialog} and @code{ModelessDialog} classes, and although
 this class is not used directly, most of their functionality is documented
 in this section.
 
 @subsection  Standard Dialog Method Arguments
-@pdfsubsection{Standard Dialog Method Arguments}
 
 Since all dialog instance methods have the dialog object as the first
 argument (referred to as @code{dlg}), this argument will not be described
@@ -5950,14 +5836,12 @@ control object will be an instance of one of the subclasses of the
 
 
 @subsection Dialog Methods
-@pdfsubsection{Dialog Methods}
 
 
 
 
 
 
-@pdfsubsubsection {AddControl}
 @deffn {AddControl} AddControl::Dialog
 @sp 2
 @example
@@ -6004,7 +5888,6 @@ See also:  @code{GetControl}
 
 
 
-@pdfsubsubsection {AddDlgHandlerAfter}
 @deffn {AddDlgHandlerAfter} AddDlgHandlerAfter::Dialog
 @sp 2
 @example
@@ -6095,7 +5978,6 @@ See also:  @code{AddDlgHandlerBefore}
 
 
 
-@pdfsubsubsection {AddDlgHandlerBefore}
 @deffn {AddDlgHandlerBefore} AddDlgHandlerBefore::Dialog
 @sp 2
 @example
@@ -6130,7 +6012,6 @@ See also:  @code{AddDlgHandlerAfter}
 
 
 
-@pdfsubsubsection {AutoDispose}
 @deffn {AutoDispose} AutoDispose::Dialog
 @sp 2
 @example
@@ -6186,7 +6067,6 @@ See also:  @code{CompletionFunction, Perform, SetResult}
 
 
 
-@pdfsubsubsection {BackBrush}
 @deffn {BackBrush} BackBrush::Dialog
 @sp 2
 @example
@@ -6227,7 +6107,6 @@ See also:  @code{TextBrush, SetBackBrush::Application}
 
 
 
-@pdfsubsubsection {CompletionFunction}
 @deffn {CompletionFunction} CompletionFunction::Dialog
 @sp 2
 @example
@@ -6294,7 +6173,6 @@ See also:  @code{AutoDispose, Perform, SetTag, SetResult}
 
 
 
-@pdfsubsubsection {CtlDoubleValue}
 @deffn {CtlDoubleValue} CtlDoubleValue::Dialog
 @sp 2
 @example
@@ -6341,7 +6219,6 @@ See also:  @code{CtlStringValue, CtlShortValue, ...}
 
 
 
-@pdfsubsubsection {CtlLongValue}
 @deffn {CtlLongValue} CtlLongValue::Dialog
 @sp 2
 @example
@@ -6389,7 +6266,6 @@ See also:  @code{CtlStringValue, CtlShortValue, ...}
 
 
 
-@pdfsubsubsection {CtlShortValue}
 @deffn {CtlShortValue} CtlShortValue::Dialog
 @sp 2
 @example
@@ -6449,7 +6325,6 @@ See also:  @code{CtlStringValue, CtlLongValue, ...}
 
 
 
-@pdfsubsubsection {CtlStringValue}
 @deffn {CtlStringValue} CtlStringValue::Dialog
 @sp 2
 @example
@@ -6499,7 +6374,6 @@ See also:  @code{CtlShortValue, CtlLongValue, ...}
 
 
 
-@pdfsubsubsection {CtlUnsignedShortValue}
 @deffn {CtlUnsignedShortValue} CtlUnsignedShortValue::Dialog
 @sp 2
 @example
@@ -6545,7 +6419,6 @@ See also:  @code{CtlStringValue, CtlLongValue, ...}
 
 
 
-@pdfsubsubsection {CtlValue}
 @deffn {CtlValue} CtlValue::Dialog
 @sp 2
 @example
@@ -6599,7 +6472,6 @@ See also:  @code{CtlStringValue, CtlShortValue, CtlLongValue, ...}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Dialog
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -6614,7 +6486,6 @@ method for details.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Dialog
 @sp 2
 @example
@@ -6656,7 +6527,6 @@ See also:  @code{AutoDispose}
 
 
 
-@pdfsubsubsection {GetBackBrush}
 @deffn {GetBackBrush} GetBackBrush::Dialog
 @sp 2
 @example
@@ -6693,7 +6563,6 @@ See also:  @code{BackBrush, GetTextBrush, GetBackBrush::Application}
 
 
 
-@pdfsubsubsection {GetControl}
 @deffn {GetControl} GetControl::Dialog
 @sp 2
 @example
@@ -6732,7 +6601,6 @@ See also:  @code{AddControl}
 
 
 
-@pdfsubsubsection {GetParent}
 @deffn {GetParent} GetParent::Dialog
 @sp 2
 @example
@@ -6773,7 +6641,6 @@ See also:  @code{NewDialog::ModalDialog, NewDialog::ModelessDialog}
 
 
 
-@pdfsubsubsection {GetTag}
 @deffn {GetTag} GetTag::Dialog
 @sp 2
 @example
@@ -6810,7 +6677,6 @@ See also:  @code{SetTag, SetTag::Window}
 
 
 
-@pdfsubsubsection {GetTextBrush}
 @deffn {GetTextBrush} GetTextBrush::Dialog
 @sp 2
 @example
@@ -6848,7 +6714,6 @@ See also:  @code{TextBrush, GetBackBrush, GetTextBrush::Application}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Dialog
 @sp 2
 @example
@@ -6888,7 +6753,6 @@ h = gHandle(dlg);
 
 
 
-@pdfsubsubsection {IndexValue}
 @deffn {IndexValue} IndexValue::Dialog
 @sp 2
 @example
@@ -6933,7 +6797,6 @@ See also:  @code{CtlShortValue, CtlValue}
 
 
 
-@pdfsubsubsection {InDialog}
 @deffn {InDialog} InDialog::Dialog
 @sp 2
 @example
@@ -6976,7 +6839,6 @@ See also:  @code{Perform}
 
 
 
-@pdfsubsubsection {Message}
 @deffn {Message} Message::Dialog
 @sp 2
 @example
@@ -7020,7 +6882,6 @@ See also:  @code{MessageWithTopic}
 
 
 
-@pdfsubsubsection {MessageWithTopic}
 @deffn {MessageWithTopic} MessageWithTopic::Dialog
 @sp 2
 @example
@@ -7071,7 +6932,6 @@ See also:  @code{Message} and the @code{HelpSystem} class.
 
 
 
-@pdfsubsubsection {Perform}
 @deffn {Perform} Perform::Dialog
 @sp 2
 @example
@@ -7170,7 +7030,6 @@ See also:  @code{CompletionFunction, AutoDispose}
 
 
 
-@pdfsubsubsection {SetResult}
 @deffn {SetResult} SetResult::Dialog
 @sp 2
 @example
@@ -7213,7 +7072,6 @@ See also:  @code{AutoDispose, Perform, SetTag}
 
 
 
-@pdfsubsubsection {SetTag}
 @deffn {SetTag} SetTag::Dialog
 @sp 2
 @example
@@ -7258,7 +7116,6 @@ See also:  @code{GetTag, SetTag::Window}
 
 
 
-@pdfsubsubsection {SetTopic}
 @deffn {SetTopic} SetTopic::Dialog
 @sp 2
 @example
@@ -7307,7 +7164,6 @@ See also:  The @code{HelpSystem} class and @code{SetTopic::Control}
 
 
 
-@pdfsubsubsection {TextBrush}
 @deffn {TextBrush} TextBrush::Dialog
 @sp 2
 @example
@@ -7358,7 +7214,6 @@ See also:  @code{BackBrush, SetTextBrush::Application}
 
 
 @subsection Modal Dialogs
-@pdfsubsection{Modal Dialogs}
 Modal dialogs are created with the methods described in this section.
 However, since the @code{ModalDialog} class is a subclass of @code{Dialog},
 and the @code{Dialog} class implements all the functionality common to
@@ -7369,7 +7224,6 @@ for documentation on additional functionality available to this class.
 
 
 
-@pdfsubsubsection {NewDialog}
 @deffn {NewDialog} NewDialog::ModalDialog
 @sp 2
 @example
@@ -7416,7 +7270,6 @@ See also:  @code{NewDialogStr, Perform::Dialog, NewDialog::ModelessDialog}
 
 
 
-@pdfsubsubsection {NewDialogStr}
 @deffn {NewDialogStr} NewDialogStr::ModalDialog
 @sp 2
 @example
@@ -7463,7 +7316,6 @@ See also:  @code{NewDialog, Perform::Dialog, NewDialogStr::ModelessDialog}
 
 
 @subsection Modeless Dialogs
-@pdfsubsection{Modeless Dialogs}
 Modeless dialogs are created with the methods described in this section.
 However, since the @code{ModelessDialog} class is a subclass of
 @code{Dialog}, and the @code{Dialog} class implements all the
@@ -7476,7 +7328,6 @@ functionality available to this class.
 
 
 
-@pdfsubsubsection {NewDialog}
 @deffn {NewDialog} NewDialog::ModelessDialog
 @sp 2
 @example
@@ -7520,7 +7371,10 @@ dlg = mNewDialog(ModelessDialog, MY_DIALOG, wind);
 @end example
 @sp 1
 See also:  @code{NewDialogStr, Perform::Dialog, NewDialog::ModalDialog,}
-@hfil @break @hglue .63in @code{CompletionFunction::Dialog, AutoDispose::Dialog}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{CompletionFunction::Dialog, AutoDispose::Dialog}
 @end deffn
 
 
@@ -7534,7 +7388,6 @@ See also:  @code{NewDialogStr, Perform::Dialog, NewDialog::ModalDialog,}
 
 
 
-@pdfsubsubsection {NewDialogStr}
 @deffn {NewDialogStr} NewDialogStr::ModelessDialog
 @sp 2
 @example
@@ -7578,7 +7431,10 @@ dlg = gNewDialogStr(ModelessDialog, "mydialog", wind);
 @end example
 @sp 1
 See also:  @code{NewDialog, Perform::Dialog, NewDialogStr::ModalDialog,}
-@hfil @break @hglue .63in @code{CompletionFunction::Dialog, AutoDispose::Dialog}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{CompletionFunction::Dialog, AutoDispose::Dialog}
 @end deffn
 
 
@@ -7587,7 +7443,6 @@ See also:  @code{NewDialog, Perform::Dialog, NewDialogStr::ModalDialog,}
 
 
 @section Controls
-@pdfsection{Controls}
 The @code{Control} class is never used directly.  It is used to group
 functionality common to all the control types which are all subclasses
 of this class.  Therefore, this section documents all the methods which
@@ -7600,7 +7455,6 @@ and may be subsequently accessed via @code{GetControl::Dialog}.
 
 
 @subsection  Standard Control Method Arguments
-@pdfsubsection{Standard Control Method Arguments}
 
 Since all control instance methods have the control object as their
 first argument (referred to as @code{ctl}), this argument will not be
@@ -7619,7 +7473,6 @@ uses it, it will not be defined each time.
 
 
 @subsection Control Methods
-@pdfsubsection{Control Methods}
 
 
 
@@ -7632,7 +7485,6 @@ uses it, it will not be defined each time.
 
 
 
-@pdfsubsubsection {AddHandlerAfter}
 @deffn {AddHandlerAfter} AddHandlerAfter::Control
 @sp 2
 @example
@@ -7722,7 +7574,6 @@ See also:  @code{DefaultProcessingMode, AddHandlerBefore, CallDefaultProc}
 
 
 
-@pdfsubsubsection {AddHandlerBefore}
 @deffn {AddHandlerBefore} AddHandlerBefore::Control
 @sp 2
 @example
@@ -7753,7 +7604,6 @@ See also:  @code{AddHandlerAfter}
 
 
 
-@pdfsubsubsection {CallDefaultProc}
 @deffn {CallDefaultProc} CallDefaultProc::Control
 @sp 2
 @example
@@ -7802,7 +7652,6 @@ See also:  @code{DefaultProcessingMode, AddHandlerAfter}
 
 
 
-@pdfsubsubsection {CheckFunction}
 @deffn {CheckFunction} CheckFunction::Control
 @sp 2
 @example
@@ -7865,7 +7714,6 @@ See also:  @code{GetControl::Dialog}
 
 
 
-@pdfsubsubsection {CheckValue}
 @deffn {CheckValue} CheckValue::Control
 @sp 2
 @example
@@ -7911,7 +7759,6 @@ See also:  @code{CheckFunction::Control}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Control
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -7926,7 +7773,6 @@ method for details.
 
 
 
-@pdfsubsubsection {DefaultProcessingMode}
 @deffn {DefaultProcessingMode} DefaultProcessingMode::Control
 @sp 2
 @example
@@ -7988,7 +7834,6 @@ See also:  @code{CallDefaultProc, AddHandlerAfter}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Control
 @sp 2
 @example
@@ -8033,7 +7878,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Control
 @sp 2
 @example
@@ -8076,7 +7920,6 @@ See also:  @code{GetControl::Dialog}
 
 
 
-@pdfsubsubsection {SetTopic}
 @deffn {SetTopic} SetTopic::Control
 @sp 2
 @example
@@ -8124,7 +7967,6 @@ See also:  The @code{HelpSystem} class and @code{SetTopic::Dialog}
 
 
 @subsection Text Control
-@pdfsubsection{Text Control}
 The @code{TextControl} class is a control which enables the user to
 enter arbitrary alphanumeric data on a single line.  This control
 has numerous facilities to control the length and type of input the
@@ -8148,7 +7990,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::TextControl
 @sp 2
 @example
@@ -8195,7 +8036,6 @@ See also:  @code{Value, StringValue, SetValue}
 
 
 
-@pdfsubsubsection {Capitalize}
 @deffn {Capitalize} Capitalize::TextControl
 @sp 2
 @example
@@ -8234,7 +8074,6 @@ See also:  @code{TextRange}
 
 
 
-@pdfsubsubsection {MaxLength}
 @deffn {MaxLength} MaxLength::TextControl
 @sp 2
 @example
@@ -8275,7 +8114,6 @@ See also:  @code{MinLength, TextRange, Capitalize, CheckFunction::Control}
 
 
 
-@pdfsubsubsection {MinLength}
 @deffn {MinLength} MinLength::TextControl
 @sp 2
 @example
@@ -8312,7 +8150,6 @@ See also:  @code{MaxLength, TextRange, Capitalize, CheckFunction::Control}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::TextControl
 @sp 2
 @example
@@ -8350,7 +8187,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {SetStringValue}
 @deffn {SetStringValue} SetStringValue::TextControl
 @sp 2
 @example
@@ -8389,7 +8225,6 @@ See also:  @code{SetValue, StringValue}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::TextControl
 @sp 2
 @example
@@ -8430,7 +8265,6 @@ See also:  @code{SetStringValue, Value, Attach}
 
 
 
-@pdfsubsubsection {StringValue}
 @deffn {StringValue} StringValue::TextControl
 @sp 2
 @example
@@ -8471,7 +8305,6 @@ See also:  @code{Value, Attach, SetStringValue, CtlStringValue::Dialog}
 
 
 
-@pdfsubsubsection {TextRange}
 @deffn {TextRange} TextRange::TextControl
 @sp 2
 @example
@@ -8518,7 +8351,6 @@ See also:  @code{MaxLength, MinLength, Capitalize, CheckFunction::Control}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::TextControl
 @sp 2
 @example
@@ -8554,7 +8386,6 @@ See also:  @code{StringValue, Attach, SetValue}
 
 
 @subsection Numeric Control
-@pdfsubsection{Numeric Control}
 The @code{NumericControl} class is a control which enables the user to
 enter arbitrary numeric data.  This control has numerous facilities to
 control the range and type of input the user is allowed to enter.
@@ -8577,7 +8408,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::NumericControl
 @sp 2
 @example
@@ -8626,7 +8456,6 @@ See also:  @code{Value, DoubleValue, ShortValue, SetValue}
 
 
 
-@pdfsubsubsection {DoubleValue}
 @deffn {DoubleValue} DoubleValue::NumericControl
 @sp 2
 @example
@@ -8651,7 +8480,10 @@ val = gDoubleValue(ctl);
 @end example
 @sp 1
 See also:  @code{Value, Attach, SetDoubleValue, CtlDoubleValue::Dialog}
-@hfil @break @hglue .63in @code{UnsignedShortValue, ShortValue, LongValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{UnsignedShortValue, ShortValue, LongValue}
 @end deffn
 
 
@@ -8664,7 +8496,6 @@ See also:  @code{Value, Attach, SetDoubleValue, CtlDoubleValue::Dialog}
 
 
 
-@pdfsubsubsection {LongValue}
 @deffn {LongValue} LongValue::NumericControl
 @sp 2
 @example
@@ -8689,7 +8520,10 @@ val = gLongValue(ctl);
 @end example
 @sp 1
 See also:  @code{Value, Attach, SetLongValue, CtlLongValue::Dialog}
-@hfil @break @hglue .63in @code{UnsignedShortValue, ShortValue, DoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{UnsignedShortValue, ShortValue, DoubleValue}
 @end deffn
 
 
@@ -8699,7 +8533,6 @@ See also:  @code{Value, Attach, SetLongValue, CtlLongValue::Dialog}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::NumericControl
 @sp 2
 @example
@@ -8736,7 +8569,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {NumericRange}
 @deffn {NumericRange} NumericRange::NumericControl
 @sp 2
 @example
@@ -8782,7 +8614,6 @@ See also:  @code{CheckFunction::Control}
 
 
 
-@pdfsubsubsection {SetDoubleValue}
 @deffn {SetDoubleValue} SetDoubleValue::NumericControl
 @sp 2
 @example
@@ -8812,7 +8643,10 @@ gSetDoubleValue(ctl, 3.14159265358979);
 @end example
 @sp 1
 See also:  @code{SetValue, DoubleValue, CtlDoubleValue::Dialog, SetUShortValue,}
-@hfil @break @hglue .64in   @code{SetShortValue, SetLongValue}
+@iftex
+@hfil @break @hglue .64in   
+@end iftex
+@code{SetShortValue, SetLongValue}
 @end deffn
 
 
@@ -8829,7 +8663,6 @@ See also:  @code{SetValue, DoubleValue, CtlDoubleValue::Dialog, SetUShortValue,}
 
 
 
-@pdfsubsubsection {SetLongValue}
 @deffn {SetLongValue} SetLongValue::NumericControl
 @sp 2
 @example
@@ -8859,7 +8692,10 @@ gSetLongValue(ctl, 66L);
 @end example
 @sp 1
 See also:  @code{SetValue, LongValue, CtlLongValue::Dialog, SetUShortValue,}
-@hfil @break @hglue .63in @code{SetShortValue, SetDoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{SetShortValue, SetDoubleValue}
 @end deffn
 
 
@@ -8875,7 +8711,6 @@ See also:  @code{SetValue, LongValue, CtlLongValue::Dialog, SetUShortValue,}
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::NumericControl
 @sp 2
 @example
@@ -8905,7 +8740,10 @@ gSetShortValue(ctl, 66);
 @end example
 @sp 1
 See also:  @code{SetValue, ShortValue, CtlShortValue::Dialog, SetUShortValue,}
-@hfil @break @hglue .63in @code{SetLongValue, SetDoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{SetLongValue, SetDoubleValue}
 @end deffn
 
 
@@ -8918,7 +8756,6 @@ See also:  @code{SetValue, ShortValue, CtlShortValue::Dialog, SetUShortValue,}
 
 
 
-@pdfsubsubsection {SetUShortValue}
 @deffn {SetUShortValue} SetUShortValue::NumericControl
 @sp 2
 @example
@@ -8948,7 +8785,10 @@ gSetUShortValue(ctl, 66);
 @end example
 @sp 1
 See also:  @code{SetValue, UnsignedShortValue, CtlUnsignedShortValue::Dialog}
-@hfil @break @hglue .63in @code{SetShortValue, SetLongValue, SetDoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{SetShortValue, SetLongValue, SetDoubleValue}
 @end deffn
 
 
@@ -8966,7 +8806,6 @@ See also:  @code{SetValue, UnsignedShortValue, CtlUnsignedShortValue::Dialog}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::NumericControl
 @sp 2
 @example
@@ -9011,7 +8850,6 @@ See also:  @code{Value, SetShortValue, SetUShortValue}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::NumericControl
 @sp 2
 @example
@@ -9036,7 +8874,10 @@ val = gShortValue(ctl);
 @end example
 @sp 1
 See also:  @code{Value, Attach, SetShortValue, CtlShortValue::Dialog}
-@hfil @break @hglue .63in @code{UnsignedShortValue, LongValue, DoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{UnsignedShortValue, LongValue, DoubleValue}
 @end deffn
 
 
@@ -9049,7 +8890,6 @@ See also:  @code{Value, Attach, SetShortValue, CtlShortValue::Dialog}
 
 
 
-@pdfsubsubsection {UnsignedShortValue}
 @deffn {UnsignedShortValue} UnsignedShortValue::NumericControl
 @sp 2
 @example
@@ -9074,7 +8914,10 @@ val = gUnsignedShortValue(ctl);
 @end example
 @sp 1
 See also:  @code{Value, Attach, SetUShortValue, CtlUnsignedShortValue::Dialog}
-@hfil @break @hglue .63in @code{ShortValue, LongValue, DoubleValue}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{ShortValue, LongValue, DoubleValue}
 @end deffn
 
 
@@ -9086,7 +8929,6 @@ See also:  @code{Value, Attach, SetUShortValue, CtlUnsignedShortValue::Dialog}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::NumericControl
 @sp 2
 @example
@@ -9124,7 +8966,6 @@ See also:  @code{ShortValue, DoubleValue, Attach, SetValue}
 
 
 @subsection Date Control
-@pdfsubsection{Date Control}
 The @code{DateControl} class is a control which enables the user to
 enter date information.  The user enters dates in the form mm/dd/yy
 or mm/dd/yyyy, and when the user leaves the field it changes to the
@@ -9154,7 +8995,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::DateControl
 @sp 2
 @example
@@ -9205,7 +9045,6 @@ See also:  @code{Value, LongValue, SetValue, SetLongValue}
 
 
 
-@pdfsubsubsection {DateRange}
 @deffn {DateRange} DateRange::DateControl
 @sp 2
 @example
@@ -9253,7 +9092,6 @@ See also:  @code{CheckFunction::Control}
 
 
 
-@pdfsubsubsection {LongValue}
 @deffn {LongValue} LongValue::DateControl
 @sp 2
 @example
@@ -9290,7 +9128,6 @@ See also:  @code{Value, Attach, SetLongValue, CtlLongValue::Dialog}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::DateControl
 @sp 2
 @example
@@ -9328,7 +9165,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {SetLongValue}
 @deffn {SetLongValue} SetLongValue::DateControl
 @sp 2
 @example
@@ -9373,7 +9209,6 @@ See also:  @code{SetValue, LongValue, CtlLongValue::Dialog}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::DateControl
 @sp 2
 @example
@@ -9419,7 +9254,6 @@ See also:  @code{SetLongValue, Value}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::DateControl
 @sp 2
 @example
@@ -9464,7 +9298,6 @@ See also:  @code{LongValue, Attach, SetValue}
 
 
 @subsection Push Buttons
-@pdfsubsection{Push Buttons}
 The @code{PushButton} class represents a control which allows the user
 to perform an immediate action.  That means that there is no particular
 data associated with the control.  The user pushes the button and an
@@ -9484,7 +9317,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::PushButton
 @sp 2
 @example
@@ -9521,7 +9353,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {Perform}
 @deffn {Perform} Perform::PushButton
 @sp 2
 @example
@@ -9556,7 +9387,6 @@ See also:  @code{SetFunction}
 
 
 
-@pdfsubsubsection {SetFunction}
 @deffn {SetFunction} SetFunction::PushButton
 @sp 2
 @example
@@ -9616,7 +9446,6 @@ See also:  @code{Perform}
 
 
 @subsection Check Boxes
-@pdfsubsection{Check Boxes}
 The @code{CheckBox} class represents a control which allows the user
 to select or de-select a particular option.  Unlike radio buttons,
 check boxes are not mutually exclusive.
@@ -9635,7 +9464,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::CheckBox
 @sp 2
 @example
@@ -9685,7 +9513,6 @@ See also:  @code{Value, ShortValue, SetValue, SetShortValue}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::CheckBox
 @sp 2
 @example
@@ -9720,7 +9547,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::CheckBox
 @sp 2
 @example
@@ -9770,7 +9596,6 @@ See also:  @code{SetValue, ShortValue, CtlShortValue::Dialog}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::CheckBox
 @sp 2
 @example
@@ -9819,7 +9644,6 @@ See also:  @code{SetShortValue, Value}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::CheckBox
 @sp 2
 @example
@@ -9859,7 +9683,6 @@ See also:  @code{Value, Attach, SetShortValue, CtlShortValue::Dialog}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::CheckBox
 @sp 2
 @example
@@ -9904,7 +9727,6 @@ See also:  @code{ShortValue, Attach, SetValue}
 
 
 @subsection Radio Buttons
-@pdfsubsection{Radio Buttons}
 The @code{RadioButton} class represents a control which allows the user
 to select or de-select a particular option.  Unlike check boxes, however,
 radio buttons are mutually exclusive within a group - similar to the
@@ -9926,7 +9748,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::RadioButton
 @sp 2
 @example
@@ -9975,7 +9796,6 @@ See also:  @code{Value, ShortValue, SetValue, SetShortValue}
 
 
 
-@pdfsubsubsection {Group}
 @deffn {Group} Group::RadioButton
 @sp 2
 @example
@@ -10017,7 +9837,6 @@ mGroup(ctl, FIRST_RB, LAST_RB);
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::RadioButton
 @sp 2
 @example
@@ -10052,7 +9871,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog, Group}
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::RadioButton
 @sp 2
 @example
@@ -10102,7 +9920,6 @@ See also:  @code{SetValue, ShortValue, CtlShortValue::Dialog, Group}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::RadioButton
 @sp 2
 @example
@@ -10151,7 +9968,6 @@ See also:  @code{SetShortValue, Value, Group}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::RadioButton
 @sp 2
 @example
@@ -10191,7 +10007,6 @@ See also:  @code{Value, Attach, SetShortValue, CtlShortValue::Dialog}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::RadioButton
 @sp 2
 @example
@@ -10232,7 +10047,6 @@ See also:  @code{ShortValue, Attach, SetValue}
 
 
 @subsection List Boxes
-@pdfsubsection{List Boxes}
 The @code{ListBox} class represents a control which allows the user
 to select from a list of choices.  These choices are presented in
 a vertical, possibly drop down, list of text choices.  This control
@@ -10265,7 +10079,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {AddOption}
 @deffn {AddOption} AddOption::ListBox
 @sp 2
 @example
@@ -10313,7 +10126,6 @@ See also:  @code{Alphabetize::ListBox, AddOptionAt::ListBox}
 
 
 
-@pdfsubsubsection {Alphabetize}
 @deffn {Alphabetize} Alphabetize::ListBox
 @sp 2
 @example
@@ -10352,7 +10164,6 @@ See also:  @code{AddOption::ListBox}
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::ListBox
 @sp 2
 @example
@@ -10413,7 +10224,6 @@ See also:  @code{Value, ShortValue, StringValue}
 
 
 
-@pdfsubsubsection {GetSelections}
 @deffn {GetSelections} GetSelections::ListBox
 @sp 2
 @example
@@ -10458,7 +10268,6 @@ See also:  @code{ValueAt, NumbSelected, Value, ListIndex}
 
 
 
-@pdfsubsubsection {ListIndex}
 @deffn {ListIndex} ListIndex::ListBox
 @sp 2
 @example
@@ -10494,7 +10303,6 @@ See also:  @code{ShortValue, Value, StringValue, GetSelections, SetValue}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::ListBox
 @sp 2
 @example
@@ -10533,7 +10341,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog, AddOption}
 
 
 
-@pdfsubsubsection {NumbSelected}
 @deffn {NumbSelected} NumbSelected::ListBox
 @sp 2
 @example
@@ -10571,7 +10378,6 @@ See also:  @code{GetSelections}
 
 
 
-@pdfsubsubsection {RemoveAll}
 @deffn {RemoveAll} RemoveAll::ListBox
 @sp 2
 @example
@@ -10610,7 +10416,6 @@ See also:  @code{RemoveStr, RemoveInt}
 
 
 
-@pdfsubsubsection {RemoveInt}
 @deffn {RemoveInt} RemoveInt::ListBox
 @sp 2
 @example
@@ -10656,7 +10461,6 @@ See also:  @code{RemoveStr, RemoveAll}
 
 
 
-@pdfsubsubsection {RemoveStr}
 @deffn {RemoveStr} RemoveStr::ListBox
 @sp 2
 @example
@@ -10703,7 +10507,6 @@ See also:  @code{RemoveInt, FindMode}
 
 
 
-@pdfsubsubsection {Required}
 @deffn {Required} Required::ListBox
 @sp 2
 @example
@@ -10741,7 +10544,6 @@ See also:  @code{CheckFunction::Control, CheckValue::Control}
 
 
 
-@pdfsubsubsection {SetFunction}
 @deffn {SetFunction} SetFunction::ListBox
 @sp 2
 @example
@@ -10800,7 +10602,6 @@ See also:  @code{Perform, SetChgFunction}
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::ListBox
 @sp 2
 @example
@@ -10842,7 +10643,6 @@ See also:  @code{SetStringValue, SetValue}
 
 
 
-@pdfsubsubsection {SetStringValue}
 @deffn {SetStringValue} SetStringValue::ListBox
 @sp 2
 @example
@@ -10884,7 +10684,6 @@ See also:  @code{SetShortValue, SetValue}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::ListBox
 @sp 2
 @example
@@ -10939,7 +10738,6 @@ See also:  @code{SetShortValue, SetStringValue}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::ListBox
 @sp 2
 @example
@@ -10978,7 +10776,6 @@ See also:  @code{ListIndex, Value, GetSelections, StringValue, SetValue}
 
 
 
-@pdfsubsubsection {StringValue}
 @deffn {StringValue} StringValue::ListBox
 @sp 2
 @example
@@ -11019,7 +10816,6 @@ See also:  @code{ShortValue, Value, ListIndex, GetSelections, SetValue}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::ListBox
 @sp 2
 @example
@@ -11059,7 +10855,6 @@ See also:  @code{ShortValue, StringValue, ValueAt, ListIndex, GetSelections, Set
 
 
 
-@pdfsubsubsection {ValueAt}
 @deffn {ValueAt} ValueAt::ListBox
 @sp 2
 @example
@@ -11096,7 +10891,6 @@ See also:  @code{ShortValue, Value, ListIndex, GetSelections, SetValue}
 
 
 @subsection Combo Boxes
-@pdfsubsection{Combo Boxes}
 The @code{ComboBox} class represents a control which allows the user to
 select from a list of choices or enter an alternate text string.  These
 choices are presented in a vertical, possibly drop down, list of text
@@ -11126,7 +10920,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {AddEdtHandlerAfter}
 @deffn {AddEdtHandlerAfter} AddEdtHandlerAfter::ComboBox
 @sp 2
 @example
@@ -11211,7 +11004,10 @@ static  long    process_wm_size(object  ctl,
 @end example
 @sp 1
 See also:  @code{DefaultProcessingMode, AddEdtHandlerBefore,}
-@hfil @break @hglue .63in @code{AddHandlerAfter::Control}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{AddHandlerAfter::Control}
 @end deffn
 
 
@@ -11219,7 +11015,6 @@ See also:  @code{DefaultProcessingMode, AddEdtHandlerBefore,}
 
 
 
-@pdfsubsubsection {AddEdtHandlerBefore}
 @deffn {AddEdtHandlerBefore} AddEdtHandlerBefore::ComboBox
 @sp 2
 @example
@@ -11254,7 +11049,6 @@ See also:  @code{AddEdtHandlerAfter, AddHandlerAfter::Control}
 
 
 
-@pdfsubsubsection {AddOption}
 @deffn {AddOption} AddOption::ComboBox
 @sp 2
 @example
@@ -11299,7 +11093,6 @@ See also:  @code{Alphabetize::ComboBox, AddOptionAt::ComboBox}
 
 
 
-@pdfsubsubsection {Alphabetize}
 @deffn {Alphabetize} Alphabetize::ComboBox
 @sp 2
 @example
@@ -11335,7 +11128,6 @@ See also:  @code{AddOption::ComboBox}
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::ComboBox
 @sp 2
 @example
@@ -11392,7 +11184,6 @@ See also:  @code{Value, ShortValue, StringValue}
 
 
 
-@pdfsubsubsection {DefaultEdtProcessingMode}
 @deffn {DefaultEdtProcessingMode} DefaultEdtProcessingMode::ComboBox
 @sp 2
 @example
@@ -11461,7 +11252,6 @@ See also:  @code{AddEdtHandlerAfter}
 
 
 
-@pdfsubsubsection {ListIndex}
 @deffn {ListIndex} ListIndex::ComboBox
 @sp 2
 @example
@@ -11497,7 +11287,6 @@ See also:  @code{ShortValue, Value, StringValue, Attach, SetValue}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::ComboBox
 @sp 2
 @example
@@ -11545,7 +11334,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog, AddOption}
 
 
 
-@pdfsubsubsection {RemoveAll}
 @deffn {RemoveAll} RemoveAll::ComboBox
 @sp 2
 @example
@@ -11585,7 +11373,6 @@ See also:  @code{RemoveStr, RemoveInt}
 
 
 
-@pdfsubsubsection {RemoveInt}
 @deffn {RemoveInt} RemoveInt::ComboBox
 @sp 2
 @example
@@ -11631,7 +11418,6 @@ See also:  @code{RemoveStr, RemoveAll}
 
 
 
-@pdfsubsubsection {RemoveStr}
 @deffn {RemoveStr} RemoveStr::ComboBox
 @sp 2
 @example
@@ -11680,7 +11466,6 @@ See also:  @code{RemoveInt::ComboBox, FindMode::ComboBox}
 
 
 
-@pdfsubsubsection {Required}
 @deffn {Required} Required::ComboBox
 @sp 2
 @example
@@ -11729,7 +11514,6 @@ See also:  @code{CheckFunction::Control, CheckValue::Control}
 
 
 
-@pdfsubsubsection {SetFunction}
 @deffn {SetFunction} SetFunction::ComboBox
 @sp 2
 @example
@@ -11792,7 +11576,6 @@ See also:  @code{Perform, SetChgFunction}
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::ComboBox
 @sp 2
 @example
@@ -11834,7 +11617,6 @@ See also:  @code{SetStringValue, SetValue}
 
 
 
-@pdfsubsubsection {SetStringValue}
 @deffn {SetStringValue} SetStringValue::ComboBox
 @sp 2
 @example
@@ -11876,7 +11658,6 @@ See also:  @code{SetShortValue, SetValue}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::ComboBox
 @sp 2
 @example
@@ -11931,7 +11712,6 @@ See also:  @code{SetShortValue, SetStringValue}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::ComboBox
 @sp 2
 @example
@@ -11970,7 +11750,6 @@ See also:  @code{ListIndex, Value, StringValue, Attach, SetValue}
 
 
 
-@pdfsubsubsection {StringValue}
 @deffn {StringValue} StringValue::ComboBox
 @sp 2
 @example
@@ -12011,7 +11790,6 @@ See also:  @code{ShortValue, Value, ListIndex, Attach, SetValue}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::ComboBox
 @sp 2
 @example
@@ -12048,7 +11826,6 @@ See also:  @code{ShortValue, StringValue, ValueAt, ListIndex, Attach, SetValue}
 
 
 
-@pdfsubsubsection {ValueAt}
 @deffn {ValueAt} ValueAt::ComboBox
 @sp 2
 @example
@@ -12086,7 +11863,6 @@ See also:  @code{ShortValue, Value, ListIndex, SetValue}
 
 
 @subsection Scroll Bars
-@pdfsubsection{Scroll Bars}
 The @code{ScrollBar} class represents a control which allows the user to
 select a number between two ranges via a linear, visually intuitive
 control.  The range defaults to 0 to 100 and may be controlled via
@@ -12108,7 +11884,6 @@ Standard control arguments are documented in the section entitled
 
 
 
-@pdfsubsubsection {Attach}
 @deffn {Attach} Attach::ScrollBar
 @sp 2
 @example
@@ -12154,7 +11929,6 @@ See also:  @code{Value, ShortValue, SetValue, SetShortValue,}
 
 
 
-@pdfsubsubsection {Increment}
 @deffn {Increment} Increment::ScrollBar
 @sp 2
 @example
@@ -12192,7 +11966,6 @@ See also:  @code{SetShortValue, SetValue, ScrollBarRange}
 
 
 
-@pdfsubsubsection {NewCtl}
 @deffn {NewCtl} NewCtl::ScrollBar
 @sp 2
 @example
@@ -12226,7 +11999,6 @@ See also:  @code{AddControl::Dialog, GetControl::Dialog}
 
 
 
-@pdfsubsubsection {ScollBarRange}
 @deffn {ScrollBarRange} ScrollBarRange::ScrollBar
 @sp 2
 @example
@@ -12287,7 +12059,6 @@ gScrollBarRange(ctl, 0, 100, 10, 2);
 
 
 
-@pdfsubsubsection {SetShortValue}
 @deffn {SetShortValue} SetShortValue::ScrollBar
 @sp 2
 @example
@@ -12333,7 +12104,6 @@ See also:  @code{SetValue, Increment, CtlShortValue::Dialog,}
 
 
 
-@pdfsubsubsection {SetValue}
 @deffn {SetValue} SetValue::ScrollBar
 @sp 2
 @example
@@ -12382,7 +12152,6 @@ See also:  @code{SetShortValue, Increment, Value, ScrollBarRange}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::ScrollBar
 @sp 2
 @example
@@ -12420,7 +12189,6 @@ See also:  @code{Value, Attach, SetShortValue, CtlShortValue::Dialog}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::ScrollBar
 @sp 2
 @example
@@ -12462,11 +12230,9 @@ See also:  @code{ShortValue, Attach, SetValue}
 
 
 @subsection Custom Controls
-@pdfsubsection{Custom Controls}
 
 
 @section Cursors
-@pdfsection{Cursors}
 The @code{Cursor} class (as well as its subclasses) are used to represent
 cursor objects.  This class is never used by an application.  It is used
 to house the functionality common to its subclasses.  Therefore, this
@@ -12481,10 +12247,8 @@ Note that a more convenient mechanism for using cursors is provided by
 
 
 
-@pdfsubsection {Common Cursor Functions}
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Cursor
 @sp 2
 @example
@@ -12525,7 +12289,6 @@ See also:  @code{DeepCopy}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Cursor
 @sp 2
 This method performs the same function as @code{Copy}.  See that
@@ -12541,7 +12304,6 @@ method for details.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Cursor
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -12554,7 +12316,6 @@ method for details.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Cursor
 @sp 2
 @example
@@ -12595,7 +12356,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Cursor
 @sp 2
 @example
@@ -12635,7 +12395,6 @@ h = gHandle(csr);
 
 
 @subsection System Cursors
-@pdfsubsection{System Cursors}
 The @code{SystemCursor} class represents Windows predefined cursors.
 This class is a subclass of @code{Cursor} and as such inherits most
 of its functionality from it.  This section documents the methods
@@ -12652,7 +12411,6 @@ functionality.
 
 
 
-@pdfsubsubsection {LoadSys}
 @deffn {LoadSys} LoadSys::SystemCursor
 @sp 2
 @example
@@ -12686,7 +12444,6 @@ See also:  @code{LoadSystemCursor::Window, SetCursor::Application}
 
 
 @subsection External Cursors
-@pdfsubsection{External Cursors}
 The @code{ExternalCursor} class represents arbitrary application defined
 cursors.  This class is a subclass of @code{Cursor} and as such inherits
 most of its functionality from it.  This section documents the methods
@@ -12698,7 +12455,6 @@ functionality.
 
 
 
-@pdfsubsubsection {Load}
 @deffn {Load} Load::ExternalCursor
 @sp 2
 @example
@@ -12741,7 +12497,6 @@ See also:  @code{LoadCursor::Window, SetCursor::Application}
 
 
 
-@pdfsubsubsection {LoadStr}
 @deffn {LoadStr} LoadStr::ExternalCursor
 @sp 2
 @example
@@ -12778,7 +12533,6 @@ See also:  @code{LoadCursor::Window, SetCursor::Application,}
 
 
 @section Icons
-@pdfsection{Icons}
 The @code{Icon} class (as well as its subclasses) are used to represent
 icon objects.  This class is never used by an application.  It is used
 to house the functionality common to its subclasses.  Therefore, this
@@ -12792,11 +12546,9 @@ Note that a more convenient mechanism for using icons is provided by
 
 
 
-@pdfsubsection {Common Icon Functions}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Icon
 @sp 2
 @example
@@ -12837,7 +12589,6 @@ See also:  @code{DeepCopy}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Icon
 @sp 2
 This method performs the same function as @code{Copy}.  See that
@@ -12853,7 +12604,6 @@ method for details.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Icon
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -12866,7 +12616,6 @@ method for details.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Icon
 @sp 2
 @example
@@ -12907,7 +12656,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Icon
 @sp 2
 @example
@@ -12947,7 +12695,6 @@ h = gHandle(icn);
 
 
 @subsection System Icons
-@pdfsubsection{System Icons}
 The @code{SystemIcon} class represents Windows predefined icons.
 This class is a subclass of @code{Icon} and as such inherits most
 of its functionality from it.  This section documents the methods
@@ -12964,7 +12711,6 @@ functionality.
 
 
 
-@pdfsubsubsection {LoadSys}
 @deffn {LoadSys} LoadSys::SystemIcon
 @sp 2
 @example
@@ -12998,7 +12744,6 @@ See also:  @code{LoadSystemIcon::Window, SetIcon::Application}
 
 
 @subsection External Icons
-@pdfsubsection{External Icons}
 The @code{ExternalIcon} class represents arbitrary application defined
 icons.  This class is a subclass of @code{Icon} and as such inherits
 most of its functionality from it.  This section documents the methods
@@ -13010,7 +12755,6 @@ functionality.
 
 
 
-@pdfsubsubsection {Load}
 @deffn {Load} Load::ExternalIcon
 @sp 2
 @example
@@ -13053,7 +12797,6 @@ See also:  @code{LoadIcon::Window, SetIcon::Application}
 
 
 
-@pdfsubsubsection {LoadStr}
 @deffn {LoadStr} LoadStr::ExternalIcon
 @sp 2
 @example
@@ -13091,7 +12834,6 @@ See also:  @code{LoadIcon::Window, SetIcon::Application,}
 
 
 @section Fonts
-@pdfsection{Fonts}
 The @code{Font} class (as well as its subclasses) are used to represent
 font objects.  This class is never used by an application.  It is used
 to house the functionality common to its subclasses.  Therefore, this
@@ -13106,12 +12848,10 @@ and @code{LoadSystemFont::Printer}.
 
 
 
-@pdfsubsection {Common Font Functions}
 
 
 
 
-@pdfsubsubsection {AveCharWidth}
 @deffn {AveCharWidth} AveCharWidth::Font
 @sp 2
 @example
@@ -13147,7 +12887,6 @@ See also:  @code{LineHeight, GetTM}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Font
 @sp 2
 @example
@@ -13378,7 +13117,6 @@ See also:  @code{AveCharWidth, GetTM}
 
 
 @subsection System Fonts
-@pdfsubsection{System Fonts}
 The @code{SystemFont} class represents Windows predefined fonts.
 This class is a subclass of @code{Font} and as such inherits most
 of its functionality from it.  This section documents the methods
@@ -13392,7 +13130,6 @@ functionality.
 
 
 
-@pdfsubsubsection {Load}
 @deffn {Load} Load::SystemFont
 @sp 2
 @example
@@ -13419,7 +13156,10 @@ fnt = mLoad(SystemFont, ANSI_FIXED_FONT);
 @end example
 @sp 1
 See also:  @code{LoadSystemFont::Window, LoadSystemFont::Printer,}
-@hfil @break @hglue .63in @code{SetFont::Application, Use::Window, Use::Printer}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{SetFont::Application, Use::Window, Use::Printer}
 @end deffn
 
 
@@ -13433,7 +13173,6 @@ See also:  @code{LoadSystemFont::Window, LoadSystemFont::Printer,}
 
 
 @subsection External Fonts
-@pdfsubsection{External Fonts}
 The @code{ExternalFont} class represents arbitrary external fonts.  This
 class is a subclass of @code{Font} and as such inherits most of its
 functionality from it.  This section documents the methods particular to
@@ -13447,7 +13186,6 @@ this class.  See the @code{Font} class for additional functionality.
 
 
 
-@pdfsubsubsection {Indirect}
 @deffn {Indirect} Indirect::ExternalFont
 @sp 2
 @example
@@ -13478,7 +13216,10 @@ fnt = gIndirect(ExternalFont, &lf);
 @end example
 @sp 1
 See also:  @code{LoadFont::Window, LoadFont::Printer, SetFont::Application,}
-@hfil @break @hglue .63in @code{Use::Window, Use::Printer}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{Use::Window, Use::Printer}
 @end deffn
 
 
@@ -13490,7 +13231,6 @@ See also:  @code{LoadFont::Window, LoadFont::Printer, SetFont::Application,}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::ExternalFont
 @sp 2
 @example
@@ -13523,7 +13263,10 @@ fnt = vNew(ExternalFont, "Times New Roman", 12);
 @end example
 @sp 1
 See also:  @code{LoadFont::Window, LoadFont::Printer, SetFont::Application,}
-@hfil @break @hglue .63in @code{Use::Window, Use::Printer}
+@iftex
+@hfil @break @hglue .63in 
+@end iftex
+@code{Use::Window, Use::Printer}
 @end deffn
 
 
@@ -13535,7 +13278,6 @@ See also:  @code{LoadFont::Window, LoadFont::Printer, SetFont::Application,}
 
 
 @section Brushes
-@pdfsection{Brushes}
 The @code{Brush} class (as well as its subclasses) are used to represent
 brush objects.  This class is never used by an application.  It is used
 to house the functionality common to its subclasses.  Therefore, this
@@ -13546,11 +13288,9 @@ class documents functionality which is common to all of its subclasses.
 
 
 
-@pdfsubsection {Common Brush Functions}
 
 
 
-@pdfsubsubsection {Color}
 @deffn {Color} Color::Brush
 @sp 2
 @example
@@ -13585,7 +13325,6 @@ c = gColor(bsh);
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Brush
 @sp 2
 @example
@@ -13625,7 +13364,6 @@ See also:  @code{DeepCopy}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Brush
 @sp 2
 This method performs the same function as @code{Copy}.  See that
@@ -13636,7 +13374,6 @@ method for details.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Brush
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -13649,7 +13386,6 @@ method for details.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Brush
 @sp 2
 @example
@@ -13686,7 +13422,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Brush
 @sp 2
 @example
@@ -13725,7 +13460,6 @@ h = gHandle(bsh);
 
 
 @subsection Stock Brushes
-@pdfsubsection{Stock Brushes}
 The @code{StockBrush} class represents common Windows defined brushes.  This
 class is a subclass of @code{Brush} and as such inherits most of its
 functionality from it.  This section documents the methods particular to
@@ -13736,7 +13470,6 @@ this class.  See the @code{Brush} class for additional functionality.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::StockBrush
 @sp 2
 @example
@@ -13776,7 +13509,6 @@ See also:  @code{TextBrush::Window, BackBrush::Window,}
 
 
 @subsection Solid Brushes
-@pdfsubsection{Solid Brushes}
 The @code{SolidBrush} class represents arbitrary application defined
 brushes.  This class is a subclass of @code{Brush} and as such inherits
 most of its functionality from it.  This section documents the methods
@@ -13788,7 +13520,6 @@ functionality.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::SolidBrush
 @sp 2
 @example
@@ -13826,7 +13557,6 @@ See also:  @code{TextBrush::Window, BackBrush::Window,}
 
 
 @subsection System Brushes
-@pdfsubsection{System Brushes}
 The @code{SystemBrush} class represents brushes which are those colors
 which were selected by the user as global to their Windows environment.
 The programmer may select, for example, the color the user chose for
@@ -13844,7 +13574,6 @@ functionality.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::SystemBrush
 @sp 2
 @example
@@ -13885,7 +13614,6 @@ See also:  @code{TextBrush::Window, BackBrush::Window,}
 
 
 @subsection Hatch Brushes
-@pdfsubsection{Hatch Brushes}
 The @code{HatchBrush} class represents arbitrary application defined
 brushes with a specified pattern.  This class is a subclass of
 @code{Brush} and as such inherits most of its functionality from it.
@@ -13897,7 +13625,6 @@ This section documents the methods particular to this class.  See the
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::HatchBrush
 @sp 2
 @example
@@ -13945,7 +13672,6 @@ See also:  @code{TextBrush::Window, BackBrush::Window,}
 
 
 @section Pens
-@pdfsection{Pens}
 The @code{Pen} class (as well as its subclasses) are used to represent
 pen objects.  This class is never used by an application.  It is used
 to house the functionality common to its subclasses.  Therefore, this
@@ -13955,12 +13681,10 @@ class documents functionality which is common to all of its subclasses.
 
 
 
-@pdfsubsection {Common Pen Functions}
 
 
 
 
-@pdfsubsubsection {Color}
 @deffn {Color} Color::Pen
 @sp 2
 @example
@@ -13995,7 +13719,6 @@ c = gColor(pn);
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Pen
 @sp 2
 @example
@@ -14035,7 +13758,6 @@ See also:  @code{DeepCopy}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Pen
 @sp 2
 This method performs the same function as @code{Copy}.  See that
@@ -14046,7 +13768,6 @@ method for details.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Pen
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -14059,7 +13780,6 @@ method for details.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Pen
 @sp 2
 @example
@@ -14096,7 +13816,6 @@ See also:  @code{DeepDispose}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::Pen
 @sp 2
 @example
@@ -14136,7 +13855,6 @@ h = gHandle(pn);
 
 
 @subsection Stock Pens
-@pdfsubsection{Stock Pens}
 The @code{StockPen} class represents common Windows defined pens.  This
 class is a subclass of @code{Pen} and as such inherits most of its
 functionality from it.  This section documents the methods particular to
@@ -14147,7 +13865,6 @@ this class.  See the @code{Pen} class for additional functionality.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::StockPen
 @sp 2
 @example
@@ -14184,7 +13901,6 @@ See also:  @code{Use::Printer}
 
 
 @subsection Custom Pens
-@pdfsubsection{Custom Pens}
 The @code{CustomPen} class represents arbitrary application defined pens
 with a specified pattern and width.  This class is a subclass of
 @code{Pen} and as such inherits most of its functionality from it.  This
@@ -14196,7 +13912,6 @@ section documents the methods particular to this class.  See the
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::CustomPen
 @sp 2
 @example
@@ -14241,7 +13956,6 @@ See also:  @code{Use::Printer}
 
 
 @section Help System
-@pdfsection{Help System}
 The @code{HelpSystem} class is used to support the standard Windows
 help system.  In addition to being able to support arbitrary evocation
 of help messages, this class is used by other WDS classes in order to
@@ -14270,7 +13984,6 @@ create the actual help file.
 
 
 
-@pdfsubsection {HelpContents}
 @deffn {HelpContents} HelpContents::HelpSystem
 @sp 2
 @example
@@ -14308,7 +14021,6 @@ See also:  @code{HelpFile, HelpTopic, HelpInContext}
 
 
 
-@pdfsubsection {HelpFile}
 @deffn {HelpFile} HelpFile::HelpSystem
 @sp 2
 @example
@@ -14349,7 +14061,6 @@ See also:  @code{HelpContents}
 
 
 
-@pdfsubsection {HelpInContext}
 @deffn {HelpInContext} HelpInContext::HelpSystem
 @sp 2
 @example
@@ -14386,7 +14097,6 @@ See also:  @code{HelpFile, SetTopic, HelpContents, HelpTopic}
 
 
 
-@pdfsubsection {HelpTopic}
 @deffn {HelpTopic} HelpTopic::HelpSystem
 @sp 2
 @example
@@ -14398,7 +14108,10 @@ object  r;      /*  HelpSystem  */
 @end group
 @end example
 This method is used to display the help screen associated with a given topic.
-@hfil @break @code{HelpSystem} will be returned if the request is successful
+@iftex
+@hfil @break 
+@end iftex
+@code{HelpSystem} will be returned if the request is successful
 and @code{NULL} otherwise.
 @example
 @group
@@ -14424,7 +14137,6 @@ See also:  @code{HelpFile, HelpContents, HelpInContext}
 
 
 
-@pdfsubsection {SetTopic}
 @deffn {SetTopic} SetTopic::HelpSystem
 @sp 2
 @example
@@ -14465,7 +14177,6 @@ See also:  @code{HelpFile, HelpInContext, HelpContents, HelpTopic}
 
 
 @section Common Dialogs
-@pdfsection{Common Dialogs}
 The @code{CommonDialog} class is only used to group the common dialogs
 which are all subclasses of this class.  There is no specific
 functionality associated with this class.  See the particular subclasses
@@ -14477,7 +14188,6 @@ for documentation.
 
 
 @subsection File Selection Dialog
-@pdfsubsection{File Selection Dialog}
 The @code{FileDialog} class provides a standard and convenient method of
 querying the user for a file name.  The user is able to browse the disk
 or enter a new file name.
@@ -14498,7 +14208,6 @@ the file dialog object returned by the @code{New} method.
 
 
 
-@pdfsubsubsection {AppendFilter}
 @deffn {AppendFilter} AppendFilter::FileDialog
 @sp 2
 @example
@@ -14548,7 +14257,6 @@ See also:  @code{SetFile, InitialDir, DefExt}
 
 
 
-@pdfsubsubsection {DefExt}
 @deffn {DefExt} DefExt::FileDialog
 @sp 2
 @example
@@ -14580,7 +14288,6 @@ See also:  @code{SetFile, AppendFilter}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::FileDialog
 @sp 2
 @example
@@ -14620,7 +14327,6 @@ fd = gDispose(fd);
 
 
 
-@pdfsubsubsection {GetFile}
 @deffn {GetFile} GetFile::FileDialog
 @sp 2
 @example
@@ -14663,7 +14369,6 @@ See also:  @code{GetOpenFile, GetSaveFile, SetFile, SetFlags}
 
 
 
-@pdfsubsubsection {InitialDir}
 @deffn {InitialDir} InitialDir::FileDialog
 @sp 2
 @example
@@ -14697,7 +14402,6 @@ See also:  @code{SetFile, AppendFilter, DefExt}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::FileDialog
 @sp 2
 @example
@@ -14731,7 +14435,6 @@ See also:  @code{Dispose, GetOpenFile, GetSaveFile}
 
 
 
-@pdfsubsubsection {GetOpenFile}
 @deffn {GetOpenFile} GetOpenFile::FileDialog
 @sp 2
 @example
@@ -14767,7 +14470,6 @@ See also:  @code{GetSaveFile}
 
 
 
-@pdfsubsubsection {GetSaveFile}
 @deffn {GetSaveFile} GetSaveFile::FileDialog
 @sp 2
 @example
@@ -14806,7 +14508,6 @@ See also:  @code{GetOpenFile}
 
 
 
-@pdfsubsubsection {SetFile}
 @deffn {SetFile} SetFile::FileDialog
 @sp 2
 @example
@@ -14839,7 +14540,6 @@ See also:  @code{InitialDir, GetFile, SetFlags, DefExt}
 
 
 
-@pdfsubsubsection {SetFlags}
 @deffn {SetFlags} SetFlags::FileDialog
 @sp 2
 @example
@@ -14881,7 +14581,6 @@ See also:  @code{SetFile, DefExt}
 
 
 
-@pdfsubsubsection {SetTitle}
 @deffn {SetTitle} SetTitle::FileDialog
 @sp 2
 @example
@@ -14913,7 +14612,6 @@ See also:  @code{SetFile, AppendFilter, DefExt}
 
 
 @subsection Printer Selection and Configuration Dialog
-@pdfsubsection{Printer Selection and Configuration Dialog}
 The @code{PrintDialog} class is used to present the user with a standard
 and convenient dialog for printer selection and configuration.
 
@@ -14939,7 +14637,6 @@ the print dialog object returned by the @code{New} method.
 
 
 
-@pdfsubsubsection {Copies}
 @deffn {Copies} Copies::PrintDialog
 @sp 2
 @example
@@ -14974,7 +14671,6 @@ See also:  @code{Perform, SetFlags, GetPageRange}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::PrintDialog
 @sp 2
 @example
@@ -15014,7 +14710,6 @@ See also:  @code{New, Perform}
 
 
 
-@pdfsubsubsection {GetPageRange}
 @deffn {GetPageRange} GetPageRange::PrintDialog
 @sp 2
 @example
@@ -15053,7 +14748,6 @@ See also:  @code{Perform, SetFlags, Copies}
 
 
 
-@pdfsubsubsection {Handle}
 @deffn {Handle} Handle::PrintDialog
 @sp 2
 @example
@@ -15097,7 +14791,6 @@ See also:  @code{Perform}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::PrintDialog
 @sp 2
 @example
@@ -15138,7 +14831,6 @@ See also:  @code{Perform, Dispose}
 
 
 
-@pdfsubsubsection {Perform}
 @deffn {Perform} Perform::PrintDialog
 @sp 2
 @example
@@ -15172,7 +14864,6 @@ See also:  @code{New, Dispose}
 
 
 
-@pdfsubsubsection {SetFlags}
 @deffn {SetFlags} SetFlags::PrintDialog
 @sp 2
 @example
@@ -15214,7 +14905,6 @@ gSetFlags(pd, PD_ALLPAGES);
 
 
 @subsection Color Selection Dialog
-@pdfsubsection{Color Selection Dialog}
 The @code{ColorDialog} class is used to present the user with a standard
 and convenient dialog for color selection and configuration.
 
@@ -15229,7 +14919,6 @@ the color dialog object returned by the @code{New} method.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::ColorDialog
 @sp 2
 @example
@@ -15267,7 +14956,6 @@ See also:  @code{New, Perform}
 
 
 
-@pdfsubsubsection {GetColor}
 @deffn {GetColor} GetColor::ColorDialog
 @sp 2
 @example
@@ -15306,7 +14994,6 @@ See also:  @code{Perform, SetColor, GetCustomColorPtr}
 
 
 
-@pdfsubsubsection {GetCustomColorPtr}
 @deffn {GetCustomColorPtr} GetCustomColorPtr::ColorDialog
 @sp 2
 @example
@@ -15355,7 +15042,6 @@ See also:  @code{Perform, GetColor}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::ColorDialog
 @sp 2
 @example
@@ -15393,7 +15079,6 @@ See also:  @code{Perform, Dispose}
 
 
 
-@pdfsubsubsection {Perform}
 @deffn {Perform} Perform::ColorDialog
 @sp 2
 @example
@@ -15430,7 +15115,6 @@ See also:  @code{New, Dispose}
 
 
 
-@pdfsubsubsection {SetColor}
 @deffn {SetColor} SetColor::ColorDialog
 @sp 2
 @example
@@ -15472,7 +15156,6 @@ See also:  @code{Perform, GetColor}
 
 
 
-@pdfsubsubsection {SetFlags}
 @deffn {SetFlags} SetFlags::ColorDialog
 @sp 2
 @example
@@ -15511,7 +15194,6 @@ gSetFlags(cd, CC_FULLOPEN);
 
 
 @subsection Font Selection Dialog
-@pdfsubsection{Font Selection Dialog}
 The @code{FontDialog} class is used to present the user with a standard
 and convenient dialog for font selection.
 
@@ -15525,7 +15207,6 @@ the font dialog object returned by the @code{New} method.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::FontDialog
 @sp 2
 @example
@@ -15565,7 +15246,6 @@ See also:  @code{New, Perform}
 
 
 
-@pdfsubsubsection {Font}
 @deffn {Font} Font::FontDialog
 @sp 2
 @example
@@ -15605,7 +15285,6 @@ See also:  @code{Perform}
 
 
 
-@pdfsubsubsection {GetColor}
 @deffn {GetColor} GetColor::FontDialog
 @sp 2
 @example
@@ -15646,7 +15325,6 @@ See also:  @code{SetFlags, SetColor, Perform}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::FontDialog
 @sp 2
 @example
@@ -15684,7 +15362,6 @@ See also:  @code{Perform, Dispose}
 
 
 
-@pdfsubsubsection {Perform}
 @deffn {Perform} Perform::FontDialog
 @sp 2
 @example
@@ -15721,7 +15398,6 @@ See also:  @code{New, Dispose}
 
 
 
-@pdfsubsubsection {SetColor}
 @deffn {SetColor} SetColor::FontDialog
 @sp 2
 @example
@@ -15759,7 +15435,6 @@ See also:  @code{SetFlags, GetColor, Perform}
 
 
 
-@pdfsubsubsection {SetFlags}
 @deffn {SetFlags} SetFlags::FontDialog
 @sp 2
 @example
@@ -15793,7 +15468,6 @@ gSetFlags(fd, CF_ANSIONLY);
 
 
 @section Dynamic Link Libraries
-@pdfsection{Dynamic Link Libraries}
 The @code{DynamicLibrary} class is used to support the dynamic link
 library (DLL) facility of Windows.  This class provides a convenient
 mechanism to load, free and use DLLs.
@@ -15808,7 +15482,6 @@ returned by the @code{LoadLibrary} method and represents a DLL.
 
 
 
-@pdfsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::DynamicLibrary
 @sp 2
 This method performs the same function as @code{Dispose}.  See that
@@ -15821,7 +15494,6 @@ method for details.
 
 
 
-@pdfsubsection {Dispose}
 @deffn {Dispose} Dispose::DynamicLibrary
 @sp 2
 @example
@@ -15860,7 +15532,6 @@ See also:  @code{FreeAll, DeepDispose}
 
 
 
-@pdfsubsection {FindStr}
 @deffn {FindStr} FindStr::DynamicLibrary
 @sp 2
 @example
@@ -15872,7 +15543,10 @@ object  dl;     /*  DLL object     */
 @end group
 @end example
 This class method is used to obtain the DLL object (previously loaded via
-@break @code{LoadLibrary}) via its associated file name.  This won't work
+@iftex
+@break 
+@end iftex
+@code{LoadLibrary}) via its associated file name.  This won't work
 after the DLL object is disposed.
 @example
 @group
@@ -15896,7 +15570,6 @@ See also:  @code{LoadLibrary}
 
 
 
-@pdfsubsection {FreeAll}
 @deffn {FreeAll} FreeAll::DynamicLibrary
 @sp 2
 @example
@@ -15928,7 +15601,6 @@ See also:  @code{Dispose, DeepDispose}
 
 
 
-@pdfsubsection {GetProcAddress}
 @deffn {GetProcAddress} GetProcAddress::DynamicLibrary
 @sp 2
 @example
@@ -15965,7 +15637,6 @@ See also:  @code{FindStr, LoadLibrary}
 
 
 
-@pdfsubsection {LoadLibrary}
 @deffn {LoadLibrary} LoadLibrary::DynamicLibrary
 @sp 2
 @example

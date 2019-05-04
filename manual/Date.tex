@@ -1,7 +1,6 @@
 @page
 
 @section Date Class
-@pdfsection{Date Class}
 The @code{Date} class is a subclass of the @code{LongInteger}
 class and used to represent dates.  The equivalent C language
 representation would be a long integer in the form @code{YYYYMMDD}
@@ -12,7 +11,6 @@ so July 23, 1993 would be represented as 19930723L.
 
 
 @subsection Date Class Methods
-@pdfsubsection{Date Class Methods}
 The @code{Date} class has only one class method.  The @code{New}
 method is inherited from the @code{LongInteger} class.
 
@@ -21,7 +19,6 @@ method is inherited from the @code{LongInteger} class.
 
 
 
-@pdfsubsubsection {CalToJul}
 @deffn {CalToJul} CalToJul::Date
 @sp 2
 @example
@@ -52,7 +49,6 @@ See also:  @code{JulToCal::Date, Julian::Date}
 
 
 
-@pdfsubsubsection {FixInvalidDate}
 @deffn {FixInvalidDate} FixInvalidDate::Date
 @sp 2
 @example
@@ -93,7 +89,6 @@ x = gFixInvalidDate(Date, 1);   /*  x = the previous mode */
 
 
 
-@pdfsubsubsection {JulToCal}
 @deffn {JulToCal} JulToCal::Date
 @sp 2
 @example
@@ -125,7 +120,6 @@ See also:  @code{CalToJul::Date, Julian::Date}
 
 
 
-@pdfsubsubsection {Today}
 @deffn {Today} Today::Date
 @sp 2
 @example
@@ -160,7 +154,6 @@ See also:  @code{FormatDate::Date, Dispose::Object}
 
 
 @subsection Date Instance Methods
-@pdfsubsection{Date Instance Methods}
 A portion of the @code{Date} class's functionality is obtained through
 its inheritance of the @code{LongInteger} class.  The remaining
 functionality is defined by the following specific methods.
@@ -171,7 +164,6 @@ functionality is defined by the following specific methods.
 
 
 
-@pdfsubsubsection {AddDays}
 @deffn {AddDays} AddDays::Date
 @sp 2
 @example
@@ -206,7 +198,6 @@ See also:  @code{AddMonths::Date, AddYears::Date}
 
 
 
-@pdfsubsubsection {AddMonths}
 @deffn {AddMonths} AddMonths::Date
 @sp 2
 @example
@@ -244,7 +235,6 @@ See also:  @code{AddDays::Date, AddYears::Date}
 
 
 
-@pdfsubsubsection {AddYears}
 @deffn {AddYears} AddYears::Date
 @sp 2
 @example
@@ -280,7 +270,6 @@ See also:  @code{AddDays::Date, AddMonths::Date}
 
 
 
-@pdfsubsubsection {ChangeDateValue}
 @deffn {ChangeDateValue} ChangeDateValue::Date
 @sp 2
 @example
@@ -314,7 +303,6 @@ See also:  @code{ChangeLongValue::Number}
 
 
 
-@pdfsubsubsection {DateValue}
 @deffn {DateValue} DateValue::Date
 @sp 2
 @example
@@ -354,7 +342,6 @@ See also:  @code{LongValue::Number}
 
 
 
-@pdfsubsubsection {DayName}
 @deffn {DayName} DayName::Date
 @sp 2
 @example
@@ -390,7 +377,6 @@ See also:  @code{FormatDate::Date, MonthName::Date}
 
 
 
-@pdfsubsubsection {Difference}
 @deffn {Difference} Difference::Date
 @sp 2
 @example
@@ -427,7 +413,6 @@ r = gDifference(dt2, dt1);    /*  r = 31L  */
 
 
 
-@pdfsubsubsection {FormatDate}
 @deffn {FormatDate} FormatDate::Date
 @sp 2
 @example
@@ -490,7 +475,6 @@ See also:  @code{MonthName::Date, DayName::Date}
 
 
 
-@pdfsubsubsection {Julian}
 @deffn {Julian} Julian::Date
 @sp 2
 @example
@@ -524,7 +508,6 @@ See also:  @code{CalToJul::Date, JulToCal::Date}
 
 
 
-@pdfsubsubsection {MonthName}
 @deffn {MonthName} MonthName::Date
 @sp 2
 @example
@@ -560,7 +543,6 @@ See also:  @code{FormatDate::Date, DayName::Date}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Date
 @sp 2
 @example
@@ -601,7 +583,6 @@ See also:  @code{PrintValue::Object, Print::Object, FormatDate::Date}
 
 
 
-@pdfsubsubsection {ValidDate}
 @deffn {ValidDate} ValidDate::Date
 @sp 2
 @example

@@ -1,7 +1,6 @@
 @page
 
 @section DateTime Class
-@pdfsection{DateTime Class}
 The @code{DateTime} class uses multiple inheritance to inherit
 from both the @code{Date} and the @code{Time} classes and is
 used to represent precise moments in time.
@@ -11,7 +10,6 @@ used to represent precise moments in time.
 
 
 @subsection DateTime Class Methods
-@pdfsubsection{DateTime Class Methods}
 The @code{DateTime} class has two class methods to create instances.
 
 
@@ -19,7 +17,6 @@ The @code{DateTime} class has two class methods to create instances.
 
 
 
-@pdfsubsubsection {NewDateTime}
 @deffn {NewDateTime} NewDateTime::DateTime
 @sp 2
 @example
@@ -56,7 +53,6 @@ See also:  @code{Now::DateTime, Dispose::Object}
 
 
 
-@pdfsubsubsection {Now}
 @deffn {Now} Now::DateTime
 @sp 2
 @example
@@ -91,7 +87,6 @@ See also:  @code{NewDateTime::DateTime, Dispose::Object}
 
 
 @subsection DateTime Instance Methods
-@pdfsubsection{DateTime Instance Methods}
 A portion of the @code{DateTime} class's functionality is obtained through
 its inheritance of the @code{Date} class and of the @code{Time}.  The
 remaining functionality is defined by the following specific methods.
@@ -102,7 +97,6 @@ remaining functionality is defined by the following specific methods.
 
 
 
-@pdfsubsubsection {AddHours}
 @deffn {AddHours} AddHours::DateTime
 @sp 2
 @example
@@ -131,7 +125,10 @@ gAddHours(d, 2L);
 @end example
 @sp 1
 See also:  @code{AddMilliseconds::DateTime, AddMinutes::DateTime,}
-@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{AddSeconds::DateTime}
 @end deffn
 
 
@@ -141,7 +138,6 @@ See also:  @code{AddMilliseconds::DateTime, AddMinutes::DateTime,}
 
 
 
-@pdfsubsubsection {AddMilliseconds}
 @deffn {AddMilliseconds} AddMilliseconds::DateTime
 @sp 2
 @example
@@ -171,7 +167,10 @@ gAddMilliseconds(d, 20L);
 @end example
 @sp 1
 See also:  @code{AddHours::DateTime, AddMinutes::DateTime,}
-@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{AddSeconds::DateTime}
 @end deffn
 
 
@@ -184,7 +183,6 @@ See also:  @code{AddHours::DateTime, AddMinutes::DateTime,}
 
 
 
-@pdfsubsubsection {AddMinutes}
 @deffn {AddMinutes} AddMinutes::DateTime
 @sp 2
 @example
@@ -213,7 +211,10 @@ gAddMinutes(d, 20L);
 @end example
 @sp 1
 See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
-@hfil @break @hglue .64in      @code{AddSeconds::DateTime}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{AddSeconds::DateTime}
 @end deffn
 
 
@@ -226,7 +227,6 @@ See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
 
 
 
-@pdfsubsubsection {AddSeconds}
 @deffn {AddSeconds} AddSeconds::DateTime
 @sp 2
 @example
@@ -256,7 +256,10 @@ gAddSeconds(d, 20L);
 @end example
 @sp 1
 See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
-@hfil @break @hglue .64in      @code{AddMinutes::DateTime}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{AddMinutes::DateTime}
 @end deffn
 
 
@@ -268,7 +271,6 @@ See also:  @code{AddHours::DateTime, AddMilliseconds::DateTime,}
 
 
 
-@pdfsubsubsection {ChangeDateTimeValues}
 @deffn {ChangeDateTimeValues} ChangeDateTimeValues::DateTime
 @sp 2
 @example
@@ -307,7 +309,6 @@ See also:  @code{ChangeLongValue::DateTime, NewDateTime::DateTime}
 
 
 
-@pdfsubsubsection {ChangeLongValue}
 @deffn {ChangeLongValue} ChangeLongValue::DateTime
 @sp 2
 @example
@@ -347,7 +348,6 @@ See also:  @code{ChangeDateTimeValues::DateTime, NewDateTime::DateTime}
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::DateTime
 @sp 2
 @example
@@ -380,7 +380,6 @@ See also:  @code{Hash::DateTime}
 
 
 
-@pdfsubsubsection {DateTimeDifference}
 @deffn {DateTimeDifference} DateTimeDifference::DateTime
 @sp 2
 @example
@@ -418,7 +417,6 @@ gDateTimeDifference(d2, d1, &dd, &td);
 
 
 
-@pdfsubsubsection {DateTimeValues}
 @deffn {DateTimeValues} DateTimeValues::DateTime
 @sp 2
 @example
@@ -457,7 +455,6 @@ See also:  @code{NewDateTime::DateTime, ChangeDateTimeValues::Time}
 
 
 
-@pdfsubsubsection {FormatDateTime}
 @deffn {FormatDateTime} FormatDateTime::DateTime
 @sp 2
 @example
@@ -498,7 +495,6 @@ See also:  @code{FormatDate::Date, FormatTime::Time}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::DateTime
 @sp 2
 @example
@@ -532,7 +528,6 @@ See also:  @code{Compare::DateTime}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::DateTime
 @sp 2
 @example
@@ -574,7 +569,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {ValidDateTime}
 @deffn {ValidDateTime} ValidDateTime::DateTime
 @sp 2
 @example

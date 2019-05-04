@@ -1,7 +1,6 @@
 @page
 
 @section Pipe Class
-@pdfsection{Pipe Class}
 The @code{Pipe} class is used to provide a mechanism for threads
 to transfer information via a uni-directional byte stream.  If
 bi-directional communications is needed two pipes may be used.
@@ -21,7 +20,6 @@ See the relevant text for a detailed description of pipes.
 
 
 @subsection Pipe Class Methods
-@pdfsubsection{Pipe Class Methods}
 There are only two class methods associated with the @code{Pipe} class.
 They are used to create new pipes and find existing ones.
 
@@ -32,7 +30,6 @@ They are used to create new pipes and find existing ones.
 
 
 
-@pdfsubsubsection {FindStr}
 @deffn {FindStr} FindStr::Pipe
 @sp 2
 @example
@@ -59,7 +56,6 @@ See also:  @code{New::Pipe}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Pipe
 @sp 2
 @example
@@ -92,7 +88,6 @@ See also:  @code{NewWithStrInt::Pipe, FindStr::Pipe, Dispose::Pipe}
 
 
 
-@pdfsubsubsection {NewWithStrInt}
 @deffn {NewWithStrInt} NewWithStrInt::Pipe
 @sp 2
 @example
@@ -148,7 +143,6 @@ See also:  @code{New::Pipe, FindStr::Pipe, Dispose::Pipe}
 
 
 @subsection Pipe Instance Methods
-@pdfsubsection{Pipe Instance Methods}
 The instance methods associated with this class are used to put bytes
 on the pipe, take bytes off, dispose of, and obtain information
 about particular pipes.
@@ -170,7 +164,6 @@ are documented in this section.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Pipe
 @sp 2
 @example
@@ -182,7 +175,10 @@ object  r;     /*  NULL  */
 @end group
 @end example
 This method is used to dispose of a pipe instance.  
-@hfil @break It is the same as @code{Dispose::Pipe}.
+@iftex
+@hfil @break 
+@end iftex
+It is the same as @code{Dispose::Pipe}.
 
 The value returned is always @code{NULL} and may be used to null out
 the variable which contained the object being disposed in order to
@@ -204,7 +200,6 @@ avoid future accidental use.
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Pipe
 @sp 2
 @example
@@ -216,7 +211,10 @@ object  r;     /*  NULL  */
 @end group
 @end example
 This method is used to dispose of a pipe instance.  
-@hfil @break It is the same as @code{DeepDispose::Pipe}.
+@iftex
+@hfil @break 
+@end iftex
+It is the same as @code{DeepDispose::Pipe}.
 
 The value returned is always @code{NULL} and may be used to null out
 the variable which contained the object being disposed in order to
@@ -238,7 +236,6 @@ avoid future accidental use.
 
 
 
-@pdfsubsubsection {Length}
 @deffn {Length} Length::Pipe
 @sp 2
 @example
@@ -268,7 +265,6 @@ See also:  @code{Room::Pipe, Size::Pipe}
 
 
 
-@pdfsubsubsection {Mode}
 @deffn {Mode} Mode::Pipe
 @sp 2
 @example
@@ -314,7 +310,6 @@ See also:  @code{Room::Pipe, Length::Pipe}
 
 
 
-@pdfsubsubsection {Room}
 @deffn {Room} Room::Pipe
 @sp 2
 @example
@@ -357,7 +352,6 @@ See also:  @code{Length::Pipe}
 
 
 
-@pdfsubsubsection {Size}
 @deffn {Size} Size::Pipe
 @sp 2
 @example

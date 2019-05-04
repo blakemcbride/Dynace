@@ -1,7 +1,6 @@
 @page
 
 @section StringDictionary Class
-@pdfsection{StringDictionary Class}
 This class combines the functionality of the @code{Set}
 and @code{StringAssociation} classes in order to store a collection of
 arbitrary key/value pairs.
@@ -19,14 +18,12 @@ use of the @code{Set}/@code{Dictionary} related classes.
 
 
 @subsection StringDictionary Class Methods
-@pdfsubsection{StringDictionary Class Methods}
 There are no class methods for this class.  It inherits the ability
 to create instances of itself through its superclass, @code{Set}.
 
 
 
 @subsection StringDictionary Instance Methods
-@pdfsubsection{StringDictionary Instance Methods}
 The instance methods associated with this class are used to add, retrieve
 and remove key/value pairs from the @code{Dictionary}.  Note that additional
 functionality may be obtained through its superclass, @code{Set}.
@@ -36,7 +33,6 @@ functionality may be obtained through its superclass, @code{Set}.
 
 
 
-@pdfsubsubsection {AddStr}
 @deffn {AddStr} AddStr::StringDictionary
 @sp 2
 @example
@@ -62,9 +58,15 @@ key/value pair passed.
 @c @end group
 @c @end example
 @sp 1
-See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfil}
-@hfil @break @hglue .64in      @code{ChangeValueWithStr::StringDictionary,}
-@hfil @break @hglue .64in      @code{RemoveStr::StringDictionary}
+See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeValueWithStr::StringDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveStr::StringDictionary}
 @end deffn
 
 
@@ -76,7 +78,6 @@ See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfi
 
 
 
-@pdfsubsubsection {ChangeValueWithStr}
 @deffn {ChangeValueWithStr} ChangeValueWithStr::StringDictionary
 @sp 2
 @example
@@ -106,8 +107,11 @@ simply returns @code{NULL}.
 @c @end group
 @c @end example
 @sp 1
-See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfil}
-@hfil @break @hglue .64in      @code{RemoveStr::StringDictionary}
+See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveStr::StringDictionary}
 @end deffn
 
 
@@ -117,7 +121,6 @@ See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary, @hfi
 
 
 
-@pdfsubsubsection {DeepDisposeStr}
 @deffn {DeepDisposeStr} DeepDisposeStr::StringDictionary
 @sp 2
 @example
@@ -159,7 +162,6 @@ See also:  @code{RemoveStr::StringDictionary}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::StringDictionary
 @sp 2
 @example
@@ -185,7 +187,10 @@ avoid future accidental use.
 @c @end example
 @sp 1
 See also:  @code{RemoveStr::StringDictionary, DeepDispose::Set,}
-@hfil @break @hglue .64in      @code{DisposeAllNodes::StringDictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{DisposeAllNodes::StringDictionary}
 @end deffn
 
 
@@ -204,7 +209,6 @@ See also:  @code{RemoveStr::StringDictionary, DeepDispose::Set,}
 
 
 
-@pdfsubsubsection {DisposeAllNodes}
 @deffn {DisposeAllNodes} DisposeAllNodes::StringDictionary
 @sp 2
 @example
@@ -246,7 +250,6 @@ See also:  @code{DeepDisposeAllNodes::Set, Dispose::StringDictionary}
 
 
 
-@pdfsubsubsection {DisposeStr}
 @deffn {DisposeStr} DisposeStr::StringDictionary
 @sp 2
 @example
@@ -289,7 +292,6 @@ See also:  @code{RemoveStr::StringDictionary}
 
 
 
-@pdfsubsubsection {FindStr}
 @deffn {FindStr} FindStr::StringDictionary
 @sp 2
 @example
@@ -324,7 +326,6 @@ See also:  @code{FindValueStr::StringDictionary}
 
 
 
-@pdfsubsubsection {FindAddStr}
 @deffn {FindAddStr} FindAddStr::StringDictionary
 @sp 2
 @example
@@ -360,7 +361,6 @@ See also:  @code{FindStr::StringDictionary, FindValueStr::StringDictionary}
 
 
 
-@pdfsubsubsection {FindValueStr}
 @deffn {FindValueStr} FindValueStr::StringDictionary
 @sp 2
 @example
@@ -395,7 +395,6 @@ See also:  @code{FindStr::StringDictionary}
 
 
 
-@pdfsubsubsection {RemoveStr}
 @deffn {RemoveStr} RemoveStr::StringDictionary
 @sp 2
 @example

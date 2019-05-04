@@ -27,7 +27,6 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Mechanics
-@pdfchapter{Mechanics}
 
 This chapter, in concert with the WDS examples, describes the tools and
 actual steps necessary to create WDS application programs.  The best
@@ -35,7 +34,6 @@ method of learning is to go through the example programs located under
 the @code{\DYNACE\WINEXAM} directory in the order in which they appear.
 
 @section Build Modes
-@pdfsection{Build Modes}
 There are two principal modes of building WDS applications.  You can
 either use the Integrated Development Environment (IDE) which comes
 with your compiler or you can use the included DMAKE command line
@@ -57,12 +55,10 @@ the Dynace and WDS systems from scratch.
 
 
 @section IDE Build Setup
-@pdfsection{IDE Build Setup}
 Prior to building any of the examples using the IDE, a few configuration
 options within the IDE need to be set.
 
 @subsection Microsoft IDE
-@pdfsubsection{Microsoft IDE}
 Configure the correct directories for include files and libraries.
 This can be done via the tools / options / directories menu item.
 
@@ -76,7 +72,6 @@ whatever is already set) for library files.
 
 
 @subsection Borland IDE
-@pdfsubsection{Borland IDE}
 Configure the correct directories for include files and libraries.
 Since the Borland IDE associates these directories directly with
 each project, this information will have to be adjusted separately
@@ -97,14 +92,12 @@ Additionally, configure the IDE such that it will look under the
 for library files.
 
 @subsection Symantec IDE
-@pdfsubsection{Symantec IDE}
 Symantec compiler versions 7.2 and prior do not work due to bugs in
 their compiler.  A patched 7.2 compiler did work but was a little
 flaky.  Version 7.21 seemed to work fine but was not extensively
 tested.
 
 @section DMAKE Build Setup
-@pdfsection{DMAKE Build Setup}
 This section lists environment variables which must be set if the
 DMAKE build mode is used.  If the IDE build mode is used
 see the IDE Build Setup section for setup details.
@@ -146,16 +139,18 @@ set INCLUDE=d:\bc45\include
 
 
 @section Building Dynace & WDS From Scratch
-@pdfsection{Building Dynace & WDS From Scratch}
 The procedure used to build Dynace & WDS from scratch is fully described
-in @hfil @break @code{\DYNACE\DOCS\BUILD.txt}.  See that file for build
+in 
+@iftex
+@hfil @break 
+@end iftex
+@code{\DYNACE\DOCS\BUILD.txt}.  See that file for build
 instructions.
 
 New users will want to read all the files in the @code{docs} directory.
 
 
 @section Examples Setup
-@pdfsection{Examples Setup}
 All examples are buildable under all supported environments and build
 procedures, including IDE or DMAKE builds, as well as 16 bit Windows or
 32 bit Win32 (NT, Win32s, Windows 95).  The only difference is the build
@@ -222,7 +217,6 @@ Used to delete all files produced by a build for a single example
 
 
 @section Example Files
-@pdfsection{Example Files}
 This section documents the files which are contained in each example
 program.
 
@@ -300,7 +294,6 @@ Once an application is built, the only file needed to run it is
 
 
 @section Building The Examples
-@pdfsection{Building The Examples}
 In order to build an example with an IDE, simply open the appropriate
 project file and select build.
 
@@ -323,7 +316,6 @@ dmake -f MAKEFILE.DM  DEBUG=1
 
 
 @section Debugging With The IDE
-@pdfsection{Debugging With The IDE}
 Due to the fact that the WDS is the first thing which Windows sees
 when it executes an application and the fact that WDS is not shipped
 with debugging information, the following procedure will make it
@@ -341,7 +333,6 @@ as well as your application specific code.
 
 
 @section Building Your Own Application
-@pdfsection{Building Your Own Application}
 The best method of building your own application would be to start
 with one of the example programs and proceed from there.  This way
 all the compiler, linker and other options will be preset.  
@@ -353,14 +344,12 @@ application.  This example has the appropriate make file logic to
 handle custom classes along with a WDS application.
 
 @section DMAKE
-@pdfsection{DMAKE}
 DMAKE is a very powerful, portable and enhanced make utility developed
 by Dennis Vadura.  It is freely distributable and not owned by
 Algorithms Corporation or Blake McBride.  Complete documentation for this utility
 is contained in @code{\DYNACE\DOCS\DMAKE.MAN}
 
 @section DPP
-@pdfsection{DPP}
 @code{DPP} is the pre-processor used by Dynace to convert class definition
 files into C source files.  It is also used to generate generic files
 and perform generic/method argument checking.  This utility is only needed

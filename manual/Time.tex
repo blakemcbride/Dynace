@@ -1,7 +1,6 @@
 @page
 
 @section Time Class
-@pdfsection{Time Class}
 The @code{Time} class uses the same set of instance and class
 methods as the @code{LongInteger} class.  The equivalent C language
 representation would be a long integer in the form @code{HHMMSSLLL}
@@ -12,7 +11,6 @@ so 1:23:45.678 pm would be represented as 132345678L.
 
 
 @subsection Time Class Methods
-@pdfsubsection{Time Class Methods}
 The @code{Time} class has two class methods to create instances.
 
 
@@ -20,7 +18,6 @@ The @code{Time} class has two class methods to create instances.
 
 
 
-@pdfsubsubsection {NewWithLong}
 @deffn {NewWithLong} NewWithLong::Time
 @sp 2
 @example
@@ -55,7 +52,6 @@ See also:  @code{Now::Time, FormatTime::Time, Dispose::Object}
 
 
 
-@pdfsubsubsection {Now}
 @deffn {Now} Now::Time
 @sp 2
 @example
@@ -90,7 +86,6 @@ See also:  @code{NewWithLong::Time, FormatTime::Time, Dispose::Object}
 
 
 @subsection Time Instance Methods
-@pdfsubsection{Time Instance Methods}
 A portion of the @code{Time} class's functionality is identical to
 the functionality of the @code{LongInteger} class.  The remaining
 functionality is defined by the following specific methods.
@@ -101,7 +96,6 @@ functionality is defined by the following specific methods.
 
 
 
-@pdfsubsubsection {AddHours}
 @deffn {AddHours} AddHours::Time
 @sp 2
 @example
@@ -136,7 +130,6 @@ See also:  @code{AddMilliseconds::Time, AddMinutes::Time, AddSeconds::Time}
 
 
 
-@pdfsubsubsection {AddMilliseconds}
 @deffn {AddMilliseconds} AddMilliseconds::Time
 @sp 2
 @example
@@ -175,7 +168,6 @@ See also:  @code{AddHours::Time, AddMinutes::Time, AddSeconds::Time}
 
 
 
-@pdfsubsubsection {AddMinutes}
 @deffn {AddMinutes} AddMinutes::Time
 @sp 2
 @example
@@ -213,7 +205,6 @@ See also:  @code{AddHours::Time, AddMilliseconds::Time, AddSeconds::Time}
 
 
 
-@pdfsubsubsection {AddSeconds}
 @deffn {AddSeconds} AddSeconds::Time
 @sp 2
 @example
@@ -250,7 +241,6 @@ See also:  @code{AddHours::Time, AddMilliseconds::Time, AddMinutes::Time}
 
 
 
-@pdfsubsubsection {ChangeLongValue}
 @deffn {ChangeLongValue} ChangeLongValue::Time
 @sp 2
 @example
@@ -287,7 +277,6 @@ See also:  @code{ChangeTimeValue::Time, NewWithLong::Time}
 
 
 
-@pdfsubsubsection {ChangeTimeValue}
 @deffn {ChangeTimeValue} ChangeTimeValue::Time
 @sp 2
 @example
@@ -324,7 +313,6 @@ See also:  @code{ChangeLongValue::Time, NewWithLong::Time}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::Time
 @sp 2
 @example
@@ -362,7 +350,6 @@ See also:  @code{ChangeLongValue::Time, ChangeTimeValue::Time}
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::Time
 @sp 2
 @example
@@ -395,7 +382,6 @@ See also:  @code{Hash::Time}
 
 
 
-@pdfsubsubsection {Difference}
 @deffn {Difference} Difference::Time
 @sp 2
 @example
@@ -431,7 +417,6 @@ See also:  @code{TimeDifference::Time}
 
 
 
-@pdfsubsubsection {FormatTime}
 @deffn {FormatTime} FormatTime::Time
 @sp 2
 @example
@@ -497,7 +482,6 @@ See also:  @code{StringRepValue::Time}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::Time
 @sp 2
 @example
@@ -531,7 +515,6 @@ See also:  @code{Compare::Time}
 
 
 
-@pdfsubsubsection {Hours}
 @deffn {Hours} Hours::Time
 @sp 2
 @example
@@ -573,7 +556,6 @@ See also:  @code{Milliseconds::Time, Minutes::Time, Seconds::Time}
 
 
 
-@pdfsubsubsection {LongValue}
 @deffn {LongValue} LongValue::Time
 @sp 2
 @example
@@ -612,7 +594,6 @@ See also:  @code{NewWithLong::Time, ChangeLongValue::Time, TimeValue::Time}
 
 
 
-@pdfsubsubsection {Milliseconds}
 @deffn {Milliseconds} Milliseconds::Time
 @sp 2
 @example
@@ -654,7 +635,6 @@ See also:  @code{Hours::Time, Minutes::Time, Seconds::Time}
 
 
 
-@pdfsubsubsection {Minutes}
 @deffn {Minutes} Minutes::Time
 @sp 2
 @example
@@ -696,7 +676,6 @@ See also:  @code{Hours::Time, Milliseconds::Time, Seconds::Time}
 
 
 
-@pdfsubsubsection {Seconds}
 @deffn {Seconds} Seconds::Time
 @sp 2
 @example
@@ -738,7 +717,6 @@ See also:  @code{Hours::Time, Milliseconds::Time, Minutes::Time}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Time
 @sp 2
 @example
@@ -769,7 +747,10 @@ s = gStringRepValue(x);
 @end example
 @sp 1
 See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
-@hfil @break @hglue .64in      @code{TimeStringRepValue::Time}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{TimeStringRepValue::Time}
 @end deffn
 
 
@@ -781,7 +762,6 @@ See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
 
 
 
-@pdfsubsubsection {TimeDifference}
 @deffn {TimeDifference} TimeDifference::Time
 @sp 2
 @example
@@ -817,7 +797,6 @@ See also:  @code{Difference::Time}
 
 
 
-@pdfsubsubsection {TimeStringRepValue}
 @deffn {TimeStringRepValue} TimeStringRepValue::Time
 @sp 2
 @example
@@ -845,7 +824,10 @@ s = gTimeStringRepValue(x);
 @end example
 @sp 1
 See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
-@hfil @break @hglue .64in      @code{StringRepValue::Time}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{StringRepValue::Time}
 @end deffn
 
 
@@ -857,7 +839,6 @@ See also:  @code{PrintValue::Object, Print::Object, FormatTime::Time,}
 
 
 
-@pdfsubsubsection {TimeValue}
 @deffn {TimeValue} TimeValue::Time
 @sp 2
 @example
@@ -896,7 +877,6 @@ See also:  @code{NewWithLong::Time, ChangeLongValue::Time, LongValue::Time}
 
 
 
-@pdfsubsubsection {ValidTime}
 @deffn {ValidTime} ValidTime::Time
 @sp 2
 @example

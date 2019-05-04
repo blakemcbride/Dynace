@@ -1,7 +1,6 @@
 @page
 
 @section Semaphore Class
-@pdfsection{Semaphore Class}
 This class provides a mechanism to coordinate the activity of multiple
 threads.  It provides counting, named and unnamed semaphores.
  See the manual for a detailed description of semaphores.
@@ -12,7 +11,6 @@ use of the thread / pipe / semaphore related classes.
 
 
 @subsection Semaphore Class Methods
-@pdfsubsection{Semaphore Class Methods}
 The only two class methods associated with this class provide a
 means to create new semaphore instances and to find existing
 semaphores by name.
@@ -24,7 +22,6 @@ semaphores by name.
 
 
 
-@pdfsubsubsection {FindStr}
 @deffn {FindStr} FindStr::Semaphore
 @sp 2
 @example
@@ -56,7 +53,6 @@ See also:  @code{New::Semaphore}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Semaphore
 @sp 2
 @example
@@ -78,7 +74,10 @@ The value returned (@code{s}) is the semaphore object created.
 @c @end example
 @sp 1
 See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
-@hfil @break @hglue .64in      @code{Dispose::Semaphore}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{Dispose::Semaphore}
 @end deffn
 
 
@@ -93,7 +92,6 @@ See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
 
 
 
-@pdfsubsubsection {NewSemaphore}
 @deffn {NewSemaphore} NewSemaphore::Semaphore
 @sp 2
 @example
@@ -130,7 +128,10 @@ method.
 @c @end example
 @sp 1
 See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
-@hfil @break @hglue .64in      @code{Dispose::Semaphore}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{Dispose::Semaphore}
 @end deffn
 
 
@@ -138,7 +139,6 @@ See also:  @code{NewSemaphore::Semaphore, FindStr::Semaphore,}
 
 
 @subsection Semaphore Instance Methods
-@pdfsubsection{Semaphore Instance Methods}
 The instance methods associated with this class provide a means
 for locking, releasing, disposing and getting information about
 semaphore instances.
@@ -154,7 +154,6 @@ semaphore instances.
 
 
 
-@pdfsubsubsection {Count}
 @deffn {Count} Count::Semaphore
 @sp 2
 @example
@@ -185,7 +184,6 @@ See also:  @code{New::Semaphore, Name::Semaphore}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Semaphore
 @sp 2
 @example
@@ -220,7 +218,6 @@ See also:  @code{Release::Semaphore}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Semaphore
 @sp 2
 @example
@@ -257,7 +254,6 @@ See also:  @code{Release::Semaphore}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::Semaphore
 @sp 2
 @example
@@ -286,7 +282,6 @@ See also:  @code{New::Semaphore, Count::Semaphore}
 
 
 
-@pdfsubsubsection {Release}
 @deffn {Release} Release::Semaphore
 @sp 2
 @example
@@ -322,7 +317,6 @@ See also:  @code{WaitFor::Semaphore}
 
 
 
-@pdfsubsubsection {WaitFor}
 @deffn {WaitFor} WaitFor::Semaphore
 @sp 2
 @example

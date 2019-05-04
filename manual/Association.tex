@@ -1,7 +1,6 @@
 @page
 
 @section  Association Class
-@pdfsection{Association Class}
 The @code{Association} class is an abstract class which serves the
 sole purpose of grouping several subclasses which have common
 functionality.  There is no specific class or instance methods
@@ -11,7 +10,9 @@ here because of their common interface with all subclasses of the
 
 The subclasses of this class (@code{LookupKey},
 @code{ObjectAssociation}, @code{StringAssociation} and
-@iftex @break @end iftex
+@iftex 
+@break 
+@end iftex
 @code{IntegerAssociation}) are used to associate a key with a value and
 provide a means for manipulating these associations.  Instances of these
 classes are principally used by the @code{Set} and @code{Dictionary}
@@ -19,12 +20,10 @@ classes but may also be useful wherever a key/value pair may be useful.
 
 
 @subsection Association Class Methods
-@pdfsubsection{Association Class Methods}
 There are no class methods implemented by this class.
 
 
 @subsection Association Instance Methods
-@pdfsubsection{Association Instance Methods}
 There are no class methods implemented by this class, however, some
 methods are documented here because of their common interface with all
 subclasses of the @code{Association} class.  These methods are actually
@@ -35,7 +34,6 @@ implemented by all subclasses of this class.
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::Association
 @sp 2
 @example
@@ -71,7 +69,6 @@ See also:  @code{Hash::Association}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::Association
 @sp 2
 @example

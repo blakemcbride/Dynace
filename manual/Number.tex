@@ -1,7 +1,6 @@
 @page
 
 @section Number Class
-@pdfsection{Number Class}
 The @code{Number} class is an abstract class used to combine common
 functionality of the primitive C numeric data types.  Although most of the
 functionality is actually implemented in the subclasses of the @code{Number}
@@ -9,12 +8,10 @@ class, they are documented here because of their common interface.
 
 
 @subsection Number Class Methods
-@pdfsubsection{Number Class Methods}
 The @code{Number} class has no specific class methods.
 
 
 @subsection Number Instance Methods
-@pdfsubsection{Number Instance Methods}
 Although most of the instance methods are actually implemented in the
 subclasses of the @code{Number} class, they are documented here because
 of their common interface.  Regardless of the numeric type being
@@ -30,7 +27,6 @@ of the @code{DoubleFloat} class.)
 
 
 
-@pdfsubsubsection {ChangeCharValue}
 @deffn {ChangeCharValue} ChangeCharValue::Number
 @sp 2
 @example
@@ -75,7 +71,6 @@ See also:  @code{CharValue::Number}
 
 
 
-@pdfsubsubsection {ChangeDoubleValue}
 @deffn {ChangeDoubleValue} ChangeDoubleValue::Number
 @sp 2
 @example
@@ -117,7 +112,6 @@ See also:  @code{NewWithDouble::DoubleFloat, DoubleValue::Number}
 
 
 
-@pdfsubsubsection {ChangeLongValue}
 @deffn {ChangeLongValue} ChangeLongValue::Number
 @sp 2
 @example
@@ -155,7 +149,6 @@ See also:  @code{NewWithLong::LongInteger, LongValue::Number}
 
 
 
-@pdfsubsubsection {ChangeShortValue}
 @deffn {ChangeShortValue} ChangeShortValue::Number
 @sp 2
 @example
@@ -197,7 +190,6 @@ See also:  @code{NewWithInt::ShortInteger, ShortValue::Number}
 
 
 
-@pdfsubsubsection {ChangeUShortValue}
 @deffn {ChangeUShortValue} ChangeUShortValue::Number
 @sp 2
 @example
@@ -240,7 +232,6 @@ See also:  @code{NewWithUnsigned::UnsignedShortInteger}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::Number
 @sp 2
 @example
@@ -281,7 +272,6 @@ See also:  @code{ChangeCharValue::Number, ChangeShortValue::Number, etc.}
 
 
 
-@pdfsubsubsection {CharValue}
 @deffn {CharValue} CharValue::Number
 @sp 2
 @example
@@ -320,7 +310,6 @@ See also:  @code{NewWithChar::Character, ChangeValue::Number}
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::Number
 @sp 2
 @example
@@ -354,7 +343,6 @@ See also:  @code{Hash::Number}
 
 
 
-@pdfsubsubsection {DoubleValue}
 @deffn {DoubleValue} DoubleValue::Number
 @sp 2
 @example
@@ -395,7 +383,6 @@ See also:  @code{NewWithDouble::DoubleFloat, ChangeValue::Number}
 
 
 
-@pdfsubsubsection {FormatNumber}
 @deffn {FormatNumber} FormatNumber::Number
 @sp 2
 @example
@@ -464,7 +451,6 @@ See also:  @code{StringRepValue::Number}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::Number
 @sp 2
 @example
@@ -498,7 +484,6 @@ See also:  @code{Compare::Number}
 
 
 
-@pdfsubsubsection {LongValue}
 @deffn {LongValue} LongValue::Number
 @sp 2
 @example
@@ -539,7 +524,6 @@ See also:  @code{NewWithLong::LongInteger, ChangeLongValue::Number}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::Number
 @sp 2
 @example
@@ -582,7 +566,6 @@ See also:  @code{NewWithInt::ShortInteger, ChangeShortValue::Number}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Number
 @sp 2
 @example
@@ -623,7 +606,6 @@ See also:  @code{PrintValue::Object, Print::Object, FormatNumber::Number}
 
 
 
-@pdfsubsubsection {UnsignedShortValue}
 @deffn {UnsignedShortValue} UnsignedShortValue::Number
 @sp 2
 @example
@@ -653,7 +635,10 @@ s = gUnsignedShortValue(x);
 @end example
 @sp 1
 See also:  @code{NewWithUnsigned::UnsignedShortInteger,}
-@hfil @break @hglue .64in      @code{ChangeUShortValue::Number}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeUShortValue::Number}
 @end deffn
 
 

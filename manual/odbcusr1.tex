@@ -1,10 +1,8 @@
 @c -*-texinfo-*-
 
 @chapter ODBC Tutorial
-@pdfchapter{ODBC Tutorial}
 
 @section Opening and Closing a Database
-@pdfsection{Opening and Closing a Database}
 
 Prior to any use of a database, it must be opened.  Two functions are
 available to accommodate the function as follows:
@@ -60,10 +58,8 @@ This procedure will close the database and @code{NULL} out the @code{DB} variabl
 
 
 @section Statements
-@pdfsection{Statements}
 
 @subsection Introduction
-@pdfsubsection{Introduction}
 
 One concept which is important to fully understand is the
 @emph{Statement} object.  A Statement object allows the program a means
@@ -75,7 +71,6 @@ at any given point.  This number is only limited by the particular
 database vendor.
 
 @subsection Creating and Disposing of Statement Objects
-@pdfsubsection{Creating and Disposing of Statement Objects}
 
 
 @deffn {NewStatement}  NewStatement::Database
@@ -108,10 +103,8 @@ This will dispose of the statement object;
 
 
 @section Adding Records
-@pdfsection{Adding Records}
 
 @subsection Overview
-@pdfsubsection{Overview}
 
 Adding of records is accomplished in three steps as follows.
 
@@ -134,7 +127,6 @@ steps 2 and 3.  Data assigned to a field which is invariant need not be
 re-assigned.
 
 @subsection Selecting the Table
-@pdfsubsection{Selecting the Table}
 
 Selecting the table can be accomplished in two ways.  The most common way would be
 via the @code{gInsert} method.  Alternatively, if you are already in the middle of a select
@@ -163,7 +155,6 @@ This method selects a table for subsequent record adds.
 
 
 @subsection Assigning Field Data
-@pdfsubsection{Assigning Field Data}
 
 Once the desired table is selected, field data may be assigned using the
 following methods.
@@ -199,7 +190,6 @@ will convert it for you.  Date fields are simply converted to @code{long}'s
 of the form @code{YYYYMMDD}.
 
 @subsection Adding The Record
-@pdfsubsection{Adding The Record}
 
 Once the data has been assigned the record may be added as follows.
 
@@ -219,10 +209,8 @@ and cause the application to abort, however.
 @end deffn
 
 @section Reading Records
-@pdfsection{Reading Records}
 
 @subsection Overview
-@pdfsubsection{Overview}
 
 Reading records is accomplished in three steps as follows.
 
@@ -240,7 +228,6 @@ Access the field data.
 }
 
 @subsection Selecting a Record Set
-@pdfsubsection{Selecting a Record Set}
 
 Selecting a record set is accomplished by executing a normal SQL
 @code{select} command as follows.
@@ -282,7 +269,6 @@ returned upon success.
 
 
 @subsection Selecting a Record
-@pdfsubsection{Selecting a Record}
 
 The following functions allow the selection of a specific record within a
 selected set.  Note that if @code{gDBSelectOne} is used, none of these
@@ -310,7 +296,6 @@ int     r;      /*  0=success                      */
 
 
 @subsection Accessing Field Data
-@pdfsubsection{Accessing Field Data}
 
 The following functions are used to access field data.
 
@@ -346,7 +331,6 @@ convert it for you.
 
 
 @section Changing and Deleting Records
-@pdfsection{Changing and Deleting Records}
 
 The procedure for changing or deleting records is similar to that of
 reading records.  Steps 1 and 2 are the same.  In addition, once a
@@ -370,7 +354,6 @@ This method will either update or delete the last selected record.
 
 
 @section Executing SQL Commands
-@pdfsection{Executing SQL Commands}
 
 The following methods allow the execution of arbitrary SQL commands.
 
@@ -414,7 +397,6 @@ A file extension of @code{.sql} is assumed.
 
 
 @section Dropping Tables
-@pdfsection{Dropping Tables}
 
 
 
@@ -436,7 +418,6 @@ exist this command will be ignored.
 
 
 @section Clearing Fields
-@pdfsection{Clearing Fields}
 
 
 @deffn {Clear}  Clear::Statement
@@ -457,7 +438,6 @@ selection.
 
 
 @section WDS Interface
-@pdfsection{WDS Interface}
 
 The following methods are used to associate ODBC data fields to dialog controls.
 

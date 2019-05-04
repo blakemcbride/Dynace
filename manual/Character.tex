@@ -1,7 +1,6 @@
 @page
 
 @section Character Class
-@pdfsection{Character Class}
 The @code{Character} class is used to represent the C language
 @code{char} data type as a Dynace object.  It is a subclass of the
 @code{Number} class.  Even though the @code{Character} class
@@ -12,13 +11,11 @@ in this section.
 
 
 @subsection Character Class Methods
-@pdfsubsection{Character Class Methods}
 The @code{Character} class has only one class method and it is used to create
 new instances of itself.
 
 
 
-@pdfsubsubsection {NewWithChar}
 @deffn {NewWithChar} NewWithChar::Character
 @sp 2
 @example
@@ -51,7 +48,10 @@ x = gNewWithChar(Character, 'a');
 @end example
 @sp 1
 See also:  @code{CharValue::Number, ChangeCharValue::Number,}
-@hfil @break @hglue .64in      @code{Dispose::Object}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{Dispose::Object}
 @end deffn
 
 
@@ -59,7 +59,6 @@ See also:  @code{CharValue::Number, ChangeCharValue::Number,}
 
 
 @subsection Character Instance Methods
-@pdfsubsection{Character Instance Methods}
 The instance methods associated with the @code{Character} class provide
 a means of changing and obtaining the value associated with an instance
 of the @code{Character} class.  Most of the @code{Character} class
@@ -72,7 +71,6 @@ class.  The remainder are documented in this section.
 
 
 
-@pdfsubsubsection {FormatChar}
 @deffn {FormatChar} FormatChar::Character
 @sp 2
 @example

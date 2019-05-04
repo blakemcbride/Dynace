@@ -1,7 +1,6 @@
 @page
 
 @section NumberArray Class
-@pdfsection{NumberArray Class}
 The @code{NumberArray} class, which is a subclass of @code{Array}, is an
 abstract class used to combine common functionality of numeric arrays.
 Although most of the functionality is actually implemented in the
@@ -10,7 +9,6 @@ because of their common interface.
 
 
 @subsection NumberArray Class Methods
-@pdfsubsection{NumberArray Class Methods}
 The only class method associated with this class is the @code{New} method
 which is used to create new instances of numeric arrays.  This method
 is actually implemented by subclasses of @code{NumberArray}.
@@ -22,7 +20,6 @@ is actually implemented by subclasses of @code{NumberArray}.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::NumberArray
 @sp 2
 @example
@@ -39,7 +36,11 @@ the @code{NumberArray} class.  It is documented here because it is the
 same for all subclasses of the @code{NumberArray} class.
 
 @code{cls} would be one of the subclasses of the @code{NumberArray}
-class (such as @hfil @break @code{CharacterArray} @code{ShortArray}
+class (such as 
+@iftex
+@hfil @break 
+@end iftex
+@code{CharacterArray} @code{ShortArray}
 @code{UnsignedShortArray} @code{LongArray} @code{FloatArray} or
 @code{DoubleFloatArray}).  This will indicate the type of array to be
 created.
@@ -71,7 +72,6 @@ ary = vNew(DoubleFloatArray, 2, 5, 4);
 
 
 @subsection NumberArray Instance Methods
-@pdfsubsection{NumberArray Instance Methods}
 The instance methods associated with this class are actually implemented
 by subclasses of @code{NumberArray}.  They are documented here because
 of their common interface with all subclasses of @code{NumberArray}.
@@ -96,7 +96,6 @@ back a @code{double} value.
 
 
 
-@pdfsubsubsection {ChangeCharValue}
 @deffn {ChangeCharValue} ChangeCharValue::NumberArray
 @sp 2
 @example
@@ -140,7 +139,10 @@ vChangeCharValue(ary, 'C', 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
-@hfil @break @hglue .64in @code{ChangeCharValue::NumberArray}  ...
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChangeCharValue::NumberArray}  ...
 @end deffn
 
 
@@ -149,7 +151,6 @@ See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
 
 
 
-@pdfsubsubsection {ChangeDoubleValue}
 @deffn {ChangeDoubleValue} ChangeDoubleValue::NumberArray
 @sp 2
 @example
@@ -193,7 +194,10 @@ vChangeDoubleValue(ary, 3.141, 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeValue::NumberArray, ChangeCharValue::NumberArray,}
-@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChangeShortValue::NumberArray}  ...
 @end deffn
 
 
@@ -204,7 +208,6 @@ See also:  @code{ChangeValue::NumberArray, ChangeCharValue::NumberArray,}
 
 
 
-@pdfsubsubsection {ChangeLongValue}
 @deffn {ChangeLongValue} ChangeLongValue::NumberArray
 @sp 2
 @example
@@ -247,7 +250,10 @@ vChangeLongValue(ary, 27L, 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
-@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChangeShortValue::NumberArray}  ...
 @end deffn
 
 
@@ -258,7 +264,6 @@ See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
 
 
 
-@pdfsubsubsection {ChangeShortValue}
 @deffn {ChangeShortValue} ChangeShortValue::NumberArray
 @sp 2
 @example
@@ -302,7 +307,10 @@ vChangeShortValue(ary, 27, 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
-@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChangeShortValue::NumberArray}  ...
 @end deffn
 
 
@@ -312,7 +320,6 @@ See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
 
 
 
-@pdfsubsubsection {ChangeUShortValue}
 @deffn {ChangeUShortValue} ChangeUShortValue::NumberArray
 @sp 2
 @example
@@ -356,7 +363,10 @@ vChangeUShortValue(ary, 27U, 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
-@hfil @break @hglue .64in @code{ChangeShortValue::NumberArray}  ...
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChangeShortValue::NumberArray}  ...
 @end deffn
 
 
@@ -366,7 +376,6 @@ See also:  @code{ChangeValue::NumberArray, ChangeDoubleValue::NumberArray,}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::NumberArray
 @sp 2
 @example
@@ -410,7 +419,10 @@ vChangeValue(ary, v, 1, 2);
 @end example
 @sp 1
 See also:  @code{ChangeDoubleValue::NumberArray,}
-@hfil @break @hglue .64in      @code{ChangeCharValue::NumberArray  ...}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeCharValue::NumberArray  ...}
 @end deffn
 
 
@@ -424,7 +436,6 @@ See also:  @code{ChangeDoubleValue::NumberArray,}
 
 
 
-@pdfsubsubsection {CharValue}
 @deffn {CharValue} CharValue::NumberArray
 @sp 2
 @example
@@ -474,7 +485,6 @@ See also:  @code{ChangeCharValue::NumberArray}
 
 
 
-@pdfsubsubsection {DoubleValue}
 @deffn {DoubleValue} DoubleValue::NumberArray
 @sp 2
 @example
@@ -526,7 +536,6 @@ See also:  @code{ChangeDoubleValue::NumberArray}
 
 
 
-@pdfsubsubsection {LongValue}
 @deffn {LongValue} LongValue::NumberArray
 @sp 2
 @example
@@ -576,7 +585,6 @@ See also:  @code{ChangeLongValue::NumberArray}
 
 
 
-@pdfsubsubsection {ShortValue}
 @deffn {ShortValue} ShortValue::NumberArray
 @sp 2
 @example
@@ -623,7 +631,6 @@ See also:  @code{ChangeShortValue::NumberArray}
 
 
 
-@pdfsubsubsection {UnsignedShortValue}
 @deffn {UnsignedShortValue} UnsignedShortValue::NumberArray
 @sp 2
 @example

@@ -27,7 +27,6 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Mechanics
-@pdfchapter{Mechanics}
 This chapter describes the actual steps necessary to use build and use
 Dynace.  First the steps necessary to configure, compile and link Dynace
 and Dynace applications is described, then the steps necessary to use
@@ -37,7 +36,6 @@ techniques are discussed.
 
 
 @section Setup, Configuration & Build Procedures
-@pdfsection{Setup, Configuration & Build Procedures}
 This section, in concert with the examples, describes the tools and
 actual steps necessary to build Dynace and create Dynace application
 programs.  The best method of learning is to go through the example
@@ -45,7 +43,6 @@ programs located under the @code{\DYNACE\EXAMPLES} directory in the
 order in which they appear.
 
 @subsection Build Utilities
-@pdfsubsection{Build Utilities}
 All the utilities used to build Dynace applications are contained within
 the Dynace package and the command line utilities (compiler, linker,
 etc.) which come with your compiler.  Dynace utilizes special utilities
@@ -60,7 +57,6 @@ debugging.  You may also be able to find a way of integrating the
 supplied make files and procedures into your favorite IDE.
 
 @subsection DMAKE Build Setup
-@pdfsubsection{DMAKE Build Setup}
 This section lists environment variables which must be set for the
 DMAKE build.
 
@@ -94,15 +90,17 @@ example and Dynace source code directories.
 
 
 @subsection Building Dynace From Scratch
-@pdfsubsection{Building Dynace From Scratch}
 The procedure used to build Dynace from scratch is fully described
-in @hfil @break @code{\DYNACE\DOCS\BUILD.txt}.  See that file for build instructions.
+in 
+@iftex
+@hfil @break 
+@end iftex
+@code{\DYNACE\DOCS\BUILD.txt}.  See that file for build instructions.
 
 New users will want to read all the files in the @code{docs} directory.
 
 
 @subsection Examples Setup
-@pdfsubsection{Examples Setup}
 All examples are buildable under all supported environments and build
 procedures including 16 and 32 bit environments.  The only difference is
 the makefile used.
@@ -110,7 +108,6 @@ the makefile used.
 
 
 @subsection Example Files
-@pdfsubsection{Example Files}
 This section documents the files which are contained in each example
 program.
 
@@ -163,7 +160,6 @@ Once an application is built, the only file needed to run it is
 
 
 @subsection Building The Examples
-@pdfsubsection{Building The Examples}
 In order to build with the DMAKE command line utility execute the
 following command.
 
@@ -183,7 +179,6 @@ dmake -f MAKEFILE.DM  DEBUG=1
 
 
 @subsection Debugging
-@pdfsubsection{Debugging}
 When @code{dpp} strategy 1 is selected Dynace uses a small amount of
 assembler.  This is not true for the default strategy of 2, however,
 when strategy 1 is used there are a couple of procedures which, when
@@ -202,7 +197,6 @@ class variables through the ``@code{cv}'' structure pointer.
 
 
 @subsection Building Your Own Application
-@pdfsubsection{Building Your Own Application}
 The best method of building your own application would be to start
 with one of the example programs and proceed from there.  This way
 all the compiler, linker and other options will be preset.  The best
@@ -211,7 +205,6 @@ class.  Their makefiles are designed to handle class files in
 a very convenient and automated way.
 
 @subsection DMAKE
-@pdfsubsection{DMAKE}
 DMAKE is a very powerful, portable and enhanced make utility developed
 by Dennis Vadura.  It is freely distributable and not owned by
 Algorithms Corporation or Blake McBride.  Complete documentation for this utility
@@ -223,7 +216,6 @@ is contained in @code{\DYNACE\DOCS\DMAKE.MAN}
 
 @page
 @section Using Dynace Classes
-@pdfsection{Using Dynace Classes}
 Dynace usage can be divided into two categories: @emph{class user} or
 @emph{class creation}.  All a class user has to do to use Dynace classes
 is include a single file in the source code and call a function to
@@ -242,7 +234,6 @@ pre-existing class.  The next section will discuss the steps necessary
 to create new classes.
 
 @subsection External Naming Conventions
-@pdfsubsection{External Naming Conventions}
 External naming conventions refers to those names that the programmer
 defines such as a new class name, an instance variable name or a method
 or generic name.  By contrast, internal naming conventions refers to
@@ -298,7 +289,6 @@ The above naming scheme is used by the Dynace system, however, it
 is not enforced.  You may use any naming scheme you wish.
 
 @subsection Internal Naming Conventions
-@pdfsubsection{Internal Naming Conventions}
 External naming conventions refers to those names that the programmer
 defines such as a new class name, an instance variable name or a method
 or generic name.  By contrast, internal naming conventions refers to
@@ -349,7 +339,6 @@ default class method name for methods with argument checking turned off
 
 
 @subsection Class Hierarchy
-@pdfsubsection{Class Hierarchy}
 The only class in Dynace which has no superclasses is called
 @code{Object}.  All classes in Dynace eventually inherit from the class
 @code{Object}.  The Object class defines those features that are common
@@ -384,7 +373,6 @@ unnecessary, it is important to fully understand the relationship between
 the inheritance of the above classes, and the indentation of the diagram.
 
 @subsection Example Code
-@pdfsubsection{Example Code}
 The following example illustrates a complete program which uses Dynace.
 Each line is explained in the following sub-sections.
 
@@ -432,7 +420,6 @@ main(int argc, char *argv[])
 @end example
 
 @subsection Include File
-@pdfsubsection{Include File}
 Any source module which uses any Dynace objects must include @code{generics.h}.
 This may be accomplished with the following line:
 @example
@@ -440,7 +427,6 @@ This may be accomplished with the following line:
 @end example
 
 @subsection Declarations
-@pdfsubsection{Declarations}
 All objects (classes, instances, methods...) in Dynace are @emph{objects}.
 The declaration used in Dynace is @code{object}.  Therefore, if you wanted
 to declare three objects in Dynace you could use the following:
@@ -451,7 +437,6 @@ This declaration may be used anywhere you can define any other type of
 variable in the C language.
 
 @subsection Initializing Dynace
-@pdfsubsection{Initializing Dynace}
 The first thing which must be done prior to using any classes in Dynace is
 to initialize the Dynace kernel and system classes.
 
@@ -467,7 +452,6 @@ Use of the following is required to initialize the Dynace system:
 
 
 @subsection Generic Functions
-@pdfsubsection{Generic Functions}
 In Dynace, generic function names, by convention only, always begin with
 a lower case ``@code{g}'' or ``@code{v}'', followed by an upper case
 letter, and then optionally followed by other letters (of any case),
@@ -486,7 +470,6 @@ because different methods, with different argument requirements, may be
 called.
 
 @subsection Creating Objects
-@pdfsubsection{Creating Objects}
 By convention, the generic function used to create new objects is called
 @code{gNew()} or @code{vNew()}.  The first argument to either should be
 the class of the new object (or instance) to be created.  Any, possible,
@@ -513,7 +496,6 @@ created, each of a different type, had the same declaration.  Note also,
 the standard naming of the generic function @code{gNewXXXX()}.
 
 @subsection Using Objects
-@pdfsubsection{Using Objects}
 Once an object is created it may be used as arguments to generic functions.
 For example:
 @example
@@ -534,7 +516,6 @@ and evokes it.  This association is defined by the person who wrote the
 @code{ShortInteger} class.
 
 @subsection Disposing of Objects
-@pdfsubsection{Disposing of Objects}
 All objects in Dynace are allocated from the heap.  Therefore, when an object
 is no longer needed, it must be returned to the heap.  If this is not
 done you would eventually run out of heap space.  Dynace has two methods
@@ -615,7 +596,6 @@ tradeoffs.  See the sub-section on the Boehm Garbage Collector under the
 Dynace Customization & Special Techniques section.
 
 @subsection Generics Files
-@pdfsubsection{Generics Files}
 In any given program, only a single source file should contain all the
 generic functions used throughout the entire application.  This includes
 the generics used by the Dynace kernel, the class library, and any
@@ -630,7 +610,6 @@ details.
 
 
 @subsection Compiling & Linking
-@pdfsubsection{Compiling & Linking}
 This section describes the necessary tools and steps necessary to create
 an application which uses the Dynace system.
 
@@ -677,7 +656,6 @@ of the makefiles included with the example programs included with Dynace.
 There are specific make files for each supported compiler.
 
 @subsection Learning Dynace Classes
-@pdfsubsection{Learning Dynace Classes}
 Once the basics of using Dynace objects, and the mechanics of creating a
 program are understood, a study of the Dynace library, including what
 facilities it has to offer, and how to use it, are strongly recommended.
@@ -689,7 +667,6 @@ classes has been achieved.
 
 @page
 @section Defining Dynace Classes
-@pdfsection{Defining Dynace Classes}
 This section describes the syntax and procedure necessary to create
 Dynace classes.  It is recommended that all the information in the
 previous sections be understood prior to continuing in this section.  It
@@ -723,10 +700,11 @@ to produce the appropriate generic files.
 The following sub-sections describe the exact syntax
 necessary to define your own Dynace classes.
 
+@iftex
 @break
+@end iftex
 
 @subsection Class Definition File Syntax
-@pdfsubsection{Class Definition File Syntax}
 Class definition files may contain normal C code without restriction.
 In addition, the following syntax elements may be used to define a class,
 methods and generics.
@@ -743,7 +721,9 @@ Legend:
         Lines beginning with // are comments
         Lower case identifiers and other symbols are typed as-is
 
+@iftex
 @hrule
+@end iftex
 
 // Class definition
 
@@ -765,15 +745,17 @@ VARIABLE-DECLARATION = [TYPE]  variable ;
 
 TYPE defaults to object
 
+@iftex
 @c @hrule
 @break
+@end iftex
 //  Public method definition 
 
 [public]  METHOD-TYPE [RETURN-TYPE]  GENERIC [,GENERIC]...
         [,<GENERIC>]... [: METHOD-NAME]  ( ARGUMENT-LIST )
-{
+@{
         METHOD-BODY
-}
+@}
 
 METHOD-TYPE = imeth | cmeth | ivmeth | cvmeth
 
@@ -784,15 +766,17 @@ Undeclared method names default to CLASS_Xm_GENERIC
 ARGUMENT-LIST - types default to object,
                 first arg (object self) defaults
 
+@iftex
 @hrule
+@end iftex
 
 //  Private method definition 
 
 private METHOD-TYPE [RETURN-TYPE]  METHOD-NAME
         ( ARGUMENT-LIST )
-{
+@{
         METHOD-BODY
-}
+@}
 
 METHOD-TYPE = imeth | cmeth | ivmeth | cvmeth
 
@@ -801,13 +785,17 @@ RETURN-TYPE defaults to object
 ARGUMENT-LIST - types default to object,
                 first arg (object self) defaults
 
+@iftex
 @hrule
+@end iftex
 
 //  Super syntax
 
 GENERIC(super [ARG]  [, ARGN]... )
 
+@iftex
 @hrule
+@end iftex
 
 //  Comments
 
@@ -1156,7 +1144,7 @@ imeth   char * gMyGeneric, gAnotherGeneric : SomeMethod ()
 The following example illustrates the syntax used to associate a single
 method with generics which have argument checking turned on (imeth's)
 and generics which have them turned off (ivmeth's).  This syntax is
-only recognized by the @code{dpp} program when its {-X} option is enabled,
+only recognized by the @code{dpp} program when its @code{-X} option is enabled,
 otherwise this special syntax is just ignored.
 
 
@@ -1304,7 +1292,6 @@ to the end of the line.
 
 
 @subsection Example Code
-@pdfsubsection{Example Code}
 The following example illustrates a complete program which defines a new
 Dynace class.  Each line is explained in the following sub-sections.
 
@@ -1363,7 +1350,6 @@ imeth   gPrint(FILE *fp)
 
 
 @subsection Class Definition
-@pdfsubsection{Class Definition}
 The first step in defining a new class would be to create a @code{.d}
 file with a @code{defclass} specification.  This is discussed in
 detail in the section which describes the @code{defclasss} syntax.
@@ -1382,7 +1368,6 @@ it would be difficult to distinguish instance variables from locally
 declared variables.
 
 @subsection Defining Methods
-@pdfsubsection{Defining Methods}
 Once the @code{defclass} specification is given, the methods may be
 declared.  The syntax for this, as well as several examples are discussed
 in the section which described method syntax.
@@ -1733,7 +1718,6 @@ modify its behavior to suit your needs without having to re-write the
 pre-existing code.
 
 @subsection Class Initialization
-@pdfsubsection{Class Initialization}
 During startup, when your application executes @code{InitDynace},
 Dynace initializes the Dynace kernel, the generic objects and
 the Dynace kernel classes.  The remaining classes get initialized
@@ -1793,7 +1777,6 @@ static  void    class_init()
 
 
 @subsection What Gets Linked
-@pdfsubsection{What Gets Linked}
 Regardless of what classes exist in a particular library or what
 classes are mentioned in the @code{generics.h} or @code{generics.c}
 files Dynace is designed in such a fashion so that at link time
@@ -1802,7 +1785,6 @@ in.
 
 
 @subsection The @code{gNew} Class Method
-@pdfsubsection{The gNew Class Method}
 Most classes will have an instance creation method.  This is the method
 which is responsible for creating and initializing instances of the new
 class, also called the @emph{constructor}.  If no local instance
@@ -1852,7 +1834,6 @@ for @code{iName}.
 
 
 @subsection The @code{Dispose} Instance Method
-@pdfsubsection{The Dispose Instance Method}
 Any class whose instances must do something more when being disposed of
 than just freeing themselves, must define an instance disposal method.
 This method, called the @emph{destructor}, is usually associated with
@@ -1900,7 +1881,6 @@ which simply disposes of the individual object.
 
 
 @subsection Creating Generic Files
-@pdfsubsection{Creating Generic Files}
 The @code{generics.h} and @code{generics.c} files are created by the
 @code{dpp} program.  @code{dpp} reads in the pre-defined classes and
 generics from a pre-existing @code{generics.h} files as well as user
@@ -1913,7 +1893,6 @@ the correct generic files for the application.   See the section describing
 
 @page
 @section Dynace Pre-Processor (DPP)
-@pdfsection{Dynace Pre-Processor (DPP)}
 The @code{dpp} program is the heart of the compile time functionality of
 Dynace.  @code{Dpp} is capable of reading in pre-existing generics
 declaration files (normally @code{generics.h}) and class
@@ -1952,7 +1931,6 @@ and @code{generics.obj} files are just touched.
 
 
 @subsection Controlling DPP
-@pdfsubsection{Controlling DPP}
 @code{Dpp} operates by first reading in all input files (regardless
 of their order on the command line) and then using this information
 to check the input consistency and produce any requested output files.
@@ -1983,7 +1961,6 @@ any arguments.  It will display a complete list of all options and
 exit.
 
 @subsection DPP Status Messages
-@pdfsubsection{DPP Status Messages}
 During @code{dpp} operation, it will display the name of each file
 it is reading or writing, in addition to any warning or error messages.
 At the end of its run, @code{dpp} will display a status message similar
@@ -2005,7 +1982,6 @@ The second line indicates the same thing for generics.
 
 
 @subsection Input Options (-g & -G)
-@pdfsubsection{Input Options (-g & -G)}
 Input options are those which cause @code{dpp} to read a file.
 
 @subsubsection Generic Declaration Input
@@ -2064,7 +2040,6 @@ In addition to recognizing @code{*.d} files as class definition files,
 respectively.
 
 @subsection Output Options
-@pdfsubsection{Output Options}
 Output options are those options which cause @code{dpp} to create
 a file.
 
@@ -2135,7 +2110,6 @@ MzScheme is available at
 @code{http://www.plt-scheme.org}
 
 @subsection Misc. Options
-@pdfsubsection{Misc. Options}
 @code{Dpp} supports a variety of other options documented in this
 section.  Some options, however, are not documented.  This is because
 some features are either experimental and not ready for use or only used
@@ -2379,14 +2353,12 @@ unrecommended configuration.
 
 @page
 @section Dynace Customization & Special Techniques
-@pdfsection{Dynace Customization & Special Techniques}
 The Dynace kernel includes a class called @code{Dynace}.  This class is used
 to query and set various parameters which effect the global operation
 of Dynace.  The following subsections detail the various parameters which
 may be effected in Dynace as well as other special issues.
 
 @subsection Makefile / Generics.h File Dependencies
-@pdfsubsection{Makefile / Generics.h File Dependencies}
 All source files are technically dependent upon the application specific
 @code{generics.h} file.  However, it is important that the make utility
 not be made aware of this fact.  This is important because one of the main
@@ -2506,7 +2478,6 @@ have to do if you change the arguments to a regular C function?  Answer -
 the same thing.
 
 @subsection Compile Time Argument Checking
-@pdfsubsection{Compile Time Argument Checking}
 Dynace supports the simultaneous use of generics which have compile
 time argument checking enabled and those that have the option
 turned off.  By convention only, generics which have compile time
@@ -2578,7 +2549,6 @@ generic functions including @code{vNew}, @code{vFind}, @code{vRemove},
 the @code{dpp} @code{-X} option in order to enable them however.
 
 @subsection Runtime Argument Validation
-@pdfsubsection{Runtime Argument Validation}
 Whenever a generic function is evoked in Dynace, the system checks the
 validity of the first argument.  It makes sure that the first argument
 is in fact a valid Dynace object.  If it is not, Dynace will report that fact
@@ -2641,7 +2611,6 @@ Note that the @code{ChkArg} set of macros may only be used as the first
 executable statements in a method.
 
 @subsection Methods With A Variable Number Of Arguments
-@pdfsubsection{Methods With A Variable Number Of Arguments}
 Due to the way Dynace deals with the various method / generic interface
 strategies (described under @code{dpp} subsection ``Preprocessing
 Strategies'') it was necessary to construct a standard way of dealing
@@ -2655,7 +2624,6 @@ described in the section on the @code{MAKE_REST} and @code{GetArg}
 Dynace macros.
 
 @subsection Tracing Facility
-@pdfsubsection{Tracing Facility}
 Dynace includes a powerful and flexible tracing facility to assist
 in the debugging of applications.  The facility traces generic calls
 of arbitrary combinations of classes, generics and methods.
@@ -2686,14 +2654,15 @@ to @code{stdout}.
 
 See @code{Trace::Dynace}, @code{Trace::Behavior},
 @code{Trace::GenericFunction}, @code{Trace::Method},
-@iftex @hfil @break @end iftex
+@iftex 
+@hfil @break 
+@end iftex
 @code{TracePrint::Dynace} and @code{traceStream} for more information.
 
 
 
 
 @subsection Memory Management and Object Disposal
-@pdfsubsection{Memory Management and Object Disposal}
 As stated earlier, all objects in Dynace are allocated from the heap.  In
 fact the @code{object} declaration actually declares a variable to be a
 pointer to this allocated memory.  Therefore, when an object is no
@@ -2728,9 +2697,8 @@ objects being referenced within the object being disposed.  The system
 default @code{gDeepDispose} method performs the same function as the
 system default @code{gDispose} method.
 
-@node{Speeding Up IsObj}
+@anchor{Speeding-Up-IsObj}
 @subsection Speeding Up IsObj
-@pdfsubsection{Speeding Up IsObj}
 
 @code{IsObj} is a function which validates a Dynace object pointer at
 runtime.  This function is a small and fast function but gets called
@@ -2755,7 +2723,6 @@ Note that this issue and its corresponding solution are only relevant
 in a Windows environment.  Unix / Linux don't suffer from these problems.
 
 @subsection Garbage Collection
-@pdfsubsection{Garbage Collection}
 The way the garbage collector works is that it keeps track of your
 maximum real memory requirements, after a garbage collection.  Whenever
 your current memory usage exceeds a user defined number of bytes over
@@ -2811,7 +2778,6 @@ tradeoffs.  See the sub-section on the Boehm Garbage Collector.
 
 
 @subsection Global or Static Variables
-@pdfsubsection{Global or Static Variables}
 The Dynace garbage collector only marks objects which are accessible, either
 directly or indirectly, via automatic variables (those on the stack).
 Therefore, if you create an object and assign it to a global or static
@@ -2845,7 +2811,6 @@ The @code{RegisterVariable} macro actually calls @code{gRegisterMemory}.
 
 
 @subsection Boehm Garbage Collector
-@pdfsubsection{Boehm Garbage Collector}
 In addition to the garbage collector (GC) which is part of Dynace,
 Dynace supports another GC which is freely available and widely used
 throughout the industry.  This GC is not owned or supported by
@@ -2887,7 +2852,6 @@ boehm@@acm.org
 
 
 @subsection Native Thread Support
-@pdfsubsection{Native Thread Support}
 Dynace has been designed to support a truly multi-threading
 environment.  This is not the simulated threads supplied with Dynace
 but the true threads provided by the underlying system.  Dynace
@@ -2910,7 +2874,6 @@ See @code{include/dynl.h} and the @code{*.c} files generated by
 
 
 @subsection Method Cache
-@pdfsubsection{Method Cache}
 As stated earlier, the Dynace system caches method dispatching.  This
 caching speeds up the system tremendously.  The larger the cache the
 better.  The default cache size is rather small, and may be user
@@ -2929,7 +2892,6 @@ of the Dynace system.
 
 
 @subsection Memory Compaction
-@pdfsubsection{Memory Compaction}
 Dynace includes a memory allocator which is capable of performing memory
 compaction.  This is used by the @code{String} class (as well as
 possibly other classes) to reduce or eliminate memory fragmentation.
@@ -2944,7 +2906,6 @@ operations which would typically fragment memory.
 
 
 @subsection Avoiding Runtime Method Lookup Costs
-@pdfsubsection{Avoiding Runtime Method Lookup Costs}
 There is a small runtime overhead associated with the runtime binding
 mechanism of Dynace (or any system which has runtime binding).  This
 overhead is kept to a minimum by the Dynace method cache and other techniques
@@ -2961,7 +2922,6 @@ example program which demonstrates the technique.
 
 
 @subsection Generic Functions As First Class C Objects
-@pdfsubsection{Generic Functions As First Class C Objects}
 In C, variables are treated as first class objects.  That is they may
 be defined, initialized, assigned to (value change) and localized in
 any arbitrary block.  C functions, on the other hand, are sort of
@@ -2976,7 +2936,6 @@ See the relevant example for more details.
 
 
 @subsection Static Binding
-@pdfsubsection{Static Binding}
 It is possible to perform static binding with the Dynace system.  Doing so,
 however, is highly discouraged because it eliminates much of the
 flexibility and encapsulation properties of Dynace.  The only reason
@@ -2998,7 +2957,6 @@ validate the validity and type of the first argument.
 
 
 @subsection Allocating Objects From The Stack
-@pdfsubsection{Allocating Objects From The Stack}
 All objects in Dynace are normally allocated from the heap.  This
 allows for the maximum flexibility in terms of their life time
 and scope.  However, Dynace does have a limited capability to
@@ -3040,7 +2998,6 @@ See documentation on the @code{StackAlloc} for further details.
 
 @page
 @section Notes On Compilers, Rebuilding And Porting Dynace
-@pdfsection{Notes On Compilers, Rebuilding And Porting Dynace}
 
 Dynace has been designed and tested to be as portable as possible.  At
 the time of the writing of this manual Dynace has been compiled and
@@ -3068,7 +3025,6 @@ The generics file must always be compiled with the optimization options
 
 
 @subsection DMAKE
-@pdfsubsection{DMAKE}
 The makefile utility used for all builds, except unix, is DMAKE.
 DMAKE is a very powerful, portable and enhanced make utility developed
 by Dennis Vadura.  It is freely distributable and not owned by
@@ -3076,7 +3032,6 @@ Algorithms Corporation or Blake McBride.  Complete documentation for this utilit
 is contained in @code{\DYNACE\DOCS\DMAKE.MAN}
 
 @subsection MS--DOS
-@pdfsubsection{MS-DOS}
 
 All 16 bit MS--DOS libraries were built using the large memory model.  There
 is no reason why Dynace could not be run in other models other than the
@@ -3157,7 +3112,6 @@ strategies 2 or above must be used.  The 16 bit version of their
 compiler was never tested.
 
 @subsection UNIX
-@pdfsubsection{UNIX}
 
 The makefiles associated with the UNIX build are all named makefile.unx.
 
@@ -3196,7 +3150,6 @@ contained in the file name @code{jumpto.s2}.  All necessary files are
 included with the system.  See the makefiles for additional information.
 
 @subsection Using A Debugger
-@pdfsubsection{Using A Debugger}
 
 Because of the way Dynace dispatches methods it is often difficult to
 trace through a generic call at the C source level.  It has been found
@@ -3223,7 +3176,6 @@ a program.
 
 
 @subsection Porting To Other Compilers, Memory Models or OSs
-@pdfsubsection{Porting To Other Compilers, Memory Models or OSs}
 There are several issues associated with porting Dynace to a new
 environment.  These issues are covered in the following subsections.
 

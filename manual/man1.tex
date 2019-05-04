@@ -28,7 +28,6 @@
 
 
 @chapter Introduction
-@pdfchapter{Introduction}
 Dynace (pronounced @emph{d@=i-ne-s@=e}) stands for a ``DYNAmic C
 language Extension''.  It is an object oriented extension to the C or
 C++ languages.
@@ -55,7 +54,6 @@ on top of the Dynace kernel.
 
 
 @section Features
-@pdfsection{Features}
 The following table lists some of the key features of Dynace:
 
 @itemize @bullet
@@ -120,7 +118,6 @@ collection classes such as Dictionary and Double Linked Lists.
 
 @page
 @section Reasons to use Dynace
-@pdfsection{Reasons to use Dynace}
 The following lists several reasons to use Dynace:
 
 @enumerate
@@ -185,10 +182,8 @@ Dynace applications are royalty free (with the appropriate license).
 
 @page
 @section Dynace vs. Other Languages
-@pdfsection{Dynace vs. Other Languages}
 
 @subsection A comparison of Dynace and C++
-{@catcode`@+=12 @pdfsubsection{A comparison of Dynace and C++}}
 
 The Dynace object oriented extension to the C language was created in
 order to solve many of the problems associated with C++ while retaining
@@ -198,7 +193,6 @@ of C++ and how Dynace address them, as well as other important facts
 regarding Dynace.
 
 @subsubsection Code In Header Files
-@pdfsubsection{Code In Header Files}
 
 C++ greatly encourages the movement of code and class definitions from
 source files (.c) to header files (.h).  Because of its design, C++
@@ -229,7 +223,6 @@ of abstraction and code protection without any class definitions
 in header files.
 
 @subsubsection Frequency Of Re-compiles
-@pdfsubsection{Frequency Of Re-compiles}
 
 One very important consequence of placing class definitions in header
 files is that even very small changes in a class's definition
@@ -255,7 +248,6 @@ approach is that only the absolute minimum amount of time is wasted
 on compiles.
 
 @subsubsection Application Maintainability / Object Encapsulation
-@pdfsubsection{Application Maintainability / Object Encapsulation}
 
 One of the principal features of the object oriented paradigm is
 encapsulation.  Encapsulation is the ability to combine code and data
@@ -294,7 +286,6 @@ achieved.
 
 
 @subsubsection C++ Templates
-{@catcode`@+=12 @pdfsubsection{C++ Templates}}
 
 In order to write similar code for many classes C++ provides
 templates.  Templates are an extremely poor attempt to patch some
@@ -312,7 +303,6 @@ duplicate any code.  The existing code adapts to new classes at
 runtime!
 
 @subsubsection Virtual Functions
-@pdfsubsection{Virtual Functions}
 
 Virtual functions give C++ a great deal of flexibility.  However,
 there is a major problem associated with them.  If you purchase a
@@ -325,7 +315,6 @@ is never a one you can't use like a virtual function.  Dynace implements
 these methods in a memory efficient manner so it's not prohibitive.
 
 @subsubsection Learning Curve / Code Complexity
-@pdfsubsection{Learning Curve / Code Complexity}
 
 C++ is a large and complex language from a syntactical standpoint,
 especially when compared to the minimalist C language.  There are two
@@ -354,7 +343,6 @@ like any other C program.  Dynace is, therefore, much simpler and easier
 to master than C++ and the resulting tool is more powerful and expressive.
 
 @subsubsection Code Re-usability
-@pdfsubsection{Code Re-usability}
 
 C++ is a strongly typed language.  This means that all type information
 associated with variables and function arguments must be completely
@@ -381,7 +369,6 @@ its type at runtime.
 
 
 @subsubsection Strong vs. Weakly Typed Languages
-@pdfsubsection{Strong vs. Weakly Typed Languages}
 
 Strongly typed languages (such as C++) require that the programmer
 specify exactly what data types a particular routine may handle.
@@ -439,7 +426,6 @@ allows the development of truly general purpose, reusable software
 components.
 
 @subsubsection Generic Container Classes
-@pdfsubsection{Generic Container Classes}
 
 The tremendous difficulty involved in tricking C++ into implementing
 generic container classes, such as dictionary, linked list and bags,
@@ -456,7 +442,6 @@ Creating generic container classes is fundamental and trivial in Dynace.
 This is a very important difference.
 
 @subsubsection Runtime class representation
-@pdfsubsection{Runtime class representation}
 
 C++ has no runtime representation of classes and no metaclasses.  In
 fact, a C++ class is not an object at all.  In short, C++ is a half
@@ -506,7 +491,6 @@ an instance of the new class against the old code in the library
 without ever having to re-compile the old code.
 
 @subsubsection Efficiency
-@pdfsubsection{Efficiency}
 
 
 Dynace is not an interpretive language. Dynace programs are compiled with a
@@ -520,7 +504,6 @@ as to totally dispense with the runtime overhead.
 
 
 @subsubsection Compatibility With C
-@pdfsubsection{Compatibility With C}
 
 C++ is somewhat compatible with C, however, Dynace is entirely
 compatible with C.  Code which uses Dynace classes is just plain C
@@ -534,7 +517,6 @@ facilities to a pre-existing C application with Dynace.
 
 
 @subsubsection Garbage Collection
-@pdfsubsection{Garbage Collection}
 
 While C++ will automatically dispose of some types of objects (automatic
 variables), it can not automatically dispose of those objects allocated
@@ -544,7 +526,6 @@ handles all object reclamation automatically.
 
 
 @subsubsection Class Library
-@pdfsubsection{Class Library}
 
 C++ environments come with an absolute bare minimum of fundamental classes.
 Of course there are many C++ class libraries available, however, given
@@ -558,7 +539,6 @@ arrays, threads, pipes and semaphores.
 
 
 @subsubsection Conclusion
-@pdfsubsection{Conclusion}
 
 
 Dynace adds powerful object oriented capabilities in a simple,
@@ -579,7 +559,6 @@ enhance.
 
 
 @subsection A comparison of Dynace and Smalltalk
-@pdfsubsection{A comparison of Dynace and Smalltalk}
 
 
 Dynace is a very dynamic and flexible language just like
@@ -653,7 +632,6 @@ Dynace supports multiple inheritance.
 
 @page
 @section Installation
-@pdfsection{Installation}
 The diskette(s) distributed with Dynace are standard DOS formatted
 diskette(s).  The files on the diskette(s) have been compressed in order
 to reduce the quantity of diskettes. 
@@ -666,7 +644,6 @@ installation instructions.
 
 
 @section Contents
-@pdfsection{Contents}
 Once the system has been installed there will exist a series of
 directories under the @code{dynace} directory.  The system will contain
 the following directories:
@@ -730,14 +707,18 @@ Complete source to the utility programs.
 
 The only files that are absolutely necessary for a developer are those
 located in the @code{\DYNACE\LIB, \DYNACE\INCLUDE} and @code{\DYNACE\BIN}
-directories and @hfil @break @code{\DYNACE\UTILS\STARTUP.MK}.
+directories and
+@iftex 
+@hfil 
+@break 
+@end iftex 
+@code{\DYNACE\UTILS\STARTUP.MK}.
 
 
 
 
 @page
 @section Learning The System
-@pdfsection{Learning The System}
 This manual contains a description and rationale of object oriented
 concepts, a detailed description of the Dynace system and complete
 reference to all Dynace classes including examples.  The example programs
@@ -775,7 +756,6 @@ of its particular relevance to the approach taken in the Dynace system.
 
 @page
 @section Quick Start & Tutorial
-@pdfsection{Quick Start & Tutorial}
 The Dynace system includes a series of examples which serve both as a
 Quick Start and a Tutorial.  Each example is contained in its entirety
 in an independent directory.  This is done in order to illustrate the
@@ -889,7 +869,6 @@ of example programs.
 
 @page
 @section Manual Organization
-@pdfsection{Manual Organization}
 This manual serves as both a user manual and a complete reference manual
 to the Dynace system.  It makes no assumptions about the users knowledge
 of object oriented programming.  It does, however, assume a working
@@ -933,7 +912,6 @@ described in chapters 4 and 5.
 
 @page
 @section Contact Information
-@pdfsection{Contact Information}
 
 @table @asis
 
@@ -944,7 +922,10 @@ described in chapters 4 and 5.
 blake@@mcbride.name
 
 @item Discussion
-There is a Dynace discussion group at @hfil@break
+There is a Dynace discussion group at 
+@iftex
+@hfil@break
+@end iftex
 http://groups.yahoo.com/group/Dynace/
 
 @end table
@@ -953,7 +934,6 @@ http://groups.yahoo.com/group/Dynace/
 
 
 @section Use, Copyrights & Trademarks
-@pdfsection{Use, Copyrights & Trademarks}
 Copyright  @copyright{} 1996 Blake McBride
 All rights reserved.
 
@@ -981,7 +961,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @section Credits
-@pdfsection{Credits}
 
 
 The Dynace Object Oriented Extension to C, Windows Development System

@@ -1,7 +1,6 @@
 @page
 
 @section Thread Class
-@pdfsection{Thread Class}
 The @code{Thread} class gives Dynace the ability to create, manage and
 execute multiple threads of execution in a timesharing fashion.  See the
 manual for a detailed description of threads.
@@ -12,7 +11,6 @@ use of the thread / pipe / semaphore related classes.
 
 
 @subsection Thread Class Methods
-@pdfsubsection{Thread Class Methods}
 The class methods associated with the @code{Thread} class provide a means
 to create new instances of the @code{Thread} class.  Each instance
 represents a unique thread of execution.  The class methods also provide
@@ -28,7 +26,6 @@ as the ability to initialize the threading system.
 
 
 
-@pdfsubsubsection {BlockingGetkey}
 @deffn {BlockingGetkey} BlockingGetkey::Thread
 @sp 2
 @example
@@ -67,7 +64,6 @@ See also:  @code{StartThreader}
 
 
 
-@pdfsubsubsection {FindStr}
 @deffn {FindStr} FindStr::Thread
 @sp 2
 @example
@@ -101,7 +97,6 @@ See also:  @code{NewThread::Thread}
 
 
 
-@pdfsubsubsection {NewThread}
 @deffn {NewThread} NewThread::Thread
 @sp 2
 @example
@@ -187,7 +182,6 @@ See also:  @code{StartThreader, FindStr::Thread}
 
 
 @subsection Thread Instance Methods
-@pdfsubsection{Thread Instance Methods}
 The instance methods associated with this class are used to manage and
 query various aspects related to particular threads.  Each instance
 represents a single unique thread.
@@ -196,7 +190,6 @@ represents a single unique thread.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Thread
 @sp 2
 @example
@@ -232,7 +225,6 @@ See also:  @code{Kill::Thread, Hold::Thread}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Thread
 @sp 2
 @example
@@ -278,7 +270,6 @@ See also:  @code{Kill::Thread, Hold::Thread}
 
 
 
-@pdfsubsubsection {ChangePriority}
 @deffn {ChangePriority} ChangePriority::Thread
 @sp 2
 @example
@@ -324,7 +315,6 @@ See also:  @code{Priority::Thread, NewThread::Thread, State::Thread}
 
 
 
-@pdfsubsubsection {Hold}
 @deffn {Hold} Hold::Thread
 @sp 2
 @example
@@ -360,7 +350,6 @@ See also:  @code{Release::Thread, Kill::Thread}
 
 
 
-@pdfsubsubsection {IntValue}
 @deffn {IntValue} IntValue::Thread
 @sp 2
 @example
@@ -398,7 +387,6 @@ See also:  @code{State::Thread, WaitFor::Thread, Kill::Thread}
 
 
 
-@pdfsubsubsection {Kill}
 @deffn {Kill} Kill::Thread
 @sp 2
 @example
@@ -438,7 +426,6 @@ See also:  @code{Dispose::Thread, Hold::Thread}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::Thread
 @sp 2
 @example
@@ -471,7 +458,6 @@ See also:  @code{NewThread::Thread, State::Thread, Priority::Thread}
 
 
 
-@pdfsubsubsection {Priority}
 @deffn {Priority} Priority::Thread
 @sp 2
 @example
@@ -511,7 +497,6 @@ See also:  @code{ChangePriority::Thread, NewThread::Thread, State::Thread}
 
 
 
-@pdfsubsubsection {Release}
 @deffn {Release} Release::Thread
 @sp 2
 @example
@@ -550,7 +535,6 @@ See also:  @code{Hold::Thread}
 
 
 
-@pdfsubsubsection {State}
 @deffn {State} State::Thread
 @sp 2
 @example
@@ -595,7 +579,6 @@ WAITING_FOR_SEMAPHORE  Thread waiting for semaphore
 
 
 
-@pdfsubsubsection {WaitFor}
 @deffn {WaitFor} WaitFor::Thread
 @sp 2
 @example
@@ -627,7 +610,6 @@ See also:  @code{Kill::Thread, Dispose::Thread, Hold::Thread}
 
 
 @subsection Thread Macros
-@pdfsubsection{Thread Macros}
 The thread system includes a few macros which are used to provide
 some additional functionality without incurring much system overhead.
 
@@ -647,7 +629,6 @@ some additional functionality without incurring much system overhead.
 
 
 
-@pdfsubsubsection {ENABLE_THREADER}
 @deffn {ENABLE_THREADER} ENABLE_THREADER
 @sp 2
 @example
@@ -701,7 +682,6 @@ See also:  @code{INHIBIT_THREADER, StartThreader}
 
 
 
-@pdfsubsubsection {INHIBIT_THREADER}
 @deffn {INHIBIT_THREADER} INHIBIT_THREADER
 @sp 2
 @example
@@ -746,7 +726,6 @@ See also:  @code{ENABLE_THREADER, StartThreader}
 
 
 
-@pdfsubsubsection {StartThreader}
 @deffn {StartThreader} StartThreader
 @sp 2
 @example
@@ -787,7 +766,6 @@ See also:  @code{NewThread::Thread}
 
 
 
-@pdfsubsubsection {YIELD}
 @deffn {YIELD} YIELD
 @sp 2
 @example

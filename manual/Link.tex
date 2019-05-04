@@ -1,7 +1,6 @@
 @page
 
 @section Link Class
-@pdfsection{Link Class}
 The @code{Link} class is used to represent a single link in a doubly
 linked list.  It is normally used in conjunction with the
 @code{LinkList} class in order to manage arbitrary objects on a doubly
@@ -23,14 +22,12 @@ use of the doubly linked list related classes.
 
 
 @subsection Link Class Methods
-@pdfsubsection{Link Class Methods}
 The @code{Link} class has only a single class method.  That method is used
 to create and initialize new instances of itself.
 
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Link
 @sp 2
 @example
@@ -63,7 +60,6 @@ See also:  @code{Dispose::Link}
 
 
 @subsection Link Instance Methods
-@pdfsubsection{Link Instance Methods}
 The instances methods associated with the @code{Link} class are used to
 link, unlink, move and dispose of particular instances of the
 @code{Link} class or (more often) one of its subclasses.
@@ -83,7 +79,6 @@ link, unlink, move and dispose of particular instances of the
 
 
 
-@pdfsubsubsection {AddAfter}
 @deffn {AddAfter} AddAfter::Link
 @sp 2
 @example
@@ -119,7 +114,6 @@ See also:  @code{AddBefore::Link}
 
 
 
-@pdfsubsubsection {AddBefore}
 @deffn {AddBefore} AddBefore::Link
 @sp 2
 @example
@@ -147,7 +141,10 @@ This method returns its first argument.
 @c @end example
 @sp 1
 See also:  @code{AddAfter::Link, ChangeNext::Link,}
-@hfil @break @hglue .64in      @code{ChangePrevious::Link}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangePrevious::Link}
 @end deffn
 
 
@@ -157,7 +154,6 @@ See also:  @code{AddAfter::Link, ChangeNext::Link,}
 
 
 
-@pdfsubsubsection {ChangeNext}
 @deffn {ChangeNext} ChangeNext::Link
 @sp 2
 @example
@@ -188,7 +184,6 @@ See also:  @code{ChangePrevious::Link, Next::Link}
 
 
 
-@pdfsubsubsection {ChangePrevious}
 @deffn {ChangePrevious} ChangePrevious::Link
 @sp 2
 @example
@@ -221,7 +216,6 @@ See also:  @code{ChangeNext::Link, Previous::Link}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Link
 @sp 2
 @example
@@ -259,7 +253,6 @@ See also:  @code{DeepCopy::Link, Copy::Object}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Link
 @sp 2
 This method performs the same function as @code{Copy::Link}.
@@ -275,7 +268,6 @@ This method performs the same function as @code{Copy::Link}.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Link
 @sp 2
 @example
@@ -311,7 +303,6 @@ See also:  @code{Dispose::Link, Remove::Link}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Link
 @sp 2
 @example
@@ -351,7 +342,6 @@ See also:  @code{DeepDispose::Link, Remove::Link}
 
 
 
-@pdfsubsubsection {InitLink}
 @deffn {InitLink} InitLink::Link
 @sp 2
 @example
@@ -383,7 +373,6 @@ See also:  @code{Previous::Link, Next::Link}
 
 
 
-@pdfsubsubsection {List}
 @deffn {List} List::Link
 @sp 2
 @example
@@ -414,7 +403,6 @@ See also:  @code{Previous::Link, Next::Link, InitLink::Link}
 
 
 
-@pdfsubsubsection {MoveAfter}
 @deffn {MoveAfter} MoveAfter::Link
 @sp 2
 @example
@@ -448,7 +436,6 @@ See also:  @code{MoveBefore::Link, MoveBeginning::Link}
 
 
 
-@pdfsubsubsection {MoveBefore}
 @deffn {MoveBefore} MoveBefore::Link
 @sp 2
 @example
@@ -488,7 +475,6 @@ See also:  @code{MoveAfter::Link, MoveEnd::Link}
 
 
 
-@pdfsubsubsection {MoveBeginning}
 @deffn {MoveBeginning} MoveBeginning::Link
 @sp 2
 @example
@@ -525,7 +511,6 @@ See also:  @code{MoveEnd::Link, MoveAfter::Link}
 
 
 
-@pdfsubsubsection {MoveEnd}
 @deffn {MoveEnd} MoveEnd::Link
 @sp 2
 @example
@@ -564,7 +549,6 @@ See also:  @code{MoveBeginning::Link, MoveBefore::Link}
 
 
 
-@pdfsubsubsection {Next}
 @deffn {Next} Next::Link
 @sp 2
 @example
@@ -606,7 +590,6 @@ See also:  @code{Previous::Link, Nth::Link, List::Link}
 
 
 
-@pdfsubsubsection {Nth}
 @deffn {Nth} Nth::Link
 @anchor{Nth}
 @sp 2
@@ -644,7 +627,6 @@ See also:  @code{Previous::Link, Next::Link, List::Link}
 
 
 
-@pdfsubsubsection {Previous}
 @deffn {Previous} Previous::Link
 @sp 2
 @example
@@ -673,7 +655,6 @@ See also:  @code{Next::Link, Nth::Link, List::Link}
 
 
 
-@pdfsubsubsection {Remove}
 @deffn {Remove} Remove::Link
 @sp 2
 @example
@@ -708,7 +689,6 @@ See also:  @code{ChangeNext::Link, ChangePrevious::Link}
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::Link
 @sp 2
 @example
@@ -744,7 +724,6 @@ See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Link}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Link
 @sp 2
 @example

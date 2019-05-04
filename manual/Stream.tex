@@ -1,7 +1,6 @@
 @page
 
 @section Stream Class
-@pdfsection{Stream Class}
 The @code{Stream} class is an abstract class used to group other classes
 which poses the ability to read and write characters sequentially.
 Although much of the actual functionality is implemented by its
@@ -9,12 +8,10 @@ subclasses, the methods are documented here because of their common
 interface.
 
 @subsection Stream Class Methods
-@pdfsubsection{Stream Class Methods}
 There are no class methods associated with this class.
 
 
 @subsection Stream Instance Methods
-@pdfsubsection{Stream Instance Methods}
 Although most of the following methods are actually implemented in the
 subclasses of @code{Stream}, they are documented here because of their
 common interface.  Note that some methods are not available for all
@@ -26,7 +23,6 @@ seeking backward on a @code{String}).
 
 
 
-@pdfsubsubsection {Advance}
 @deffn {Advance} Advance::Stream
 @sp 2
 @example
@@ -59,7 +55,6 @@ See also:  @code{Seek::Stream, Retreat::Stream}
 
 
 
-@pdfsubsubsection {EndOfStream}
 @deffn {EndOfStream} EndOfStream::Stream
 @sp 2
 @example
@@ -90,7 +85,6 @@ See also:  @code{Length::Stream, Position::Stream}
 
 
 
-@pdfsubsubsection {Gets}
 @deffn {Gets} Gets::Stream
 @sp 2
 @example
@@ -127,7 +121,6 @@ See also:  @code{Read::Stream, Puts::Stream}
 
 
 
-@pdfsubsubsection {Length}
 @deffn {Length} Length::Stream
 @sp 2
 @example
@@ -158,7 +151,6 @@ See also:  @code{Seek::Stream, Position::Stream}
 
 
 
-@pdfsubsubsection {Position}
 @deffn {Position} Position::Stream
 @sp 2
 @example
@@ -188,7 +180,6 @@ See also:  @code{Seek::Stream, Length::Stream}
 
 
 
-@pdfsubsubsection {Printf}
 @deffn {Printf} Printf::Stream
 @sp 2
 @example
@@ -227,7 +218,6 @@ See also:  @code{Puts::Stream}
 
 
 
-@pdfsubsubsection {Putc}
 @deffn {Putc} Putc::Stream
 @sp 2
 @example
@@ -261,7 +251,6 @@ See also:  @code{Puts::Stream}
 
 
 
-@pdfsubsubsection {Puts}
 @deffn {Puts} Puts::Stream
 @sp 2
 @example
@@ -298,7 +287,6 @@ See also:  @code{Putc::Stream, Printf::Stream}
 
 
 
-@pdfsubsubsection {Read}
 @deffn {Read} Read::Stream
 @sp 2
 @example
@@ -337,7 +325,6 @@ See also:  @code{Gets::Stream}
 
 
 
-@pdfsubsubsection {Retreat}
 @deffn {Retreat} Retreat::Stream
 @sp 2
 @example
@@ -379,7 +366,6 @@ See also:  @code{Seek::Stream, Advance::Stream}
 
 
 
-@pdfsubsubsection {Seek}
 @deffn {Seek} Seek::Stream
 @sp 2
 @example
@@ -422,7 +408,6 @@ See also:  @code{Retreat::Stream, Advance::Stream}
 
 
 
-@pdfsubsubsection {Write}
 @deffn {Write} Write::Stream
 @sp 2
 @example
@@ -453,7 +438,6 @@ See also:  @code{Puts::Stream, Read::Stream}
 
 
 @subsection Stream Global Variables
-@pdfsubsection{Stream Global Variables}
 There are several global variables associated with the @code{Stream}
 class.  These variables represent standard streams used throughout
 Dynace.  They are used for diagnostic output as well as any other input
@@ -464,7 +448,6 @@ remainder of this section documents all the global stream variables.
 
 
 
-@pdfsubsubsection {stderrStream}
 @deffn {stderrStream} stderrStream::Stream
 @sp 2
 @example
@@ -494,7 +477,6 @@ See also:  @code{stdoutStream::Stream}
 
 
 
-@pdfsubsubsection {stdinStream}
 @deffn {stdinStream} stdinStream::Stream
 @sp 2
 @example
@@ -523,7 +505,6 @@ See also:  @code{stdoutStream::Stream}
 
 
 
-@pdfsubsubsection {stdoutStream}
 @deffn {stdoutStream} stdoutStream::Stream
 @sp 2
 @example
@@ -555,7 +536,6 @@ See also:  @code{stderrStream::Stream}
 
 
 
-@pdfsubsubsection {traceStream}
 @deffn {traceStream} traceStream::Stream
 @sp 2
 @example

@@ -27,7 +27,6 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Concepts
-@pdfchapter{Concepts}
 Over time, the methods used in the development of computer software has
 evolved from a @emph{Goto} model, to a @emph{Structured Programming}
 model, and finally the @emph{Object Oriented model}.  In the
@@ -96,7 +95,6 @@ manual.
 
 @page
 @section Object Oriented
-@pdfsection{Object Oriented}
 
 The Object Oriented model of programming is embodied by three
 fundamental concepts, a bit of new terminology, and a few new
@@ -106,7 +104,6 @@ These concepts will be introduced first, followed by the mechanisms.
 The terminology will be introduced as it is encountered.
 
 @subsection Encapsulation
-@pdfsubsection{Encapsulation}
 Encapsulation allows the programmer to tightly bind a data structure
 with the routines which access it, into an item called an @emph{object}.
 Encapsulation reduces the ways in which outside data or procedures may
@@ -154,7 +151,6 @@ methods to achieve this will become increasingly clear as we progress.
 
 
 @subsection Polymorphism And Overloading
-@pdfsubsection{Polymorphism And Overloading}
 In a normal C program, you may only have one function with any particular
 name.  For example, if you had a non-static function @code{fun1()} in one
 module, you couldn't have another non-static function @code{fun1()} in
@@ -242,7 +238,6 @@ You could later pass @code{draw_n3()} a @code{triangle} or a @code{rectangle}
 and again, no code changes, and no re-compilation of @code{draw_n3()}.
 
 @subsubsection Early vs. Late Binding
-@pdfsubsection{Early vs. Late Binding}
 
 In the previous example of @code{draw_n3()} one should understand that
 there is a @code{draw()} function defined for the @code{square}, one for the
@@ -284,7 +279,6 @@ method may be used in tight loops.  Dynace can also use early binding,
 however, this is discouraged.
 
 @subsection Inheritance
-@pdfsubsection{Inheritance}
 Inheritance allows you to create objects which are like other objects,
 or group of objects, but has some differences.  Inheritance is an
 extremely powerful tool.  It enables a programmer to create a new
@@ -341,7 +335,6 @@ in both depth and width, whatever makes sense.
 
 @page
 @section Dynace
-@pdfsection{Dynace}
 Dynace is an object oriented extension to the C language.  It implements
 all of the features discussed in this manual.  Dynace is written in the
 C language, and designed to be portable, efficient, powerful, and
@@ -369,7 +362,6 @@ although the vast majority of these concepts are very closely related to
 most of the above languages.
 
 @subsection Object
-@pdfsubsection{Object}
 Dynace adds to the C language only @emph{one} new data type, the @emph{object}.
 An @emph{object} is a package consisting of data and the procedures
 necessary to create, destroy, modify, and otherwise effect the data.  An
@@ -393,7 +385,6 @@ In this example three variables, @code{a, b} and @code{c}, which may
 refer to objects, have been defined.
 
 @subsection Classes & Instances
-@pdfsubsection{Classes & Instances}
 In Dynace, @emph{each} and @emph{every} object refers to an object, called
 a @emph{class}, which defines that object.  One class object may define
 any number of objects.  Each object which is defined by a particular
@@ -424,7 +415,6 @@ knows which class it is.  There may be an arbitrary number of instances of
 a class, however.
 
 @subsubsection  Superclasses
-@pdfsubsection{Superclasses}
 Each class may have zero or more superclasses.  Classes normally have at
 least one superclass, though.  The data contained in an instance will
 be the sum of the data defined directly in the instance's class, and the
@@ -439,7 +429,6 @@ If class @code{A} is a superclass of class @code{B} then, class @code{B}
 is called a @emph{subclass} of class @code{A}.
 
 @subsubsection Instance Variables
-@pdfsubsection{Instance Variables}
 The data contained within a particular instance are called its
 @emph{instance variables}.  The values contained within an instance's
 instance variables are unique to that individual instance.  Of course
@@ -453,7 +442,6 @@ instance's class are able to access the instance variables.  This
 ensures encapsulation and data abstraction.
 
 @subsubsection Class Variables
-@pdfsubsection{Class Variables}
 Each class may also contain data. This data, which is located in the class,
 are called @emph{class variables}.  The data in class variables is always
 unique to a particular class.  Class variables often serve as data which
@@ -466,7 +454,6 @@ Like instances variables, class variables may only be accessed by
 specific procedures which are bound to the class.
 
 @subsection Metaclasses
-@pdfsubsection{Metaclasses}
 As was discussed before, all things in Dynace are @emph{objects}, and
 are treated the same.  If this is true, you may be wondering why we are
 discussing classes and instances like they are two different things.
@@ -486,7 +473,6 @@ every class is an instance of exactly one class (the metaclass) and has
 zero or more superclasses.
 
 @subsection Methods
-@pdfsubsection{Methods}
 As was discussed earlier, the only procedures which may access instance
 variables are the procedures associated with the class of the instance.
 These procedures are called @emph{methods}.  Methods are used to effect
@@ -508,19 +494,16 @@ These features are very important.  They are among the key elements
 which allow the object oriented model to be such a powerful tool.
 
 @subsubsection Instance Methods
-@pdfsubsection{Instance Methods}
 @emph{Instance methods} are methods which typically operate on instance
 variables.  Instance methods are conceptually located in the class of
 an instance.
 
 @subsubsection Class Methods
-@pdfsubsection{Class Methods}
 @emph{Class methods} are methods which typically operate on class
 variables.  Class methods are conceptually located in the class of
 the class, or the metaclass.
 
 @subsection Generic Functions
-@pdfsubsection{Generic Functions}
 Given how tightly bound and inaccessible instance (or class) variables and
 methods are bound to an object, one might wonder just how anything external
 to the object can cause any change in an object.  The answer to this is
@@ -570,7 +553,6 @@ sending a @emph{message} to the object which is the first argument to
 the generic function.
 
 @subsubsection Method Lookup
-@pdfsubsection{Method Lookup}
 The order with which generic functions search for an appropriate method
 is important to understand.  The first place searched is always the
 class of the object in the first argument to the generic function.  If
@@ -614,7 +596,6 @@ first argument to a generic function is a class, then a class method
 will be found.
 
 @subsection Memory Management and Garbage Collection
-@pdfsubsection{Memory Management and Garbage Collection}
 All objects in Dynace are dynamic entities which are allocated from the C
 heap.  When a new object is created, it is allocated from the heap, but
 when an object is no longer needed, it must be returned to the heap,
@@ -635,7 +616,6 @@ smooth, reliable, and efficient operation of an application without
 ever having to worry about freeing any objects.
 
 @subsection Threads
-@pdfsubsection{Threads}
 In a normal C program when one function calls another the first function
 waits until the second function completes before it may continue.  The
 program follows a single line, or @emph{thread}, of execution.  In a
@@ -676,7 +656,6 @@ native threads provided by the underlying system.
 
 
 @subsection Pipes
-@pdfsubsection{Pipes}
 Once there are multiple threads running there arises a need to coordinate
 and communicate among the multiple threads.  @emph{Pipes} are a
 streams based facility which allows one thread to pass information
@@ -689,7 +668,6 @@ Dynace supports named and anonymous pipes with blocking and non-blocking
 io.
 
 @subsection Semaphores
-@pdfsubsection{Semaphores}
 Thread coordination is achieved with @emph{semaphores}.  Semaphores allow
 the programmer to control the number of threads which may have simultaneous
 access to arbitrary system resources or blocks of code.
@@ -713,7 +691,6 @@ are implemented in such a fashion so that threads which are waiting for
 a semaphore require no CPU time!
 
 @subsection Dynace Kernel & Class Library
-@pdfsubsection{Dynace Kernel & Class Library}
 Dynace consists of two separable parts.  One part is called the @emph{kernel},
 and the other is the @emph{class library}.  The kernel contains all the
 raw functionality of Dynace.  It contains all the features which allow the

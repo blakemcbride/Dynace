@@ -1,7 +1,6 @@
 @page
 
 @section String Class
-@pdfsection{String Class}
 The @code{String} class is used to represent the C language
 @code{char *} data type as a Dynace object.  It is a subclass
 of the @code{Stream} class and it provides an array of methods
@@ -25,7 +24,6 @@ file in memory.
 
 
 @subsection String Class Methods
-@pdfsubsection{String Class Methods}
 The String class has several class methods which create new @code{String}
 instances.  They are provided to lend various levels of flexibility.
 
@@ -35,7 +33,6 @@ instances.  They are provided to lend various levels of flexibility.
 
 
 
-@pdfsubsubsection {Build}
 @deffn {Build} Build::String
 @sp 2
 @example
@@ -81,7 +78,6 @@ There is also an instance method @code{Build::String}
 
 
 
-@pdfsubsubsection {MaskFunction}
 @deffn {MaskFunction} MaskFunction::String
 @sp 2
 @example
@@ -120,7 +116,10 @@ r = fun(str[1]);                        /*  r == 1        */
 @end example
 @sp 1
 See also:  @code{gSetMaskFiller::String, gApplyMask::String,}
-@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{gRemoveMask::String}
 @end deffn
 
 
@@ -134,7 +133,6 @@ See also:  @code{gSetMaskFiller::String, gApplyMask::String,}
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::String
 @sp 2
 @example
@@ -159,7 +157,10 @@ x = gNew(String);
 @end example
 @sp 2
 See also:  @code{Copy::String, StringValue::String, Dispose::String,}
-@hfil @break @hglue .64in      @code{NewWithStr::String, NewWithObj::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{NewWithStr::String, NewWithObj::String}
 @end deffn
 
 
@@ -169,7 +170,6 @@ See also:  @code{Copy::String, StringValue::String, Dispose::String,}
 
 
 
-@pdfsubsubsection {NewWithStr}
 @deffn {NewWithStr} NewWithStr::String
 @sp 2
 @example
@@ -201,7 +201,10 @@ y = gNewWithStr(String, (char *) x);
 @end group
 @end example
 See also:  @code{Copy::String, StringValue::String, Dispose::String}
-@hfil @break @hglue .64in     @code{New::String, NewWithObj::String}
+@iftex
+@hfil @break @hglue .64in     
+@end iftex
+@code{New::String, NewWithObj::String}
 @end deffn
 
 
@@ -215,7 +218,6 @@ See also:  @code{Copy::String, StringValue::String, Dispose::String}
 
 
 
-@pdfsubsubsection {NewWithObj}
 @deffn {NewWithObj} NewWithObj::String
 @sp 2
 @example
@@ -247,7 +249,10 @@ y = gNewWithObj(String, x);
 @end group
 @end example
 See also:  @code{Copy::String, StringValue::String, Dispose::String}
-@hfil @break @hglue .64in      @code{NewWithStr::String, New::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{NewWithStr::String, New::String}
 @end deffn
 
 
@@ -261,7 +266,6 @@ See also:  @code{Copy::String, StringValue::String, Dispose::String}
 
 
 
-@pdfsubsubsection {Sprintf}
 @deffn {Sprintf} Sprintf::String
 @sp 2
 @example
@@ -301,7 +305,6 @@ See also:  @code{StringValue::String, Dispose::String}
 
 
 @subsection String Instance Methods
-@pdfsubsection{String Instance Methods}
 The instance methods associated with the String class provide a
 means of changing and obtaining the value associated with an instance of
 the String class.  Methods are also included to help the generic
@@ -314,7 +317,6 @@ container classes to quickly access members of this class.
 
 
 
-@pdfsubsubsection {Append}
 @deffn {Append} Append::String
 @sp 2
 @example
@@ -360,7 +362,6 @@ See also:  @code{ChangeValue::String, Build::String}
 
 
 
-@pdfsubsubsection {ApplyMask}
 @deffn {ApplyMask} ApplyMask::String
 @sp 2
 @example
@@ -407,7 +408,10 @@ gApplyMask(x, NULL, "1234567890"); /* x = "1234567890"     */
 @end example
 @sp 1
 See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
-@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{gRemoveMask::String}
 @end deffn
 
 
@@ -424,7 +428,6 @@ See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
 
 
 
-@pdfsubsubsection {Build}
 @deffn {Build} Build::String
 @sp 2
 @example
@@ -491,7 +494,6 @@ There is also a class method @code{Build::String}
 
 
 
-@pdfsubsubsection {ChangeCharAt}
 @deffn {ChangeCharAt} ChangeCharAt::String
 @sp 2
 @example
@@ -536,7 +538,6 @@ See also:  @code{CharValueAt::String}
 
 
 
-@pdfsubsubsection {ChangeStrValue}
 @deffn {ChangeStrValue} ChangeStrValue::String
 @sp 2
 @example
@@ -578,7 +579,6 @@ See also:  @code{ChangeValue::String, Append::String, Build::String}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::String
 @sp 2
 @example
@@ -623,7 +623,6 @@ See also:  @code{ChangeStrValue::String, Append::String, Build::String}
 
 
 
-@pdfsubsubsection {CharValueAt}
 @deffn {CharValueAt} CharValueAt::String
 @sp 2
 @example
@@ -662,7 +661,6 @@ See also:  @code{ChangeCharAt::String}
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::String
 @sp 2
 @example
@@ -705,7 +703,6 @@ See also:  @code{Equal::String, CompareI::String, CompareN::String}
 
 
 
-@pdfsubsubsection {CompareI}
 @deffn {CompareI} CompareI::String
 @sp 2
 @example
@@ -744,7 +741,6 @@ See also:  @code{Compare::String, CompareN::String}
 
 
 
-@pdfsubsubsection {CompareN}
 @deffn {CompareN} CompareN::String
 @sp 2
 @example
@@ -785,7 +781,6 @@ See also:  @code{Compare::String, CompareNI::String}
 
 
 
-@pdfsubsubsection {CompareNI}
 @deffn {CompareNI} CompareNI::String
 @sp 2
 @example
@@ -835,7 +830,6 @@ See also:  @code{CompareI::String, CompareN::String}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::String
 @sp 2
 @example
@@ -877,7 +871,6 @@ See also:  @code{New::String, DeepCopy::String}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::String
 @sp 2
 @example
@@ -913,7 +906,6 @@ See also:  @code{New::String, Copy::String}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::String
 @sp 2
 @example
@@ -947,7 +939,6 @@ gDeepDispose(x);
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::String
 @sp 2
 @example
@@ -991,7 +982,6 @@ gDispose(x);
 
 
 
-@pdfsubsubsection {Drop}
 @deffn {Drop} Drop::String
 @sp 2
 @example
@@ -1036,7 +1026,6 @@ See also:  @code{Take::String, SubString::String}
 
 
 
-@pdfsubsubsection {Equal}
 @deffn {Equal} Equal::String
 @sp 2
 @example
@@ -1086,7 +1075,6 @@ See also:  @code{Compare::String}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::String
 @sp 2
 @example
@@ -1117,7 +1105,6 @@ See also:  @code{Compare::String}
 
 
 
-@pdfsubsubsection {JustifyCenter}
 @deffn {JustifyCenter} JustifyCenter::String
 @sp 2
 @example
@@ -1147,7 +1134,10 @@ gJustifyCenter(gTake(x, 14));   /*  x = "   ABD  DEF   "    */
 @end example
 @sp 1
 See also:  @code{Take::String, JustifyRight::String,}
-@hfil @break @hglue .64in       @code{JustifyLeft::String}
+@iftex
+@hfil @break @hglue .64in       
+@end iftex
+@code{JustifyLeft::String}
 @end deffn
 
 
@@ -1155,7 +1145,6 @@ See also:  @code{Take::String, JustifyRight::String,}
 
 
 
-@pdfsubsubsection {JustifyLeft}
 @deffn {JustifyLeft} JustifyLeft::String
 @sp 2
 @example
@@ -1185,7 +1174,10 @@ gJustifyLeft(gTake(x, 10));   /*  x = "ABD  DEF  "    */
 @end example
 @sp 1
 See also:  @code{Take::String, JustifyCenter::String,}
-@hfil @break @hglue .64in       @code{JustifyRight::String}
+@iftex
+@hfil @break @hglue .64in       
+@end iftex
+@code{JustifyRight::String}
 @end deffn
 
 
@@ -1198,7 +1190,6 @@ See also:  @code{Take::String, JustifyCenter::String,}
 
 
 
-@pdfsubsubsection {JustifyRight}
 @deffn {JustifyRight} JustifyRight::String
 @sp 2
 @example
@@ -1228,7 +1219,10 @@ gJustifyRight(gTake(x, 10));   /*  x = "  ABD  DEF"    */
 @end example
 @sp 1
 See also:  @code{Take::String, JustifyCenter::String,}
-@hfil @break @hglue .64in       @code{JustifyLeft::String}
+@iftex
+@hfil @break @hglue .64in       
+@end iftex
+@code{JustifyLeft::String}
 @end deffn
 
 
@@ -1243,7 +1237,6 @@ See also:  @code{Take::String, JustifyCenter::String,}
 
 
 
-@pdfsubsubsection {NumbPieces}
 @deffn {NumbPieces} NumbPieces::String
 @sp 2
 @example
@@ -1299,7 +1292,6 @@ See also:  @code{Piece::String}
 
 
 
-@pdfsubsubsection {Piece}
 @deffn {Piece} Piece::String
 @sp 2
 @example
@@ -1359,7 +1351,6 @@ See also:  @code{NumbPieces::String}
 
 
 
-@pdfsubsubsection {PrintLength}
 @deffn {PrintLength} PrintLength::String
 @sp 2
 @example
@@ -1406,7 +1397,6 @@ See also:  @code{Size::String}
 
 
 
-@pdfsubsubsection {Process}
 @deffn {Process} Process::String
 @sp 2
 @example
@@ -1453,7 +1443,6 @@ See also:  @code{PrintLength::String}
 
 
 
-@pdfsubsubsection {RemoveMask}
 @deffn {RemoveMask} RemoveMask::String
 @sp 2
 @example
@@ -1488,7 +1477,10 @@ gRemoveMask(x, NULL, "(123) 456-7890");/*x="(123) 456-7890"*/
 @end example
 @sp 1
 See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
-@hfil @break @hglue .64in      @code{gApplyMask::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{gApplyMask::String}
 @end deffn
 
 
@@ -1503,7 +1495,6 @@ See also:  @code{gMaskFunction::String, gSetMaskFiller::String,}
 
 
 
-@pdfsubsubsection {SetMaskFiller}
 @deffn {SetMaskFiller} SetMaskFiller::String
 @sp 2
 @example
@@ -1538,7 +1529,10 @@ gApplyMask(x, "<(###) ###-####", NULL);
 @end example
 @sp 1
 See also:  @code{gMaskFunction::String, gApplyMask::String,}
-@hfil @break @hglue .64in      @code{gRemoveMask::String}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{gRemoveMask::String}
 @end deffn
 
 
@@ -1552,7 +1546,6 @@ See also:  @code{gMaskFunction::String, gApplyMask::String,}
 
 
 
-@pdfsubsubsection {Size}
 @deffn {Size} Size::String
 @sp 2
 @example
@@ -1593,7 +1586,6 @@ See also:  @code{PrintLength::String}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::String
 @sp 2
 @example
@@ -1636,7 +1628,6 @@ See also:  @code{StringValue::String, PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {StringValue}
 @deffn {StringValue} StringValue::String
 @sp 2
 @example
@@ -1670,7 +1661,6 @@ See also:  @code{New::String, ChangeValue::String}
 
 
 
-@pdfsubsubsection {StripCenter}
 @deffn {StripCenter} StripCenter::String
 @sp 2
 @example
@@ -1708,7 +1698,6 @@ See also:  @code{StripRight::String, StripLeft::String}
 
 
 
-@pdfsubsubsection {StripLeft}
 @deffn {StripLeft} StripLeft::String
 @sp 2
 @example
@@ -1744,7 +1733,6 @@ See also:  @code{StripRight::String, StripCenter::String}
 
 
 
-@pdfsubsubsection {StripRight}
 @deffn {StripRight} StripRight::String
 @sp 2
 @example
@@ -1793,7 +1781,6 @@ See also:  @code{StripLeft::String, StripCenter::String}
 
 
 
-@pdfsubsubsection {SubString}
 @deffn {SubString} SubString::String
 @sp 2
 @example
@@ -1845,7 +1832,6 @@ See also:  @code{Take::String, Drop::String}
 
 
 
-@pdfsubsubsection {Take}
 @deffn {Take} Take::String
 @sp 2
 @example
@@ -1901,7 +1887,6 @@ See also:  @code{Drop::String, SubString::String}
 
 
 
-@pdfsubsubsection {ToLower}
 @deffn {ToLower} ToLower::String
 @sp 2
 @example
@@ -1940,7 +1925,6 @@ See also:  @code{ToUpper::String}
 
 
 
-@pdfsubsubsection {ToUpper}
 @deffn {ToUpper} ToUpper::String
 @sp 2
 @example

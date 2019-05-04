@@ -1,7 +1,6 @@
 @page
 
 @section IntegerAssociation Class
-@pdfsection{IntegerAssociation Class}
 This class is a subclass of @code{Association} and is used to represent
 an association between a C language @code{int} and an arbitrary Dynace
 object.  It performs all the functions as the @code{LookupKey} and
@@ -14,7 +13,6 @@ See the examples included with the Dynace system for an illustration of the
 use of the @code{Set}/@code{Dictionary} related classes.
 
 @subsection IntegerAssociation Class Methods
-@pdfsubsection{IntegerAssociation Class Methods}
 The only class method associated with this class is one needed to create
 new instances of itself.
 
@@ -23,7 +21,6 @@ new instances of itself.
 
 
 
-@pdfsubsubsection {NewWithIntObj}
 @deffn {NewWithIntObj} NewWithIntObj::IntegerAssociation
 @sp 2
 @example
@@ -54,7 +51,6 @@ The new instance is returned.
 
 
 @subsection IntegerAssociation Instance Methods
-@pdfsubsection{IntegerAssociation Instance Methods}
 The instance methods associated with this class are used to obtain,
 change and print the key and value associated with the instance.
 Additional functionality, although implemented by this class, is documented
@@ -73,7 +69,6 @@ of @code{Association}.
 
 
 
-@pdfsubsubsection {ChangeIntKey}
 @deffn {ChangeIntKey} ChangeIntKey::IntegerAssociation
 @sp 2
 @example
@@ -95,7 +90,10 @@ returns @code{i}.
 @c @end example
 @sp 1
 See also:  @code{IntKey::IntegerAssociation,}
-@hfil @break @hglue .64in      @code{ChangeValue::IntegerAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeValue::IntegerAssociation}
 @end deffn
 
 
@@ -108,7 +106,6 @@ See also:  @code{IntKey::IntegerAssociation,}
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::IntegerAssociation
 @sp 2
 @example
@@ -132,7 +129,10 @@ disposed.  This method returns the old value being replaced.
 @c @end example
 @sp 1
 See also:  @code{Value::IntegerAssociation,}
-@hfil @break @hglue .64in      @code{ChangeIntKey::IntegerAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeIntKey::IntegerAssociation}
 @end deffn
 
 
@@ -144,7 +144,6 @@ See also:  @code{Value::IntegerAssociation,}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::IntegerAssociation
 @sp 2
 @example
@@ -179,7 +178,6 @@ See also:  @code{Copy::Object}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::IntegerAssociation
 @sp 2
 @example
@@ -224,7 +222,6 @@ See also:  @code{Dispose::Object}
 
 
 
-@pdfsubsubsection {IntKey}
 @deffn {IntKey} IntKey::IntegerAssociation
 @sp 2
 @example
@@ -254,7 +251,6 @@ See also:  @code{ChangeIntKey::IntegerAssociation}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::IntegerAssociation
 @sp 2
 @example
@@ -295,7 +291,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::IntegerAssociation
 @sp 2
 @example
@@ -316,7 +311,10 @@ This method is used to obtain the value associated with
 @c @end example
 @sp 1
 See also:  @code{ChangeValue::IntegerAssociation,}
-@hfil @break @hglue .64in      @code{IntKey::IntegerAssociation}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{IntKey::IntegerAssociation}
 @end deffn
 
 

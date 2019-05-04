@@ -1,7 +1,6 @@
 @page
 
 @section FindFile Class
-@pdfsection{FindFile Class}
 The @code{FindFile} class is designed to provide a portable means of
 enumerating over the file names contained within a particular file
 system directory.  Currently, this class has only been ported to the DOS
@@ -12,14 +11,12 @@ Macintosh environments.
 
 
 @subsection FindFile Class Methods
-@pdfsubsection{FindFile Class Methods}
 The only class method used in this class is one to create instances of itself.
 
 
 
 
 
-@pdfsubsubsection {NewFindFile}
 @deffn {NewFindFile} NewFindFile::FindFile
 @sp 2
 @example
@@ -68,9 +65,9 @@ object  ff;
 char    *file;
 
 ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
-while (file = gNextFile(ff))  {
+while (file = gNextFile(ff))  @{
         do something with file
-}
+@}
 gDispose(ff);
 @end group
 @end example
@@ -83,7 +80,6 @@ See also:  @code{NextFile::FindFile}
 
 
 @subsection FindFile Instance Methods
-@pdfsubsection{FindFile Instance Methods}
 The instance methods associated with this class provide a means for
 sequentially enumerating through the selected file names and obtaining
 some degree of information associated with each particular file.
@@ -91,7 +87,6 @@ some degree of information associated with each particular file.
 
 
 
-@pdfsubsubsection {Attributes}
 @deffn {Attributes} Attributes::FindFile
 @sp 2
 @example
@@ -115,19 +110,22 @@ unsigned  attr;
 
 ff = gNewFindFile(FindFile, "*.*",
                   FF_FILE | FF_DIRECTORY | FF_READWRITE);
-while (file = gNextFile(ff))  {
+while (file = gNextFile(ff))  @{
         attr = gAttributes(ff);
         if (attr & FF_DIRECTORY)
                 handle a directory
         else if (attr & FF_FILE)
                 handle a file
-}
+@}
 gDispose(ff);
 @end group
 @end example
 @sp 1
 See also:  @code{NewFindFile::FindFile, NextFile::FindFile,}
-@hfil @break @hglue .64in      @code{WriteTime::FindFile}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{WriteTime::FindFile}
 @end deffn
 
 
@@ -137,7 +135,6 @@ See also:  @code{NewFindFile::FindFile, NextFile::FindFile,}
 
 
 
-@pdfsubsubsection {Length}
 @deffn {Length} Length::FindFile
 @sp 2
 @example
@@ -160,9 +157,9 @@ char    *file;
 long    len;
 
 ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
-while (file = gNextFile(ff))  {
+while (file = gNextFile(ff))  @{
         len = gLength(ff);
-}
+@}
 gDispose(ff);
 @end group
 @end example
@@ -178,7 +175,6 @@ See also:  @code{Attributes::FindFile, NextFile::FindFile}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::FindFile
 @sp 2
 @example
@@ -200,9 +196,9 @@ object  ff;
 char   *file;
 
 ff = gNewFindFile(FindFile, "*.c", FF_FILE | FF_READWRITE);
-while (gNextFile(ff))  {
+while (gNextFile(ff))  @{
         file = gName(ff);
-}
+@}
 gDispose(ff);
 @end group
 @end example
@@ -220,7 +216,6 @@ See also:  @code{NextFile::FindFile}
 
 
 
-@pdfsubsubsection {NextFile}
 @deffn {NextFile} NextFile::FindFile
 @sp 2
 @example
@@ -263,7 +258,6 @@ See also:  @code{NewFindFirst::FindFile}
 
 
 
-@pdfsubsubsection {WriteTime}
 @deffn {WriteTime} WriteTime::FindFile
 @sp 2
 @example

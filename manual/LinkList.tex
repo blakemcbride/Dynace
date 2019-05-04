@@ -1,7 +1,6 @@
 @page
 
 @section LinkList Class
-@pdfsection{LinkList Class}
 Instances of this class are used to coordinate and handle doubly linked
 lists as a whole.  It is used with instances of the @code{Link} class
 (or one of its subclasses) which represent the individual links of
@@ -15,7 +14,6 @@ use of the doubly linked list related classes.
 
 
 @subsection LinkList Class Methods
-@pdfsubsection{LinkList Class Methods}
 There is only one class method associated with this class and it is used
 to create new instances of the class.
 
@@ -25,7 +23,6 @@ to create new instances of the class.
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::LinkList
 @sp 2
 @example
@@ -57,7 +54,6 @@ See also:  @code{Dispose::LinkList}
 
 
 @subsection LinkList Instance Methods
-@pdfsubsection{LinkList Instance Methods}
 The instance methods associated with this class perform functions to
 add, change, inquire, enumerate and dispose of links associated with the
 linked list.  They also provide information such as how many links are
@@ -70,7 +66,6 @@ on the list.
 
 
 
-@pdfsubsubsection {AddFirst}
 @deffn {AddFirst} AddFirst::LinkList
 @sp 2
 @example
@@ -105,7 +100,6 @@ See also:  @code{AddLast::LinkList, DisposeFirst::LinkList}
 
 
 
-@pdfsubsubsection {AddLast}
 @deffn {AddLast} AddLast::LinkList
 @sp 2
 @example
@@ -136,7 +130,6 @@ See also:  @code{AddFirst::LinkList, DisposeLast::LinkList}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::LinkList
 @sp 2
 @example
@@ -174,7 +167,6 @@ See also:  @code{DeepCopy::LinkList, Copy::Object}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::LinkList
 @sp 2
 @example
@@ -212,7 +204,6 @@ See also:  @code{Copy::LinkList, Copy::Object}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::LinkList
 @sp 2
 @example
@@ -248,7 +239,6 @@ See also:  @code{Dispose::LinkList, Dispose::Object}
 
 
 
-@pdfsubsubsection {DeepDisposeAllNodes}
 @deffn {DeepDisposeAllNodes} DeepDisposeAllNodes::LinkList
 @sp 2
 @example
@@ -289,7 +279,6 @@ See also:  @code{DeepDispose::LinkList, DisposeAllNodes::LinkList}
 
 
 
-@pdfsubsubsection {DeepDisposeFirst}
 @deffn {DeepDisposeFirst} DeepDisposeFirst::LinkList
 @sp 2
 @example
@@ -327,7 +316,6 @@ See also:  @code{DeepDisposeLast::LinkList, DisposeFirst::LinkList}
 
 
 
-@pdfsubsubsection {DeepDisposeLast}
 @deffn {DeepDisposeLast} DeepDisposeLast::LinkList
 @sp 2
 @example
@@ -362,7 +350,6 @@ See also:  @code{DeepDisposeFirst::LinkList, DisposeLast::LinkList}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::LinkList
 @sp 2
 @example
@@ -399,7 +386,6 @@ See also:  @code{DeepDispose::LinkList, DisposeAllNodes::LinkList}
 
 
 
-@pdfsubsubsection {DisposeAllNodes}
 @deffn {DisposeAllNodes} DisposeAllNodes::LinkList
 @sp 2
 @example
@@ -436,7 +422,6 @@ See also:  @code{Dispose::LinkList, DeepDisposeAllNodes::LinkList}
 
 
 
-@pdfsubsubsection {DisposeFirst}
 @deffn {DisposeFirst} DisposeFirst::LinkList
 @sp 2
 @example
@@ -462,7 +447,10 @@ This method returns the linked list passed.
 @c @end example
 @sp 1
 See also:  @code{DisposeLast::LinkList, DeepDispose::LinkList,}
-@hfil @break @hglue .64in      @code{RemoveFirst::LinkList}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveFirst::LinkList}
 @end deffn
 
 
@@ -474,7 +462,6 @@ See also:  @code{DisposeLast::LinkList, DeepDispose::LinkList,}
 
 
 
-@pdfsubsubsection {DisposeLast}
 @deffn {DisposeLast} DisposeLast::LinkList
 @sp 2
 @example
@@ -500,7 +487,10 @@ This method returns the linked list passed.
 @c @end example
 @sp 1
 See also:  @code{DisposeFirst::LinkList, DeepDispose::LinkList,}
-@hfil @break @hglue .64in      @code{RemoveLast::LinkList}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveLast::LinkList}
 @end deffn
 
 
@@ -512,7 +502,6 @@ See also:  @code{DisposeFirst::LinkList, DeepDispose::LinkList,}
 
 
 
-@pdfsubsubsection {First}
 @deffn {First} First::LinkList
 @sp 2
 @example
@@ -547,7 +536,6 @@ See also:  @code{Last::LinkList, RemoveFirst::LinkList}
 
 
 
-@pdfsubsubsection {IncNelm}
 @deffn {IncNelm} IncNelm::LinkList
 @sp 2
 @example
@@ -586,7 +574,6 @@ used externally.
 
 
 
-@pdfsubsubsection {Last}
 @deffn {Last} Last::LinkList
 @sp 2
 @example
@@ -623,7 +610,6 @@ See also:  @code{First::LinkList, RemoveLast::LinkList}
 
 
 
-@pdfsubsubsection {Remove}
 @deffn {Remove} Remove::LinkList
 @sp 2
 This method has been superseded by @code{Remove::Link}.
@@ -638,7 +624,6 @@ See also:  @code{Dispose::Link, RemoveFirst::LinkList}
 
 
 
-@pdfsubsubsection {RemoveFirst}
 @deffn {RemoveFirst} RemoveFirst::LinkList
 @sp 2
 @example
@@ -675,7 +660,6 @@ See also:  @code{RemoveLast::LinkList, DisposeFirst::LinkList}
 
 
 
-@pdfsubsubsection {RemoveLast}
 @deffn {RemoveLast} RemoveLast::LinkList
 @sp 2
 @example
@@ -711,7 +695,6 @@ See also:  @code{RemoveFirst::LinkList, DisposeLast::LinkList}
 
 
 
-@pdfsubsubsection {Sequence}
 @deffn {Sequence} Sequence::LinkList
 @sp 2
 @example
@@ -763,7 +746,6 @@ See also:  @code{Next::LinkSequence}
 
 
 
-@pdfsubsubsection {Size}
 @deffn {Size} Size::LinkList
 @sp 2
 @example
@@ -796,7 +778,6 @@ This method is used to obtain the number of links on the linked list.
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::LinkList
 @sp 2
 @example

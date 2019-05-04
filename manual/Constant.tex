@@ -1,7 +1,6 @@
 @page
 
 @section Constant Class
-@pdfsection{Constant Class}
 This class is used to represent constants.  Constants are objects which
 can never be destroyed or copied.  They always retain their value and
 when compared, they only equal themselves.  An example of a constant
@@ -9,13 +8,11 @@ would be an object which represents a true or false condition such
 as @code{T} and @code{NIL} in lisp.
 
 @subsection Constant Class Methods
-@pdfsubsection{Constant Class Methods}
 There are no specific class methods associated with this class.  The
-default instance creation method (@code(New)) is used.
+default instance creation method (@code{New}) is used.
 
 
 @subsection Constant Instance Methods
-@pdfsubsection{Constant Instance Methods}
 The instance methods associated with this class are used to override
 certain default methods in order to insure the ``constant'' status
 of instances of this class.
@@ -30,7 +27,6 @@ of instances of this class.
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Constant
 @sp 2
 @example
@@ -64,7 +60,6 @@ of the @code{Constant} class.
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Constant
 @sp 2
 @example
@@ -93,7 +88,6 @@ of the @code{Constant} class.
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Constant
 @sp 2
 @example
@@ -128,7 +122,6 @@ use is to insure the undelete-ability of instances of the
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Constant
 @sp 2
 @example
@@ -159,7 +152,6 @@ use is to insure the undelete-ability of instances of the
 
 
 
-@pdfsubsubsection {Equal}
 @deffn {Equal} Equal::Constant
 @sp 2
 @example

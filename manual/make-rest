@@ -1,9 +1,0 @@
-tex classes
-dvips classes
-gs2 classes
-mv classes.jep classes.1
-
-tex wdscls
-dvips wdscls
-gs2 wdscls
-mv wdscls.jep wdscls.1

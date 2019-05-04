@@ -1,7 +1,6 @@
 @page
 
 @section LinkValue Class
-@pdfsection{LinkValue Class}
 The @code{LinkValue} class is a subclass of the @code{Link} class.  It is
 used in conjunction with the @code{LinkList} class in order to manage
 arbitrary objects on a doubly linked list data structure.
@@ -23,14 +22,12 @@ use of the doubly linked list related classes.
 
 
 @subsection LinkValue Class Methods
-@pdfsubsection{LinkValue Class Methods}
 The @code{LinkValue} class has only a single class method.  That method
 is used to create and initialize new instances of itself.
 
 
 
 
-@pdfsubsubsection {NewWithObj}
 @deffn {NewWithObj} NewWithObj::LinkValue
 @sp 2
 @example
@@ -61,7 +58,6 @@ See also:  @code{Dispose::Link, DeepDispose::LinkValue}
 
 
 @subsection LinkValue Instance Methods
-@pdfsubsection{LinkValue Instance Methods}
 The instances methods associated with the @code{LinkValue} class are used to
 link, unlink, move and dispose of particular instances of the
 @code{LinkValue} class.  The majority of its linking type functionality
@@ -74,7 +70,6 @@ is inherited from its superclass, @code{Link}.
 
 
 
-@pdfsubsubsection {ChangeValue}
 @deffn {ChangeValue} ChangeValue::LinkValue
 @sp 2
 @example
@@ -111,7 +106,6 @@ See also:  @code{Value::LinkValue, NewWithObj::LinkValue}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::LinkValue
 @sp 2
 @example
@@ -148,7 +142,6 @@ See also:  @code{Copy::Object}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::LinkValue
 @sp 2
 @example
@@ -184,7 +177,6 @@ See also:  @code{Dispose::Link}
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::LinkValue
 @sp 2
 @example
@@ -208,7 +200,10 @@ a project) in order to directly print an object to a stream.
 @c @end example
 @sp 1
 See also:  @code{Print::Object, PrintValue::Object,}
-@hfil @break @hglue .64in      @code{StringRepValue::LinkValue}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{StringRepValue::LinkValue}
 @end deffn
 
 
@@ -219,7 +214,6 @@ See also:  @code{Print::Object, PrintValue::Object,}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::LinkValue
 @sp 2
 @example
@@ -256,7 +250,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {Value}
 @deffn {Value} Value::LinkValue
 @sp 2
 @example

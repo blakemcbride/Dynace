@@ -1,7 +1,6 @@
 @page
 
 @section IntegerDictionary Class
-@pdfsection{IntegerDictionary Class}
 This class combines the functionality of the @code{Set}
 and @code{IntegerAssociation} classes in order to store a collection of
 arbitrary key/value pairs.
@@ -19,14 +18,12 @@ use of the @code{Set}/@code{Dictionary} related classes.
 
 
 @subsection IntegerDictionary Class Methods
-@pdfsubsection{IntegerDictionary Class Methods}
 There are no class methods for this class.  It inherits the ability
 to create instances of itself through its superclass, @code{Set}.
 
 
 
 @subsection IntegerDictionary Instance Methods
-@pdfsubsection{IntegerDictionary Instance Methods}
 The instance methods associated with this class are used to add, retrieve
 and remove key/value pairs from the @code{Dictionary}.  Note that additional
 functionality may be obtained through its superclass, @code{Set}.
@@ -36,7 +33,6 @@ functionality may be obtained through its superclass, @code{Set}.
 
 
 
-@pdfsubsubsection {AddInt}
 @deffn {AddInt} AddInt::IntegerDictionary
 @sp 2
 @example
@@ -63,9 +59,18 @@ key/value pair passed.
 @c @end example
 @sp 1
 See also:  @code{FindInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{ChangeValueWithInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{RemoveInt::IntegerDictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{FindValueInt::IntegerDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeValueWithInt::IntegerDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveInt::IntegerDictionary}
 @end deffn
 
 
@@ -78,7 +83,6 @@ See also:  @code{FindInt::IntegerDictionary,}
 
 
 
-@pdfsubsubsection {ChangeValueWithInt}
 @deffn {ChangeValueWithInt} ChangeValueWithInt::IntegerDictionary
 @sp 2
 @example
@@ -109,8 +113,14 @@ simply returns @code{NULL}.
 @c @end example
 @sp 1
 See also:  @code{FindInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{RemoveInt::IntegerDictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{FindValueInt::IntegerDictionary,}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveInt::IntegerDictionary}
 @end deffn
 
 
@@ -123,7 +133,6 @@ See also:  @code{FindInt::IntegerDictionary,}
 
 
 
-@pdfsubsubsection {DeepDisposeInt}
 @deffn {DeepDisposeInt} DeepDisposeInt::IntegerDictionary
 @sp 2
 @example
@@ -165,7 +174,6 @@ See also:  @code{RemoveInt::IntegerDictionary}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::IntegerDictionary
 @sp 2
 @example
@@ -191,7 +199,10 @@ avoid future accidental use.
 @c @end example
 @sp 1
 See also:  @code{RemoveInt::IntegerDictionary, DeepDispose::Set,}
-@hfil @break @hglue .64in      @code{DisposeAllNodes::IntegerDictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{DisposeAllNodes::IntegerDictionary}
 @end deffn
 
 
@@ -206,7 +217,6 @@ See also:  @code{RemoveInt::IntegerDictionary, DeepDispose::Set,}
 
 
 
-@pdfsubsubsection {DisposeAllNodes}
 @deffn {DisposeAllNodes} DisposeAllNodes::IntegerDictionary
 @sp 2
 @example
@@ -251,7 +261,6 @@ See also:  @code{DeepDisposeAllNodes::Set, Dispose::IntegerDictionary}
 
 
 
-@pdfsubsubsection {DisposeInt}
 @deffn {DisposeInt} DisposeInt::IntegerDictionary
 @sp 2
 @example
@@ -293,7 +302,6 @@ See also:  @code{RemoveInt::IntegerDictionary}
 
 
 
-@pdfsubsubsection {FindInt}
 @deffn {FindInt} FindInt::IntegerDictionary
 @sp 2
 @example
@@ -328,7 +336,6 @@ See also:  @code{FindValueInt::IntegerDictionary}
 
 
 
-@pdfsubsubsection {FindAddInt}
 @deffn {FindAddInt} FindAddInt::IntegerDictionary
 @sp 2
 @example
@@ -354,7 +361,10 @@ key/value pair representing @code{key} and @code{value}.
 @c @end example
 @sp 1
 See also:  @code{FindInt::IntegerDictionary,}
-@hfil @break @hglue .64in      @code{FindValueInt::IntegerDictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{FindValueInt::IntegerDictionary}
 @end deffn
 
 
@@ -365,7 +375,6 @@ See also:  @code{FindInt::IntegerDictionary,}
 
 
 
-@pdfsubsubsection {FindValueInt}
 @deffn {FindValueInt} FindValueInt::IntegerDictionary
 @sp 2
 @example
@@ -400,7 +409,6 @@ See also:  @code{FindInt::IntegerDictionary}
 
 
 
-@pdfsubsubsection {RemoveInt}
 @deffn {RemoveInt} RemoveInt::IntegerDictionary
 @sp 2
 @example

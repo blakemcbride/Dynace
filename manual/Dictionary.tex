@@ -1,7 +1,6 @@
 @page
 
 @section Dictionary Class
-@pdfsection{Dictionary Class}
 The @code{Dictionary} class combines the functionality of the @code{Set}
 and @code{ObjectAssociation} classes in order to store a collection of
 arbitrary key/value pairs.  The key may be any unique Dynace object.
@@ -16,14 +15,12 @@ use of the @code{Set}/@code{Dictionary} related classes.
 
 
 @subsection Dictionary Class Methods
-@pdfsubsection{Dictionary Class Methods}
 There are no class methods for this class.  It inherits the ability
 to create instances of itself through its superclass, @code{Set}.
 
 
 
 @subsection Dictionary Instance Methods
-@pdfsubsection{Dictionary Instance Methods}
 The instance methods associated with this class are used to add, retrieve
 and remove key/value pairs from the @code{Dictionary}.  Note that additional
 functionality may be obtained through its superclass, @code{Set}.
@@ -33,7 +30,6 @@ functionality may be obtained through its superclass, @code{Set}.
 
 
 
-@pdfsubsubsection {AddValue}
 @deffn {AddValue} AddValue::Dictionary
 @sp 2
 @example
@@ -64,7 +60,10 @@ objects in the @code{Dictionary}.
 @c @end example
 @sp 1
 See also:  @code{Find::Dictionary, FindValue::Dictionary,}
-@hfil @break @hglue .64in      @code{RemoveObj::Dictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveObj::Dictionary}
 @end deffn
 
 
@@ -76,7 +75,6 @@ See also:  @code{Find::Dictionary, FindValue::Dictionary,}
 
 
 
-@pdfsubsubsection {ChangeValueWithObj}
 @deffn {ChangeValueWithObj} ChangeValueWithObj::Dictionary
 @sp 2
 @example
@@ -107,7 +105,10 @@ simply returns @code{NULL}.
 @c @end example
 @sp 1
 See also:  @code{Find::Dictionary, FindValue::Dictionary,}
-@hfil @break @hglue .64in      @code{RemoveObj::Dictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{RemoveObj::Dictionary}
 @end deffn
 
 
@@ -121,7 +122,6 @@ See also:  @code{Find::Dictionary, FindValue::Dictionary,}
 
 
 
-@pdfsubsubsection {DeepDisposeObj}
 @deffn {DeepDisposeObj} DeepDisposeObj::Dictionary
 @sp 2
 @example
@@ -166,7 +166,6 @@ See also:  @code{RemoveObj::Dictionary}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Dictionary
 @sp 2
 @example
@@ -192,7 +191,10 @@ avoid future accidental use.
 @c @end example
 @sp 1
 See also:  @code{RemoveObj::Dictionary, DeepDispose::Set,}
-@hfil @break @hglue .64in      @code{DisposeAllNodes::Dictionary}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{DisposeAllNodes::Dictionary}
 @end deffn
 
 
@@ -210,7 +212,6 @@ See also:  @code{RemoveObj::Dictionary, DeepDispose::Set,}
 
 
 
-@pdfsubsubsection {DisposeAllNodes}
 @deffn {DisposeAllNodes} DisposeAllNodes::Dictionary
 @sp 2
 @example
@@ -257,7 +258,6 @@ See also:  @code{DeepDisposeAllNodes::Set, Dispose::Dictionary}
 
 
 
-@pdfsubsubsection {DisposeObj}
 @deffn {DisposeObj} DisposeObj::Dictionary
 @sp 2
 @example
@@ -305,7 +305,6 @@ See also:  @code{RemoveObj::Dictionary}
 
 
 
-@pdfsubsubsection {Find}
 @deffn {Find} Find::Dictionary
 @sp 2
 @example
@@ -343,7 +342,6 @@ See also:  @code{FindValue::Dictionary}
 
 
 
-@pdfsubsubsection {FindAddValue}
 @deffn {FindAddValue} FindAddValue::Dictionary
 @sp 2
 @example
@@ -383,7 +381,6 @@ See also:  @code{Find::Dictionary, FindValue::Dictionary}
 
 
 
-@pdfsubsubsection {FindValue}
 @deffn {FindValue} FindValue::Dictionary
 @sp 2
 @example
@@ -421,7 +418,6 @@ See also:  @code{Find::Dictionary}
 
 
 
-@pdfsubsubsection {RemoveObj}
 @deffn {RemoveObj} RemoveObj::Dictionary
 @sp 2
 @example

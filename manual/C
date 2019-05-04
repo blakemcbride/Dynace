@@ -1,3 +1,0 @@
-rm -f man.{cp,fn,fns,ky,pg,toc,tp,vr,jep,aux,log} classes.{log,dvi}
-rm -f wds.{cp,fn,fns,ky,pg,toc,tp,vr,jep,aux,log} wdscls.{log,dvi}
-rm -f *~ core

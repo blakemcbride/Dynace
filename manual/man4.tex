@@ -27,7 +27,6 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Kernel Reference
-@pdfchapter{Kernel Reference}
 The Dynace kernel consists of the bare minimum of classes, methods, and generic
 functions needed to implement the object oriented concepts discussed herein.
 This chapter will discuss the structure and various facilities available in
@@ -46,7 +45,6 @@ the methods through their associated generics (add the ``g'').
 
 @page
 @section Kernel Class Hierarchy
-@pdfsection{Kernel Class Hierarchy}
 This Dynace kernel contains the following class hierarchy:
 @example
 @group
@@ -62,17 +60,14 @@ This Dynace kernel contains the following class hierarchy:
 
 @page
 @section Object Class
-@pdfsection{Object Class}
 The @code{Object} Class is the root of all objects in Dynace.  It is the
 last place searched when looking for a given method.  As such, the
 @code{Object} Class defines the default behavior for all objects in Dynace.
 
 @subsection Object Class Methods
-@pdfsubsection{Object Class Methods}
 There are no class methods defined for the @code{Object} class.
 
 @subsection Object Instance Methods
-@pdfsubsection{Object Instance Methods}
 @code{Object}'s instance methods define the default behavior for all objects
 in Dynace.
 
@@ -86,7 +81,6 @@ in Dynace.
 
 
 
-@pdfsubsubsection {BasicSize}
 @deffn {BasicSize} BasicSize::Object
 @sp 2
 @example
@@ -130,7 +124,6 @@ See also:  @code{Size::Object, InstanceSize::Behavior}
 
 
 
-@pdfsubsubsection {Compare}
 @deffn {Compare} Compare::Object
 @sp 2
 @example
@@ -171,7 +164,6 @@ See also:  @code{Hash::Object}
 
 
 
-@pdfsubsubsection {Copy}
 @deffn {Copy} Copy::Object
 @sp 2
 @example
@@ -216,7 +208,6 @@ See also:  @code{DeepCopy::Object, EQ, Equal::Object}
 
 
 
-@pdfsubsubsection {DeepCopy}
 @deffn {DeepCopy} DeepCopy::Object
 @sp 2
 @example
@@ -258,7 +249,6 @@ See also:  @code{Copy::Object, EQ, Equal::Object}
 
 
 
-@pdfsubsubsection {DeepDispose}
 @deffn {DeepDispose} DeepDispose::Object
 @sp 2
 @example
@@ -295,7 +285,6 @@ See also:  @code{Dispose::Object, GCDispose::Object}
 
 
 
-@pdfsubsubsection {Dispose}
 @deffn {Dispose} Dispose::Object
 @sp 2
 @example
@@ -339,7 +328,6 @@ See also:  @code{DeepDispose::Object, GCDispose::Object}
 
 
 
-@pdfsubsubsection {Equal}
 @deffn {Equal} Equal::Object
 @sp 2
 @example
@@ -389,7 +377,6 @@ See also:  @code{EQ}
 
 
 
-@pdfsubsubsection {Error}
 @deffn {Error} Error::Object
 @sp 2
 @example
@@ -426,7 +413,6 @@ See also:  @code{Puts::Stream, stderrStream}
 
 
 
-@pdfsubsubsection {GCDispose}
 @deffn {GCDispose} GCDispose::Object
 @sp 2
 @example
@@ -455,7 +441,6 @@ See also:  @code{Dispose::Object, DeepDispose::Object}
 
 
 
-@pdfsubsubsection {Hash}
 @deffn {Hash} Hash::Object
 @sp 2
 @example
@@ -491,7 +476,6 @@ See also:  @code{Compare::Object}
 
 
 
-@pdfsubsubsection {Init}
 @deffn {Init} Init::Object
 @sp 2
 @example
@@ -533,7 +517,6 @@ See also:  @code{Alloc::Behavior, New::Behavior}
 
 
 
-@pdfsubsubsection {IsKindOf}
 @deffn {IsKindOf} IsKindOf::Object
 @sp 2
 @example
@@ -578,7 +561,6 @@ See also:  @code{IsKindOf::Behavior, IsInstanceOf, ClassOf}
 
 
 
-@pdfsubsubsection {Print}
 @deffn {Print} Print::Object
 @sp 2
 @example
@@ -621,7 +603,6 @@ See also:  @code{PrintValue::Object, StringRepValue::Object, stdoutStream}
 
 
 
-@pdfsubsubsection {PrintValue}
 @deffn {PrintValue} PrintValue::Object
 @sp 2
 @example
@@ -663,7 +644,6 @@ See also:  @code{Print::Object, StringRepValue::Object, stdoutStream}
 
 
 
-@pdfsubsubsection {ShouldNotImplement}
 @deffn {ShouldNotImplement} ShouldNotImplement::Object
 @sp 2
 @example
@@ -708,7 +688,6 @@ See also:  @code{Error::Object}
 
 
 
-@pdfsubsubsection {Size}
 @deffn {Size} Size::Object
 @sp 2
 @example
@@ -748,7 +727,6 @@ See also:  @code{BasicSize::Object}
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::Object
 @sp 2
 @example
@@ -787,7 +765,6 @@ See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Object}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Object
 @sp 2
 @example
@@ -831,7 +808,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {SubclassResponsibility}
 @deffn {SubclassResponsibility} SubclassResponsibility::Object
 @sp 2
 @example
@@ -873,16 +849,13 @@ See also:  @code{Error::Object}
 
 @page
 @section Behavior Class
-@pdfsection{Behavior Class}
 The @code{Behavior} Class is used to define the default behavior
 common to @code{Class} and @code{MetaClass} type objects.
 
 @subsection Behavior Class Methods
-@pdfsubsection{Behavior Class Methods}
 There are no class methods defined for the @code{Behavior} class.
 
 @subsection Behavior Instance Methods
-@pdfsubsection{Behavior Instance Methods}
 @code{Behavior}'s instance methods define the default behavior common to all
 @code{Class} and @code{MetaClass} type objects.
 
@@ -890,7 +863,6 @@ There are no class methods defined for the @code{Behavior} class.
 
 
 
-@pdfsubsubsection {Alloc}
 @deffn {Alloc} Alloc::Behavior
 @sp 2
 @example
@@ -929,7 +901,6 @@ See also:  @code{Init::Object, New::Behavior, StackAlloc macro}
 
 
 
-@pdfsubsubsection {DoesNotImplement}
 @deffn {DoesNotImplement} DoesNotImplement::Behavior
 @sp 2
 @example
@@ -964,7 +935,6 @@ See also:  @code{RespondesTo, InvalidObject::Method}
 
 
 
-@pdfsubsubsection {DontCollect}
 @deffn {DontCollect} DontCollect::Behavior
 @sp 2
 @example
@@ -1001,7 +971,6 @@ gDontCollect(ShortInteger);
 
 
 
-@pdfsubsubsection {FindMethod}
 @deffn {FindMethod} FindMethod::Behavior
 @sp 2
 @example
@@ -1044,8 +1013,14 @@ implements the method.
 @c @end example
 @sp 1
 See also:  @code{imcPointer, cmcPointer, imiPointer, cmiPointer, iSuper,}
-@hfil @break @hglue .64in    @code{RespondsTo, cSuper,}
-@hfil @break @hglue .64in    @code{DoesNotImplement::Behavior, FindMethodObject::Behavior}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{RespondsTo, cSuper,}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{DoesNotImplement::Behavior, FindMethodObject::Behavior}
 @end deffn
 
 
@@ -1062,7 +1037,6 @@ See also:  @code{imcPointer, cmcPointer, imiPointer, cmiPointer, iSuper,}
 
 
 
-@pdfsubsubsection {FindMethodObject}
 @deffn {FindMethodObject} FindMethodObject::Behavior
 @sp 2
 @example
@@ -1111,7 +1085,6 @@ See also:  @code{FindMethod::Object, Generic}
 
 
 
-@pdfsubsubsection {InstanceSize}
 @deffn {InstanceSize} InstanceSize::Behavior
 @sp 2
 @example
@@ -1145,7 +1118,6 @@ See also:  @code{BasicSize::Object, StackAlloc::Behavior}
 
 
 
-@pdfsubsubsection {IsKindOf}
 @deffn {IsKindOf} IsKindOf::Behavior
 @sp 2
 @example
@@ -1185,7 +1157,6 @@ See also:  @code{IsKindOf::Object, IsInstanceOf, ClassOf}
 
 
 
-@pdfsubsubsection {MarkingMethod}
 @deffn {MarkingMethod} MarkingMethod::Behavior
 @sp 2
 @example
@@ -1212,7 +1183,10 @@ in a very unusual way.
 @c @end example
 @sp 1
 See also:  @code{MarkRange::Dynace, MarkObject::Dynace,}
-@hfil @break @hglue .64in    @code{RegisterMemory::Dynace}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{RegisterMemory::Dynace}
 @end deffn
 
 
@@ -1222,7 +1196,6 @@ See also:  @code{MarkRange::Dynace, MarkObject::Dynace,}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::Behavior
 @sp 2
 @example
@@ -1254,7 +1227,6 @@ name = gName(ShortInteger);
 
 
 
-@pdfsubsubsection {New}
 @deffn {New} New::Behavior
 @sp 2
 @example
@@ -1299,7 +1271,6 @@ See also:  @code{Alloc::Behavior, Init::Object, StackAlloc macro}
 
 
 
-@pdfsubsubsection {StackAlloc}
 @deffn {StackAlloc} StackAlloc::Behavior
 @sp 2
 @example
@@ -1313,7 +1284,11 @@ object  obj;
 @end example
 This method is used to turn arbitrary storage pointed to by @code{ptr}
 into an instance of @code{cls}.  The storage is assumed to be large
-enough (the value returned by @hfil @break @code{InstanceSize::Behavior}).
+enough (the value returned by 
+@iftex
+@hfil @break 
+@end iftex
+@code{InstanceSize::Behavior}).
 The object returned will function as a normal object except that when it
 is disposed (via @code{gDispose}, etc.) no actual freeing of the object
 will occur.  However, user defined disposal code will be utilized.
@@ -1342,7 +1317,6 @@ See also:  @code{StackAlloc macro, InstanceSize::Behavior}
 
 
 
-@pdfsubsubsection {StringRep}
 @deffn {StringRep} StringRep::Behavior
 @sp 2
 @example
@@ -1385,7 +1359,6 @@ See also:  @code{Print::Object, PrintValue::Object, StringRepValue::Link}
 
 
 
-@pdfsubsubsection {StringRepValue}
 @deffn {StringRepValue} StringRepValue::Behavior
 @sp 2
 @example
@@ -1421,7 +1394,6 @@ See also:  @code{PrintValue::Object, Print::Object}
 
 
 
-@pdfsubsubsection {SubClasses}
 @deffn {SubClasses} SubClasses::Behavior
 @sp 2
 @example
@@ -1458,7 +1430,6 @@ See also:  @code{SuperClasses::Behavior}
 
 
 
-@pdfsubsubsection {SuperClasses}
 @deffn {SuperClasses} SuperClasses::Behavior
 @sp 2
 @example
@@ -1497,7 +1468,6 @@ See also:  @code{SubClasses::Behavior}
 
 
 
-@pdfsubsubsection {Trace}
 @deffn {Trace} Trace::Behavior
 @sp 2
 @example
@@ -1537,7 +1507,10 @@ gTrace(Set, DYNACE_TRACE_ON); /* turn tracing on for Set */
 @end example
 @sp 1
 See also:  @code{Trace::Dynace, TracePrint::Dynace, Trace::GenericFunction,}
-@hfil @break @hglue .64in @code{Trace::Method}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{Trace::Method}
 @end deffn
 
 
@@ -1551,12 +1524,10 @@ See also:  @code{Trace::Dynace, TracePrint::Dynace, Trace::GenericFunction,}
 
 @page
 @section Class Class
-@pdfsection{Class Class}
 The @code{Class} Class is mainly used for the creation of new class objects.
 
 
 @subsection Class Class Methods
-@pdfsubsection{Class Class Methods}
 The only class methods in the class @code{Class} are used to create new
 class objects and find class objects.
 
@@ -1566,7 +1537,6 @@ class objects and find class objects.
 
 
 
-@pdfsubsubsection {FindClass}
 @deffn {FindClass} FindClass::Class
 @sp 2
 @example
@@ -1598,7 +1568,6 @@ cls = gFindClass(Class, "Set");
 
 
 
-@pdfsubsubsection {GetAll}
 @deffn {GetAll} GetAll::Class
 @sp 2
 @example
@@ -1635,7 +1604,6 @@ See also:  @code{GetAll::Class}
 
 
 
-@pdfsubsubsection {NewClass}
 @deffn {NewClass} NewClass::Class
 @sp 2
 @example
@@ -1690,7 +1658,6 @@ See also:  @code{NewStdClass::Class}
 
 
 
-@pdfsubsubsection {NewStdClass}
 @deffn {NewStdClass} NewStdClass::Class
 @sp 2
 @example
@@ -1755,13 +1722,11 @@ See also:  @code{NewClass::Class}
 
 
 @subsection Class Instance Methods
-@pdfsubsection{Class Instance Methods}
 The class Class has no instance methods.
 
 
 @page
 @section MetaClass Class
-@pdfsection{MetaClass Class}
 All metaclasses in the system are instances of the class @code{MetaClass}.
 Since all metaclasses are instances of the @code{MetaClass} class, and
 all class objects are instances of their associated metaclasses, the
@@ -1772,21 +1737,18 @@ all class objects are instances of their associated metaclasses, the
 
 @page
 @section Method Class
-@pdfsection{Method Class}
 The @code{Method} class gives Dynace the ability to represent methods
 (static C language functions) as true objects.  The principal use of this
 class is to create new methods.
 
 
 @subsection Method Class Methods
-@pdfsubsection{Method Class Methods}
 There is only one class method associated with the @code{Method} class and
 it is used for the creation of new methods.
 
 
 
 
-@pdfsubsubsection {NewMethod}
 @deffn {NewMethod} NewMethod::Method
 @sp 2
 @example
@@ -1824,7 +1786,6 @@ See also:  @code{iMethodFor, ivMethodFor, cvMethodFor, cMethodFor}
 
 
 @subsection Method Instance Methods
-@pdfsubsection{Method Instance Methods}
 The instances methods associated with this class are used to obtain
 information about a method object.
 
@@ -1832,7 +1793,6 @@ information about a method object.
 
 
 
-@pdfsubsubsection {ChangeFunction}
 @deffn {ChangeFunction} ChangeFunction::Method
 @sp 2
 @example
@@ -1865,7 +1825,6 @@ See also:  @code{FindMethodObject::Behavior, Function::Method}
 
 
 
-@pdfsubsubsection {Function}
 @deffn {Function} Function::Method
 @sp 2
 @example
@@ -1886,7 +1845,10 @@ object.
 @c @end example
 @sp 1
 See also:  @code{FindMethodObject::Behavior,}
-@hfil @break @hglue .64in      @code{ChangeFunction::Method}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeFunction::Method}
 @end deffn
 
 
@@ -1895,7 +1857,6 @@ See also:  @code{FindMethodObject::Behavior,}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::Method
 @sp 2
 @example
@@ -1930,7 +1891,6 @@ See also:  @code{FindMethodObject::Behavior}
 
 
 
-@pdfsubsubsection {Trace}
 @deffn {Trace} Trace::Method
 @sp 2
 @example
@@ -1975,8 +1935,14 @@ gTrace(mth, DYNACE_TRACE_ON);
 @end example
 @sp 1
 See also:  @code{Trace::Dynace, TracePrint::Dynace,}
-@hfil @break @hglue .64in @code{FindMethodObject::Behavior, Generic,}
-@hfil @break @hglue .64in @code{Trace::Behavior, Trace::GenericFunction}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{FindMethodObject::Behavior, Generic,}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{Trace::Behavior, Trace::GenericFunction}
 @end deffn
 
 
@@ -1990,14 +1956,12 @@ See also:  @code{Trace::Dynace, TracePrint::Dynace,}
 
 @page
 @section GenericFunction Class
-@pdfsection{GenericFunction Class}
 The @code{GenericFunction} class gives Dynace the ability to represent
 generic functions (C language functions) as true objects.  The principal
 use of this class is to create new generic function objects.
 
 
 @subsection GenericFunction Class Methods
-@pdfsubsection{GenericFunction Class Methods}
 The class methods in this class are used to create new generic objects
 and obtain a list of all generics.
 
@@ -2005,7 +1969,6 @@ and obtain a list of all generics.
 
 
 
-@pdfsubsubsection {FindGeneric}
 @deffn {FindGeneric} FindGeneric::GenericFunction
 @sp 2
 @example
@@ -2033,7 +1996,6 @@ See also:  @code{GetAll::GenericFunction}
 
 
 
-@pdfsubsubsection {GetAll}
 @deffn {GetAll} GetAll::GenericFunction
 @sp 2
 @example
@@ -2068,7 +2030,6 @@ See also:  @code{GetAll::Class, FindGeneric::GenericFunction}
 
 
 
-@pdfsubsubsection {NewGeneric}
 @deffn {NewGeneric} NewGeneric::GenericFunction
 @sp 2
 @example
@@ -2098,7 +2059,10 @@ normal access to this method and the generic function object in general.
 @c @end example
 @sp 1
 See also:  @code{dpp, defGeneric, externGeneric, InitGeneric,}
-@hfil @break @hglue .64in    @code{GetGenericPtr::GenericFunction}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{GetGenericPtr::GenericFunction}
 @end deffn
 
 
@@ -2107,7 +2071,6 @@ See also:  @code{dpp, defGeneric, externGeneric, InitGeneric,}
 
 
 @subsection GenericFunction Instance Methods
-@pdfsubsection{GenericFunction Instance Methods}
 @code{GenericFunction} instance methods define the behavior of all generic
 functions.
 
@@ -2116,7 +2079,6 @@ functions.
 
 
 
-@pdfsubsubsection {GetGenericPtr}
 @deffn {GetGenericPtr} GetGenericPtr::GenericFunction
 @sp 2
 @example
@@ -2148,7 +2110,6 @@ See also:  @code{Generic, GetAll::GenericFunction}
 
 
 
-@pdfsubsubsection {InvalidObject}
 @deffn {InvalidObject} InvalidObject::GenericFunction
 @sp 2
 @example
@@ -2182,7 +2143,6 @@ See also:  @code{ChkArg, InvalidType::GenericFunction, Error::Object}
 
 
 
-@pdfsubsubsection {InvalidType}
 @deffn {InvalidType} InvalidType::GenericFunction
 @sp 2
 @example
@@ -2219,7 +2179,6 @@ See also:  @code{ChkArg, InvalidObject::GenericFunction, Error::Object}
 
 
 
-@pdfsubsubsection {Name}
 @deffn {Name} Name::GenericFunction
 @sp 2
 @example
@@ -2257,7 +2216,6 @@ See also:  @code{Generic}
 
 
 
-@pdfsubsubsection {Trace}
 @deffn {Trace} Trace::GenericFunction
 @sp 2
 @example
@@ -2299,7 +2257,10 @@ gTrace(Generic(vNew), DYNACE_TRACE_ON);
 @end example
 @sp 1
 See also:  @code{Generic, Trace::Dynace, TracePrint::Dynace,}
-@hfil @break @hglue .64in @code{Trace::Behavior, Trace::Method}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{Trace::Behavior, Trace::Method}
 @end deffn
 
 
@@ -2318,7 +2279,6 @@ See also:  @code{Generic, Trace::Dynace, TracePrint::Dynace,}
 
 @page
 @section Dynace Class
-@pdfsection{Dynace Class}
 The @code{Dynace} Class is used to affect various parameters which control
 the internal operation of the Dynace kernel.  The user may control whether
 the garbage collector is activated or not and what parameters it is
@@ -2329,7 +2289,6 @@ methods.
 
 
 @subsection Dynace Class Methods
-@pdfsubsection{Dynace Class Methods}
 All functionality of the Dynace class is accessed through it's class methods.
 
 
@@ -2338,7 +2297,6 @@ All functionality of the Dynace class is accessed through it's class methods.
 
 
 
-@pdfsubsubsection {ChangeRegisteredMemory}
 @deffn {ChangeRegisteredMemory} ChangeRegisteredMemory::Dynace
 @sp 2
 @example
@@ -2377,7 +2335,6 @@ See also:  @code{RegisterMemory::Dynace, GC::Dynace}
 
 
 
-@pdfsubsubsection {CurMemUsed}
 @deffn {CurMemUsed} CurMemUsed::Dynace
 @sp 2
 @example
@@ -2417,7 +2374,6 @@ See also:  @code{MaxMemUsed::Dynace, GC::Dynace, DumpObjects::Dynace}
 
 
 
-@pdfsubsubsection {DumpObjects}
 @deffn {DumpObjects} DumpObjects::Dynace
 @sp 2
 @example
@@ -2475,7 +2431,6 @@ See also:  @code{DumpObjectsString::Dynace, MaxMemUsed::Dynace, GC::Dynace}
 
 
 
-@pdfsubsubsection {DumpObjectsDiff}
 @deffn {DumpObjectsDiff} DumpObjectsDiff::Dynace
 @sp 2
 @example
@@ -2542,7 +2497,6 @@ See also:  @code{DumpObjectsString::Dynace, DumpObjects::Dynace}
 
 
 
-@pdfsubsubsection {DumpObjectsString}
 @deffn {DumpObjectsString} DumpObjectsString::Dynace
 @sp 2
 @example
@@ -2586,7 +2540,6 @@ See also:  @code{DumpObjectsDiff::Dynace, DumpObjects::Dynace}
 
 
 
-@pdfsubsubsection {GC}
 @deffn {GC} GC::Dynace
 @sp 2
 @example
@@ -2610,7 +2563,10 @@ gGC(Dynace);
 @end example
 @sp 1
 See also:  @code{SetMemoryBufferArea::Dynace, RegisterMemory::Dynace,}
-@hfil @break @hglue .64in    @code{DumpObjects::Dynace, NumbGC::Dynace}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{DumpObjects::Dynace, NumbGC::Dynace}
 @end deffn
 
 
@@ -2623,7 +2579,6 @@ See also:  @code{SetMemoryBufferArea::Dynace, RegisterMemory::Dynace,}
 
 
 
-@pdfsubsubsection {MaxAfterGC}
 @deffn {MaxAfterGC} MaxAfterGC::Dynace
 @sp 2
 @example
@@ -2670,7 +2625,6 @@ See also:  @code{MaxMemUsed::Dynace, CurMemUsed::Dynace, GC::Dynace}
 
 
 
-@pdfsubsubsection {MaxMemUsed}
 @deffn {MaxMemUsed} MaxMemUsed::Dynace
 @sp 2
 @example
@@ -2693,7 +2647,10 @@ mem = gMaxMemUsed(Dynace);
 @end example
 @sp 1
 See also:  @code{MaxAfterGC::Dynace, CurMemUsed::Dynace, GC::Dynace,}
-@hfil @break @hglue .64in    @code{DumpObjects::Dynace}
+@iftex
+@hfil @break @hglue .64in    
+@end iftex
+@code{DumpObjects::Dynace}
 @end deffn
 
 
@@ -2704,7 +2661,6 @@ See also:  @code{MaxAfterGC::Dynace, CurMemUsed::Dynace, GC::Dynace,}
 
 
 
-@pdfsubsubsection {NumbGC}
 @deffn {NumbGC} NumbGC::Dynace
 @sp 2
 @example
@@ -2738,7 +2694,6 @@ See also:  @code{MaxAfterGC::Dynace, CurMemUsed::Dynace, GC::Dynace}
 
 
 
-@pdfsubsubsection {ObjectChecking}
 @deffn {ObjectChecking} ObjectChecking::Dynace
 @sp 2
 @example
@@ -2788,7 +2743,6 @@ See also:  @code{ChkArg}
 
 
 
-@pdfsubsubsection {RegisterMemory}
 @deffn {RegisterMemory} RegisterMemory::Dynace
 @sp 2
 @example
@@ -2838,14 +2792,16 @@ RegisterVariable(b);
 @end example
 @sp 1
 See also:  @code{GC::Dynace, RemoveRegisteredMemory::Dynace,}
-@hfil @break @hglue .64in   @code{ChangeRegisteredMemory::Dynace}
+@iftex
+@hfil @break @hglue .64in   
+@end iftex
+@code{ChangeRegisteredMemory::Dynace}
 @end deffn
 
 
 
 
 
-@pdfsubsubsection {RemoveRegisteredMemory}
 @deffn {RemoveRegisteredMemory} RemoveRegisteredMemory::Dynace
 @sp 2
 @example
@@ -2878,7 +2834,10 @@ gRemoveRegisteredMemory(Dynace, rmpb);
 @end example
 @sp 1
 See also:  @code{RegisterMemory::Dynace, ChangeRegisteredMemory::Dynace,}
-@hfil @break @hglue .64in   @code{GC::Dynace}
+@iftex
+@hfil @break @hglue .64in   
+@end iftex
+@code{GC::Dynace}
 @end deffn
 
 
@@ -2888,7 +2847,6 @@ See also:  @code{RegisterMemory::Dynace, ChangeRegisteredMemory::Dynace,}
 
 
 
-@pdfsubsubsection {ResizeMethodCache}
 @deffn {ResizeMethodCache} ResizeMethodCache::Dynace
 @sp 2
 @example
@@ -2952,7 +2910,6 @@ gResizeMethodCache(Dynace, 101, 203);
 
 
 
-@pdfsubsubsection {SetMemoryBufferArea}
 @deffn {SetMemoryBufferArea} SetMemoryBufferArea::Dynace
 @sp 2
 @example
@@ -3010,7 +2967,6 @@ See also:  @code{GC::Dynace, RegisterMemory::Dynace}
 
 
 
-@pdfsubsubsection {Trace}
 @deffn {Trace} Trace::Dynace
 @sp 2
 @example
@@ -3046,7 +3002,10 @@ gTrace(Dynace, DYNACE_TRACE_ON);   /*  turn tracing on  */
 @end example
 @sp 1
 See also:  @code{TracePrint::Dynace, Trace::Behavior,}
-@hfil @break @hglue .64in @code{Trace::GenericFunction, Trace::Method}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{Trace::GenericFunction, Trace::Method}
 @end deffn
 
 
@@ -3056,7 +3015,6 @@ See also:  @code{TracePrint::Dynace, Trace::Behavior,}
 
 
 
-@pdfsubsubsection {TracePrint}
 @deffn {TracePrint} TracePrint::Dynace
 @sp 2
 @example
@@ -3082,7 +3040,10 @@ for more information.
 @c @end example
 @sp 1
 See also:  @code{traceStream::Stream, Trace::Dynace, Trace::Behavior,}
-@hfil @break @hglue .64in @code{Trace::GenericFunction, Trace::Method}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{Trace::GenericFunction, Trace::Method}
 @end deffn
 
 
@@ -3093,7 +3054,6 @@ See also:  @code{traceStream::Stream, Trace::Dynace, Trace::Behavior,}
 
 
 @subsection Dynace Instance Methods
-@pdfsubsection{Dynace Instance Methods}
 There are no instance methods associated with the Dynace class.
 
 
@@ -3102,7 +3062,6 @@ There are no instance methods associated with the Dynace class.
 
 @page
 @section Kernel Macros
-@pdfsection{Kernel Macros}
 Dynace has a number of macros to simplify the creation and usage of objects.
 These macros are all defined in the file @code{dynl.h}.  The following
 text describe each macro.
@@ -3117,7 +3076,6 @@ text describe each macro.
 
 
 
-@pdfsubsection {accessIVs}
 @deffn {accessIVs} accessIVs
 @sp 2
 @example
@@ -3179,7 +3137,6 @@ See also:  @code{ivsPtr, ivPtr, ivType, GetIVs}
 
 
 
-@pdfsubsection {ChkArg}
 @deffn {ChkArg} ChkArg
 @sp 2
 @example
@@ -3222,7 +3179,10 @@ imeth object  MyMethod(object self, object arg2, object arg3)
 @end example
 @sp 1
 See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
-@hfil @break @hglue .64in @code{ChkArgTyp, ChkArgNul, ChkArgTypNul}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChkArgTyp, ChkArgNul, ChkArgTypNul}
 @end deffn
 
 
@@ -3234,7 +3194,6 @@ See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
 
 
 
-@pdfsubsection {ChkArgNul}
 @deffn {ChkArgNul} ChkArgNul
 @sp 2
 @example
@@ -3279,7 +3238,10 @@ imeth object  MyMethod(object self, object arg2, object arg3)
 @end example
 @sp 1
 See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
-@hfil @break @hglue .64in @code{ChkArgTyp, ChkArg, ChkArgTypNul}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChkArgTyp, ChkArg, ChkArgTypNul}
 @end deffn
 
 
@@ -3291,7 +3253,6 @@ See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object,}
 
 
 
-@pdfsubsection {ChkArgTyp}
 @deffn {ChkArgTyp} ChkArgTyp
 @sp 2
 @example
@@ -3341,7 +3302,10 @@ imeth object  MyMethod(object self, object arg2, object arg3)
 @end example
 @sp 1
 See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
-@hfil @break @hglue .64in @code{ChkArgNul, ChkArgTypNul}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChkArgNul, ChkArgTypNul}
 @end deffn
 
 
@@ -3354,7 +3318,6 @@ See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
 
 
 
-@pdfsubsection {ChkArgTypNul}
 @deffn {ChkArgTypNul} ChkArgTypNul
 @sp 2
 @example
@@ -3406,7 +3369,10 @@ imeth object  MyMethod(object self, object arg2, object arg3)
 @end example
 @sp 1
 See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
-@hfil @break @hglue .64in @code{ChkArgNul, ChkArgTyp}
+@iftex
+@hfil @break @hglue .64in 
+@end iftex
+@code{ChkArgNul, ChkArgTyp}
 @end deffn
 
 
@@ -3422,7 +3388,6 @@ See also:  @code{ObjectChecking::Dynace, IsObj, IsKindOf::Object, ChkArg,}
 
 
 
-@pdfsubsection {ClassOf}
 @deffn {ClassOf} ClassOf
 @sp 2
 @example
@@ -3457,7 +3422,6 @@ See also:  @code{IsKindOf::Object, IsInstanceOf}
 
 
 
-@pdfsubsection {cmcPointer}
 @deffn {cmcPointer} cmcPointer
 @sp 2
 @example
@@ -3520,7 +3484,6 @@ See also:  @code{cmiPointer, imiPointer, imcPointer, FindMethod::Behavior}
 
 
 
-@pdfsubsection {cmeth}
 @deffn {cmeth} cmeth
 @sp 2
 @example
@@ -3539,9 +3502,9 @@ the encapsulation and enable name space overloading.
 
 cmeth object  New(self)
 object self;
-{
+@{
         ...
-}
+@}
 @end group
 @end example
 @sp 1
@@ -3561,7 +3524,6 @@ See also:  @code{imeth, method}
 
 
 
-@pdfsubsection {cMethodFor}
 @deffn {cMethodFor} cMethodFor
 @sp 2
 @example
@@ -3610,7 +3572,6 @@ See also:  @code{cvMethodFor, iMethodFor}
 
 
 
-@pdfsubsection {cmiPointer}
 @deffn {cmiPointer} cmiPointer
 @sp 2
 @example
@@ -3676,7 +3637,6 @@ See also:  @code{cmcPointer, imiPointer, imcPointer, FindMethod::Behavior}
 
 
 
-@pdfsubsection {cSuper}
 @deffn {cSuper} cSuper
 @sp 2
 @example
@@ -3722,7 +3682,6 @@ See also:  @code{oSuper, iSuper}
 
 
 
-@pdfsubsection {cvMethodFor}
 @deffn {cvMethodFor} cvMethodFor
 @sp 2
 @example
@@ -3782,7 +3741,6 @@ See also:  @code{iMethodFor, cMethodFor, ivMethodFor}
 
 
 
-@pdfsubsection {defGeneric}
 @deffn {defGeneric} defGeneric
 @sp 2
 @example
@@ -3809,7 +3767,10 @@ defGeneric(object, vNew)
 @end example
 @sp 1
 See also:  @code{dpp, externGeneric, InitGeneric,}
-@hfil @break @hglue .64in      @code{NewGeneric::GenericFunction}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{NewGeneric::GenericFunction}
 @end deffn
 
 
@@ -3830,7 +3791,6 @@ See also:  @code{dpp, externGeneric, InitGeneric,}
 
 
 
-@pdfsubsection {END}
 @deffn {END} END
 @sp 2
 @example
@@ -3865,7 +3825,6 @@ See also:  @code{NewClass::Class}
 
 
 
-@pdfsubsection {EQ}
 @deffn {EQ} EQ
 @sp 2
 @example
@@ -3915,7 +3874,6 @@ See also:  @code{Equal::Object, NEQ}
 
 
 
-@pdfsubsection {externGeneric}
 @deffn {externGeneric} externGeneric
 @sp 2
 @example
@@ -3954,7 +3912,6 @@ See also:  @code{dpp, defGeneric, InitGeneric}
 
 
 
-@pdfsubsection {Generic}
 @deffn {Generic} Generic
 @sp 2
 @example
@@ -3993,7 +3950,6 @@ See also:  @code{FindMethodObject::Behavior}
 
 
 
-@pdfsubsection {GetArg}
 @deffn {GetArg} GetArg
 @sp 2
 @example
@@ -4038,7 +3994,6 @@ See also:  @code{MAKE_REST, RESET_REST}
 
 
 
-@pdfsubsection {GetCVs}
 @deffn {GetCVs} GetCVs
 @sp 2
 @example
@@ -4086,7 +4041,6 @@ See also:  @code{GetIVs}
 
 
 
-@pdfsubsection {GetIVs}
 @deffn {GetIVs} GetIVs
 @sp 2
 @example
@@ -4133,7 +4087,6 @@ See also:  @code{GetCVs, accessIVs, ivPtr}
 
 
 
-@pdfsubsection {imcPointer}
 @deffn {imcPointer} imcPointer
 @sp 2
 @example
@@ -4203,7 +4156,6 @@ See also:  @code{imiPointer, cmiPointer, cmcPointer, FindMethod::Behavior}
 
 
 
-@pdfsubsection {imeth}
 @deffn {imeth} imeth
 @sp 2
 @example
@@ -4222,9 +4174,9 @@ the encapsulation and enable name space overloading.
 
 imeth object  ChangeValue(self)
 object self;
-{
+@{
         ...
-}
+@}
 @end group
 @end example
 @sp 1
@@ -4243,7 +4195,6 @@ See also:  @code{cmeth, method}
 
 
 
-@pdfsubsection {iMethodFor}
 @deffn {iMethodFor} iMethodFor
 @sp 2
 @example
@@ -4292,7 +4243,6 @@ See also:  @code{ivMethodFor, cMethodFor}
 
 
 
-@pdfsubsection {imiPointer}
 @deffn {imiPointer} imiPointer
 @sp 2
 @example
@@ -4344,7 +4294,10 @@ for (i=0 ; i != 100 ; )
 @end example
 @sp 1
 See also:  @code{imcPointer, cmiPointer, cmcPointer,}
-@hfil @break @hglue .64in         @code{FindMethod::Behavior}
+@iftex
+@hfil @break @hglue .64in         
+@end iftex
+@code{FindMethod::Behavior}
 @end deffn
 
 
@@ -4357,7 +4310,6 @@ See also:  @code{imcPointer, cmiPointer, cmcPointer,}
 
 
 
-@pdfsubsection {InitGeneric}
 @deffn {InitGeneric} InitGeneric
 @sp 2
 @example
@@ -4385,7 +4337,10 @@ InitGeneric(vNew);
 @end example
 @sp 1
 See also:  @code{dpp, NewGeneric::GenericFunction, defGeneric,}
-@hfil @break @hglue .64in         @code{externGeneric}
+@iftex
+@hfil @break @hglue .64in         
+@end iftex
+@code{externGeneric}
 @end deffn
 
 
@@ -4401,7 +4356,6 @@ See also:  @code{dpp, NewGeneric::GenericFunction, defGeneric,}
 
 
 
-@pdfsubsection {IsaClass}
 @deffn {IsaClass} IsaClass
 @sp 2
 @example
@@ -4450,7 +4404,6 @@ See also:  @code{IsaMetaClass, ClassOf, EQ}
 
 
 
-@pdfsubsection {IsaMetaClass}
 @deffn {IsaMetaClass} IsaMetaClass
 @sp 2
 @example
@@ -4495,7 +4448,6 @@ See also:  @code{IsaClass, ClassOf, EQ}
 
 
 
-@pdfsubsection {IsInstanceOf}
 @deffn {IsInstanceOf} IsInstanceOf
 @sp 2
 @example
@@ -4538,7 +4490,6 @@ See also:  @code{IsKindOf::Object, ClassOf}
 
 
 
-@pdfsubsection {iSuper}
 @deffn {iSuper} iSuper
 @sp 2
 @example
@@ -4583,7 +4534,6 @@ See also:  @code{oSuper, cSuper}
 
 
 
-@pdfsubsection {ivMethodFor}
 @deffn {ivMethodFor} ivMethodFor
 @sp 2
 @example
@@ -4642,7 +4592,6 @@ See also:  @code{iMethodFor, cMethodFor}
 
 
 
-@pdfsubsection {ivPtr}
 @deffn {ivPtr} ivPtr
 @sp 2
 @example
@@ -4720,7 +4669,6 @@ See also:  @code{accessIVs, ivsPtr, ivType, GetIVs}
 
 
 
-@pdfsubsection {ivsPtr}
 @deffn {ivsPtr} ivsPtr
 @sp 2
 @example
@@ -4784,7 +4732,6 @@ See also:  @code{accessIVs, ivPtr, ivType, GetIVs}
 
 
 
-@pdfsubsection {ivType}
 @deffn {ivType} ivType
 @sp 2
 @example
@@ -4828,7 +4775,6 @@ See also:  @code{accessIVs, ivPtr, ivsPtr}
 
 
 
-@pdfsubsection {MAKE_REST}
 @deffn {MAKE_REST} MAKE_REST
 @sp 2
 @example
@@ -4858,7 +4804,7 @@ which acts as a pointer to the variable argument list, a
 @exdent Example:
 
 imeth  gChangeValue(int a, char *b, ...)
-{
+@{
         double  var1;
         int     dd;
         MAKE_REST(b);
@@ -4866,7 +4812,7 @@ imeth  gChangeValue(int a, char *b, ...)
         var1 = GetArg(double);
         dd = GetArg(int);
         ...
-}
+@}
 @end group
 @end example
 @sp 1
@@ -4888,7 +4834,6 @@ See also:  @code{GetArg, RESET_REST}
 
 
 
-@pdfsubsection {NEQ}
 @deffn {NEQ} NEQ
 @sp 2
 @example
@@ -4935,7 +4880,6 @@ See also:  @code{Equal::Object, EQ}
 
 
 
-@pdfsubsection {oSuper}
 @deffn {oSuper} oSuper
 @sp 2
 @example
@@ -4987,7 +4931,6 @@ See also:  @code{iSuper, cSuper}
 
 
 
-@pdfsubsection {RegisterVariable}
 @deffn {RegisterVariable} RegisterVariable
 @sp 2
 @example
@@ -5013,7 +4956,10 @@ See the text for a detailed description of the garbage collector.
 @c @end example
 @sp 1
 See also:  @code{RegisterMemory::Dynace, RemoveRegisteredMemory::Dynace,}
-@hfil @break @hglue .64in      @code{ChangeRegisteredMemory::Dynace}
+@iftex
+@hfil @break @hglue .64in      
+@end iftex
+@code{ChangeRegisteredMemory::Dynace}
 @end deffn
 
 
@@ -5028,7 +4974,6 @@ See also:  @code{RegisterMemory::Dynace, RemoveRegisteredMemory::Dynace,}
 
 
 
-@pdfsubsection {RESET_REST}
 @deffn {RESET_REST} RESET_REST
 @sp 2
 @example
@@ -5051,7 +4996,7 @@ beginning of the argument list.
 @exdent Example:
 
 imeth  gChangeValue(int a, char *b, ...)
-{
+@{
         double  var1;
         int     dd;
         MAKE_REST(b);
@@ -5063,7 +5008,7 @@ imeth  gChangeValue(int a, char *b, ...)
         var1 = GetArg(double);
         dd = GetArg(int);
         ...
-}
+@}
 @end group
 @end example
 @sp 1
@@ -5088,7 +5033,6 @@ See also:  @code{GetArg, MAKE_REST}
 
 
 
-@pdfsubsection {RespondsTo}
 @deffn {RespondsTo} RespondsTo
 @sp 2
 @example
@@ -5136,7 +5080,6 @@ See also:  @code{FindMethod::Behavior}
 
 
 
-@pdfsubsection {StackAlloc}
 @deffn {StackAlloc} StackAlloc
 @sp 2
 @example
@@ -5205,7 +5148,6 @@ See also:  @code{StackAlloc::Behavior}
 
 @page
 @section  Kernel Functions
-@pdfsection{Kernel Functions}
 The number of regular C language functions available externally
 has been kept to an absolute minimum.  The reason for this is the
 static nature of C functions and an effort to minimize the number
@@ -5220,7 +5162,6 @@ text describes each function.
 
 
 
-@pdfsubsection {Dynace GetInitialPageSize}
 @deffn {Dynace_GetInitialPageSize} Dynace_GetInitialPageSize
 @sp 2
 @example
@@ -5235,7 +5176,7 @@ the amount of memory Dynace should allocate upon startup.  If used, it
 must be defined and supplied as part of the application's code.  The value
 returned, given in number of bytes, is what Dynace uses to allocate its
 initial block of memory for various objects to be allocated from.
-This is used to speed up Dynace under Windows.  @xref{Speeding Up IsObj}.
+This is used to speed up Dynace under Windows.  @xref{Speeding-Up-IsObj}.
 @example
 @group
 @exdent Example:
@@ -5257,7 +5198,6 @@ See also:  @code{Dynace_GetPageSize}
 
 
 
-@pdfsubsection {Dynace GetPageSize}
 @deffn {Dynace_GetPageSize} Dynace_GetPageSize
 @sp 2
 @example
@@ -5272,7 +5212,7 @@ the amount of memory Dynace should allocate after its startup allocation.  If us
 must be defined and supplied as part of the application's code.  The value
 returned, given in number of bytes, is what Dynace uses to allocate its
 blocks of memory, when needed, after its initial memory block is used up.
-This is used to speed up Dynace under Windows.  @xref{Speeding Up IsObj}.
+This is used to speed up Dynace under Windows.  @xref{Speeding-Up-IsObj}.
 @example
 @group
 @exdent Example:
@@ -5298,7 +5238,6 @@ See also:  @code{Dynace_GetInitialPageSize}
 
 
 
-@pdfsubsection {GetIVptr}
 @deffn {GetIVptr} GetIVptr
 @sp 2
 @example
@@ -5337,7 +5276,6 @@ See also:  @code{ivPtr, ivsPtr, accessIVs}
 
 
 
-@pdfsubsection {InitDynace}
 @deffn {InitDynace} InitDynace
 @sp 2
 @example
@@ -5376,7 +5314,6 @@ See also:  @code{InitKernel, GC::Dynace}
 
 
 
-@pdfsubsection {InitKernel}
 @deffn {InitKernel} InitKernel
 @sp 2
 @example
@@ -5424,7 +5361,6 @@ See also:  @code{InitDynace, GC::Dynace}
 
 
 
-@pdfsubsection {IsObj}
 @deffn {IsObj} IsObj
 @sp 2
 @example
@@ -5449,7 +5385,7 @@ else
 @end group
 @end example
 @sp 1
- @xref{Speeding Up IsObj}.
+@xref{Speeding-Up-IsObj}.
 @end deffn
 
 
@@ -5460,7 +5396,6 @@ else
 
 @page
 @section  Kernel Data Types
-@pdfsection{Kernel Data Types}
 There is really only one new data type associated with Dynace, the
 @code{object} type.  However, Dynace also has some type definitions
 which are simply used to ease programming in the Dynace environment.
@@ -5475,7 +5410,6 @@ which are simply used to ease programming in the Dynace environment.
 
 
 
-@pdfsubsection {object}
 @deffn {object} object
 @sp 2
 @example
@@ -5514,7 +5448,6 @@ object  a, b, c;
 
 
 
-@pdfsubsection {ofun}
 @deffn {ofun} ofun
 @sp 2
 @example
