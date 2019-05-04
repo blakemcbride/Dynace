@@ -1,23 +1,19 @@
 
-The Dynace manual is approximately 320 pages and the WDS manual is
-approximately 232 pages.
+The Dynace manual is approximately 400 pages and the WDS manual is
+approximately 226 pages.
 
 The manuals have been prepared for standard 8.5x11 inch paper and are
 correctly formatted for double sided printing.
 
-There are two tables of contents associated with each manual which gets
-printed last.  These pages should be moved to the front of the
-manuals (immediately following the cover).
+HTML versions of the docs are also present.
 
-The following file extensions are used:
+The folowing programs are used in preparation of the manuals:
 
-.lj	HP Laserjet III or later printer
-.ps	Postscript
-.dvi	TeX DVI file
+	TeX
+	texinfo
+	texi2pdf
+	texi2html
+	pdftk
+	sed
 
-
-When printing the HP files from DOS you should use the /b option to copy
-as follows:
-
-copy /b dyn400.lj lpt1
 
