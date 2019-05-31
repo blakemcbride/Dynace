@@ -194,10 +194,10 @@ nofit:
 		while (i--)
 			s[--si]	= ' ';
 	}
-	if (percent)
-		s[--si] = '%';
 	if (paren)
 		s[--si]	= sign ? ')' : ' ';
+	if (percent)
+		s[--si] = '%';
 	for (nd=0 ; nd < d  &&	si ; nd++)  {
 		n /= base;
 		i = (int) floor(base * (n - floor(n)) + .5);
@@ -228,13 +228,13 @@ nofit:
 		while (si > i)
 			s[--si]	= '0';
 	}
+	if (dol	 &&  si)
+		s[--si]	= '$';
 	if (sign)
 		if (si)
 			s[--si]	= paren	? '(' :	'-';
 		else
 			n = 1.0;	/*  signal error condition	*/
-	if (dol	 &&  si)
-		s[--si]	= '$';
 	while (si)
 		s[--si]	= ' ';
 	if (n != 0.0)
