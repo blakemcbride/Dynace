@@ -8,6 +8,7 @@ endif
 ifdef WINE
 OPT += -fPIC
 WINEINCPATH = /usr/include/wine
+# WINEINCPATH = /opt/wine-devel/include/wine
 THIRTYTWOBIT = true
 endif
 
