@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on May 4, 2019 by texi2html 1.82
+<!-- Created on July 24, 2020 by texi2html 1.82
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -107,8 +107,8 @@ on top of the Dynace kernel.
 </p>
 <ul>
 <li> Written in C and designed to maximize portability (currently tested
-on 16 &amp; 32 bit DOS, Windows 3.1, Windows 95, Windows NT, Linux, Nextstep,
-SunOS &amp; various other Unix, Plan 9, VMS and Macintosh.)
+on 32 and 64 bit environments including Linux, Mac, Windows &amp;
+various other systems such as Plan 9, VMS, IoT devices, etc.)
 
 </li><li> Very little added to the standard C syntax (very easy to learn for
 anyone familiar with C)
@@ -151,7 +151,7 @@ must be freed)
 </li><li> Any Class located anywhere in the class hierarchy may be changed without
 necessitating the re-compilation of any other module so long as the
 pre-existing method protocols remain unchanged. (No need to re-compile
-the world because your not sure who is using or subclassing it &ndash; A
+the world because you&rsquo;re not sure who is using or subclassing it &ndash; A
 major problem with C++ !!)
 
 </li><li> Uniform representation of all objects including Classes, Instances,
@@ -934,7 +934,7 @@ enhance.
 <a name="A-comparison-of-Dynace-and-Smalltalk"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#Conclusion" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="#Installation" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Obtaining-The-System" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Dynace-vs_002e-Other-Languages" title="Up section"> Up </a>]</td>
@@ -1017,12 +1017,8 @@ Dynace supports multiple inheritance.
 
 </li></ul>
 
-
-
-
-
 <hr size="6">
-<a name="Installation"></a>
+<a name="Obtaining-The-System"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#A-comparison-of-Dynace-and-Smalltalk" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Contents" title="Next section in reading order"> &gt; </a>]</td>
@@ -1039,14 +1035,10 @@ Dynace supports multiple inheritance.
 <td valign="middle" align="left">[<a href="#Method_002c-Macro_002c-Function-And-Variable-Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section">1.4 Installation</h2>
-<p>The diskette(s) distributed with Dynace are standard DOS formatted
-diskette(s).  The files on the diskette(s) have been compressed in order
-to reduce the quantity of diskettes. 
+<h2 class="section">1.4 Obtaining The System</h2>
+<p>The entire system is available at <a href="https://github.com/blakemcbride/Dynace">https://github.com/blakemcbride/Dynace</a>
 </p>
-<p>See the file <code>README</code>, located on the first disk, for
-installation instructions.
-</p>
+
 
 
 
@@ -1054,7 +1046,7 @@ installation instructions.
 <hr size="6">
 <a name="Contents"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="#Installation" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="#Obtaining-The-System" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Learning-The-System" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
@@ -1071,75 +1063,92 @@ installation instructions.
 </tr></table>
 <h2 class="section">1.5 Contents</h2>
 <p>Once the system has been installed there will exist a series of
-directories under the <code>dynace</code> directory.  The system will contain
+directories under the <code>Dynace</code> root directory.  The system will contain
 the following directories:
 </p>
 
 <dl compact="compact">
-<dt> \DYNACE</dt>
-<dd><p>This is the root of the Dynace system.
-</p>
-</dd>
-<dt> \DYNACE\LIB</dt>
+<dt> lib</dt>
 <dd><p>This is the location of all the Dynace libraries.  You may wish to add
 this directory to the list of paths your linker searches.
 </p>
 </dd>
-<dt> \DYNACE\INCLUDE</dt>
+<dt> include</dt>
 <dd><p>This is the location of the include files necessary to compile Dynace
 applications.  You may need to add this directory to the path your
 compiler uses to search include files.
 </p>
 </dd>
-<dt> \DYNACE\BIN</dt>
+<dt> bin</dt>
 <dd><p>Executable files necessary for development with the Dynace system.
 This directory should be added to your normal search path for executable
 programs.
 </p>
 </dd>
-<dt> \DYNACE\EXAMPLES</dt>
+<dt> examples</dt>
 <dd><p>Example programs used to learn &amp; demonstrate the Dynace object oriented
 extension to C.
 </p>
 </dd>
-<dt> \DYNACE\WINEXAM</dt>
+<dt> WinExam</dt>
 <dd><p>Example programs used to learn &amp; demonstrate WDS.
 </p>
 </dd>
-<dt> \DYNACE\DOCS</dt>
+<dt> docs</dt>
 <dd><p>Misc. documentation files.
 </p>
 </dd>
-<dt> \DYNACE\MANUAL</dt>
+<dt> manual</dt>
 <dd><p>The Dynace and WDS manuals.
 </p>
 </dd>
-<dt> \DYNACE\KERNAL</dt>
+<dt> kernel</dt>
 <dd><p>Complete source to the Dynace kernel.
 </p>
 </dd>
-<dt> \DYNACE\CLASS</dt>
+<dt> class</dt>
 <dd><p>Source to all of the Dynace base classes.
 </p>
 </dd>
-<dt> \DYNACE\THREADS</dt>
+<dt> threads</dt>
 <dd><p>Complete source to the multi-threader, pipes and semaphores.
 </p>
 </dd>
-<dt> \DYNACE\GENERICS</dt>
+<dt> generics</dt>
 <dd><p>Files necessary to build the system generics files from scratch.
 </p>
 </dd>
-<dt> \DYNACE\DPP</dt>
+<dt> dpp</dt>
 <dd><p>Complete source to the <code>dpp</code> utility.
 </p>
 </dd>
-<dt> \DYNACE\WINDOWS</dt>
+<dt> Windows</dt>
 <dd><p>Complete source to the Dynace WDS library.
 </p>
 </dd>
-<dt> \DYNACE\UTILS</dt>
+<dt> utils</dt>
 <dd><p>Complete source to the utility programs.
+</p>
+</dd>
+<dt> cld</dt>
+<dd><p>A GUI program for creating Win32 dialogs.  This also works on Linux
+and Mac through Wine.
+</p>
+</dd>
+<dt> ODBC</dt>
+<dd><p>Library to access SQL tables through ODBC.
+</p>
+</dd>
+<dt> Resources</dt>
+<dd><p>Utility to read Windows resource files.
+</p>
+</dd>
+<dt> Registry</dt>
+<dd><p>Utilities to deal with Windows registry.
+</p>
+</dd>
+<dt> OLE</dt>
+<dd><p>Link between Microsoft OLE technology and Dynace.
 </p>
 </dd>
 </dl>
@@ -1147,9 +1156,8 @@ extension to C.
 
 
 <p>The only files that are absolutely necessary for a developer are those
-located in the <code>\DYNACE\LIB, \DYNACE\INCLUDE</code> and <code>\DYNACE\BIN</code>
-directories and
-<code>\DYNACE\UTILS\STARTUP.MK</code>.
+located in the <code>lib, include</code> and <code>bin</code>
+directories and (for Windows only) <code>utils/startup.mk</code>.
 </p>
 
 
@@ -1235,8 +1243,8 @@ in an independent directory.  This is done in order to illustrate the
 exact files and steps necessary to create a single application.
 </p>
 <p>The example programs are contained in sub-directories under the
-<em>EXAMPLES</em> directory and are named <em>EXAMnn</em> (where the
-<em>nn</em> is a two digit number).  These numbers are significant in that
+<em>examples</em> directory and are named <em>examNN</em> (where the
+<em>NN</em> is a two digit number).  These numbers are significant in that
 they describe the correct order that the examples should be followed.
 Each example depends on knowledge built up in previous examples which is
 not repeated.
@@ -1244,7 +1252,7 @@ not repeated.
 <p>Each example contains a <em>readme</em> file which describes information
 relating to the purpose of the example and build instructions.  These
 files should be read first.  Each example also includes makefiles
-which are used by the included <code>dmake</code> make utility.
+which are used by the included <code>dmake</code> (Windows only) make utility.
 The source to the examples is also included.
 </p>
 <p>The example programs are not intended as a substitute for the manual.
@@ -1360,7 +1368,7 @@ runtime cost.
 </dl>
 
 
-<p>See the file <code>\DYNACE\EXAMPLES\LIST</code> for the most up-to-date list
+<p>See the file <code>examples/list</code> for the most up-to-date list
 of example programs.
 </p>
 
@@ -32169,7 +32177,7 @@ with all other subclasses of the <code>Number</code> class.
       </ul></li>
       <li><a name="toc-A-comparison-of-Dynace-and-Smalltalk" href="#A-comparison-of-Dynace-and-Smalltalk">1.3.2 A comparison of Dynace and Smalltalk</a></li>
     </ul></li>
-    <li><a name="toc-Installation" href="#Installation">1.4 Installation</a></li>
+    <li><a name="toc-Obtaining-The-System" href="#Obtaining-The-System">1.4 Obtaining The System</a></li>
     <li><a name="toc-Contents" href="#Contents">1.5 Contents</a></li>
     <li><a name="toc-Learning-The-System" href="#Learning-The-System">1.6 Learning The System</a></li>
     <li><a name="toc-Quick-Start-_0026-Tutorial" href="#Quick-Start-_0026-Tutorial">1.7 Quick Start &amp; Tutorial</a></li>
@@ -32689,7 +32697,7 @@ with all other subclasses of the <code>Number</code> class.
 </tr></table>
 <h1>About This Document</h1>
 <p>
-  This document was generated by <em>Blake McBride</em> on <em>May 4, 2019</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Blake McBride</em> on <em>July 24, 2020</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
 </p>
 <p>
   The buttons in the navigation panels have the following meaning:
@@ -32791,7 +32799,7 @@ with all other subclasses of the <code>Number</code> class.
 <hr size="1">
 <p>
  <font size="-1">
-  This document was generated by <em>Blake McBride</em> on <em>May 4, 2019</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Blake McBride</em> on <em>July 24, 2020</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
  </font>
  <br>
 

@@ -16,10 +16,13 @@ The system also comes with a language tutorial.  See:
 Then there is a Windows development system tutorial at:
 
 	winexam/exam01/readme
-
-(The Windows development System uses the WIN32 API.  It operates under
-Windows but also operates under Mac and Linux using Wine (the Win32
-API for Unix))
+	
+Dynace operates equally well on Linux, BSD, Mac, Windows, and a
+variety of other systems.  WDS, the Windows Development System, is a
+set of Dynace classes that are built on top of Dynace.  Dynace is
+independent of WDS and can be used without it.  WDS itself depends
+upon the Microsoft Win32 API.  This API is also available on Linux and
+Mac through the Wine project.
 
 
 ----------------------------------------
@@ -40,7 +43,7 @@ The DOS port should still work but is no longer tested.
 The system runs fine under 32 and 64 bit Linux as well as 64 bit Mac.
 It should run fine with possible minor tweaks to the makefiles.
 
-Assuming DR is your Dynace root directory such as  c:\dynace
+Assuming DR is your Dynace root directory such as  c:\dynace or ~/Dynace
 
 Go to the appropriate section.
 

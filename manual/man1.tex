@@ -59,8 +59,8 @@ The following table lists some of the key features of Dynace:
 @itemize @bullet
 
 @item Written in C and designed to maximize portability (currently tested
-on 16 & 32 bit DOS, Windows 3.1, Windows 95, Windows NT, Linux, Nextstep,
-SunOS & various other Unix, Plan 9, VMS and Macintosh.)
+on 32 and 64 bit environments including Linux, Mac, Windows &
+various other systems such as Plan 9, VMS, IoT devices, etc.)
 
 @item Very little added to the standard C syntax (very easy to learn for
 anyone familiar with C)
@@ -103,7 +103,7 @@ must be freed)
 @item Any Class located anywhere in the class hierarchy may be changed without
 necessitating the re-compilation of any other module so long as the
 pre-existing method protocols remain unchanged. (No need to re-compile
-the world because your not sure who is using or subclassing it -- A
+the world because you're not sure who is using or subclassing it -- A
 major problem with C++ !!)
 
 @item Uniform representation of all objects including Classes, Instances,
@@ -627,92 +627,92 @@ Dynace supports multiple inheritance.
 
 @end itemize
 
+@section Obtaining The System
+The entire system is available at @uref{https://github.com/blakemcbride/Dynace}
+
+
 
 
 
 @page
-@section Installation
-The diskette(s) distributed with Dynace are standard DOS formatted
-diskette(s).  The files on the diskette(s) have been compressed in order
-to reduce the quantity of diskettes. 
-
-See the file @code{README}, located on the first disk, for
-installation instructions.
-
-
-
-
-
 @section Contents
 Once the system has been installed there will exist a series of
-directories under the @code{dynace} directory.  The system will contain
+directories under the @code{Dynace} root directory.  The system will contain
 the following directories:
 
 
 @table @asis
-@item \DYNACE
-This is the root of the Dynace system.
-
-@item \DYNACE\LIB
+@item lib
 This is the location of all the Dynace libraries.  You may wish to add
 this directory to the list of paths your linker searches.
 
-@item \DYNACE\INCLUDE
+@item include
 This is the location of the include files necessary to compile Dynace
 applications.  You may need to add this directory to the path your
 compiler uses to search include files.
 
-@item \DYNACE\BIN
+@item bin
 Executable files necessary for development with the Dynace system.
 This directory should be added to your normal search path for executable
 programs.
 
-@item \DYNACE\EXAMPLES
+@item examples
 Example programs used to learn & demonstrate the Dynace object oriented
 extension to C.
 
-@item \DYNACE\WINEXAM
+@item WinExam
 Example programs used to learn & demonstrate WDS.
 
-@item \DYNACE\DOCS
+@item docs
 Misc. documentation files.
 
-@item \DYNACE\MANUAL
+@item manual
 The Dynace and WDS manuals.
 
-@item \DYNACE\KERNAL
+@item kernel
 Complete source to the Dynace kernel.
 
-@item \DYNACE\CLASS
+@item class
 Source to all of the Dynace base classes.
 
-@item \DYNACE\THREADS
+@item threads
 Complete source to the multi-threader, pipes and semaphores.
 
-@item \DYNACE\GENERICS
+@item generics
 Files necessary to build the system generics files from scratch.
 
-@item \DYNACE\DPP
+@item dpp
 Complete source to the @code{dpp} utility.
 
-@item \DYNACE\WINDOWS
+@item Windows
 Complete source to the Dynace WDS library.
 
-@item \DYNACE\UTILS
+@item utils
 Complete source to the utility programs.
+
+@item cld
+A GUI program for creating Win32 dialogs.  This also works on Linux
+and Mac through Wine.
+
+@item ODBC
+Library to access SQL tables through ODBC.
+
+@item Resources
+Utility to read Windows resource files.
+
+@item Registry
+Utilities to deal with Windows registry.
+
+@item OLE
+Link between Microsoft OLE technology and Dynace.
 
 @end table
 
 
 
 The only files that are absolutely necessary for a developer are those
-located in the @code{\DYNACE\LIB, \DYNACE\INCLUDE} and @code{\DYNACE\BIN}
-directories and
-@iftex 
-@hfil 
-@break 
-@end iftex 
-@code{\DYNACE\UTILS\STARTUP.MK}.
+located in the @code{lib, include} and @code{bin}
+directories and (for Windows only) @code{utils/startup.mk}.
 
 
 
@@ -762,8 +762,8 @@ in an independent directory.  This is done in order to illustrate the
 exact files and steps necessary to create a single application.
 
 The example programs are contained in sub-directories under the
-@emph{EXAMPLES} directory and are named @emph{EXAMnn} (where the
-@emph{nn} is a two digit number).  These numbers are significant in that
+@emph{examples} directory and are named @emph{examNN} (where the
+@emph{NN} is a two digit number).  These numbers are significant in that
 they describe the correct order that the examples should be followed.
 Each example depends on knowledge built up in previous examples which is
 not repeated.
@@ -771,7 +771,7 @@ not repeated.
 Each example contains a @emph{readme} file which describes information
 relating to the purpose of the example and build instructions.  These
 files should be read first.  Each example also includes makefiles
-which are used by the included @code{dmake} make utility.
+which are used by the included @code{dmake} (Windows only) make utility.
 The source to the examples is also included.
 
 The example programs are not intended as a substitute for the manual.
@@ -863,7 +863,7 @@ Illustrates some of the numeric and date formatting abilities.
 @end table
 
 
-See the file @code{\DYNACE\EXAMPLES\LIST} for the most up-to-date list
+See the file @code{examples/list} for the most up-to-date list
 of example programs.
 
 
@@ -914,9 +914,6 @@ described in chapters 4 and 5.
 @section Contact Information
 
 @table @asis
-
-@c @item Voice
-@c 615--791--1636
 
 @item Internet
 blake@@mcbride.name
