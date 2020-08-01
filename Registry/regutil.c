@@ -27,12 +27,13 @@
 */
 
 
-
 #ifdef _MSC_VER
-#if _MSC_VER > 1200
-#define _CRT_SECURE_NO_DEPRECATE
-#define _POSIX_
-#endif
+#  if _MSC_VER > 1200
+#    define _CRT_SECURE_NO_DEPRECATE
+#    define _POSIX_
+#  else
+#    define DWORD_PTR	DWORD
+#  endif
 #endif
 
 #define	USEREG

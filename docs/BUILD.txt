@@ -75,7 +75,15 @@ kernel, class, dpp, and generics at this level.
 
 	setupenv.bat
 
-2.  Build the system
+2.  If your login ID has a period in it, you need to set the TMP
+environment varaible explicitly as follows:
+
+        set TMP=C:\TEMP
+	
+or any other suitable location.  If you need to do this, you may want
+to update setupenv.bat to reflect this change.
+
+3.  Build the system
 
 The following table indicates the correct makefile for each supported
 environment: (note:  only MSC.DM is really tested or used anymore)

@@ -100,8 +100,19 @@ typedef unsigned long  INT_PTR;
 #endif
 #endif
 
-/* pointer to long long  */
-#define PTOLL(p)	((long long)(INT_PTR)p)
+#if defined(_MSC_VER)
+#  if _MSC_VER > 1200
+#    define PTOLL(p)	((long long)(INT_PTR)p)
+#  else
+#    define PTOLL(p)	((INT_PTR)p)
+#    define ULONG_PTR	DWORD
+#    define DWORD_PTR	LPDWORD
+#    define SQLLEN	SQLINTEGER
+#    define SQLULEN	SQLUINTEGER
+#  endif
+#else
+#  define PTOLL(p)	((long long)(INT_PTR)p)
+#endif
 
 #ifdef	PLAN9
 #include "plan9.h"

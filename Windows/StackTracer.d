@@ -29,15 +29,20 @@
 
 
 #ifdef _MSC_VER
-#if _MSC_VER > 1200
-#define _CRT_SECURE_NO_DEPRECATE
-#define _POSIX_
-#endif
+#  if _MSC_VER > 1200
+#    define _CRT_SECURE_NO_DEPRECATE
+#    define _POSIX_
+#    include <windows.h>
+#    include <DbgHelp.h>
+#  else
+#    include <windows.h>
+#    include <imagehlp.h>
+#  endif
+#else
+#  include <windows.h>
+#  include <DbgHelp.h>
 #endif
 
-#include <windows.h>
-//#include <imagehlp.h>
-#include <DbgHelp.h>
 #include <tchar.h>
 #include <stdlib.h>
 #include <stdio.h>
