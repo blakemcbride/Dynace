@@ -54,7 +54,7 @@ Windows
 -------
 
 If you are operating With Cygwin under Windows, use the Linux build
-docs below rather than this secion.
+docs below rather than this section.
 
 This procedure will work for 32 and 64 bit builds.
 
@@ -76,7 +76,7 @@ kernel, class, dpp, and generics at this level.
 	setupenv.bat
 
 2.  If your login ID has a period in it, you need to set the TMP
-environment varaible explicitly as follows:
+environment variable explicitly as follows:
 
         set TMP=C:\TEMP
 	
@@ -94,7 +94,7 @@ MSC.DM		Microsoft C 32 or 64 bit
 M16.DM		Microsoft C 16 bit
 W32.DM		Watcom C 32 bit
 
-MSC.dm can be substitutied with the above if necessary, type:
+MSC.dm can be substituted with the above if necessary, type:
 (Note: the case does matter.)
 
 	dmake -f msc.dm all-scratch
@@ -138,7 +138,7 @@ this.
 
 If you now want to build the GUI library use the following.  This can
 only be done after the above steps were followed (although switching
-to STRAT=-S1, the fater mode doesn't matter.  It works either way.)
+to STRAT=-S1, the faster mode, doesn't matter.  It works either way.)
 
 	dmake -f msc.dm wds-makegens
 	dmake -f msc.dm wds-all-scratch
