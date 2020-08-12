@@ -1,0 +1,215 @@
+
+Technical Summary of Dynace
+
+This document attempts to give a technical overview of how Dynace's OO
+model is structured highlighting the differences between Dynace and
+what can be called a Standard Model which is the one used by common OO
+languages such as Java, C#, and C++.  This document is necessary because
+Dynace follows a model similar to the Common Lisp Object System (CLOS)
+rather than what I am terming the Standard Model. 
+
+This document is only 95% true.  The parts that are not true is that
+Dynace allows for exceptions to its strict rules.  Typically this is
+done for performance reasons.  However, these exceptions are rarely
+used and are documented in the Dynace manual.
+
+Dynace classes are defined in .d files.  These files are essentially C
+source files with Dynace class definitions.  At compile-time, Dynace
+runs a Dynace supplied pre-processor named DPP that converts a .d
+file into a single .c file.  This process does not generate .h files
+(except for generics.h which will be discussed later).
+
+Each Dynace .d file defines a single Dynace class.  Unlike Java and
+C#, the file name and the name of the class it defines are unrelated.
+
+Each Dynace class may contain instance and class variables as well as
+instance and class methods.  All Dynace instance and class variables
+as well as all instance and class methods are private.  That means they
+are only accessible from within that single source file.  This is
+quite different from Java, C#, and C++.
+
+Conceptually, the way inheritance and encapsulation work in Dynace as
+well as class and instance variables and class and instance methods
+work is the same as in Java, C#, and C++.  The big difference is that
+all methods are private in Dynace.  So, the question arises, if
+everything is private, how does any code use these classes?  The
+answer is generic functions.
+
+In an entire application, there is only a single file named generics.h
+and a single file named generics.c.  These are created and maintained by
+the Dynace DPP program.  The generics.c file contains all of the
+public / global generic functions used by the system.  Generics.h is
+included by every C source file that is to use Dynace classes.  This
+provides the compile-time argument checking for generic functions (in
+addition to a number of other infrastructure needs).  Generics.c and
+generics.h contain nothing but DPP generated generic functions.  They
+would never be hand-modified.
+
+For the moment, let's ignore the Dynace naming convention regarding
+method and generic names as starting with 'g' or 'v'.  That is a
+convention only and not enforced or used by Dynace.
+
+Here is how generic functions give access to private methods.  Let's
+say you have two unrelated classes named C1 and C2.  Let's say they
+each contain a method named M1.  So, class C1 contains a method named
+M1 and class C2 also contains its own M1.  They don't clash because
+they're each private to their respective files.
+
+When you run DPP, Dynace sees the two M1's and creates a single
+generic function named M1.  This generic function is just a standard
+public / global C function.  All of the generic functions Dynace
+creates are in the single generics.c file.  The single generics.h file
+simply contains the header information for those generic functions.
+
+C files that wish to use Dynace classes would simply include
+generics.h.  Since generic M1 is public / global, any C file may use
+it.  What generic M1 does internally is the special sauce.
+Internally, generic M1 checks the type of its first argument.  If it
+as a class, the generic function calls the private class method that
+is associated with it.  If the first argument to the generic is an
+instance, the generic calls the appropriate private instance method.
+Inheritance works as you would expect.
+
+--
+
+Method / generic naming convention
+
+Again, the 'g' and 'v' often associated with Dynace generics and
+methods is a convention only and is not enforced by Dynace.  The 'g'
+stands for 'generic'.  What it is supposed to tell the programmer is
+that this C function is dispatching to a private instance or class
+method somewhere (depending on the type of the first argument).
+
+Typically, if several classes define the same method, they'll have the
+same arguments.  However, Dynace does not require that.  In Dynace,
+methods in different classes with the same name do not have to have
+the same arguments.  However, if they have different arguments, the C
+compiler has no way of assuring the arguments to the generics are
+correct at compile time.  This is because the system doesn't know what
+you are calling until runtime.  In C terms, Dynace uses variable
+argument generics to handle this situation.  In order to make clear to
+the programmer, namely that the arguments are not being compile-time
+checked, we use the 'v' naming convention rather than the 'g' naming
+convention.  The 'v' stands for 'variable arguments'.
+
+--
+
+
+Multiple inheritance.
+
+Dynace supports multiple inheritance similar to C++.  When a class is
+defined with multiple parents, the ordering of that superclass
+specification is critical.  That is what determines the search order
+when more than one of those parents defines the same method.
+
+--
+
+Dependencies.
+
+All of the internal data structures used by Dynace are built at runtime.
+What this does for us is as follows.
+
+Dynace classes do not use or produce .h files (except the single,
+global generics.h).  This means that other Dynace and C files are not
+compile-time dependent on Dynace class files.  If a Dynace class file
+changes, there is no need to re-compile other Dynace or C files!
+
+If a Dynace class adds a totally new method for which there was no
+prior generic, in addition to the single class file that need to be
+re-compiled, generics.c will also need to be re-compiled.  However, no
+other Dynace or C file need be re-compiled.  The only exception to
+this is if you change a method signature (the arguments it takes).  If
+you do that, a full re-build of the entire system is necessary.
+
+DPP automatically detects and reports method argument inconsistencies.
+
+--
+
+Dynace features
+
+In addition to Dynace features described in this document and
+elsewhere, Dynace also supports cooperative threads, native threads, and an
+automatic garbage collector.
+
+--
+
+Speed
+
+Since Dynace builds all of its data structures at runtime, and
+performs method lookup and dispatching at runtime, one may question
+the speed of Dynace.  Dynace employs several techniques designed to
+mitigate these performance penalties as follows.
+
+First, Dynace only performs method call lookups a single time.  Once
+it finds the correct method to call for a given type, it places that
+relationship in a method cache Dynace maintains internally.
+Alternatively, Dynace supports a method cache mechanism it calls
+fast-and-wide.  That method lookup mechanism uses large arrays rather
+than a hashing system.  It is only slightly faster but requires a
+great deal more memory.  The Dynace fast-and-wide mechanism is
+equivalent to what C++ does for virtual functions.  
+
+Second, Dynace includes an optional assembler piece.  What this does
+is as follows.  when you C program calls a generic, the generic
+function determines what method to call and calls it.  Normally, when
+the method returns, it would return to the generic which would then
+return to the calling C program.  The assembler circumvents this
+process.  With the assembler piece this is what happens.  The C
+program calls a generic.  The generic determines the method to call
+and calls it.  However, when the method returns, it returns directly
+to the calling C program rather than the generic function thus
+avoiding the extra return.  The DPP strategy controls which method is
+employed.
+
+Lastly, due to the above, the overhead of Dynace is typically
+negligible - far less then 5%.  There is, however, one area which
+cause a far more significant overhead.  Perhaps as much as 20%.
+
+Every time a generic is called, Dynace validates it's first argument
+to be sure it is a valid Dynace object.  The beauty of this is that if
+there is a program error and that first argument is not a Dynace
+object (class or instance), Dynace is able to display an appropriate
+error message rather than just crashing.  This is very helpful when
+trying to correct an error.  If the program crashed without this
+check, no one would know why.
+
+This runtime object validation performed by Dynace is a feature that
+can be turned off for something of a performance benefit.
+
+--
+
+WDS (Windows Development System)
+
+Dynace includes its kernel and a fairly full class library of common
+data structures.  It is very generic and very portable.
+
+On top of Dynace, there are a set of Windows specific classes used to
+make the task of creating a Windows GUI application significantly easier
+than other libraries such as MFC.  This set of classes is called WDS.
+These classes are portable to Mac & Linux through the WINE project
+which is a WIN32 API layer.
+
+--
+
+Tutorials
+
+Dynace includes two tutorials.  One is for Dynace and the other is for
+WDS.  They are in the 'examples' and 'WinExam' directories
+respectively.
+
+--
+
+Documentation
+
+Dynace is well documented.  Dynace comes with a 350 page detailed user
+manual and reference.  It has been kept up to date fairly well and
+should be fairly accurate.
+
+WDS has an additional 250 page manual.  Unfortunately, however, it has
+not been kept up to date and is fairly out-dated.  It is, however, a
+good overview and a good starting point.
+
+	
+Blake McBride
+8/12/2020
+
