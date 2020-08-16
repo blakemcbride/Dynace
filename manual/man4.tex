@@ -2369,6 +2369,44 @@ See also:  @code{MaxMemUsed::Dynace, GC::Dynace, DumpObjects::Dynace}
 
 
 
+@deffn {DumpMemoryDiff} DumpMemoryDiff::Dynace
+@sp 2
+@example
+@group
+c = gDumpMemoryDiff(Dynace, start, fileName)
+
+object  c;       /*  the Dynace class  */
+object start;    /*  value returned from gMarkMemoryBeginning::Dynace  */
+char *fileName;  /*  the name of the file to dump the list to   */
+@end group
+@end example
+This method is used in conjunction with gMarkMemoryBeginning to find
+memory leaks.  A list of all remaining objects between the call
+to gMarkMemoryBeginning and gDumpMemoryDiff.
+
+Typically, one would call gMarkMemoryBeginning, run your normal code
+including calls to dispose of objects no longer needed, and then
+call gDumpMemoryDiff to see what objects remain after all of the 
+dispose calls.  Those are your leaks.
+
+Note that @code{start} should be DeepDisposed when it is no longer needed.
+Also, these two methods should normally be used rather than DumpObjects.
+@example
+@group
+@exdent Example:
+
+object start = gMarkMemoryBeginning(Dynace);
+...
+gDumpMemoryDiff(Dynace, start, "MyMemDump.txt");
+gDeepDispose(start);
+@end group
+@end example
+@sp 1
+See also:  @code{MarkMemoryBeginning::Dynace}
+@end deffn
+
+
+
 
 
 
@@ -2403,7 +2441,7 @@ gDumpObjects(Dynace, "objects.lst", 0);
 @end group
 @end example
 @sp 1
-See also:  @code{DumpObjectsString::Dynace, MaxMemUsed::Dynace, GC::Dynace}
+See also:  @code{MarkMemoryBeginning::Dynace, DumpObjectsString::Dynace, MaxMemUsed::Dynace, GC::Dynace}
 @end deffn
 
 
@@ -2467,7 +2505,7 @@ diff = gDumpObjectsDiff(Dynace, d1, d2);
 @end group
 @end example
 @sp 1
-See also:  @code{DumpObjectsString::Dynace, DumpObjects::Dynace}
+See also:  @code{MarkMemoryBeginning::Dynace, DumpObjectsString::Dynace, DumpObjects::Dynace}
 @end deffn
 
 
@@ -2524,7 +2562,7 @@ string dictionaries would then be compared using
 @c @end group
 @c @end example
 @sp 1
-See also:  @code{DumpObjectsDiff::Dynace, DumpObjects::Dynace}
+See also:  @code{MarkMemoryBeginning::Dynace, DumpObjectsDiff::Dynace, DumpObjects::Dynace}
 @end deffn
 
 
@@ -2570,6 +2608,44 @@ See also:  @code{SetMemoryBufferArea::Dynace, RegisterMemory::Dynace,}
 @end deffn
 
 
+
+
+
+
+
+@deffn {MarkMemoryBeginning} MarkMemoryBeginning::Dynace
+@sp 2
+@example
+@group
+start = gMarkMemoryBeginning(Dynace)
+
+object start;
+@end group
+@end example
+This method is used in conjunction with gDumpMemoryDiff to find
+memory leaks.  A list of all remaining objects between the call
+to gMarkMemoryBeginning and gDumpMemoryDiff.
+
+Typically, one would call gMarkMemoryBeginning, run your normal code
+including calls to dispose of objects no longer needed, and then
+call gDumpMemoryDiff to see what objects remain after all of the 
+dispose calls.  Those are your leaks.
+
+Note that @code{start} should be DeepDisposed when it is no longer needed.
+Also, these two methods should normally be used rather than DumpObjects.
+@example
+@group
+@exdent Example:
+
+object start = gMarkMemoryBeginning(Dynace);
+...
+gDumpMemoryDiff(Dynace, start, "MyMemDump.txt");
+gDeepDispose(start);
+@end group
+@end example
+@sp 1
+See also:  @code{DumpMemoryDiff::Dynace}
+@end deffn
 
 
 

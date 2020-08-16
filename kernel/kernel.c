@@ -1827,6 +1827,44 @@ cmeth	object	Dynace_cm_gDumpObjectsDiff(object self, object sd1, object sd2)
 	return diff;
 }
 
+cmeth	object	Dynace_cm_gMarkMemoryBeginning(object self)
+{
+	String;
+	StringAssociation;
+	Set;
+	StringDictionary;
+	File;
+	LongInteger;
+	return gDumpObjectsString(Dynace, 0);
+}
+
+cmeth	object	Dynace_cm_gDumpMemoryDiff(object self, object d1, char *fname)
+{
+	object	d2 = gDumpObjectsString(Dynace, 0);
+	object	seq, sa, f;
+	int	n = 0;
+	char	buf[100];
+
+	object diff = gDumpObjectsDiff(Dynace, d1, d2);
+	f = gOpenFile(File, fname, "wt");
+	seq = gSequence(diff);
+	while (sa = gNext(seq)) {
+		object k = gKey(sa);
+		object v = gValue(sa);
+		sprintf(buf, "%s %ld\n", gStringValue(k), gLongValue(v));
+		gWrite(f, buf, strlen(buf));
+		n++;
+	}
+	if (!n) {
+		strcpy(buf, "No objects found.\n");
+		gWrite(f, buf, strlen(buf));
+	}
+	gDispose(f);
+	gDeepDispose(d2);
+	gDeepDispose(diff);
+	return self;
+}
+
 LOCAL	void	rebuild_free_list(Behavior_iv_t *cv, int is)
 {
 	instance_block	*ib;
@@ -2412,6 +2450,8 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 	cMethodFor(Dynace, gDumpObjects, Dynace_cm_gDumpObjects);
 	cMethodFor(Dynace, gDumpObjectsString, Dynace_cm_gDumpObjectsString);
 	cMethodFor(Dynace, gDumpObjectsDiff, Dynace_cm_gDumpObjectsDiff);
+	cMethodFor(Dynace, gMarkMemoryBeginning, Dynace_cm_gMarkMemoryBeginning);
+	cMethodFor(Dynace, gDumpMemoryDiff, Dynace_cm_gDumpMemoryDiff);
 
 	cMethodFor(GenericFunction, gGetAll, GenericFunction_cm_gGetAll);
 	cMethodFor(GenericFunction, gFindGeneric, GenericFunction_cm_gFindGeneric);

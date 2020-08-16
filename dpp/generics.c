@@ -162,6 +162,7 @@ object	Generic(gDoesNotImplement);
 object	Generic(gDontCollect);
 object	Generic(gDoubleValue);
 object	Generic(gDrop);
+object	Generic(gDumpMemoryDiff);
 object	Generic(gDumpObjects);
 object	Generic(gDumpObjectsDiff);
 object	Generic(gDumpObjectsString);
@@ -290,6 +291,7 @@ object	Generic(gLock);
 object	Generic(gLongValue);
 object	Generic(gLookup);
 object	Generic(gMakeServer);
+object	Generic(gMarkMemoryBeginning);
 object	Generic(gMarkObject);
 object	Generic(gMarkRange);
 object	Generic(gMarkingMethod);
@@ -1047,6 +1049,11 @@ static	objrtn	_gDrop(object self, int n)
 	return (*(gDrop_t)_FindMethod(self, Generic(gDrop)))(self, n);
 }
 
+static	objrtn	_gDumpMemoryDiff(object self, object d1, char *fname)
+{
+	return (*(gDumpMemoryDiff_t)_FindMethod(self, Generic(gDumpMemoryDiff)))(self, d1, fname);
+}
+
 static	objrtn	_gDumpObjects(object self, char *file, int type)
 {
 	return (*(gDumpObjects_t)_FindMethod(self, Generic(gDumpObjects)))(self, file, type);
@@ -1685,6 +1692,11 @@ static	objrtn	_gLookup(object self, object luk, int mode, int deep, int type, ob
 static	objrtn	_gMakeServer(object self, int port, int ssl)
 {
 	return (*(gMakeServer_t)_FindMethod(self, Generic(gMakeServer)))(self, port, ssl);
+}
+
+static	objrtn	_gMarkMemoryBeginning(object self)
+{
+	return (*(gMarkMemoryBeginning_t)_FindMethod(self, Generic(gMarkMemoryBeginning)))(self);
 }
 
 static	void	_gMarkObject(object self, object obj)
@@ -2942,6 +2954,7 @@ gDoesNotImplement_t	gDoesNotImplement = _gDoesNotImplement;
 gDontCollect_t	gDontCollect = _gDontCollect;
 gDoubleValue_t	gDoubleValue = _gDoubleValue;
 gDrop_t	gDrop = _gDrop;
+gDumpMemoryDiff_t	gDumpMemoryDiff = _gDumpMemoryDiff;
 gDumpObjects_t	gDumpObjects = _gDumpObjects;
 gDumpObjectsDiff_t	gDumpObjectsDiff = _gDumpObjectsDiff;
 gDumpObjectsString_t	gDumpObjectsString = _gDumpObjectsString;
@@ -3070,6 +3083,7 @@ gLock_t	gLock = _gLock;
 gLongValue_t	gLongValue = _gLongValue;
 gLookup_t	gLookup = _gLookup;
 gMakeServer_t	gMakeServer = _gMakeServer;
+gMarkMemoryBeginning_t	gMarkMemoryBeginning = _gMarkMemoryBeginning;
 gMarkObject_t	gMarkObject = _gMarkObject;
 gMarkRange_t	gMarkRange = _gMarkRange;
 gMarkingMethod_t	gMarkingMethod = _gMarkingMethod;
@@ -3401,6 +3415,7 @@ void	InitGenerics()
 	InitGeneric( gDontCollect );
 	InitGeneric( gDoubleValue );
 	InitGeneric( gDrop );
+	InitGeneric( gDumpMemoryDiff );
 	InitGeneric( gDumpObjects );
 	InitGeneric( gDumpObjectsDiff );
 	InitGeneric( gDumpObjectsString );
@@ -3529,6 +3544,7 @@ void	InitGenerics()
 	InitGeneric( gLongValue );
 	InitGeneric( gLookup );
 	InitGeneric( gMakeServer );
+	InitGeneric( gMarkMemoryBeginning );
 	InitGeneric( gMarkObject );
 	InitGeneric( gMarkRange );
 	InitGeneric( gMarkingMethod );

@@ -85,6 +85,8 @@ cmeth	void	gMarkObject(object obj){}
 cmeth	gDumpObjects(char *file, int type){}
 cmeth	gDumpObjectsString(int type){}
 cmeth	gDumpObjectsDiff(sd1, sd2){}
+cmeth	gMarkMemoryBeginning(){}
+cmeth	gDumpMemoryDiff(object d1, char *fname){}
 
 #endif
 
