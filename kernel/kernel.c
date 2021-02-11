@@ -1852,12 +1852,12 @@ cmeth	object	Dynace_cm_gDumpMemoryDiff(object self, object d1, char *fname)
 		object k = gKey(sa);
 		object v = gValue(sa);
 		sprintf(buf, "%s %ld\n", gStringValue(k), gLongValue(v));
-		gWrite(f, buf, strlen(buf));
+		gWrite(f, buf, (int) strlen(buf));
 		n++;
 	}
 	if (!n) {
 		strcpy(buf, "No objects found.\n");
-		gWrite(f, buf, strlen(buf));
+		gWrite(f, buf, (int) strlen(buf));
 	}
 	gDispose(f);
 	gDeepDispose(d2);
