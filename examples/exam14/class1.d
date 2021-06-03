@@ -1,23 +1,4 @@
 
-
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
-
-
  /*  This example adds a class variable to the previous examples.
      Class variables are shared by all instances of a class, that is,
      there's only copy and it is associated to the class as a whole.
@@ -131,21 +112,5 @@ imeth	char	* gGetName : get_name ()
 {
 	return iName;
 }
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
 
 

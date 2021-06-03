@@ -3420,7 +3420,7 @@ void	demo_message(HWND hwnd)
 	MessageBox(hwnd, 
 
 "This is a demo version of the Dynace Windows Development System (WDS) "
-"by Blake McBride (blake@mcbride.name)."
+"by Blake McBride."
 		   , "Demo Information Window", MB_OK);
 #endif
 }

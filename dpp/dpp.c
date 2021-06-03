@@ -5000,7 +5000,7 @@ static	int	class_source(char *p)
 static	void	print_help(object stream)
 {
 	vPrintf(stream, "DPP Version %s %s (%d bit)\n\n", __DATE__, __TIME__, 8*(int)sizeof(char *));
-	gPuts(stream, "dpp is Copyright (c) 1993-2000 Blake McBride (blake@mcbride.name)\n");
+	gPuts(stream, "dpp is Copyright (c) 1993-2000 Blake McBride (blake@mcbridemail.com)\n");
 	gPuts(stream, "       All rights reserved.\nSee accompanying license.\n\n");
 	gPuts(stream, "usage: dpp  options\n");
 

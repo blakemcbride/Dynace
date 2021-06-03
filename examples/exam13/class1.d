@@ -1,23 +1,4 @@
 
-
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
-
-
  /*  Nothing in this file has been changed from the previous example.  */
 
 #include <string.h>
@@ -38,21 +19,4 @@ imeth	char	* gGetName : get_name ()
 {
 	return iName;
 }
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
-
 

@@ -1,5 +1,5 @@
 
-/*  Copyright 1998 Blake McBride (blake@mcbride.name)  */
+/*  Copyright 1998 Blake McBride (blake@mcbridemail.com)  */
 
 #ifndef _CRT_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE

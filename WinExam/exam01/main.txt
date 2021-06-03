@@ -61,7 +61,7 @@ int	start()
 
 	win = vNew(MainWindow, title);
 
-	/*  This next line associates the Blake McBride (blake@mcbride.name) ICON
+	/*  This next line associates the ICON
 	    (ALGOCORP.ICO) with window win.  This icon was defined and
 	    named with the resource editor which comes with your compiler.
 	    This line is unnecessary and only serves to cause the Algorithms

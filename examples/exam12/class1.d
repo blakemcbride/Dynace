@@ -1,23 +1,4 @@
 
-
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
-
-
  /*  This example builds on the previous example by the addition of
      two methods which allow users of this class to set and obtain the
      value in the iName instance variable.  */
@@ -108,21 +89,5 @@ imeth	char	*gGetName : get_name ()
 {
 	return iName;
 }
-
-
-/*
- *
- *	This source code is CONFIDENTIAL and
- *	PROPRIETARY to Blake McBride (blake@mcbride.name). Unauthorized
- *	distribution, adaptation or use	may
- *	be subject to civil and	criminal penalties.
- *
- *	Copyright (c) 1993 Blake McBride (blake@mcbride.name)
- *
- *	ALL RIGHTS RESERVED.
- *
- *
- *
- */
 
 
