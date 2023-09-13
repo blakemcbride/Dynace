@@ -2,17 +2,13 @@
 Description of files available in this directory.
 
 
-README.txt	basic intro, contact information
+../README	basic intro, contact information, starting point
 
 INDEX.txt	this file
 
 LICENSE.txt	fully describes what you can and cannot do with this package
 
 DESCRIBE.txt	basic description of the system
-
-PACKAGES.txt	description of available Dynace packages and what's in them
-
-INSTALL.txt	installation instructions
 
 ORIENT.txt	description or orientation to all the directories
 
