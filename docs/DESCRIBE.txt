@@ -136,5 +136,5 @@ There is no portable way to do this in C.  Dynace includes inline assembler
 for some of the major platforms for this.  On the other hand, I presume the
 Boehm-Demers-Weiser GC already handles this.
 
-I have some fears with the interaction of native threads and the GC.
+I have some concerns with the interaction of native threads and the GC.
 
