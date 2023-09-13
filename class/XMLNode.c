@@ -214,8 +214,9 @@ PMETHOD objrtn parse(object self, InputStream *is)
 					*p = c; 
 					bb = p; 
 				} else { 
+					char *s = p; 
 					for (; *p ; p++); 
-					for (p-- ; isspace(*p) ; --p); 
+					for (p-- ; p >= s && isspace(*p) ; --p); 
 					p++; 
 					c = *p; 
 					*p = '\0'; 
@@ -1017,7 +1018,7 @@ PMETHOD void dump_xml(object self, int lvl, object fp, int next)
 	tabs[0] = '\0'; 
 #endif 
 
-#line 1011 "XMLNode.d"
+#line 1012 "XMLNode.d"
 		for (; self ; self=next?iv->iNextNode:NULL) { 
 		iv = ivPtr(self); 
 		if (iv->iType == DOCUMENT_NODE) { 
@@ -1070,7 +1071,7 @@ static int isAllSpace(char *s)
 #endif 
 
 
-#line 1062 "XMLNode.d"
+#line 1063 "XMLNode.d"
 imeth char * XMLNode_im_gName(object self)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	return iv->iName; 
@@ -1429,7 +1430,7 @@ PMETHOD void xpath_recurse(object self, object *res2, char *name, int sub_type, 
 } 
 
 
-#line 1445 "XMLNode.d"
+#line 1446 "XMLNode.d"
 PMETHOD objrtn pXPath(object self, char *path)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	char name[128], *p, sub_attr[128], sub_val[128]; 
@@ -1715,7 +1716,7 @@ main(int argc, char *argv[])
 #else 
 
 
-#line 1728 "XMLNode.d"
+#line 1729 "XMLNode.d"
 	dom = gNewDocument(XMLNode); 
 	gAppendChild(dom, res=gCreateElement(XMLNode, "FatCat")); 
 	gSetAttribute(res, "COLOR", "Red"); 
@@ -1724,14 +1725,14 @@ main(int argc, char *argv[])
 #endif 
 
 
-#line 1734 "XMLNode.d"
+#line 1735 "XMLNode.d"
 	return 0; 
 } 
 
 #endif 
 
 
-#line 1735 "XMLNode.c"
+#line 1736 "XMLNode.c"
 
 objrtn	XMLNode_initialize(void)
 {
