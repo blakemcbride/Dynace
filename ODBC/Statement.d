@@ -318,8 +318,8 @@ imeth	object	gDispose, gDeepDispose ()
 		gDispose(iLastSelect);
 	if (iLazyStatement)
 		gDispose(iLazyStatement);
-	GCDispose(self);
 	gRemoveStatement(iDatabase, self);
+	GCDispose(self);
 	return NULL;
 }
 

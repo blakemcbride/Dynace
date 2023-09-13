@@ -1,3 +1,76 @@
+Broadly speaking, this system has two primary components as follows:
+
+1. The Dynace language
+2. The Win32 GUI Development classes
+
+
+The Dynace language is very portable and includes:
+
+* the kernel (provided the OO features and other langage-level facilities)
+* DPP (the Dynace pre-processor)
+* class library (collection of generic Dynace classes)
+
+The Dynace language stands on its own and is documented in the file named
+manual/Dynace.pdf.  It does not require the Win32 GUI classes.
+
+The Win32 GUI Development classes are a set of Dynace classes that make
+developping Windows GUI appications very easy.  These classes are, 
+theoretically, portable to Linux and Mac via the Wine API.
+
+These classes were used for many years by commercial Windows applications.
+However, they have not been maintained through the switch to 64 bit machines.
+It is believed that getting all this to work on Win64 would not be a bit deal.
+I just haven't had the time or motivation for it.
+
+Regardless, the Dynace language is portable and works fine on 64 bit machines.
+
+CONCERNS
+
+There are two areas I'd look out for whan porting the Dynace langage as 
+follows:
+
+A. Threads
+B. Garbage collector
+
+Dynace has two threading models it supports:
+
+I. Green threads
+II. Native threads
+
+Green threads is where a single CPU or process thread is used.  Dynace time
+slices that single thread.
+
+Native threads is where real OS threads are used across multiple threads.
+
+Both are complete and tested.  However, neither has been used in a production 
+environment.  So, I am not 100% confident about them.
+
+In terms of the garbage collector, Dynace has been designed to support two 
+models:
+
+1. Dynace comes with a mark & sweep collector.  It is designed not to take
+a lot of stack space regardless of the structure it is marking.  It also
+handles recurrent data structires just fine.
+
+2. The second model utilizes the Boehm-Demers-Weiser GC.
+
+Both are complete and have been tested.  Neither has been used in production.
+I would feel more comfortable with the one that comes with Dynace.
+
+There is a major portability concern with the Dynace GC.  In order to mark
+all areas, Dynace must have access to the registers and the global roots.
+There is no portable way to do this in C.  Dynace includes inline assembler
+for some of the major platforms for this.  On the other hand, I presume the
+Boehm-Demers-Weiser GC already handles this.
+
+I have some fears with the interaction of native threads and the GC.
+
+
+
+See BUILD.txt for build instructions.
+
+-----
+
 
 The following gives a basic outline of the sub-directory structure associated
 with the Dynace system.

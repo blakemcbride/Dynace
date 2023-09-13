@@ -8,10 +8,6 @@ INDEX.txt	this file
 
 LICENSE.txt	fully describes what you can and cannot do with this package
 
-REGISTER.txt	describes how to register your copy, alternative licensing
-		arrangements and how to get the latest version and printed
-		manuals
-
 DESCRIBE.txt	basic description of the system
 
 PACKAGES.txt	description of available Dynace packages and what's in them

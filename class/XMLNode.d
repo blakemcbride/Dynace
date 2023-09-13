@@ -206,8 +206,9 @@ private	cmeth	object	parse(InputStream *is)
 						*p = c;
 						bb = p;
 					} else {
+						char *s = p;
 						for (; *p ; p++);
-						for (p-- ; isspace(*p) ; --p);
+						for (p-- ; p >= s && isspace(*p) ; --p);
 						p++;
 						c = *p;
 						*p = '\0';
