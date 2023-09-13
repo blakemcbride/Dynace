@@ -113,8 +113,9 @@ slices that single thread.
 
 Native threads is where real OS threads are used across multiple threads.
 
-Both are complete and tested.  However, neither has been used in a production 
-environment.  So, I am not 100% confident about them.
+Both are complete and tested but not extensively.  Neither
+has been used in a production environment.  So, I am not 100%
+confident about them.
 
 In terms of the garbage collector, Dynace has been designed to support two 
 models:
@@ -125,8 +126,9 @@ handles recurrent data structires just fine.
 
 2. The second model utilizes the Boehm-Demers-Weiser GC.
 
-Both are complete and have been tested.  Neither has been used in production.
-I would feel more comfortable with the one that comes with Dynace.
+Both are complete and have been tested but not extensively.  Neither
+has been used in production.  I would feel more comfortable with the
+one that comes with Dynace.
 
 There is a major portability concern with the Dynace GC.  In order to mark
 all areas, Dynace must have access to the registers and the global roots.
