@@ -58,10 +58,10 @@ docs below rather than this section.
 
 This procedure will work for 32 and 64 bit builds.
 
-Dynace is build from the command line using the included DMAKE
+Dynace is built from the command line using the included DMAKE
 program.  DMAKE is just an enhanced nmake or make program.
 
-First make sure that your command line compiler is set up correctly.
+First, make sure that your command line compiler is set up correctly.
 You can do this by using the "Visual Studio Command Prompt" that comes
 with Visual Studio and is located under "Visual Studio Tools".  I
 suggest that you create a "Hello, World" program and compile and link
