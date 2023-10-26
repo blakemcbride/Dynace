@@ -29,6 +29,10 @@
 
 #include "generics.h"
 
+#if defined(_M_IX86) || defined(_M_X64)   //  32 or 64 bit Windows
+#include <windows.h>   // needed for GC
+#endif
+
 #include <string.h>
 #include <stdint.h>
 
@@ -39,7 +43,7 @@
 #endif
 #endif
 
-#if	defined(MSC32)  ||  defined(BC32)  ||  defined(SYMC32)
+#if	defined(_M_IX86) || defined(_M_X64)
 #include <signal.h>
 #include <setjmp.h>
 /*#define	USE_SIGNAL*/
@@ -58,7 +62,7 @@ pthread_mutexattr_t _mutex_attr;
 #pragma inline
 #endif
 
-#if	(defined(WIN32)  ||  defined(__APPLE__))  &&  !defined(BOEHM_GC)
+#if	(defined(_M_IX86)  ||  defined(_M_X64)  ||  defined(__APPLE__))  &&  !defined(BOEHM_GC)
 #define	HEAP_HAS_HOLES
 extern	void  *_Dynace_malloc( long nbytes );
 extern	void  *_Dynace_calloc( long size, long nelem );
@@ -238,7 +242,7 @@ LOCAL	objrtn Dynace_cm_gResizeMethodCache(object self,int classes,int generics);
 LOCAL	void cache_add(int row,int col,object generic,object cls,int level,object meth);
 #endif
 
-#if	defined(WIN32)  &&  !defined(BOEHM_GC)    /*  routines located in win32gm.c  */
+#if	(defined(_M_IX86) || defined(_M_X64))  &&  !defined(BOEHM_GC)    /*  routines located in win32gm.c  */
 extern int _is_heap_base(char* p);
 extern void _register_global_memory(void);
 #endif
@@ -1996,15 +2000,6 @@ LOCAL	void	get_mem_stats(void)
 	CMU = m;
 }
 
-
-#if	(defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)
-#define MARK_REG(r)				\
-	__asm	{ mov	c, r  }			\
-	if (IsObj(c)  &&  c->tag & OBJ_USED)	\
-		Dynace_cm_gMarkObject(Dynace_c, c)
-#endif
-
-
 #if defined(__GNUC__)
 #if defined(__i386__)
 #define MARK_REG(r)					\
@@ -2013,7 +2008,7 @@ LOCAL	void	get_mem_stats(void)
 		Dynace_cm_gMarkObject(Dynace_c, c)
 #elif defined(__amd64__)
 #define MARK_REG(r)					\
-	__asm__	("mov %%" #r ",%0" : "=g" (c));	\
+	__asm__	volatile ("mov %%" #r ", %0" : "=r" (c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
 		Dynace_cm_gMarkObject(Dynace_c, c)
 #endif
@@ -2048,15 +2043,59 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
 	mark_non_collecting_classes();
-#if (defined(MSC32) && !defined(_M_X64))  ||  defined(BC32)  ||  (defined(__GNUC__) && defined(__i386__))
-	MARK_REG(eax);
-	MARK_REG(ebx);
-	MARK_REG(ecx);
-	MARK_REG(edx);
-	MARK_REG(esi);
-	MARK_REG(edi);
-	MARK_REG(ebp);
-#elif defined(__GNUC__)  &&  defined(__amd64__)
+#ifdef _M_IX86  // 32-bit Windows
+	{
+#define MARK_REG(r)  if (IsObj((object)context.r)  &&  ((object)(context.r))->tag & OBJ_USED) \
+			Dynace_cm_gMarkObject(Dynace_c, (object) context.r)
+		
+		CONTEXT context;
+		HANDLE hThread = GetCurrentThread();
+		context.ContextFlags = CONTEXT_FULL;
+		if (GetThreadContext(hThread, &context)) {
+			MARK_REG(Eax);
+			MARK_REG(Ebx);
+			MARK_REG(Ecx);
+			MARK_REG(Edx);
+			MARK_REG(Esi);
+			MARK_REG(Edi);
+			MARK_REG(Ebp);
+			MARK_REG(Esp);
+			MARK_REG(Eip);
+		}
+	}
+#endif
+
+#ifdef _M_X64  // 64-bit Windows
+	{
+#define MARK_REG(r)  if (IsObj((object)context.r)  &&  ((object)(context.r))->tag & OBJ_USED) \
+			Dynace_cm_gMarkObject(Dynace_c, (object) context.r)
+		
+		CONTEXT context;
+		HANDLE hThread = GetCurrentThread();
+		context.ContextFlags = CONTEXT_FULL;
+		if (GetThreadContext(hThread, &context)) {
+			MARK_REG(Rax);
+			MARK_REG(Rbx);
+			MARK_REG(Rcx);
+			MARK_REG(Rdx);
+			MARK_REG(Rsi);
+			MARK_REG(Rdi);
+			MARK_REG(Rbp);
+			MARK_REG(Rsp);
+			MARK_REG(R8);
+			MARK_REG(R9);
+			MARK_REG(R10);
+			MARK_REG(R11);
+			MARK_REG(R12);
+			MARK_REG(R13);
+			MARK_REG(R14);
+			MARK_REG(R15);
+			MARK_REG(Rip);
+		}
+	}
+#endif
+
+#if defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC
 	MARK_REG(rax);
 	MARK_REG(rbx);
 	MARK_REG(rcx);
@@ -2315,7 +2354,7 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 
 	if (once++)
 		return;
-#if	defined(WIN32)  &&  !defined(BOEHM_GC)
+#if	(defined(_M_IX86) || defined(_M_X64))  &&  !defined(BOEHM_GC)
 	_is_heap_base(NULL);
 #endif
 
