@@ -118,6 +118,10 @@ typedef unsigned long  INT_PTR;
 #include "plan9.h"
 #endif
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include <stdio.h>
 /*#include <malloc.h>*/
 
