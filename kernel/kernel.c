@@ -30,6 +30,7 @@
 #include "generics.h"
 
 #include <string.h>
+#include <stdint.h>
 
 #if !defined(__COSMIC__)  &&  !defined(PLAN9)
 #include <time.h>
@@ -97,7 +98,7 @@ typedef	struct	memory_range  {
 
 
 #ifdef	ALIGN4	/* align 4 bytes */
-#define EVEN(x)		((((INT_PTR)(x) + 3) >> 2) << 2)
+#define EVEN(x)		((((intptr_t)(x) + 3) >> 2) << 2)
 #else		/*  align 2 bytes  */
 #define EVEN(x)		((x) + ((x) % 2))
 #endif
@@ -329,11 +330,11 @@ LOCAL	void	add_ptr(char *p, unsigned len)
 }
 
 #ifdef	ALIGN4
-#define chk_ptr(p, len)	(!((INT_PTR)(p) & (3)) &&		\
+#define chk_ptr(p, len)	(!((intptr_t)(p) & (3)) &&		\
 			 (char *)(p) >= lowPtr  &&		\
 			 (char *)(p) <= highPtr - (len))
 #else
-#define	chk_ptr(p, len)	(!((INT_PTR)(p) & 1)  &&  (char *)(p) >= lowPtr  &&  (char *)(p) <= highPtr - (len))
+#define	chk_ptr(p, len)	(!((intptr_t)(p) & 1)  &&  (char *)(p) >= lowPtr  &&  (char *)(p) <= highPtr - (len))
 #endif
 
 #else  /*  not SEGMENTED_MEMORY and not HEAP_HAS_HOLES  */
@@ -1659,9 +1660,9 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 	from = (char _HUGE_ **) EVEN(from);
 	to   = (char _HUGE_ **) EVEN(to);
 #else
-	if ((INT_PTR) from & 1L)
+	if ((intptr_t) from & 1L)
 		from = (char _HUGE_ **) ((char _HUGE_ *) from + 1);
-	if ((INT_PTR) to & 1L)
+	if ((intptr_t) to & 1L)
 		to = (char _HUGE_ **) ((char _HUGE_ *) to + 1);
 #endif
 	while (from < to)  {
