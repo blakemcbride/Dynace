@@ -48,6 +48,7 @@ object	Object_c;
 
 #line 38 "Object.d"
 #include <math.h> 
+#include <stdint.h> 
 
 static ifun cErrorFunction; 
 
@@ -72,7 +73,7 @@ imeth objrtn Object_im_gError(object self, char *msg)
 	} 
 #endif 
 
-#line 62 "Object.d"
+#line 63 "Object.d"
 		exit(1); 
 	return self; 
 } 
@@ -86,7 +87,7 @@ ivmeth objrtn Object_ivm_vError(object self, va_list _rest_)
 	return gError(self, buf); 
 } 
 
-#line 90 "Object.c"
+#line 91 "Object.c"
 
 static	objrtn	Object_ifm_vError(object self, ...)
 {
@@ -97,7 +98,7 @@ static	objrtn	Object_ifm_vError(object self, ...)
 
 
 
-#line 75 "Object.d"
+#line 76 "Object.d"
 imeth objrtn Object_im_gSubclassResponsibility(object self, char *meth)
 { 
 	char buf[100]; 
@@ -165,7 +166,7 @@ imeth objrtn Object_im_gPrintValue(object self, object stream)
 #endif 
 
 
-#line 141 "Object.d"
+#line 142 "Object.d"
 imeth unsigned long Object_im_gObjectSerialNumber(object self)
 { Object_iv_t *iv = GetIVs(Object, self);
 	return iv->sn; 
@@ -175,7 +176,7 @@ imeth int Object_im_gHash(object self)
 { 
 	double t; 
 
-	t = .6125423371 * (double)(INT_PTR) self; 
+	t = .6125423371 * (double)(intptr_t) self; 
 	t = t < 0.0 ? -t : t; 
 	return (int) (BIG_INT * (t - floor(t))); 
 } 
@@ -185,7 +186,7 @@ imeth int Object_im_gCompare(object self, object obj2)
 	if (EQ(self, obj2)) 
 		return 0; 
 	ChkArg(obj2, 2); 
-	if ((INT_PTR) self < (INT_PTR) obj2) 
+	if ((intptr_t) self < (intptr_t) obj2) 
 		return -1; 
 	else 
 		return 1; 
@@ -228,12 +229,12 @@ objrtn Object_initialize(void)
 #else 
 
 
-#line 201 "Object.d"
+#line 202 "Object.d"
 	ivMethodFor(Object, vError, Object_ivm_vError, Object_ifm_vError); 
 #endif 
 
 
-#line 203 "Object.d"
+#line 204 "Object.d"
 	iMethodFor(Object, gSubclassResponsibility, Object_im_gSubclassResponsibility); 
 	iMethodFor(Object, gShouldNotImplement, Object_im_gShouldNotImplement); 
 	iMethodFor(Object, gHash, Object_im_gHash); 
@@ -250,7 +251,7 @@ objrtn Object_initialize(void)
 #endif 
 
 
-#line 217 "Object.d"
+#line 218 "Object.d"
 	return Object_c; 
 } 
 
@@ -258,40 +259,40 @@ objrtn Object_initialize(void)
 
 imeth objrtn Object_im_gDispose(object self)
 
-#line 222 "Object.d"
+#line 223 "Object.d"
 {} 
 
 
-#line 223 "Object.d"
+#line 224 "Object.d"
 imeth int Object_im_gEqual(object self, object obj2)
 
-#line 223 "Object.d"
+#line 224 "Object.d"
 {} 
 
 
-#line 224 "Object.d"
+#line 225 "Object.d"
 imeth objrtn Object_im_gCopy(object self)
 
-#line 224 "Object.d"
+#line 225 "Object.d"
 {} 
 
 
-#line 225 "Object.d"
+#line 226 "Object.d"
 imeth int Object_im_gSize(object self)
 
-#line 225 "Object.d"
+#line 226 "Object.d"
 {} 
 
 
-#line 226 "Object.d"
+#line 227 "Object.d"
 imeth int Object_im_gBasicSize(object self)
 
-#line 226 "Object.d"
+#line 227 "Object.d"
 {} 
 
 imeth objrtn Object_im_gLoadJavaClass(object self, char *name)
 
-#line 228 "Object.d"
+#line 229 "Object.d"
 {} 
 
 

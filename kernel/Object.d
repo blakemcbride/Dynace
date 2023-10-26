@@ -36,6 +36,7 @@ public	defclass Object  {
 };
 
 #include <math.h>
+#include <stdint.h>
 
 static	ifun	cErrorFunction;
 
@@ -147,7 +148,7 @@ imeth	int	gHash()
 {
 	double	t;
 
-	t = .6125423371	* (double)(INT_PTR) self;
+	t = .6125423371	* (double)(intptr_t) self;
 	t = t < 0.0 ? -t : t;
 	return (int) (BIG_INT * (t - floor(t)));
 }
@@ -157,7 +158,7 @@ imeth	int	gCompare(object obj2)
 	if (EQ(self, obj2))
 		return 0;
 	ChkArg(obj2, 2);
-	if ((INT_PTR) self < (INT_PTR) obj2)
+	if ((intptr_t) self < (intptr_t) obj2)
 		return -1;
 	else
 		return 1;

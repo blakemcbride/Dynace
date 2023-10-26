@@ -35,7 +35,11 @@
 
 
 
-#line 32 "Thread.d"
+#line 30 "Thread.d"
+#include <stdint.h> 
+
+
+
 typedef struct _priority_queue *PQ; 
 
 #define	CLASS	Thread_c
@@ -46,7 +50,7 @@ typedef struct _priority_queue *PQ;
 object	Thread_c;
 
 
-#line 50 "Thread.c"
+#line 54 "Thread.c"
 typedef struct  _Thread_iv_t  {
 	object iObj;
 	char * iName;
@@ -54,8 +58,8 @@ typedef struct  _Thread_iv_t  {
 	jmp_buf iRtn;
 	char * iStack_buf;
 	char * iStack_location;
-	INT_PTR iStack_buf_size;
-	INT_PTR iStack_size;
+	intptr_t iStack_buf_size;
+	intptr_t iStack_size;
 	int iState;
 	int iAutoDispose;
 	int iPriority;
@@ -71,7 +75,7 @@ typedef struct  _Thread_iv_t  {
 }	Thread_iv_t;
 
 
-#line 75 "Thread.c"
+#line 79 "Thread.c"
 typedef struct  _Thread_cv_t  {
 	char * cTs_stkpos;
 	PQ cMpq;
@@ -87,7 +91,7 @@ typedef struct  _Thread_cv_t  {
 static	Thread_cv_t	*Thread_cv;
 
 
-#line 80 "Thread.d"
+#line 82 "Thread.d"
 struct _priority_queue { 
 	int priority; 
 	ivType *thread; 
@@ -106,21 +110,21 @@ struct _priority_queue {
 #endif 
 
 
-#line 96 "Thread.d"
+#line 98 "Thread.d"
 #endif 
 
 
-#line 97 "Thread.d"
+#line 99 "Thread.d"
 #else 
 
 
-#line 98 "Thread.d"
+#line 100 "Thread.d"
 int getch(void); 
 int kbhit(void); 
 #endif 
 
 
-#line 104 "Thread.d"
+#line 106 "Thread.d"
 jmp_buf _t_start; 
 
 
@@ -144,19 +148,19 @@ static void del_tnr(ivType *t);
 #else 
 
 
-#line 136 "Thread.d"
+#line 138 "Thread.d"
 #define NEXT_THREAD if (Thread_cv->cCpq) Thread_cv->cCpq->thread = Thread_cv->cCpq->thread->iNext; if (Thread_cv->cGkt && kbhit()) { Release(Thread_cv->cGkt->iObj, 0); Thread_cv->cGkt = NULL; } if (Thread_cv->cCpq = Thread_cv->cMpq) Thread_cv->cCt = Thread_cv->cCpq->thread; else exit(0) 
 
-#line 142 "Thread.d"
+#line 144 "Thread.d"
 #define add_tnr(t) if (t->iNext = Thread_cv->cTnr) Thread_cv->cTnr->iPrev = t; t->iPrev = NULL; Thread_cv->cTnr = t 
 
-#line 150 "Thread.d"
+#line 152 "Thread.d"
 #define del_tnr(t) if (t->iPrev) t->iPrev->iNext = t->iNext; else Thread_cv->cTnr = t->iNext; if (t->iNext) t->iNext->iPrev = t->iPrev 
 
 #endif 
 
 
-#line 154 "Thread.d"
+#line 156 "Thread.d"
 extern void _start_timer(void); 
 
 
@@ -189,7 +193,7 @@ static void next_thread(void)
 #endif 
 
 
-#line 188 "Thread.d"
+#line 190 "Thread.d"
 static void start_thread(ivType *s) 
 { 
 	PQ tpq, ppq, npq; 
@@ -282,7 +286,7 @@ static void del_tnr(ivType *t)
 #endif 
 
 
-#line 279 "Thread.d"
+#line 281 "Thread.d"
 PMETHOD objrtn Kill(object self, int rtn)
 { Thread_iv_t *iv = GetIVs(Thread, self);
 	if (iv->iState == DONE_THREAD) 
@@ -317,7 +321,7 @@ PMETHOD objrtn Kill(object self, int rtn)
 	} 
 #endif 
 
-#line 312 "Thread.d"
+#line 314 "Thread.d"
 		ENABLE_THREADER; 
 	if (!Thread_cv->cCpq || Thread_cv->cCt == iv) { 
 		Thread_cv->cCt = NULL; 
@@ -362,7 +366,7 @@ PMETHOD objrtn Dispose(object self)
 	} 
 #endif 
 
-#line 355 "Thread.d"
+#line 357 "Thread.d"
 		gRemoveStr(Thread_cv->cThreads, iv->iName); 
 	free(iv->iName); 
 	oSuper(Thread_c, gDispose, self)(self); 
@@ -514,12 +518,12 @@ static void _dynace_yield(void)
 #else 
 
 
-#line 504 "Thread.d"
+#line 506 "Thread.d"
 		Thread_cv->cCt->iStack_location = (char *) &t; 
 #endif 
 
 
-#line 506 "Thread.d"
+#line 508 "Thread.d"
 		if ((int)(Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
 		if (Thread_cv->cCt->iStack_size > Thread_cv->cCt->iStack_buf_size) { 
@@ -547,7 +551,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 531 "Thread.d"
+#line 533 "Thread.d"
 		} 
 		if (Thread_cv->cCt->iStack_size) { 
 #ifdef sparc 
@@ -555,7 +559,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 536 "Thread.d"
+#line 538 "Thread.d"
 			memcpy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
@@ -587,7 +591,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 565 "Thread.d"
+#line 567 "Thread.d"
 		longjmp(Thread_cv->cCt->iRtn, 1); 
 	} 
 } 
@@ -617,7 +621,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 592 "Thread.d"
+#line 594 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -849,7 +853,7 @@ int getch(void)
 #endif 
 
 
-#line 822 "Thread.d"
+#line 824 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -867,7 +871,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 871 "Thread.c"
+#line 875 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {

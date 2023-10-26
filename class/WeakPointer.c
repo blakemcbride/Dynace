@@ -37,6 +37,7 @@
 
 #line 32 "WeakPointer.d"
 #include <math.h> 
+#include <stdint.h> 
 
 #define	CLASS	WeakPointer_c
 #define	ivType	WeakPointer_iv_t
@@ -46,7 +47,7 @@
 object	WeakPointer_c;
 
 
-#line 50 "WeakPointer.c"
+#line 51 "WeakPointer.c"
 typedef struct  _WeakPointer_iv_t  {
 	object iVal;
 	long iObjSN;
@@ -54,7 +55,7 @@ typedef struct  _WeakPointer_iv_t  {
 
 
 
-#line 39 "WeakPointer.d"
+#line 40 "WeakPointer.d"
 PMETHOD objrtn init(object self, object obj)
 { WeakPointer_iv_t *iv = GetIVs(WeakPointer, self);
 	iv->iVal = obj; 
@@ -109,7 +110,7 @@ imeth int WeakPointer_im_gHash(object self)
 { WeakPointer_iv_t *iv = GetIVs(WeakPointer, self);
 	double t; 
 
-	t = .6125423371 * (double) (INT_PTR) iv->iVal; 
+	t = .6125423371 * (double) (intptr_t) iv->iVal; 
 	t = t < 0.0 ? -t : t; 
 	return (int) (BIG_INT * (t - floor(t))); 
 } 
@@ -135,7 +136,7 @@ imeth objrtn WeakPointer_im_gStringRepValue(object self)
 } 
 
 
-#line 139 "WeakPointer.c"
+#line 140 "WeakPointer.c"
 
 objrtn	WeakPointer_initialize(void)
 {

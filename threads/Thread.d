@@ -27,6 +27,8 @@
 */
 
 
+#include <stdint.h>
+
 
 
 typedef	struct	_priority_queue	  *PQ;
@@ -40,8 +42,8 @@ defclass  Thread  {
 	jmp_buf		iRtn;
 	char		*iStack_buf;	/*  save buffer for thread stack  */
 	char		*iStack_location;  /*  ending real stack position  */
-	INT_PTR		iStack_buf_size;/*  size of stack_buf		*/
-	INT_PTR		iStack_size;	/*  space used on stack_buf	*/
+	intptr_t	iStack_buf_size;/*  size of stack_buf		*/
+	intptr_t	iStack_size;	/*  space used on stack_buf	*/
 	int		iState;		/*  current state of thread	*/
 	int		iAutoDispose;	/*  dispose when thread done	*/
 	int		iPriority;	/*  thread priority		*/

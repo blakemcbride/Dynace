@@ -27,11 +27,6 @@ clean :
 	cd threads  ; $(MAKE) $@ -f makefile
 	cd generics ; $(MAKE) $@ -f makefile
 	cd dpp      ; $(MAKE) $@ -f makefile
-ifdef WINE
-	cd Windows  ; $(MAKE) $@ -f makefile
-	cd ODBC     ; $(MAKE) $@ -f makefile
-	cd Resources  ; $(MAKE) $@ -f makefile
-endif
 	find . -name '*~' -exec rm \{\} \;
 	find . -name '*.o' -exec rm \{\} \;
 	find . -name '*.obj' -exec rm \{\} \;
@@ -112,7 +107,7 @@ ifeq ($(CC),$(HCC))  # not on cross-compile
 endif
 # The following target is used to convert an SVN checkout into a shippable distribution
 # It must only be run immediatly after a co or export
-# It creates a system which can boot without DPP, Windows or WINE
+# It creates a system which can boot without DPP
 bootable:
 	rm -f include/generics.h
 	cp bin/Linux/dpp bin

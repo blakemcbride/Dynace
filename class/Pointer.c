@@ -37,6 +37,7 @@
 
 #line 32 "Pointer.d"
 #include <math.h> 
+#include <stdint.h> 
 
 #define	CLASS	Pointer_c
 #define	ivType	Pointer_iv_t
@@ -46,14 +47,14 @@
 object	Pointer_c;
 
 
-#line 50 "Pointer.c"
+#line 51 "Pointer.c"
 typedef struct  _Pointer_iv_t  {
 	void * iVal;
 }	Pointer_iv_t;
 
 
 
-#line 38 "Pointer.d"
+#line 39 "Pointer.d"
 cmeth objrtn Pointer_cm_gNewWithPtr(object self, void *val)
 { 
 	object obj = oSuper(Pointer_c, gNew, self)(self); 
@@ -84,7 +85,7 @@ imeth int Pointer_im_gHash(object self)
 { Pointer_iv_t *iv = GetIVs(Pointer, self);
 	double t; 
 
-	t = .6125423371 * (double) (INT_PTR) iv->iVal; 
+	t = .6125423371 * (double) (intptr_t) iv->iVal; 
 	t = t < 0.0 ? -t : t; 
 	return (int) (BIG_INT * (t - floor(t))); 
 } 
@@ -110,7 +111,7 @@ imeth objrtn Pointer_im_gStringRepValue(object self)
 } 
 
 
-#line 114 "Pointer.c"
+#line 115 "Pointer.c"
 
 objrtn	Pointer_initialize(void)
 {
