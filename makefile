@@ -1,5 +1,4 @@
 # Makefile for Linux, Mac, BSD, Cygwin, Solaris, etc.   	-*-Makefile-*-
-#  Call this makefile with "WINE=1" if compiling with/for WINE
 include makefile.inc
 all : setup.unx
 	cd kernel   ; $(MAKE) -f makefile
@@ -9,22 +8,11 @@ ifeq ($(CC),$(HCC))  # no need to make on cross-compile
 	cd dpp      ; $(MAKE) -f makefile install
 endif
 	cd generics ; $(MAKE) -f makefile
-ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile
-	cd ODBC     ; $(MAKE) -f makefile
-	cd Resources  ; $(MAKE) -f makefile
-endif
 base : makegens
 	cd kernel   ; $(MAKE) -f makefile
 	cd class    ; $(MAKE) -f makefile
 	cd threads  ; $(MAKE) -f makefile
 	cd generics ; $(MAKE) -f makefile
-ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile
-	cd ODBC     ; $(MAKE) -f makefile
-	cd Resources    ; $(MAKE) -f makefile
-	cd Java/Dynace  ; $(MAKE) -f makefile
-endif
 debug : setup.unx
 	cd kernel   ; $(MAKE) -f makefile DEBUG=1
 	cd class    ; $(MAKE) -f makefile DEBUG=1
@@ -115,22 +103,12 @@ makegens:
 	cd kernel ; rm -f generics.* ; $(DPP) $(DPPOPTS) -h -i -s *.d ; mv generics.h ../include
 	cd class ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
 	cd threads ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
-ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile newgens
-	cd ODBC     ; $(MAKE) -f makefile newgens
-	cd Java/Dynace  ; $(MAKE) -f makefile newgens
-endif
 newgens : makegens
 	cd kernel   ;  $(MAKE) -f makefile reallynewgens
 	cd class    ;  $(MAKE) -f makefile newgens
 	cd threads  ;  $(MAKE) -f makefile newgens
 ifeq ($(CC),$(HCC))  # not on cross-compile
 	cd dpp      ;  $(MAKE) -f makefile newgens  ;  $(MAKE) -f makefile generics.c
-endif
-ifdef WINE
-	cd Windows  ; $(MAKE) -f makefile newgens
-	cd ODBC     ; $(MAKE) -f makefile newgens
-	cd Java/Dynace  ; $(MAKE) -f makefile newgens
 endif
 # The following target is used to convert an SVN checkout into a shippable distribution
 # It must only be run immediatly after a co or export

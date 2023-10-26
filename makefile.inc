@@ -5,13 +5,6 @@ else
 OPT = -O
 endif
 
-ifdef WINE
-OPT += -fPIC
-WINEINCPATH = /usr/include/wine
-# WINEINCPATH = /opt/wine-devel/include/wine
-THIRTYTWOBIT = true
-endif
-
 .SUFFIXES: .d .iv
 .PRECIOUS : %.c %.iv
 BINDIR = ../bin
@@ -71,10 +64,6 @@ endif
 
 ifdef OVERLOADS
 DPPOPTS += -X
-endif
-
-ifdef WINE
-CFLAGS += -I$(WINEINCPATH)/windows -D_WINDOWS -D_WIN32 -D__WINE__
 endif
 
 DPPOPTS += $(STRAT)

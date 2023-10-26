@@ -1,0 +1,31 @@
+
+After Dynace was written, a Win32 GUI development set of Dynace
+classes was constructed.  That set of classes was called the Windows
+Development System (WDS).  Dynace, together with WDS, was used in
+commercial applications for about 20 years.  So it was well tested and
+valid for production use.
+
+An open-source release was made of both.  WDS was also ported to the
+Wine library so that GUI applications could easily be built for
+Windows, Mac, or Linux using a single code-base.
+
+However, over the years Win32 slowly morphed a bit, especially to
+support the 64-bit environment.  Every few years we tested our Wine
+port and found many changes were needed each time.
+
+While WDS could simultaneously support native Win32 under 32 and 64 bit
+Windows as well as WINE, this would require ongoing effort.  The 
+problem is I do not have any sense that WDS is being used anymore.
+It is, therefore, not worth the effort.
+
+I have decided to remove WDS in order to have a simpler system
+that works well without a lot of ongoing effort.  My plan is to put WDS
+in it's own repo for those interested.  It will not be enhanced
+anymore.
+
+If you with to view the old WDS classes, checkout revision:
+ace207aac659f2fca1a98ded0668aa31d0d607d5
+of this repo.
+
+Blake McBride
+10/26/2023

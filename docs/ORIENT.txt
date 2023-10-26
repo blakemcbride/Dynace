@@ -39,29 +39,12 @@ generics	source code to build procedures used to build the master
 
 utils		source code to various utility programs
 
-Windows		source code to the WIN32 GUI development system which
-                also works under Linux/WINE
-
-ODBC		source code to an ODBC library
-
-cld		source to a GUI resource editor
-
-Java		source to a Java / Dynace interface
-
-OLE		Create and use Dynace objects transparently through OLE
-
-scheme		Runtime source files for the MzScheme / Dynace interface
-
-WDS		Driver program which allows you to write complete applications
-		making use of Dynace classes, GUI library, and ODBC interface
-		through Java or MzScheme.
-
 
 Documentation
 ----------------------------------------------------------------------
 docs		various readme files to help orient a new user
 
-manual		various formats of the Dynace & WDS manuals (600+ pages!)
+manual		various formats of the Dynace manual (300+ pages!)
 		along with source to them.
 		See the PDF files in that directory for pre-made manuals.
 
@@ -70,7 +53,6 @@ Examples
 ----------------------------------------------------------------------
 examples	Dynace language examples and tutorial
 
-WinExam		GUI examples and tutorial
 
 
 

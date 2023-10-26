@@ -31,49 +31,8 @@ Dynace is totally independent of WDS.  What this means is that Dynace is
 built independently of WDS and then WDS is built on top of it.  Dynace
 can be used without WDS.
 
-WDS
----
-The Dynace Windows Development System (WDS) is a Dynace class library
-which enables a C programmer with no knowledge of C++, Dynace, the
-Windows API or message-driven architecture to write real Windows
-applications with an absolute minimum learning curve and number of
-lines of code.  In fact, it is possible to become familiar enough with
-windows, menus, dialogs and controls using WDS to write a Windows
-application after just one day!
-
-The programmer is able to write the application using familiar C in a
-familiar procedural fashion.  Instead of taking the usual fifty plus
-lines of code necessary to implement a typical ``Hello World'' program,
-with WDS it takes four lines of code!  Fully functional menus and
-dialogs can be implemented with WDS in a handful of lines instead of the
-hundreds it takes using the Windows API or other available tools.
-
-WDS applications are portable across Windows 3.1 (Win16), Win32s,
-Windows (Win32), and Linux / WINE.  (Win16 hasn't been tested in many
-years.)
-
-The benefits of WDS are 1) the learning curve associated with Windows
-development is drastically reduced, 2) the development time is drastically
-reduced, and 3) the ability to debug, enhance and hand the code off to
-a new programmer is drastically increased.
-
-Other elements
---------------
-
-There is an interface to ODBC and OLE.
-
-There is also a close linkage between Dynace, Java and MzScheme.  The
-linkage is with MzScheme 103 but could probably be updated pretty
-easily.  This system has been tested and used a lot.
-
 
 --------
-
-Broadly speaking, this system has two primary components as follows:
-
-1. The Dynace language
-2. The Win32 GUI Development classes
-
 
 The Dynace language is very portable and includes:
 
@@ -82,16 +41,7 @@ The Dynace language is very portable and includes:
 * class library (collection of generic Dynace classes)
 
 The Dynace language stands on its own and is documented in the file named
-manual/Dynace.pdf.  It does not require the Win32 GUI classes.
-
-The Win32 GUI Development classes are a set of Dynace classes that make
-developping Windows GUI appications very easy.  These classes are, 
-theoretically, portable to Linux and Mac via the Wine API.
-
-These classes were used for many years by commercial Windows applications.
-However, they have not been maintained through the switch to 64 bit machines.
-It is believed that getting all this to work on Win64 would not be a bit deal.
-I just haven't had the time or motivation for it.
+manual/Dynace.pdf. 
 
 Regardless, the Dynace language is portable and works fine on 64 bit machines.
 

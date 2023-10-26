@@ -120,11 +120,13 @@ typedef unsigned long  INT_PTR;
 
 #include <stdio.h>
 /*#include <malloc.h>*/
+
 #ifndef	PLAN9
 #include <stdlib.h>
 #include <setjmp.h>
 #include <stdarg.h>
 #endif
+
 #ifdef	__WATCOMC__
 #include <string.h>
 #endif
@@ -137,7 +139,6 @@ typedef unsigned long  INT_PTR;
 #define	realloc(p,s)	GC_realloc(p,s)
 #endif
 
-
 #ifdef	RTKERNEL
 #ifndef	NATIVE_THREADS
 #define	NATIVE_THREADS
@@ -146,56 +147,6 @@ typedef unsigned long  INT_PTR;
 #endif
 
 #define	NULLOBJ	((object)0)
-
-#if defined(_WINDOWS)  ||  defined(MSC32)  ||  defined(MSC16)
-#if defined(MSC32)  &&  !defined(WIN32)
-#define	WIN32
-#endif
-#include <windows.h>
-#include <windowsx.h>
-#include <winuser.h>
-#ifdef	_WIDGETS
-#include "widgets.h"
-#include "xtable.h"
-#define SST_INFINITE	-2
-#define	SST_BUTTONS	-1
-#endif
-#ifdef _WORDPROC
-#include "hts.h"
-#include "ter_cmd.h"
-typedef	struct arg_list	WP_ARG_LIST;
-typedef struct StrPrint	WP_PRINT_LIST;
-#define	WP_WORDWRAP		0x00000001L
-#define	WP_PRINTVIEW		0x00000002L
-#define	WP_PAGEMODE		0x00000004L
-#define WP_FITTEDVIEW		0x00000008L
-#define WP_SHOWSTATUS		0x00000010L
-#define WP_SHOWMENU		0x00000020L
-#define WP_SHOWHORBAR		0x00000040L
-#define WP_SHOWVERBAR		0x00000080L
-#define WP_RULER		0x00000100L
-#define WP_SHOWTOOLBAR		0x00000200L
-#define WP_USERCANCLOSE		0x00000400L
-#define WP_BORDERMARGINS	0x00000800L
-#define WP_READONLY		0x00001000L
-#endif
-#if !defined(unix) || defined(_WINDOWS) || defined(__WINE__)
-#include <sql.h>
-#endif
-#if	!defined(WIN32)  &&  !defined(unix)
-#include <ole2.h>
-#include <dispatch.h>
-#include <commdlg.h>
-//  redefine the following without the __export so I can use static functions
-#undef	STDMETHODIMP
-#undef	STDMETHODIMP_
-#define	STDMETHODIMP		HRESULT FAR CDECL
-#define	STDMETHODIMP_(t)	t FAR CDECL
-#endif
-#undef	NULL
-#define NULL	((void *)0)
-#include "dynwin.h"
-#endif
 
 #ifdef	NATIVE_THREADS
 #ifdef  __unix__

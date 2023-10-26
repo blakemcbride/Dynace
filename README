@@ -23,10 +23,9 @@ Although I don't believe it is documented, in addition to cooperative
 threads, Dynace supports native threads under Win32 and could easily
 be enhanced to support Posix threads.
 
-The manual was
-complete with the last release but hasn't been updated with the new
-classes yet, although there have been enhancements made to it.  The
-GUI library (WDS) has been out of date for years.
+The manual was complete with the last release but hasn't been updated
+with the new classes yet, although there have been enhancements made
+to it.
 
 BTW, this system is very well tested and used in large development
 shops with many developers every day for the last ten years.  It is

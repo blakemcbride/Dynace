@@ -98,21 +98,9 @@ clean :
 	echo Entering dpp
 	$(MAKE) $(MAKETARGETS) $(MAKEFILE) $(MAKEMACROS)
 
-rem	cd ..\windows
-rem	echo Entering windows
-rem	$(MAKE) $(MAKETARGETS) $(MAKEFILE) $(MAKEMACROS)
-
-rem	cd ..\odbc
-rem	echo Entering odbc
-rem	$(MAKE) $(MAKETARGETS) $(MAKEFILE) $(MAKEMACROS)
-
 	cd ..\examples\setup
 	echo Entering examples (takes a while - please wait)
 	call cleanall.bat
-
-rem	cd ..\..\winexam\setup
-rem	echo Entering winexam (takes a while - please wait)
-rem	call realcln.bat
 
 	cd ..\..
 	bin\rm -zq setup.unx setup.dos *.~ *.?~ *.??~ #*.* *.{*
@@ -126,7 +114,7 @@ dist:
 	bin\rm -zq dynace*.zip
 	zip -r dynace README m32.dm makefile.unx makefile.inc change.log
 	zip dynace bin\*.* class\*.* docs\*.* dpp\*.* generics\*.* lib\*.*
-	zip dynace include\*.* kernel\*.* threads\*.* utils\*.* windows\*.* odbc\*.*
+	zip dynace include\*.* kernel\*.* threads\*.* utils\*.* 
 	zip -r dynace examples\list examples\exam* examples\setup
 	zip -r dynace winexam\list winexam\exam* winexam\setup
 
@@ -185,17 +173,6 @@ newgens : makegens
 	if errorlevel 1 goto done
 	$(MAKE) $(MAKEFILE) $(MAKEMACROS) generics.c
 	if errorlevel 1 goto done
-
-rem	cd ..\windows
-rem	echo Entering windows
-rem	$(MAKE) $(MAKEFILE) $(MAKEMACROS) newgens
-rem	if errorlevel 1 goto done
-
-rem	cd ..\odbc
-rem	echo Entering odbc
-rem	$(MAKE) $(MAKEFILE) $(MAKEMACROS) newgens
-rem	if errorlevel 1 goto done
-
 
 :done
 	cd ..

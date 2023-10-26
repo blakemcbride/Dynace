@@ -18,11 +18,7 @@ dmake.man	DMAKE (make used under DOS & all Windows) manual
 
 classes		text list of Dynace classes
 
-wdscls		text list of WDS classes
-
 headers?.txt	discussion of Dynace's header file approach - used as part
 		of a discussion on the Dynace mailing list
-
-change.log	history log file of Dynace's development
 
 Various formats of both manuals are located under the "manual" sub-directory.

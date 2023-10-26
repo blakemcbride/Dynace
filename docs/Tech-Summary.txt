@@ -178,24 +178,9 @@ can be turned off for something of a performance benefit.
 
 --
 
-WDS (Windows Development System)
-
-Dynace includes its kernel and a fairly full class library of common
-data structures.  It is very generic and very portable.
-
-On top of Dynace, there are a set of Windows specific classes used to
-make the task of creating a Windows GUI application significantly easier
-than other libraries such as MFC.  This set of classes is called WDS.
-These classes are portable to Mac & Linux through the WINE project
-which is a WIN32 API layer.
-
---
-
 Tutorials
 
-Dynace includes two tutorials.  One is for Dynace and the other is for
-WDS.  They are in the 'examples' and 'WinExam' directories
-respectively.
+Dynace examples/tutorial is in the examples directory.
 
 --
 
@@ -205,9 +190,6 @@ Dynace is well documented.  Dynace comes with a 350 page detailed user
 manual and reference.  It has been kept up to date fairly well and
 should be fairly accurate.
 
-WDS has an additional 250 page manual.  Unfortunately, however, it has
-not been kept up to date and is fairly out-dated.  It is, however, a
-good overview and a good starting point.
 
 	
 Blake McBride
