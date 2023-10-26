@@ -113,4 +113,3 @@ bootable:
 	cp bin/Linux/dpp bin
 	chmod 755 bin/dpp
 	$(MAKE) -f makefile STRAT=-S2 newgens
-	touch  ODBC/sqlgrammar.c ODBC/sqlgrammar.h ODBC/sqltokens.c

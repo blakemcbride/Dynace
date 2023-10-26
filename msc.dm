@@ -42,54 +42,6 @@ all : # setup.dos
 	cd ..
 ]
 
-wds-all : all
-%@[
-	@echo off
-
-	cd Registry
-	echo Entering Registry
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-	cd ..\Windows
-	echo Entering Windows
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-	cd ..\ODBC
-	echo Entering ODBC
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-	cd ..\Resources
-	echo Entering Resources
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-	cd ..\OLE
-	echo Entering OLE
-	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-	if errorlevel 1 goto done
-
-rem	cd ..\Widgets
-rem	echo Entering Widgets
-rem	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-rem	if errorlevel 1 goto done
-
-rem	cd ..\WordProc
-rem	echo Entering WordProc
-rem	$(MAKE) $(MAKEFILE) $(MAKEMACROS)
-rem	if errorlevel 1 goto done
-
-rem	cd ..\WDS
-rem	echo Entering WDS
-rem	$(MAKE) $(MAKEFILE) $(MAKEMACROS) curlib.nm
-rem	if errorlevel 1 goto done
-
-:done
-	cd ..
-]
-
 all-scratch : setup.dos
 %@[
 	@echo off
@@ -592,7 +544,8 @@ setup.dos :
 	bin\touch class\*.c
 	bin\touch threads\*.c
 	bin\touch dpp\*.c
-	bin\touch dpp\generics.*
+	bin\touch dpp\generics.h
+	bin\touch dpp\generics.c
 	pause
 	bin\touch include\generics.h
 ]
