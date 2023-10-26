@@ -14,9 +14,6 @@ Dynace Object-Oriented Extension to C
 * garbage collection
 * cooperative threads (also supports native threads)
 * full class library
-* optional Win32 GUI development system (portable through WINE)
-* interfaces with Java, ODBC, OLE
-* SQL interface / class library
 
 ### Dynace:
 
