@@ -2000,21 +2000,6 @@ LOCAL	void	get_mem_stats(void)
 	CMU = m;
 }
 
-#if defined(__GNUC__)
-#if defined(__i386__)
-#define MARK_REG(r)					\
-	__asm__	("movl %%" #r ",%0" : "=g" (c));	\
-	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
-		Dynace_cm_gMarkObject(Dynace_c, c)
-#elif defined(__amd64__)
-#define MARK_REG(r)					\
-	__asm__	volatile ("mov %%" #r ", %0" : "=r" (c));	\
-	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
-		Dynace_cm_gMarkObject(Dynace_c, c)
-#endif
-#endif
-
-
 cmeth	objrtn	Dynace_cm_gGC(object self)
 {
 #ifdef	BOEHM_GC
@@ -2043,6 +2028,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
 	mark_non_collecting_classes();
+	
 #ifdef _M_IX86  // 32-bit Windows
 	{
 #define MARK_REG(r)  if (IsObj((object)context.r)  &&  ((object)(context.r))->tag & OBJ_USED) \
@@ -2059,8 +2045,6 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			MARK_REG(Esi);
 			MARK_REG(Edi);
 			MARK_REG(Ebp);
-			MARK_REG(Esp);
-			MARK_REG(Eip);
 		}
 	}
 #endif
@@ -2081,7 +2065,6 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			MARK_REG(Rsi);
 			MARK_REG(Rdi);
 			MARK_REG(Rbp);
-			MARK_REG(Rsp);
 			MARK_REG(R8);
 			MARK_REG(R9);
 			MARK_REG(R10);
@@ -2096,12 +2079,16 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 #endif
 
 #if defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC
+#define MARK_REG(r)					\
+	__asm__	volatile ("mov %%" #r ", %0" : "=r" (c));	\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+
 	MARK_REG(rax);
 	MARK_REG(rbx);
 	MARK_REG(rcx);
 	MARK_REG(rdx);
 	MARK_REG(rbp);
-	MARK_REG(rsp);
 	MARK_REG(rsi);
 	MARK_REG(rdi);
 	MARK_REG(r8);
@@ -2112,6 +2099,84 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(r13);
 	MARK_REG(r14);
 	MARK_REG(r15);
+#endif
+
+	
+#if defined(__GNUC__) &&  defined(__i386__)	// 32-bit Linux
+#define MARK_REG(r)					\
+	__asm__	("movl %%" #r ",%0" : "=g" (c));	\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+
+	MARK_REG(eax);
+	MARK_REG(ebx);
+	MARK_REG(ecx);
+	MARK_REG(edx);
+	MARK_REG(edi);
+	MARK_REG(esi);
+	MARK_REG(ebp);
+#endif
+
+#if defined(__APPLE__) && TARGET_CPU_X86_64
+#define MARK_REG(r)					\
+	__asm__ ("movq %%" #r ", %0" : "=r"(c));	\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+
+	MARK_REG(rax);
+	MARK_REG(rbx);
+	MARK_REG(rcx);
+	MARK_REG(rdx);
+	MARK_REG(rbp);
+	MARK_REG(rsi);
+	MARK_REG(rdi);
+	MARK_REG(r8);
+	MARK_REG(r9);
+	MARK_REG(r10);
+	MARK_REG(r11);
+	MARK_REG(r12);
+	MARK_REG(r13);
+	MARK_REG(r14);
+	MARK_REG(r15);
+#endif
+
+#if defined(__APPLE__) && TARGET_CPU_ARM64
+#define MARK_REG(r)					\
+	__asm__ ("mov %0, " #r : "=r"(c));		\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+
+	MARK_REG(x0);
+	MARK_REG(x1);
+	MARK_REG(x2);
+	MARK_REG(x3);
+	MARK_REG(x4);
+	MARK_REG(x5);
+	MARK_REG(x6);
+	MARK_REG(x7);
+	MARK_REG(x8);
+	MARK_REG(x9);
+	MARK_REG(x10);
+	MARK_REG(x11);
+	MARK_REG(x12);
+	MARK_REG(x13);
+	MARK_REG(x14);
+	MARK_REG(x15);
+	MARK_REG(x16);
+	MARK_REG(x17);
+	MARK_REG(x18);
+	MARK_REG(x19);
+	MARK_REG(x20);
+	MARK_REG(x21);
+	MARK_REG(x22);
+	MARK_REG(x23);
+	MARK_REG(x24);
+	MARK_REG(x25);
+	MARK_REG(x26);
+	MARK_REG(x27);
+	MARK_REG(x28);
+	MARK_REG(x29);
+	MARK_REG(x30);
 #endif
 
 	for (p=LGMR ; p ; p=p->next)

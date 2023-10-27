@@ -33,6 +33,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 /*  What kind of machine?  */
 
 #ifdef	_MSC_VER
