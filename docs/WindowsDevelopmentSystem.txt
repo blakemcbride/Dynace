@@ -23,9 +23,7 @@ that works well without a lot of ongoing effort.  My plan is to put WDS
 in it's own repo for those interested.  It will not be enhanced
 anymore.
 
-If you with to view the old WDS classes, checkout revision:
-ace207aac659f2fca1a98ded0668aa31d0d607d5
-of this repo.
+WDS is now its own project on GitHub.
 
 Blake McBride
-10/26/2023
+10/27/2023
