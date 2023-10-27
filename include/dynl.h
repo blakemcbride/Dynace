@@ -125,15 +125,10 @@ typedef unsigned long  INT_PTR;
 #include <stdio.h>
 /*#include <malloc.h>*/
 
-#ifndef	PLAN9
 #include <stdlib.h>
 #include <setjmp.h>
 #include <stdarg.h>
-#endif
-
-#ifdef	__WATCOMC__
 #include <string.h>
-#endif
 
 #if	defined(BOEHM_GC)  &&  !defined(BIGLOO)
 #include "gc.h"
