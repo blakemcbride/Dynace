@@ -1,0 +1,5 @@
+*.msc eol=crlf
+*.bat eol=crlf
+*.cmd eol=crlf
+*.exe -text
+

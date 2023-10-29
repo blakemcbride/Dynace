@@ -1,0 +1,66 @@
+#  nmake makefile for Microsoft C
+
+BINDIR = ..\bin
+LIBDIR = ..\lib
+INCDIR = ..\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+
+CC = cl
+!IFDEF DEBUG
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 -Od -Zi $(CFEXTRA)
+LFLAGS = /subsystem:console /debug
+!ELSE
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 -O2 $(CFEXTRA)
+LFLAGS = /subsystem:console
+!ENDIF
+
+GFLAGS = -I$(INCDIR) -nologo -Oityb1 -Gs -Gy $(CFEXTRA)
+
+
+TARGET = dpp.exe
+
+CLASSES = Prototype.d InputStream.d OutputStream.d Token.d ArgumentList.d OutputStream2.d
+
+CFILES = dpp.c 
+
+OBJS = $(CFILES:.c=.obj) $(CLASSES:.d=.obj)
+
+.d.c :
+	dpp $(STRAT) -C -g -p $<
+
+LIBS = $(LIBDIR)\dynlcm.lib 
+
+$(TARGET) : generics.1 generics.h generics.obj $(OBJS) 
+	link /nologo /out:$@ $(LFLAGS) $(OBJS) generics.obj setargv.obj $(LIBS) winmm.lib
+
+
+install : $(TARGET)
+	cp $(TARGET) $(BINDIR)
+
+generics.h : $(CLASSES)
+	dpp $(STRAT) -C -g -t -h -p $(CLASSES)
+
+generics.c : generics.h
+	dpp $(STRAT) -C -g -c 
+
+generics.obj : generics.c 
+	$(CC) $(GFLAGS) -c generics.c
+
+generics.1 newgens:
+	rm -zq generics.*
+	dpp $(STRAT) -C -g $(INCDIR)\generics.h -h -p $(CLASSES)
+	@echo Done >generics.1
+
+
+clean realclean:
+	rm -zq *.obj *.o *.pdb *.err *.exe *.vcp *.ilk *.mdp *.ncb *.opt *.dsp *.dsw
+	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+
+
+

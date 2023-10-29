@@ -1,0 +1,62 @@
+# nmake makefile for Microsoft C
+
+
+LIBDIR = ..\lib
+INCDIR = ..\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+!IFDEF DEBUG
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 -Od -Zi -Fd$(LIBDIR)\dynm32.pdb $(CFEXTRA)
+!ELSE
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 $(CFEXTRA) -Ob2 -Oi -Ot -Oy -Gs -Gy
+!ENDIF
+
+.d.c:
+	dpp $(STRAT) -C -g $(INCDIR)\generics.h -ni -p $<
+
+CLASSES = Object.d Behavior.d MetaClass.d Class.d Method.d GenericFunction.d Dynace.d
+
+OBJ = $(CLASSES:.d=.obj) kernel.obj win32gm.obj malloc.obj getpagesize.obj getinitialpagesize.obj
+
+curlib.cm : $(OBJ) # jumpto.obj
+!IFDEF	NEW
+	echo $? >libs
+	lib /nologo /out:$(LIBDIR)\dynlcm.lib @libs
+	del libs
+!ELSE
+	echo $? >libs
+	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @libs
+	del libs
+!ENDIF
+	echo Done >$@
+
+
+kernel.obj : kernels.h Object.iv Behavior.iv Method.iv GenericFunction.iv
+
+Object.obj : Object.iv
+
+Behavior.obj : kernels.h Behavior.iv
+
+GenericFunction.obj : kernels.h GenericFunction.iv
+
+Method.obj : Method.iv
+
+
+newgens:
+	dpp $(STRAT) -C -g $(INCDIR)/generics.h -ni -p *.d -h $(INCDIR)\generics.h
+
+reallynewgens:
+	dpp $(STRAT) -C -ni -p *.d -h $(INCDIR)\generics.h
+
+
+clean :
+	rm -zq *.obj generics.* *.o *.pdb *.err
+	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+
+realclean : clean
+	rm -zq curlib.*

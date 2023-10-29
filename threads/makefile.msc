@@ -1,0 +1,42 @@
+# nmake makefile for Microsoft C
+
+
+LIBDIR = ..\lib
+INCDIR = ..\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+CC = cl
+!IFDEF DEBUG
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 -Od -Zi -Fd$(LIBDIR)\dynm32.pdb $(CFEXTRA)
+!ELSE
+CFLAGS = -I$(INCDIR) -WX -nologo -W3 -O2 $(CFEXTRA)
+!ENDIF
+
+
+.d.c:
+	dpp $(STRAT) -C -g $(INCDIR)\generics.h -p $<
+
+CLASSES = Thread.d Semaphore.d Pipe.d
+
+OBJ = $(CLASSES:.d=.obj) nttimer.obj
+
+curlib.cm : $(OBJ)
+	echo $? >lib
+	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @lib
+	rm -zq lib
+	echo Done >$@
+
+newgens:
+	dpp $(STRAT) -C -g $(INCDIR)/generics.h -p *.d -h $(INCDIR)\generics.h
+
+clean :
+	rm -zq *.obj generics.* *.o *.pdb *.err
+	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+
+realclean : clean
+	rm -zq curlib.*

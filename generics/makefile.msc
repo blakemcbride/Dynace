@@ -1,0 +1,33 @@
+
+
+# nmake makefile for Microsoft C
+
+CC = cl
+LIBDIR = ..\lib
+INCDIR = ..\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+!IFDEF DEBUG
+CFLAGS = -I$(INCDIR) -nologo -Od -Zi -Fd$(LIBDIR)\dynm32.pdb $(CFEXTRA)
+!ELSE
+CFLAGS = -I$(INCDIR) -nologo -Oityb1 -Gs -Gy $(CFEXTRA)
+!ENDIF
+
+curlib.cm : $(INCDIR)\generics.h
+	dpp $(STRAT) -C -g $(INCDIR)\generics.h -c -h
+	$(CC) -c $(CFLAGS) generics.c
+	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib generics.obj
+	rm -zq *.obj generics.*
+	echo Done >$@
+
+clean:
+	rm -zq *.obj generics.* *.o *.pdb *.err
+	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+
+realclean : clean
+	rm -zq curlib.*

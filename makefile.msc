@@ -1,0 +1,149 @@
+# nmake makefile for Microsoft C
+
+MAKEFILE=makefile.msc
+
+DPP = ..\bin\dpp
+
+DPPOPTS = -C $(STRAT)
+
+# re-builds changes files
+all:
+	-mkdir lib
+	cd kernel
+	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\class
+	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\threads
+	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) install
+	@rem
+	cd ..\generics
+	$(MAKE) /nologo /f $(MAKEFILE)
+	cd ..
+
+# rebuilds entire system from scratch
+all-scratch: setup.win
+	-mkdir lib
+	cd kernel
+	$(MAKE) /nologo /f $(MAKEFILE) NEW=1
+	@rem
+	cd ..\class
+	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\threads
+	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) install
+	@rem
+	cd ..\generics
+	$(MAKE) /nologo /f $(MAKEFILE)
+	cd ..
+
+clean:
+	cd kernel
+	$(MAKE) /nologo /f $(MAKEFILE) clean
+	@rem
+	cd ..\class
+	$(MAKE) /nologo /f $(MAKEFILE) clean
+	@rem
+	cd ..\threads
+	$(MAKE) /nologo /f $(MAKEFILE) clean
+	@rem
+	cd ..\generics
+	$(MAKE) /nologo /f $(MAKEFILE) clean
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) clean
+	@rem
+	cd ..\examples\setup
+	call cleanall.bat
+	@rem
+	cd ..\..
+	rm -zq setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
+
+	
+realclean:
+	cd kernel
+	$(MAKE) /nologo /f $(MAKEFILE) realclean
+	@rem
+	cd ..\class
+	$(MAKE) /nologo /f $(MAKEFILE) realclean
+	@rem
+	cd ..\threads
+	$(MAKE) /nologo /f $(MAKEFILE) realclean
+	@rem
+	cd ..\generics
+	$(MAKE) /nologo /f $(MAKEFILE) realclean
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) realclean
+	@rem
+	cd ..\examples\setup
+	call cleanall.bat
+	@rem
+	cd ..\..
+	rm -zq setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
+	rm -zq lib\d*.* bin\dpp bin\dpp.exe 
+	rm -zq bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.*
+
+
+dist:
+	rm -zq dynace*.zip
+	zip -r dynace README msc.dm makefile.unx makefile.inc change.log
+	zip dynace bin\* class\* docs\* dpp\* generics\* lib\*
+	zip dynace include\* kernel\* threads\* utils\*
+	zip -r dynace examples\list examples\exam* examples\setup
+
+# rebuilds generics.h from scratch
+makegens:
+	cd kernel
+	rm -zq generics.* 
+	$(DPP) $(DPPOPTS) -h -i -s *.d
+	mv generics.h ../include
+	@rem
+	cd ..\class
+	$(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d
+	mv generics.h ../include
+	@rem
+	cd ..\threads
+	$(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d
+	mv generics.h ../include
+	@rem
+	cd ..
+
+# rebuilds generics.h from scratch and pre-processes all .d files
+newgens : 
+	rm include\generics.h
+	@rem
+	cd kernel
+	$(MAKE) /nologo /f $(MAKEFILE) reallynewgens
+	@rem
+	cd ..\class
+	$(MAKE) /nologo /f $(MAKEFILE) newgens
+	@rem
+	cd ..\threads
+	$(MAKE) /nologo /f $(MAKEFILE) newgens
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) newgens
+	$(MAKE) /nologo /f $(MAKEFILE) generics.c
+	cd ..
+
+# make sure file times are correct on a new system so the build order is correct
+setup.win :
+	touch kernel\*.c
+	touch class\*.c
+	touch threads\*.c
+	touch dpp\*.c
+	touch dpp\generics.h
+	touch dpp\generics.c
+	pause
+	touch include\generics.h
+	touch $@
+
+
