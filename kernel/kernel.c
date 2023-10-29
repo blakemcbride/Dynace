@@ -2078,7 +2078,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	}
 #endif
 
-#if defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC
+#if defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC and intel Mac
 #define MARK_REG(r)					\
 	__asm__	volatile ("mov %%" #r ", %0" : "=r" (c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\

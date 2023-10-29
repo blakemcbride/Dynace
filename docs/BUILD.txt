@@ -71,19 +71,7 @@ to update setupenv.bat to reflect this change.
 
 3.  Build the system
 
-The following table indicates the correct makefile for each supported
-environment: (note:  only MSC.DM is really tested or used anymore)
-If you are using one of the other compilers, substitute the msc.dm
-shown throughout with the makefile appropriate to your environment.
-
-MSC.DM		Microsoft C 32 or 64 bit
-M16.DM		Microsoft C 16 bit
-W32.DM		Watcom C 32 bit
-
-MSC.dm can be substituted with the above if necessary, type:
-(Note: the case does matter.)
-
-	dmake -f msc.dm all-scratch
+	nmake -f makefile.msc all-scratch
 
 The system is now built.
 
@@ -94,7 +82,7 @@ examples\exam03, building and running the example using the following
 commands:
 
 	cd examples\exam03
-	dmake -f msc.dm
+	nmake -f microsoft.msc
 	main
 
 

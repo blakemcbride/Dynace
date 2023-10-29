@@ -7,10 +7,6 @@ xcopy /Y/Q bin\win32\*  bin
 
 PATH %dynloc%\bin;%path%
 
-set MAKESTARTUP=%dynloc%\utils\startup.mk
-
-:end
-
 set dynloc=
 
 
