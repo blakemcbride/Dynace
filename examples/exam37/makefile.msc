@@ -1,0 +1,64 @@
+#  nmake makefile for Windows		-*-Makefile-*-
+
+
+TARGET = main
+
+
+C_SRC = main.c
+
+
+DYNACE_PATH = ..\..
+
+BINDIR = $(DYNACE_PATH)\bin
+LIBDIR = $(DYNACE_PATH)\lib
+INCDIR = $(DYNACE_PATH)\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+!IFDEF	DEBUG
+CFLAGS = -nologo -I$(INCDIR) -WX -Zi $(CFEXTRA)
+LFLAGS = /nologo /subsystem:console /debug
+!ELSE
+CFLAGS = -nologo -I$(INCDIR) -WX -O2 $(CFEXTRA)
+LFLAGS = /nologo /subsystem:console
+!ENDIF
+
+
+LIBS = $(LIBDIR)\dynlcm.lib 
+
+# The last two libraries can be obtained from the OpenSSL website
+MSLIBS = wsock32.lib winmm.lib libcrypto.lib libssl.lib
+
+
+OBJS = $(C_SRC:.c=.obj)
+
+CC = cl
+
+
+$(TARGET).exe : $(OBJS) $(LIBS)
+	link /out:$@ $(LFLAGS) $(OBJS) $(LIBS) $(MSLIBS)
+
+clean:
+	$(BINDIR)\rm -zq *.obj
+	$(BINDIR)\rm -zq *.exe
+	$(BINDIR)\rm -zq *.ex1
+	$(BINDIR)\rm -zq *.res
+	$(BINDIR)\rm -zq *.aps
+	$(BINDIR)\rm -zq *.pdb
+	$(BINDIR)\rm -zq *.wsp
+	$(BINDIR)\rm -zq *.ilk
+	$(BINDIR)\rm -zq *.bsc
+	$(BINDIR)\rm -zq *.vcp
+	$(BINDIR)\rm -zq *.pch
+	$(BINDIR)\rm -zq *.sbr
+	$(BINDIR)\rm -zq *.vcw
+	$(BINDIR)\rm -zq *.map
+	$(BINDIR)\rm -zq generics.*
+	$(BINDIR)\rm -zqr WinDebug
+	$(BINDIR)\rm -zqr WinRel
+	$(BINDIR)\rm -zq *.idb *.mdp *.ncb
+

@@ -1,0 +1,88 @@
+#  nmake makefile for Windows		-*-Makefile-*-
+
+
+TARGET = main
+
+
+C_SRC = main.c
+
+
+CLASS_SRC = class1.d class2.d
+
+
+DYNACE_PATH = ..\..
+
+BINDIR = $(DYNACE_PATH)\bin
+LIBDIR = $(DYNACE_PATH)\lib
+INCDIR = $(DYNACE_PATH)\include
+
+CFEXTRA = -MT
+
+!IFDEF NATIVE_THREADS
+CFEXTRA += -DNATIVE_THREADS
+!ENDIF
+
+!IFDEF	DEBUG
+CFLAGS = -nologo -I$(INCDIR) -WX -Zi $(CFEXTRA)
+GFLAGS = -I$(INCDIR) -Oityb1 -Gs -Gy -nologo -Zi $(CFEXTRA)
+LFLAGS = /nologo /subsystem:console /debug
+!ELSE
+CFLAGS = -nologo -I$(INCDIR) -WX -O2 $(CFEXTRA)
+GFLAGS = -I$(INCDIR) -Oityb1 -Gs -Gy -nologo $(CFEXTRA)
+LFLAGS = /nologo /subsystem:console
+!ENDIF
+
+
+LIBS = $(LIBDIR)\dynlcm.lib 
+
+
+OBJS = $(C_SRC:.c=.obj) $(CLASS_SRC:.d=.obj)
+
+CC = cl
+
+.d.c:
+	$(BINDIR)\dpp -g -p $<
+
+$(TARGET).exe : generics.1 generics.h generics.obj $(OBJS) $(LIBS)
+	link /out:$@ $(LFLAGS) $(OBJS) generics.obj $(LIBS)
+
+
+generics.h : $(CLASS_SRC)
+	$(BINDIR)\dpp -g -t -h -p $**
+
+
+generics.c : generics.h
+	$(BINDIR)\dpp -g -c
+
+generics.obj : generics.c
+	$(CC) -c $(GFLAGS) generics.c
+
+generics.1 : 
+	$(BINDIR)\dpp -g $(INCDIR)\generics.h -h -p $(CLASS_SRC)
+	echo Done >generics.1
+
+newgens:
+	$(BINDIR)\dpp -g $(INCDIR)\generics.h -h -p $(CLASS_SRC)
+	echo Done >generics.1
+
+clean:
+	$(BINDIR)\rm -zq $(CLASS_SRC:.d=.c)
+	$(BINDIR)\rm -zq *.obj
+	$(BINDIR)\rm -zq *.exe
+	$(BINDIR)\rm -zq *.ex1
+	$(BINDIR)\rm -zq *.res
+	$(BINDIR)\rm -zq *.aps
+	$(BINDIR)\rm -zq *.pdb
+	$(BINDIR)\rm -zq *.wsp
+	$(BINDIR)\rm -zq *.ilk
+	$(BINDIR)\rm -zq *.bsc
+	$(BINDIR)\rm -zq *.vcp
+	$(BINDIR)\rm -zq *.pch
+	$(BINDIR)\rm -zq *.sbr
+	$(BINDIR)\rm -zq *.vcw
+	$(BINDIR)\rm -zq *.map
+	$(BINDIR)\rm -zq generics.*
+	$(BINDIR)\rm -zqr WinDebug
+	$(BINDIR)\rm -zqr WinRel
+	$(BINDIR)\rm -zq *.idb *.mdp *.ncb
+
