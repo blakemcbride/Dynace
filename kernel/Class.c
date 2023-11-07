@@ -72,8 +72,11 @@ cmeth objrtn Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 static	objrtn	Class_cfm_gNewStdClass(object self, char *name, int ivsize, object mc, int nipib, object superclasses, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, superclasses);
-	return Class_cm_gNewStdClass(self, name, ivsize, mc, nipib, superclasses, _rest_);
+	_ret_ = Class_cm_gNewStdClass(self, name, ivsize, mc, nipib, superclasses, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -81,13 +84,16 @@ static	objrtn	Class_cfm_gNewStdClass(object self, char *name, int ivsize, object
 #line 55 "Class.d"
 cmeth objrtn Class_cm_gNewClass(object self, char *name, int ivsize, int cvsize, object superclasses, va_list _rest_){} 
 
-#line 85 "Class.c"
+#line 88 "Class.c"
 
 static	objrtn	Class_cfm_gNewClass(object self, char *name, int ivsize, int cvsize, object superclasses, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, superclasses);
-	return Class_cm_gNewClass(self, name, ivsize, cvsize, superclasses, _rest_);
+	_ret_ = Class_cm_gNewClass(self, name, ivsize, cvsize, superclasses, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 

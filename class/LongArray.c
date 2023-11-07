@@ -71,8 +71,11 @@ cvmeth objrtn LongArray_cvm_vNew(object self, va_list _rest_)
 static	objrtn	LongArray_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_cvm_vNew(self, _rest_);
+	_ret_ = LongArray_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -84,13 +87,16 @@ ivmeth char LongArray_ivm_vCharValue(object self, va_list _rest_)
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 88 "LongArray.c"
+#line 91 "LongArray.c"
 
 static	char	LongArray_ifm_vCharValue(object self, ...)
 {
 	va_list	_rest_;
+	char	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vCharValue(self, _rest_);
+	_ret_ = LongArray_ivm_vCharValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -102,13 +108,16 @@ ivmeth short LongArray_ivm_vShortValue(object self, va_list _rest_)
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 106 "LongArray.c"
+#line 112 "LongArray.c"
 
 static	short	LongArray_ifm_vShortValue(object self, ...)
 {
 	va_list	_rest_;
+	short	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vShortValue(self, _rest_);
+	_ret_ = LongArray_ivm_vShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -120,13 +129,16 @@ ivmeth unsigned short LongArray_ivm_vUnsignedShortValue(object self, va_list _re
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 124 "LongArray.c"
+#line 133 "LongArray.c"
 
 static	unsigned short	LongArray_ifm_vUnsignedShortValue(object self, ...)
 {
 	va_list	_rest_;
+	unsigned short	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vUnsignedShortValue(self, _rest_);
+	_ret_ = LongArray_ivm_vUnsignedShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -138,13 +150,16 @@ ivmeth long LongArray_ivm_vLongValue(object self, va_list _rest_)
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 142 "LongArray.c"
+#line 154 "LongArray.c"
 
 static	long	LongArray_ifm_vLongValue(object self, ...)
 {
 	va_list	_rest_;
+	long	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vLongValue(self, _rest_);
+	_ret_ = LongArray_ivm_vLongValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -156,13 +171,16 @@ ivmeth double LongArray_ivm_vDoubleValue(object self, va_list _rest_)
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 160 "LongArray.c"
+#line 175 "LongArray.c"
 
 static	double	LongArray_ifm_vDoubleValue(object self, ...)
 {
 	va_list	_rest_;
+	double	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vDoubleValue(self, _rest_);
+	_ret_ = LongArray_ivm_vDoubleValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -176,13 +194,16 @@ ivmeth objrtn LongArray_ivm_vChangeValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 180 "LongArray.c"
+#line 198 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -195,13 +216,16 @@ ivmeth objrtn LongArray_ivm_vChangeCharValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 199 "LongArray.c"
+#line 220 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeCharValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeCharValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeCharValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -214,13 +238,16 @@ ivmeth objrtn LongArray_ivm_vChangeShortValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 218 "LongArray.c"
+#line 242 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeShortValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeShortValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -233,13 +260,16 @@ ivmeth objrtn LongArray_ivm_vChangeUShortValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 237 "LongArray.c"
+#line 264 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeUShortValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeUShortValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeUShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -252,13 +282,16 @@ ivmeth objrtn LongArray_ivm_vChangeLongValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 256 "LongArray.c"
+#line 286 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeLongValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeLongValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeLongValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -271,13 +304,16 @@ ivmeth objrtn LongArray_ivm_vChangeDoubleValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 275 "LongArray.c"
+#line 308 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeDoubleValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LongArray_ivm_vChangeDoubleValue(self, _rest_);
+	_ret_ = LongArray_ivm_vChangeDoubleValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -287,7 +323,7 @@ static void class_init(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 291 "LongArray.c"
+#line 327 "LongArray.c"
 
 objrtn	LongArray_initialize(void)
 {

@@ -77,8 +77,11 @@ cvmeth objrtn Restart_cvm_vNew(object self, va_list _rest_)
 static	objrtn	Restart_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return Restart_cvm_vNew(self, _rest_);
+	_ret_ = Restart_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -102,7 +105,7 @@ imeth objrtn Restart_im_gValue(object self)
 } 
 
 
-#line 106 "Restart.c"
+#line 109 "Restart.c"
 
 objrtn	Restart_initialize(void)
 {

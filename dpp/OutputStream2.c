@@ -169,8 +169,11 @@ ivmeth int OutputStream2_ivm_vPrintf(object self, va_list _rest_)
 static	int	OutputStream2_ifm_vPrintf(object self, ...)
 {
 	va_list	_rest_;
+	int	_ret_;
 	va_start(_rest_, self);
-	return OutputStream2_ivm_vPrintf(self, _rest_);
+	_ret_ = OutputStream2_ivm_vPrintf(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -213,7 +216,7 @@ imeth objrtn OutputStream2_im_gForceLineDirective(object self)
 } 
 
 
-#line 217 "OutputStream2.c"
+#line 220 "OutputStream2.c"
 
 objrtn	OutputStream2_initialize(void)
 {

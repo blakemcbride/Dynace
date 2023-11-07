@@ -87,8 +87,11 @@ ivmeth int Stream_ivm_vPrintf(object self, va_list _rest_)
 static	int	Stream_ifm_vPrintf(object self, ...)
 {
 	va_list	_rest_;
+	int	_ret_;
 	va_start(_rest_, self);
-	return Stream_ivm_vPrintf(self, _rest_);
+	_ret_ = Stream_ivm_vPrintf(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -108,7 +111,7 @@ static void class_init(void)
 	RegisterVariable(traceStream_o); 
 } 
 
-#line 112 "Stream.c"
+#line 115 "Stream.c"
 
 objrtn	Stream_initialize(void)
 {

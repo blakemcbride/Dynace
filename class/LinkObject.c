@@ -64,8 +64,11 @@ cvmeth objrtn LinkObject_cvm_vMakeList(object self, va_list _rest_)
 static	objrtn	LinkObject_cfm_vMakeList(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LinkObject_cvm_vMakeList(self, _rest_);
+	_ret_ = LinkObject_cvm_vMakeList(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -88,13 +91,16 @@ ivmeth objrtn LinkObject_ivm_vGetValues(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 92 "LinkObject.c"
+#line 95 "LinkObject.c"
 
 static	objrtn	LinkObject_ifm_vGetValues(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return LinkObject_ivm_vGetValues(self, _rest_);
+	_ret_ = LinkObject_ivm_vGetValues(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -164,7 +170,7 @@ imeth objrtn LinkObject_im_gNth(object self, int idx)
 } 
 
 
-#line 168 "LinkObject.c"
+#line 174 "LinkObject.c"
 
 objrtn	LinkObject_initialize(void)
 {

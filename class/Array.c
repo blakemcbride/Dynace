@@ -270,8 +270,11 @@ ivmeth int Array_ivm_vBitValue(object self, va_list _rest_)
 static	int	Array_ifm_vBitValue(object self, ...)
 {
 	va_list	_rest_;
+	int	_ret_;
 	va_start(_rest_, self);
-	return Array_ivm_vBitValue(self, _rest_);
+	_ret_ = Array_ivm_vBitValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -304,13 +307,16 @@ ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 308 "Array.c"
+#line 311 "Array.c"
 
 static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return Array_ivm_vChangeBitValue(self, _rest_);
+	_ret_ = Array_ivm_vChangeBitValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -393,13 +399,16 @@ ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 397 "Array.c"
+#line 403 "Array.c"
 
 static	objrtn	Array_ifm_vReshape(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return Array_ivm_vReshape(self, _rest_);
+	_ret_ = Array_ivm_vReshape(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -820,7 +829,7 @@ cmeth objrtn Array_cm_gIndexOrigin(object self, int n)
 	return self; 
 } 
 
-#line 824 "Array.c"
+#line 833 "Array.c"
 
 objrtn	Array_initialize(void)
 {

@@ -668,8 +668,11 @@ cvmeth objrtn String_cvm_vSprintf(object self, va_list _rest_)
 static	objrtn	String_cfm_vSprintf(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return String_cvm_vSprintf(self, _rest_);
+	_ret_ = String_cvm_vSprintf(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -722,13 +725,16 @@ ivmeth objrtn String_ivm_vBuild(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 726 "String.c"
+#line 729 "String.c"
 
 static	objrtn	String_ifm_vBuild(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return String_ivm_vBuild(self, _rest_);
+	_ret_ = String_ivm_vBuild(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -774,13 +780,16 @@ cvmeth objrtn String_cvm_vBuild(object self, va_list _rest_)
 	return newObj; 
 } 
 
-#line 778 "String.c"
+#line 784 "String.c"
 
 static	objrtn	String_cfm_vBuild(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return String_cvm_vBuild(self, _rest_);
+	_ret_ = String_cvm_vBuild(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -1265,7 +1274,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1269 "String.c"
+#line 1278 "String.c"
 
 objrtn	String_initialize(void)
 {

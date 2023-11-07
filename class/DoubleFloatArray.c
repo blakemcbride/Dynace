@@ -71,8 +71,11 @@ cvmeth objrtn DoubleFloatArray_cvm_vNew(object self, va_list _rest_)
 static	objrtn	DoubleFloatArray_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_cvm_vNew(self, _rest_);
+	_ret_ = DoubleFloatArray_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -84,13 +87,16 @@ ivmeth char DoubleFloatArray_ivm_vCharValue(object self, va_list _rest_)
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 88 "DoubleFloatArray.c"
+#line 91 "DoubleFloatArray.c"
 
 static	char	DoubleFloatArray_ifm_vCharValue(object self, ...)
 {
 	va_list	_rest_;
+	char	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vCharValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vCharValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -102,13 +108,16 @@ ivmeth short DoubleFloatArray_ivm_vShortValue(object self, va_list _rest_)
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 106 "DoubleFloatArray.c"
+#line 112 "DoubleFloatArray.c"
 
 static	short	DoubleFloatArray_ifm_vShortValue(object self, ...)
 {
 	va_list	_rest_;
+	short	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vShortValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -120,13 +129,16 @@ ivmeth unsigned short DoubleFloatArray_ivm_vUnsignedShortValue(object self, va_l
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 124 "DoubleFloatArray.c"
+#line 133 "DoubleFloatArray.c"
 
 static	unsigned short	DoubleFloatArray_ifm_vUnsignedShortValue(object self, ...)
 {
 	va_list	_rest_;
+	unsigned short	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vUnsignedShortValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vUnsignedShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -138,13 +150,16 @@ ivmeth long DoubleFloatArray_ivm_vLongValue(object self, va_list _rest_)
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 142 "DoubleFloatArray.c"
+#line 154 "DoubleFloatArray.c"
 
 static	long	DoubleFloatArray_ifm_vLongValue(object self, ...)
 {
 	va_list	_rest_;
+	long	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vLongValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vLongValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -156,13 +171,16 @@ ivmeth double DoubleFloatArray_ivm_vDoubleValue(object self, va_list _rest_)
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 160 "DoubleFloatArray.c"
+#line 175 "DoubleFloatArray.c"
 
 static	double	DoubleFloatArray_ifm_vDoubleValue(object self, ...)
 {
 	va_list	_rest_;
+	double	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vDoubleValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vDoubleValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -176,13 +194,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 180 "DoubleFloatArray.c"
+#line 198 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -195,13 +216,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeCharValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 199 "DoubleFloatArray.c"
+#line 220 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeCharValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeCharValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeCharValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -214,13 +238,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeShortValue(object self, va_list _rest_
 	return self; 
 } 
 
-#line 218 "DoubleFloatArray.c"
+#line 242 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeShortValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeShortValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -233,13 +260,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeUShortValue(object self, va_list _rest
 	return self; 
 } 
 
-#line 237 "DoubleFloatArray.c"
+#line 264 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeUShortValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeUShortValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeUShortValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -252,13 +282,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeLongValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 256 "DoubleFloatArray.c"
+#line 286 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeLongValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeLongValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeLongValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -271,13 +304,16 @@ ivmeth objrtn DoubleFloatArray_ivm_vChangeDoubleValue(object self, va_list _rest
 	return self; 
 } 
 
-#line 275 "DoubleFloatArray.c"
+#line 308 "DoubleFloatArray.c"
 
 static	objrtn	DoubleFloatArray_ifm_vChangeDoubleValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return DoubleFloatArray_ivm_vChangeDoubleValue(self, _rest_);
+	_ret_ = DoubleFloatArray_ivm_vChangeDoubleValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -287,7 +323,7 @@ static void init_class(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 291 "DoubleFloatArray.c"
+#line 327 "DoubleFloatArray.c"
 
 objrtn	DoubleFloatArray_initialize(void)
 {

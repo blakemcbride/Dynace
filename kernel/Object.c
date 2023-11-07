@@ -92,8 +92,11 @@ ivmeth objrtn Object_ivm_vError(object self, va_list _rest_)
 static	objrtn	Object_ifm_vError(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return Object_ivm_vError(self, _rest_);
+	_ret_ = Object_ivm_vError(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 

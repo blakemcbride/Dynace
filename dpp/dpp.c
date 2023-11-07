@@ -689,16 +689,30 @@ static	void	gen_inline(object fobj, char *name, object proto)
 	if (FastWideCache)
 		gPuts(fobj, "\tofun _meth_;\n");
 	if (gIsVarArg(proto))
-		vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+		if (streq(rtn, "void"))
+			vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+		else
+			vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 	if (FastWideCache)  {
 		vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
 		vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
 			streq(rtn, "void")?"":"return", name);
-	} else
-		vPrintf(fobj, "\t%s (*(%s_t)_FindMethod(self, Generic(%s)))(",
-			streq(rtn, "void")?"":"return", name, name);
+	} else {
+		if (streq(rtn, "void"))
+			vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+		else if (gIsVarArg(proto))
+			vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+		else
+			vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+	}
 	gPrintVars(proto, fobj);
-	gPuts(fobj, ");\n}\n");
+	gPuts(fobj, ");\n");
+	if (gIsVarArg(proto)) {
+		vPrintf(fobj, "\tva_end(_rest_);\n");
+		if (!streq(rtn, "void"))
+			vPrintf(fobj, "\treturn _ret_;\n");
+	}
+	gPuts(fobj, "}\n\n");
 }
 
 static	int	is_pointer(char *x)
@@ -2290,16 +2304,30 @@ static	void	make_c(object	classes,
 				if (FastWideCache)
 					gPuts(fobj, "\tofun _meth_;\n");
 				if (gIsVarArg(proto))
-					vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+					else
+						vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
 					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
 						streq(rtn, "void")?"":"return", name);
-				} else
-					vPrintf(fobj, "\t%s (*(%s_t)_FindMethod(self, Generic(%s)))(",
-						streq(rtn, "void")?"":"return", name, name);
+				} else {
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else if (gIsVarArg(proto))
+						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else
+						vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+				}
 				gPrintVars(proto, fobj);
-				gPuts(fobj, ");\n}\n\n");
+				gPuts(fobj, ");\n");
+				if (gIsVarArg(proto)) {
+					vPrintf(fobj, "\tva_end(_rest_);\n");
+					if (!streq(rtn, "void"))
+						vPrintf(fobj, "\treturn _ret_;\n");
+				}
+				gPuts(fobj, "}\n\n");
 			}
 		}
 #ifndef	DBI
@@ -2327,16 +2355,26 @@ static	void	make_c(object	classes,
 				gPuts(fobj, ")\n{\n");
 				if (FastWideCache)
 					gPuts(fobj, "\tofun _meth_;\n");
-				vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+				if (streq(rtn, "void"))
+					vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+				else
+					vPrintf(fobj, "\tva_list _rest_;\n\t%s\t_ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));	
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
 					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
 						streq(rtn, "void")?"":"return", name);
-				} else
-					vPrintf(fobj, "\t%s (*(%s_t)_FindMethod(self, Generic(%s)))(",
-						streq(rtn, "void")?"":"return", name, name);
+				} else {
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else
+						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+				}
 				gPrintVars(proto, fobj);
-				gPuts(fobj, ");\n}\n\n");
+				gPuts(fobj, ");\n");
+				gPuts(fobj, "\tva_end(_rest_);\n");
+				if (!streq(rtn, "void"))
+					gPuts(fobj, "\treturn _ret_;\n");
+				gPuts(fobj, "}\n\n");
 			}
 		gPuts(fobj, "\n\n\n");
 	}
@@ -2464,16 +2502,30 @@ static	void	make_c2(object	generics,
 				if (FastWideCache)
 					gPuts(fobj, "\tofun _meth_;\n");
 				if (gIsVarArg(proto))
-					vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+					else
+						vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
 					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
 						streq(rtn, "void")?"":"return", name);
-				} else
-					vPrintf(fobj, "\t%s (*(%s_t)_FindMethod(self, Generic(%s)))(",
-						streq(rtn, "void")?"":"return", name, name);
+				} else {
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else if (gIsVarArg(proto))
+						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else
+						vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+				}
 				gPrintVars(proto, fobj);
-				gPuts(fobj, ");\n}\n\n");
+				gPuts(fobj, ");\n");
+				if (gIsVarArg(proto)) {
+					vPrintf(fobj, "\tva_end(_rest_);\n");
+					if (!streq(rtn, "void"))
+						vPrintf(fobj, "\treturn _ret_;\n");
+				}
+				gPuts(fobj, "}\n\n");
 			}
 		}
 #ifndef	DBI
@@ -2499,16 +2551,26 @@ static	void	make_c2(object	generics,
 				gPuts(fobj, ")\n{\n");
 				if (FastWideCache)
 					gPuts(fobj, "\tofun _meth_;\n");
-				vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+				if (streq(rtn, "void"))
+					vPrintf(fobj, "\tva_list _rest_;\n\tva_start(_rest_, %s);\n", gLastArg(proto));
+				else
+					vPrintf(fobj, "\tva_list _rest_;\n\t%s\t_ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));	
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
 					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
 						streq(rtn, "void")?"":"return", name);
-				} else
-					vPrintf(fobj, "\t%s (*(%s_t)_FindMethod(self, Generic(%s)))(",
-						streq(rtn, "void")?"":"return", name, name);
+				} else {
+					if (streq(rtn, "void"))
+						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+					else
+						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+				}
 				gPrintVars(proto, fobj);
-				gPuts(fobj, ");\n}\n\n");
+				gPuts(fobj, ");\n");
+				gPuts(fobj, "\tva_end(_rest_);\n");
+				if (!streq(rtn, "void"))
+					gPuts(fobj, "\treturn _ret_;\n");
+				gPuts(fobj, "}\n\n");
 			}
 		gPuts(fobj, "\n\n\n");
 	}
@@ -3179,15 +3241,20 @@ generate_fixed_arg_meth(char 		*olmname,
 	gPrintFixedArgs(prototype, sobj);
 	gPuts(sobj, ")\n{\n");
 	gPuts(sobj, "\tva_list\t_rest_;\n");
+	if (!streq(rtn, "void"))
+		vPrintf(sobj, "\t%s\t_ret_;\n", rtn);
 	gPuts(sobj, "\tva_start(_rest_, ");
 	vPrintf(sobj, "%s);\n", gLastArg(prototype));
 /*	gUseVars(prototype, sobj);  */
 	if (streq(rtn, "void"))
 		vPrintf(sobj, "\t%s(", mname);
 	else
-		vPrintf(sobj, "\treturn %s(", mname);
+		vPrintf(sobj, "\t_ret_ = %s(", mname);
 	gPrintVars(prototype, sobj);
 	gPuts(sobj, ");\n");
+	gPuts(sobj, "\tva_end(_rest_);\n");
+	if (!streq(rtn, "void"))
+		gPuts(sobj, "\treturn _ret_;\n");
 	gPuts(sobj, "}\n\n");
 }
 
@@ -3210,12 +3277,18 @@ generate_fixed_arg_vmeth(char 		*olmname,
 		rtn = gStringValue(gReturnType(prototype)),
 		olmname);
 	gPuts(sobj, "\tva_list\t_rest_;\n");
+	if (!streq(rtn, "void"))
+		vPrintf(sobj, "\t%s\t_ret_;\n", rtn);
 	gPuts(sobj, "\tva_start(_rest_, self);\n");
 	if (streq(rtn, "void"))
 		vPrintf(sobj, "\t%s(", mname);
 	else
-		vPrintf(sobj, "\treturn %s(", mname);
-	gPuts(sobj, "self, _rest_);\n}\n\n");
+		vPrintf(sobj, "\t_ret_ = %s(", mname);
+	gPuts(sobj, "self, _rest_);\n");
+	gPuts(sobj, "\tva_end(_rest_);\n");
+	if (!streq(rtn, "void"))
+		gPuts(sobj, "\treturn _ret_;\n");
+	gPuts(sobj, "}\n\n");
 }
 
 static	void
@@ -3257,6 +3330,7 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 			if (i++  &&  strne(t=gStringValue(pnxt), "..."))
 				vPrintf(sobj, "\t%s = va_arg(_rest_, %s);\n",
 					gStringValue(vnxt), t);
+		gPuts(sobj, "\tva_end(_rest_);\n");
 	}  else  {
 		DISPOSE(pseq);
 		DISPOSE(vseq);

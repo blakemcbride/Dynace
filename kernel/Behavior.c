@@ -209,8 +209,11 @@ ivmeth objrtn Behavior_ivm_vNew(object self, va_list _rest_)
 static	objrtn	Behavior_ifm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return Behavior_ivm_vNew(self, _rest_);
+	_ret_ = Behavior_ivm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 

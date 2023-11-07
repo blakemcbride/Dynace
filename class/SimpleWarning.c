@@ -74,8 +74,11 @@ cvmeth objrtn SimpleWarning_cvm_vNew(object self, va_list _rest_)
 static	objrtn	SimpleWarning_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return SimpleWarning_cvm_vNew(self, _rest_);
+	_ret_ = SimpleWarning_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -97,7 +100,7 @@ imeth objrtn SimpleWarning_im_gDefaultRestart(object self)
 } 
 
 
-#line 101 "SimpleWarning.c"
+#line 104 "SimpleWarning.c"
 
 objrtn	SimpleWarning_initialize(void)
 {

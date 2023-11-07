@@ -94,10 +94,14 @@ setup.dos :
 	bin/addcr examples/list
 	rm -f setup.unx
 	touch setup.dos
+
+# rebuilds generics.h from scratch
 makegens:
 	cd kernel ; rm -f generics.* ; $(DPP) $(DPPOPTS) -h -i -s *.d ; mv generics.h ../include
 	cd class ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
 	cd threads ; $(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d ; mv generics.h ../include
+
+# rebuilds generics.h from scratch and pre-processes all .d files
 newgens : makegens
 	cd kernel   ;  $(MAKE) -f makefile reallynewgens
 	cd class    ;  $(MAKE) -f makefile newgens

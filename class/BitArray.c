@@ -66,13 +66,16 @@ cvmeth objrtn BitArray_cvm_vNew(object self, va_list _rest_)
 static	objrtn	BitArray_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return BitArray_cvm_vNew(self, _rest_);
+	_ret_ = BitArray_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
 
-#line 76 "BitArray.c"
+#line 79 "BitArray.c"
 
 objrtn	BitArray_initialize(void)
 {

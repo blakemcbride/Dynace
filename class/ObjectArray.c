@@ -71,8 +71,11 @@ cvmeth objrtn ObjectArray_cvm_vNew(object self, va_list _rest_)
 static	objrtn	ObjectArray_cfm_vNew(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return ObjectArray_cvm_vNew(self, _rest_);
+	_ret_ = ObjectArray_cvm_vNew(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -84,13 +87,16 @@ ivmeth objrtn ObjectArray_ivm_vValue(object self, va_list _rest_)
 	return *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 88 "ObjectArray.c"
+#line 91 "ObjectArray.c"
 
 static	objrtn	ObjectArray_ifm_vValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return ObjectArray_ivm_vValue(self, _rest_);
+	_ret_ = ObjectArray_ivm_vValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -104,13 +110,16 @@ ivmeth objrtn ObjectArray_ivm_vChangeValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 108 "ObjectArray.c"
+#line 114 "ObjectArray.c"
 
 static	objrtn	ObjectArray_ifm_vChangeValue(object self, ...)
 {
 	va_list	_rest_;
+	objrtn	_ret_;
 	va_start(_rest_, self);
-	return ObjectArray_ivm_vChangeValue(self, _rest_);
+	_ret_ = ObjectArray_ivm_vChangeValue(self, _rest_);
+	va_end(_rest_);
+	return _ret_;
 }
 
 
@@ -120,7 +129,7 @@ static void init_class(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 124 "ObjectArray.c"
+#line 133 "ObjectArray.c"
 
 objrtn	ObjectArray_initialize(void)
 {
