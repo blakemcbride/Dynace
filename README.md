@@ -33,15 +33,20 @@ Dynace Object-Oriented Extension to C
 * Solaris / OpenIndiana
 * Plan 9
 * Minix
-* ARM (cross-build)
-
-The main home for this system is:  https://github.com/blakemcbride/Dynace
 
 Dynace is production quality and has been used in commercial environments for more than ten years.
 
 Dynace was written to solve perceived problems with C++ as outlined in the user manual.
 
 Dynace is released under the BSD 2-Clause license.
+
+
+The main home for this system is:  https://github.com/blakemcbride/Dynace
+
+Discussion is at: https://github.com/blakemcbride/Dynace/discussions
+
+Report issues at:  https://github.com/blakemcbride/Dynace/issues
+
 
 System overview is at:  docs/ORIENT.txt
 
