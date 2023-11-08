@@ -63,8 +63,8 @@ Dynace.pdf : Dynace.tex man1.tex man2.tex man3.tex man4.tex man5.tex classes1.te
 	     UnsignedShortArray.tex \
 	     UnsignedShortInteger.tex
 	texi2pdf $<
-#	pdftk $@ cat 1-2 391-end 3-390 output out.pdf
-#	mv out.pdf $@
+	pdftk $@ cat 1-2 389-end 3-388 output out.pdf
+	mv out.pdf $@
 
 
 Dynace.html : Dynace.tex man1.tex man2.tex man3.tex man4.tex man5.tex classes1.tex \
