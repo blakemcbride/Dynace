@@ -34,6 +34,8 @@
 #pragma comment(lib, "winmm.lib")
 #endif
 
+#include <stdint.h>
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif

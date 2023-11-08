@@ -38,7 +38,6 @@ clean :
 realclean : clean
 	rm -f setup.unx setup.dos setup.p9
 ifeq ($(CC),$(HCC))  # keep host dpp if we are cross compiling
-	echo $(CC) $(HCC)
 	rm -f bin/dpp
 	rm -f bin/dpp.exe
 	rm -f bin/delcr

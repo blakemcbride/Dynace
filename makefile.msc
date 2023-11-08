@@ -1,5 +1,7 @@
 # nmake makefile for Microsoft C
 
+.SUFFIXES: .d .c .h .obj .exe .lib
+
 MAKEFILE=makefile.msc
 
 DPP = ..\bin\dpp

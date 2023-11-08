@@ -1,6 +1,6 @@
-
-
 # nmake makefile for Microsoft C
+
+.SUFFIXES: .c .h .obj
 
 CC = cl
 LIBDIR = ..\lib

@@ -160,11 +160,6 @@ static int verify_error=X509_V_OK;
 #define	SMALLBUFLEN	  256
 #define	BUFLEN	      2048
 
-typedef	unsigned short int uint16_t;
-#if	(!defined(unix) && !defined(__APPLE__) && !defined(__minix))  ||  defined(__WINE__)
-typedef	unsigned long  int uint32_t;
-#endif
-
 static int    initSockets(void);
 static int    is_ip_address(char *s);
 static int    what_error(void);

@@ -1,6 +1,9 @@
 #  nmake makefile for Windows		-*-Makefile-*-
 
 
+.SUFFIXES: .d .c .h .obj .exe .lib
+
+
 TARGET = main
 
 

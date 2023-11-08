@@ -1,5 +1,6 @@
 # nmake makefile for Microsoft C
 
+.SUFFIXES: .d .c .h .obj .exe .lib
 
 LIBDIR = ..\lib
 INCDIR = ..\include

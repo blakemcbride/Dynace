@@ -1,5 +1,6 @@
 # nmake makefile for Microsoft C
 
+.SUFFIXES: .d .c .h .obj .exe .lib
 
 LIBDIR = ..\lib
 INCDIR = ..\include
@@ -74,7 +75,7 @@ makegens:
 	dpp $(STRAT) -C -g $(INCDIR)/generics.h -s *.d -h $(INCDIR)\generics.h
 
 XPath.exe : XMLNode.c
-	$(CC) $(CFLAGS) /Fe$@ -DTEST $< $(LIBDIR)\dynlcm.lib
+	$(CC) $(CFLAGS) /Fe$@ -DTEST $? $(LIBDIR)\dynlcm.lib
 	rm -zq XMLNode.obj
 
 clean :
