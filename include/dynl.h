@@ -133,7 +133,6 @@ typedef unsigned long  INT_PTR;
 #include <windows.h>
 #include <sql.h>
 #include <sqlext.h>
-#include <dynwin.h>
 #endif
 
 #include <stdio.h>
