@@ -30,6 +30,10 @@
 #define	_DYNL_H
 
 #ifdef _MSC_VER
+#undef WINVER
+#undef _WIN32_WINNT
+#define WINVER		0x0501
+#define _WIN32_WINNT	0x0501
 #define _CRT_SECURE_NO_WARNINGS
 #pragma comment(lib, "winmm.lib")
 #endif
@@ -127,6 +131,9 @@ typedef unsigned long  INT_PTR;
 
 #ifdef _WIN32
 #include <windows.h>
+#include <sql.h>
+#include <sqlext.h>
+#include <dynwin.h>
 #endif
 
 #include <stdio.h>
@@ -541,15 +548,6 @@ extern	void	*Chkmem(void *, char *, int);
 #endif
 
 #define	StackAlloc(c)	gStackAlloc(c, alloca(gInstanceSize(c)))
-
-#if 0
-#if defined(__TURBOC__)  /*  ||  defined(unix)  */
-#include "generics.h"
-#else
-#include <generics.h>
-#endif
-#endif
-
 
 /*  Exception Handling code  */
 
