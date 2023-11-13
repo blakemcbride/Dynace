@@ -36,7 +36,7 @@ ifdef CYGWIN
 EXE = .exe
 endif
 
-CFLAGS = -I$(INCDIR) $(OPT) -Wno-parentheses
+CFLAGS = -I$(INCDIR) $(OPT) -Wno-parentheses -fPIC
 
 LDFLAGS = -lm
 
@@ -67,6 +67,6 @@ DPPOPTS += -X
 endif
 
 DPPOPTS += $(STRAT)
-GFLAGS = $(CFLAGS) -Wno-return-type
+GFLAGS = $(CFLAGS) -Wno-return-type -fPIC
 %.c: %.d
 	$(DPP) $(DPPOPTS) -p $<
