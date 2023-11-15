@@ -5,12 +5,14 @@
 TAGS
 bin/delcr
 bin/dpp
+bin/*.exe
 dpp/dpp
 generics/curlib
 generics/generics.c
 generics/generics.h
 lib/
 setup.unx
+setup.win
 allok
 allok.nm
 allok.cm
