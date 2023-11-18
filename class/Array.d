@@ -223,7 +223,6 @@ ivmeth	int	vBitValue(...)
 {
 	int		i, r;
 	INDEX_TYPE	offset;
-	MAKE_REST(self);
 
 	if (iType != AT_BIT)
 		gError(self, "Error: Can't use vBitValue on non-BitArrays\n");
@@ -249,7 +248,6 @@ ivmeth	vChangeBitValue(int v, ...)
 {
 	int		i, r;
 	INDEX_TYPE	offset;
-	MAKE_REST(v);
 
 	if (iType != AT_BIT)
 		gError(self, "Error: Can't use vChangeBitValue on non-BitArrays\n");
@@ -290,7 +288,6 @@ cmeth	gIota(int n)
 ivmeth	object	vReshape(unsigned rank, ...)
 {
 	INDEX_TYPE	n, *shape, d, i;
-	MAKE_REST(rank);
 
 	shape = rank ? MTnalloc(INDEX_TYPE, rank, iShape) : (INDEX_TYPE *) NULL;
 	for (i=0, n=1 ; i < rank ; ++i)  {
@@ -345,7 +342,6 @@ ivmeth	object	vReshape(unsigned rank, ...)
 	if (iShape)
 		MA_free(iShape);
 	iShape = shape;
-	
 	return self;
 }
 

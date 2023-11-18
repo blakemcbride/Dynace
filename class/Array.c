@@ -243,7 +243,6 @@ ivmeth int Array_ivm_vBitValue(object self, va_list _rest_)
 { Array_iv_t *iv = GetIVs(Array, self);
 	int i, r; 
 	INDEX_TYPE offset; 
-	MAKE_REST(self); 
 
 	if (iv->iType != AT_BIT) 
 		gError(self, "Error: Can't use vBitValue on non-BitArrays\n"); 
@@ -265,7 +264,7 @@ ivmeth int Array_ivm_vBitValue(object self, va_list _rest_)
 	return !!BIT_VAL(iv->iArray, offset); 
 } 
 
-#line 269 "Array.c"
+#line 268 "Array.c"
 
 static	int	Array_ifm_vBitValue(object self, ...)
 {
@@ -279,12 +278,11 @@ static	int	Array_ifm_vBitValue(object self, ...)
 
 
 
-#line 248 "Array.d"
+#line 247 "Array.d"
 ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
 { Array_iv_t *iv = GetIVs(Array, self);int v = va_arg(_rest_, int);
 	int i, r; 
 	INDEX_TYPE offset; 
-	MAKE_REST(v); 
 
 	if (iv->iType != AT_BIT) 
 		gError(self, "Error: Can't use vChangeBitValue on non-BitArrays\n"); 
@@ -307,7 +305,7 @@ ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 311 "Array.c"
+#line 309 "Array.c"
 
 static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 {
@@ -321,7 +319,7 @@ static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 
 
 
-#line 275 "Array.d"
+#line 273 "Array.d"
 cmeth objrtn Array_cm_gIota(object self, int n)
 { 
 	INDEX_TYPE c; 
@@ -340,7 +338,6 @@ cmeth objrtn Array_cm_gIota(object self, int n)
 ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 { Array_iv_t *iv = GetIVs(Array, self);unsigned rank = va_arg(_rest_, unsigned);
 	INDEX_TYPE n, *shape, d, i; 
-	MAKE_REST(rank); 
 
 	shape = rank ? MTnalloc(INDEX_TYPE, rank, iv->iShape) : (INDEX_TYPE *) NULL; 
 	for (i=0, n=1 ; i < rank ; ++i) { 
@@ -395,11 +392,10 @@ ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 	if (iv->iShape) 
 		MA_free(iv->iShape); 
 	iv->iShape = shape; 
-
 	return self; 
 } 
 
-#line 403 "Array.c"
+#line 399 "Array.c"
 
 static	objrtn	Array_ifm_vReshape(object self, ...)
 {
@@ -412,7 +408,7 @@ static	objrtn	Array_ifm_vReshape(object self, ...)
 }
 
 
-#line 354 "Array.d"
+#line 350 "Array.d"
 static int _A_esize(int type) 
 { 
 	switch (type) { 
@@ -682,13 +678,13 @@ PMETHOD objrtn Array_Dup(object self, int ntype, int dval, int deep)
 #else 
 
 
-#line 626 "Array.d"
+#line 622 "Array.d"
 #define CONV(tt, ft) while (n--) { *((tt *) nval) = (tt) *((ft *) val); nval = (void *) (1 + (tt *) nval); val = (void *) (1 + (ft *) val); } 
 
-#line 632 "Array.d"
+#line 628 "Array.d"
 #define CONVFI(tt, ft) while (n--) { *((tt *) nval) = (tt) Dtol((double)*(ft *) val); nval = (void *) (1 + (tt *) nval); val = (void *) (1 + (ft *) val); } 
 
-#line 638 "Array.d"
+#line 634 "Array.d"
 #define CONVFD() while (n--) { *((double *) nval) = Ftod(*((float *) val)); nval = (void *) (1 + (double *) nval); val = (void *) (1 + (float *) val); } 
 
 
@@ -703,7 +699,7 @@ PMETHOD objrtn Array_Dup(object self, int ntype, int dval, int deep)
 #endif 
 
 
-#line 651 "Array.d"
+#line 647 "Array.d"
 static int convert(ivType *iv, ivType *iv2) 
 { 
 	INDEX_TYPE m; 
@@ -829,7 +825,7 @@ cmeth objrtn Array_cm_gIndexOrigin(object self, int n)
 	return self; 
 } 
 
-#line 833 "Array.c"
+#line 829 "Array.c"
 
 objrtn	Array_initialize(void)
 {

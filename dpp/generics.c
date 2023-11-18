@@ -604,9 +604,9 @@ static	objrtn	_gAddToPool(object self, int deepFlag, object obj)
 	return (*(gAddToPool_t)_FindMethod(self, Generic(gAddToPool)))(self, deepFlag, obj);
 }
 
-static	objrtn	_gAddValue(object self, object key, object val)
+static	objrtn	_gAddValue(object self, object key, object value)
 {
-	return (*(gAddValue_t)_FindMethod(self, Generic(gAddValue)))(self, key, val);
+	return (*(gAddValue_t)_FindMethod(self, Generic(gAddValue)))(self, key, value);
 }
 
 static	objrtn	_gAddYears(object self, int years)
@@ -779,9 +779,9 @@ static	objrtn	_gChangeUShortValue(object self, unsigned val)
 	return (*(gChangeUShortValue_t)_FindMethod(self, Generic(gChangeUShortValue)))(self, val);
 }
 
-static	objrtn	_gChangeValue(object self, object val)
+static	objrtn	_gChangeValue(object self, object value)
 {
-	return (*(gChangeValue_t)_FindMethod(self, Generic(gChangeValue)))(self, val);
+	return (*(gChangeValue_t)_FindMethod(self, Generic(gChangeValue)))(self, value);
 }
 
 static	objrtn	_gChangeValueWithInt(object self, int key, object val)
@@ -929,9 +929,9 @@ static	objrtn	_gDeepDisposeLast(object self)
 	return (*(gDeepDisposeLast_t)_FindMethod(self, Generic(gDeepDisposeLast)))(self);
 }
 
-static	objrtn	_gDeepDisposeObj(object self, object key)
+static	objrtn	_gDeepDisposeObj(object self, object luk)
 {
-	return (*(gDeepDisposeObj_t)_FindMethod(self, Generic(gDeepDisposeObj)))(self, key);
+	return (*(gDeepDisposeObj_t)_FindMethod(self, Generic(gDeepDisposeObj)))(self, luk);
 }
 
 static	objrtn	_gDeepDisposeStr(object self, char *key)
@@ -1009,9 +1009,9 @@ static	objrtn	_gDisposeLast(object self)
 	return (*(gDisposeLast_t)_FindMethod(self, Generic(gDisposeLast)))(self);
 }
 
-static	objrtn	_gDisposeObj(object self, object key)
+static	objrtn	_gDisposeObj(object self, object luk)
 {
-	return (*(gDisposeObj_t)_FindMethod(self, Generic(gDisposeObj)))(self, key);
+	return (*(gDisposeObj_t)_FindMethod(self, Generic(gDisposeObj)))(self, luk);
 }
 
 static	objrtn	_gDisposeObject(object self, object obj)
@@ -1104,9 +1104,9 @@ static	int	_gFileHandle(object self)
 	return (*(gFileHandle_t)_FindMethod(self, Generic(gFileHandle)))(self);
 }
 
-static	objrtn	_gFind(object self, object key)
+static	objrtn	_gFind(object self, object luk)
 {
-	return (*(gFind_t)_FindMethod(self, Generic(gFind)))(self, key);
+	return (*(gFind_t)_FindMethod(self, Generic(gFind)))(self, luk);
 }
 
 static	objrtn	_gFindAdd(object self, object luk)
@@ -1474,9 +1474,9 @@ static	long	_gGetTotalBytesRead(object self)
 	return (*(gGetTotalBytesRead_t)_FindMethod(self, Generic(gGetTotalBytesRead)))(self);
 }
 
-static	char *	_gGets(object self, char *buf, int sz)
+static	char *	_gGets(object self, char *buf, int n)
 {
-	return (*(gGets_t)_FindMethod(self, Generic(gGets)))(self, buf, sz);
+	return (*(gGets_t)_FindMethod(self, Generic(gGets)))(self, buf, n);
 }
 
 static	objrtn	_gGroupRemove(object self, int (*fun)())
@@ -1584,9 +1584,9 @@ static	objrtn	_gIota(object self, int n)
 	return (*(gIota_t)_FindMethod(self, Generic(gIota)))(self, n);
 }
 
-static	int	_gIsKindOf(object self, object cls2)
+static	int	_gIsKindOf(object self, object aCls)
 {
-	return (*(gIsKindOf_t)_FindMethod(self, Generic(gIsKindOf)))(self, cls2);
+	return (*(gIsKindOf_t)_FindMethod(self, Generic(gIsKindOf)))(self, aCls);
 }
 
 static	int	_gIsVarArg(object self)
@@ -1904,9 +1904,9 @@ static	objrtn	_gNewWithDouble(object self, double val)
 	return (*(gNewWithDouble_t)_FindMethod(self, Generic(gNewWithDouble)))(self, val);
 }
 
-static	objrtn	_gNewWithInt(object self, int size)
+static	objrtn	_gNewWithInt(object self, int val)
 {
-	return (*(gNewWithInt_t)_FindMethod(self, Generic(gNewWithInt)))(self, size);
+	return (*(gNewWithInt_t)_FindMethod(self, Generic(gNewWithInt)))(self, val);
 }
 
 static	objrtn	_gNewWithIntObj(object self, int key, object value)
@@ -1919,9 +1919,9 @@ static	objrtn	_gNewWithLong(object self, long val)
 	return (*(gNewWithLong_t)_FindMethod(self, Generic(gNewWithLong)))(self, val);
 }
 
-static	objrtn	_gNewWithObj(object self, object link)
+static	objrtn	_gNewWithObj(object self, object value)
 {
-	return (*(gNewWithObj_t)_FindMethod(self, Generic(gNewWithObj)))(self, link);
+	return (*(gNewWithObj_t)_FindMethod(self, Generic(gNewWithObj)))(self, value);
 }
 
 static	objrtn	_gNewWithObjObj(object self, object key, object val)
@@ -1934,9 +1934,9 @@ static	objrtn	_gNewWithPtr(object self, void *val)
 	return (*(gNewWithPtr_t)_FindMethod(self, Generic(gNewWithPtr)))(self, val);
 }
 
-static	objrtn	_gNewWithStr(object self, char *dtStr)
+static	objrtn	_gNewWithStr(object self, char *so)
 {
-	return (*(gNewWithStr_t)_FindMethod(self, Generic(gNewWithStr)))(self, dtStr);
+	return (*(gNewWithStr_t)_FindMethod(self, Generic(gNewWithStr)))(self, so);
 }
 
 static	objrtn	_gNewWithStrInt(object self, char *name, int bufsiz)
@@ -2209,9 +2209,9 @@ static	void *	_gRegisterMemory(object self, void *beg, long size)
 	return (*(gRegisterMemory_t)_FindMethod(self, Generic(gRegisterMemory)))(self, beg, size);
 }
 
-static	objrtn	_gRelease(object self, int cnt)
+static	objrtn	_gRelease(object self, int yld)
 {
-	return (*(gRelease_t)_FindMethod(self, Generic(gRelease)))(self, cnt);
+	return (*(gRelease_t)_FindMethod(self, Generic(gRelease)))(self, yld);
 }
 
 static	objrtn	_gReleaseSemaphore(object self)
@@ -2259,9 +2259,9 @@ static	objrtn	_gRemoveNode(object self)
 	return (*(gRemoveNode_t)_FindMethod(self, Generic(gRemoveNode)))(self);
 }
 
-static	objrtn	_gRemoveObj(object self, object key)
+static	objrtn	_gRemoveObj(object self, object luk)
 {
-	return (*(gRemoveObj_t)_FindMethod(self, Generic(gRemoveObj)))(self, key);
+	return (*(gRemoveObj_t)_FindMethod(self, Generic(gRemoveObj)))(self, luk);
 }
 
 static	void	_gRemoveRegisteredMemory(object self, void *pp)
@@ -2664,9 +2664,9 @@ static	objrtn	_gWaitSemaphore(object self, object sema)
 	return (*(gWaitSemaphore_t)_FindMethod(self, Generic(gWaitSemaphore)))(self, sema);
 }
 
-static	int	_gWrite(object self, char *buf, unsigned n)
+static	int	_gWrite(object self, char *buf, unsigned len)
 {
-	return (*(gWrite_t)_FindMethod(self, Generic(gWrite)))(self, buf, n);
+	return (*(gWrite_t)_FindMethod(self, Generic(gWrite)))(self, buf, len);
 }
 
 static	int	_gWriteInt32(object self, int val)
@@ -2699,12 +2699,12 @@ static	int	_vBitValue(object self, ...)
 	return _ret_;
 }
 
-static	objrtn	_vBuild(object self, ...)
+static	objrtn	_vBuild(object self, char *f, ...)
 {
 	va_list _rest_;
 	objrtn _ret_;
-	va_start(_rest_, self);
-	_ret_ = (*(vBuild_t)_FindMethod(self, Generic(vBuild)))(self, _rest_);
+	va_start(_rest_, f);
+	_ret_ = (*(vBuild_t)_FindMethod(self, Generic(vBuild)))(self, f, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2859,12 +2859,12 @@ static	void *	_vPointerValue(object self, ...)
 	return _ret_;
 }
 
-static	int	_vPrintf(object self, ...)
+static	int	_vPrintf(object self, char *fmt, ...)
 {
 	va_list _rest_;
 	int _ret_;
-	va_start(_rest_, self);
-	_ret_ = (*(vPrintf_t)_FindMethod(self, Generic(vPrintf)))(self, _rest_);
+	va_start(_rest_, fmt);
+	_ret_ = (*(vPrintf_t)_FindMethod(self, Generic(vPrintf)))(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2889,12 +2889,12 @@ static	short	_vShortValue(object self, ...)
 	return _ret_;
 }
 
-static	objrtn	_vSprintf(object self, ...)
+static	objrtn	_vSprintf(object self, char *fmt, ...)
 {
 	va_list _rest_;
 	objrtn _ret_;
-	va_start(_rest_, self);
-	_ret_ = (*(vSprintf_t)_FindMethod(self, Generic(vSprintf)))(self, _rest_);
+	va_start(_rest_, fmt);
+	_ret_ = (*(vSprintf_t)_FindMethod(self, Generic(vSprintf)))(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }

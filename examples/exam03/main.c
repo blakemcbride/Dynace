@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
 
 	InitDynace(&argc);
 
-
 	/*  Create and use an instance of the ShortInteger class */
 
 	myObj = gNewWithInt(ShortInteger,  6);

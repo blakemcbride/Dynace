@@ -54,14 +54,13 @@ cvmeth objrtn BitArray_cvm_vNew(object self, va_list _rest_)
 
 #line 41 "BitArray.d"
 	static gNewArray_t cnew = NULL; 
-	MAKE_REST(rank); 
 
 	if (!cnew) 
 		cnew = cmcPointer(Array, gNewArray); 
 	return cnew(self, AT_BIT, rank, _rest_); 
 } 
 
-#line 65 "BitArray.c"
+#line 64 "BitArray.c"
 
 static	objrtn	BitArray_cfm_vNew(object self, ...)
 {
@@ -75,7 +74,7 @@ static	objrtn	BitArray_cfm_vNew(object self, ...)
 
 
 
-#line 79 "BitArray.c"
+#line 78 "BitArray.c"
 
 objrtn	BitArray_initialize(void)
 {

@@ -132,11 +132,13 @@ imeth	int	gPuts(char *str)
 	return r;
 }
 
-ivmeth	int	vPrintf(char *fmt, ...)
+/* The following is a imeth and not a ivmeth because all vPrintf methods take the exact same arguments.
+   ivmeth and cvmeth are reserved for methods that take DIFFERENT arguments.  */
+
+imeth	int	vPrintf(char *fmt, ...)
 {
 	char	buf[256];
 	int	r=0;
-	MAKE_REST(fmt);
 
 	vsprintf(buf, fmt, _rest_);
 	if (iS1  &&  (!iUse  ||  iUse == 1))

@@ -589,10 +589,13 @@ imeth	int	gPuts(char *str)
 	return iStream ? gPuts(iStream, str) : (int)strlen(str);
 }
 
-ivmeth	int	vPrintf(char *fmt, ...)
+
+/* The following is a imeth and not a ivmeth because all vPrintf methods take the exact same arguments.
+   ivmeth and cvmeth are reserved for methods that take DIFFERENT arguments.  */
+
+imeth	int	vPrintf(char *fmt, ...)
 {
 	char	buf[256];
-	MAKE_REST(fmt);
 
 	vsprintf(buf, fmt, _rest_);
 	iOLine = -20L;

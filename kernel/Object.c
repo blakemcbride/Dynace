@@ -81,13 +81,11 @@ imeth objrtn Object_im_gError(object self, char *msg)
 ivmeth objrtn Object_ivm_vError(object self, va_list _rest_)
 { char * fmt = va_arg(_rest_, char *);
 	char buf[4096]; 
-	MAKE_REST(fmt); 
-
 	vsprintf(buf, fmt, _rest_); 
 	return gError(self, buf); 
 } 
 
-#line 91 "Object.c"
+#line 89 "Object.c"
 
 static	objrtn	Object_ifm_vError(object self, ...)
 {
@@ -101,7 +99,7 @@ static	objrtn	Object_ifm_vError(object self, ...)
 
 
 
-#line 76 "Object.d"
+#line 74 "Object.d"
 imeth objrtn Object_im_gSubclassResponsibility(object self, char *meth)
 { 
 	char buf[100]; 
@@ -169,7 +167,7 @@ imeth objrtn Object_im_gPrintValue(object self, object stream)
 #endif 
 
 
-#line 142 "Object.d"
+#line 140 "Object.d"
 imeth unsigned long Object_im_gObjectSerialNumber(object self)
 { Object_iv_t *iv = GetIVs(Object, self);
 	return iv->sn; 
@@ -232,12 +230,12 @@ objrtn Object_initialize(void)
 #else 
 
 
-#line 202 "Object.d"
+#line 200 "Object.d"
 	ivMethodFor(Object, vError, Object_ivm_vError, Object_ifm_vError); 
 #endif 
 
 
-#line 204 "Object.d"
+#line 202 "Object.d"
 	iMethodFor(Object, gSubclassResponsibility, Object_im_gSubclassResponsibility); 
 	iMethodFor(Object, gShouldNotImplement, Object_im_gShouldNotImplement); 
 	iMethodFor(Object, gHash, Object_im_gHash); 
@@ -254,7 +252,7 @@ objrtn Object_initialize(void)
 #endif 
 
 
-#line 218 "Object.d"
+#line 216 "Object.d"
 	return Object_c; 
 } 
 
@@ -262,40 +260,40 @@ objrtn Object_initialize(void)
 
 imeth objrtn Object_im_gDispose(object self)
 
+#line 221 "Object.d"
+{} 
+
+
+#line 222 "Object.d"
+imeth int Object_im_gEqual(object self, object obj2)
+
+#line 222 "Object.d"
+{} 
+
+
+#line 223 "Object.d"
+imeth objrtn Object_im_gCopy(object self)
+
 #line 223 "Object.d"
 {} 
 
 
 #line 224 "Object.d"
-imeth int Object_im_gEqual(object self, object obj2)
+imeth int Object_im_gSize(object self)
 
 #line 224 "Object.d"
 {} 
 
 
 #line 225 "Object.d"
-imeth objrtn Object_im_gCopy(object self)
+imeth int Object_im_gBasicSize(object self)
 
 #line 225 "Object.d"
 {} 
 
-
-#line 226 "Object.d"
-imeth int Object_im_gSize(object self)
-
-#line 226 "Object.d"
-{} 
-
-
-#line 227 "Object.d"
-imeth int Object_im_gBasicSize(object self)
-
-#line 227 "Object.d"
-{} 
-
 imeth objrtn Object_im_gLoadJavaClass(object self, char *name)
 
-#line 229 "Object.d"
+#line 227 "Object.d"
 {} 
 
 

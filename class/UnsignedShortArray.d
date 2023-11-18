@@ -46,7 +46,6 @@ static	gIndex_t	_index;
 cvmeth	vNew(unsigned rank, ...)
 {
 	static	gNewArray_t	cnew = NULL;
-	MAKE_REST(rank);
 
 	if (!cnew)
 		cnew = cmcPointer(Array, gNewArray);
@@ -55,37 +54,31 @@ cvmeth	vNew(unsigned rank, ...)
 
 ivmeth	char	vCharValue(...)
 {
-	MAKE_REST(self);
 	return (char) *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	short	vShortValue(...)
 {
-	MAKE_REST(self);
 	return (short) *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	unsigned short	vUnsignedShortValue(...)
 {
-	MAKE_REST(self);
 	return (unsigned short) *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	long	vLongValue(...)
 {
-	MAKE_REST(self);
 	return (long) *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	double	vDoubleValue(...)
 {
-	MAKE_REST(self);
 	return (double) *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	vChangeValue(val, ...)
 {
-	MAKE_REST(val);
 	ChkArg(val, 2);
 	*((TYPE *) _index(self, _rest_)) = gUnsignedShortValue(val);
 	return self;
@@ -93,35 +86,30 @@ ivmeth	vChangeValue(val, ...)
 
 ivmeth	vChangeCharValue(int val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val;
 	return self;
 }
 
 ivmeth	vChangeShortValue(int val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val;
 	return self;
 }
 
 ivmeth	vChangeUShortValue(unsigned val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val;
 	return self;
 }
 
 ivmeth	vChangeLongValue(long val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val;
 	return self;
 }
 
 ivmeth	vChangeDoubleValue(double val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val;
 	return self;
 }

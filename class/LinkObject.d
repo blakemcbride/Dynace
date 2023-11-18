@@ -38,7 +38,6 @@ defclass  LinkObject : LinkList;
 cvmeth	vMakeList(...)
 {
 	object	lst, obj;
-	MAKE_REST(self);
 
 	lst = gNew(self);
 	while (obj = GetArg(object))
@@ -49,7 +48,6 @@ cvmeth	vMakeList(...)
 ivmeth	vGetValues(...)
 {
 	object	*var, seq, obj;
-	MAKE_REST(self);
 
 	seq = gSequence(self);
 	obj = gNext(seq);

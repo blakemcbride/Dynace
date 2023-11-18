@@ -633,23 +633,25 @@ imeth	int	gEndOfStream()
 	return !iLen;
 }
 
-cvmeth	vSprintf(char *fmt, ...)
+/* The following is a cmeth and not a cvmeth because all vSprintf methods take the exact same arguments.
+   vmeth and cvmeth are reserved for methods that take DIFFERENT arguments.  */
+
+cmeth	vSprintf(char *fmt, ...)
 {
 	char	buf[1024];
-	MAKE_REST(fmt);
 
 	vsprintf(buf, fmt, _rest_);
 	return gNewWithStr(self, buf);
 }
 
-ivmeth	vBuild(char *f, ...)
+imeth	vBuild(char *f, ...)
 {
 	object	obj;
 	char	*str, *pbuf;
-	va_list		ap;
 	int	len, argn, tlen;
 	static	char	fun[] = "Build";
-	MAKE_REST(f);
+	va_list _rest2_;
+	va_copy(_rest2_, _rest_);
 
 	
 	/*  Calculate total length  */
@@ -659,10 +661,8 @@ ivmeth	vBuild(char *f, ...)
 		tlen = get_string((object) f, &str, fun, 2);
 	else
 		tlen = iLen;
-	ASSIGN_VA_LIST(ap, _rest_);
-	for (argn=3 ; obj = va_arg(ap, object) ; )
+	for (argn=3 ; obj = va_arg(_rest_, object) ; )
 		tlen += get_string(obj, &str, fun, argn++);
-
 
 	/*  Make sure buffer is big enough  */
 
@@ -686,53 +686,63 @@ ivmeth	vBuild(char *f, ...)
 		pbuf += len;
 	}  else 
 		pbuf += iLen;
-	for (argn=3 ; obj = GetArg(object) ; )  {
+	for (argn=3 ; obj = va_arg(_rest2_, object) ; )  {
 		len = get_string(obj, &str, fun, argn++);
 		if (len)  {
 			memcpy(pbuf, str, len);
 			pbuf += len;
 		}
 	}
+	va_end(_rest2_);
 	*pbuf = '\0';
 	iLen = tlen;
 	return self;
 }
 
-cvmeth	vBuild(...)
+cmeth	vBuild(char *f, ...)
 {
 	object	obj;
 	char	*str, *pbuf;
-	va_list		ap;
-	int	len, argn, tlen=0;
+	int	len, argn, tlen;
 	static	char	fun[] = "Build";
 	object	newObj = gNew(super);
 	ivType	*iv = ivPtr(newObj);
-	MAKE_REST(self);
-
+	va_list _rest2_;
+	va_copy(_rest2_, _rest_);
 	
 	/*  Calculate total length  */
 
-	ASSIGN_VA_LIST(ap, _rest_);
-	for (argn=2 ; obj = va_arg(ap, object) ; )
-		tlen += get_string(obj, &str, fun, argn++);
+	if (f) {
+		tlen = get_string((object) f, &str, fun, 2);
+		for (argn=3 ; obj = va_arg(_rest_, object) ; )
+			tlen += get_string(obj, &str, fun, argn++);
+	} else
+		tlen = 0;
 
 	/*  Create buffer  */
 
 	iBlksz = 1;
 	SETSIZE(tlen + 1);
 	iStr = (char *) MA_malloc(iSize, &iStr);
-
 	
 	/*  Build string  */
 
 	pbuf = iStr;
-	for (argn=2 ; obj = GetArg(object) ; )  {
-		len = get_string(obj, &str, fun, argn++);
+	if (f) {
+		len = get_string((object) f, &str, fun, 2);
 		if (len)  {
 			memcpy(pbuf, str, len);
 			pbuf += len;
 		}
+		for (argn=3 ; obj = va_arg(_rest2_, object) ; )  {
+			len = get_string(obj, &str, fun, argn++);
+			if (len)  {
+				memcpy(pbuf, str, len);
+				pbuf += len;
+			}
+		}
 	}
+	va_end(_rest2_);
 	*pbuf = '\0';
 	iLen = tlen;
 	return newObj;

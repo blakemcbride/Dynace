@@ -59,14 +59,13 @@ cvmeth objrtn ShortArray_cvm_vNew(object self, va_list _rest_)
 
 #line 49 "ShortArray.d"
 	static gNewArray_t cnew = NULL; 
-	MAKE_REST(rank); 
 
 	if (!cnew) 
 		cnew = cmcPointer(Array, gNewArray); 
 	return cnew(self, AT_SHRT, rank, _rest_); 
 } 
 
-#line 70 "ShortArray.c"
+#line 69 "ShortArray.c"
 
 static	objrtn	ShortArray_cfm_vNew(object self, ...)
 {
@@ -80,14 +79,13 @@ static	objrtn	ShortArray_cfm_vNew(object self, ...)
 
 
 
-#line 57 "ShortArray.d"
+#line 56 "ShortArray.d"
 ivmeth char ShortArray_ivm_vCharValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 91 "ShortArray.c"
+#line 89 "ShortArray.c"
 
 static	char	ShortArray_ifm_vCharValue(object self, ...)
 {
@@ -101,14 +99,13 @@ static	char	ShortArray_ifm_vCharValue(object self, ...)
 
 
 
-#line 63 "ShortArray.d"
+#line 61 "ShortArray.d"
 ivmeth short ShortArray_ivm_vShortValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 112 "ShortArray.c"
+#line 109 "ShortArray.c"
 
 static	short	ShortArray_ifm_vShortValue(object self, ...)
 {
@@ -122,14 +119,13 @@ static	short	ShortArray_ifm_vShortValue(object self, ...)
 
 
 
-#line 69 "ShortArray.d"
+#line 66 "ShortArray.d"
 ivmeth unsigned short ShortArray_ivm_vUnsignedShortValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 133 "ShortArray.c"
+#line 129 "ShortArray.c"
 
 static	unsigned short	ShortArray_ifm_vUnsignedShortValue(object self, ...)
 {
@@ -143,14 +139,13 @@ static	unsigned short	ShortArray_ifm_vUnsignedShortValue(object self, ...)
 
 
 
-#line 75 "ShortArray.d"
+#line 71 "ShortArray.d"
 ivmeth long ShortArray_ivm_vLongValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 154 "ShortArray.c"
+#line 149 "ShortArray.c"
 
 static	long	ShortArray_ifm_vLongValue(object self, ...)
 {
@@ -164,14 +159,13 @@ static	long	ShortArray_ifm_vLongValue(object self, ...)
 
 
 
-#line 81 "ShortArray.d"
+#line 76 "ShortArray.d"
 ivmeth double ShortArray_ivm_vDoubleValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 175 "ShortArray.c"
+#line 169 "ShortArray.c"
 
 static	double	ShortArray_ifm_vDoubleValue(object self, ...)
 {
@@ -185,16 +179,15 @@ static	double	ShortArray_ifm_vDoubleValue(object self, ...)
 
 
 
-#line 87 "ShortArray.d"
+#line 81 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeValue(object self, va_list _rest_)
 { object val = va_arg(_rest_, object);
-	MAKE_REST(val); 
 	ChkArg(val, 2); 
 	*((TYPE *) _index(self, _rest_)) = gShortValue(val); 
 	return self; 
 } 
 
-#line 198 "ShortArray.c"
+#line 191 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeValue(object self, ...)
 {
@@ -208,15 +201,14 @@ static	objrtn	ShortArray_ifm_vChangeValue(object self, ...)
 
 
 
-#line 95 "ShortArray.d"
+#line 88 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeCharValue(object self, va_list _rest_)
 { int val = va_arg(_rest_, int);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 220 "ShortArray.c"
+#line 212 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeCharValue(object self, ...)
 {
@@ -230,15 +222,14 @@ static	objrtn	ShortArray_ifm_vChangeCharValue(object self, ...)
 
 
 
-#line 102 "ShortArray.d"
+#line 94 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeShortValue(object self, va_list _rest_)
 { int val = va_arg(_rest_, int);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 242 "ShortArray.c"
+#line 233 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeShortValue(object self, ...)
 {
@@ -252,15 +243,14 @@ static	objrtn	ShortArray_ifm_vChangeShortValue(object self, ...)
 
 
 
-#line 109 "ShortArray.d"
+#line 100 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeUShortValue(object self, va_list _rest_)
 { unsigned val = va_arg(_rest_, unsigned);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 264 "ShortArray.c"
+#line 254 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeUShortValue(object self, ...)
 {
@@ -274,15 +264,14 @@ static	objrtn	ShortArray_ifm_vChangeUShortValue(object self, ...)
 
 
 
-#line 116 "ShortArray.d"
+#line 106 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeLongValue(object self, va_list _rest_)
 { long val = va_arg(_rest_, long);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 286 "ShortArray.c"
+#line 275 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeLongValue(object self, ...)
 {
@@ -296,15 +285,14 @@ static	objrtn	ShortArray_ifm_vChangeLongValue(object self, ...)
 
 
 
-#line 123 "ShortArray.d"
+#line 112 "ShortArray.d"
 ivmeth objrtn ShortArray_ivm_vChangeDoubleValue(object self, va_list _rest_)
 { double val = va_arg(_rest_, double);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 308 "ShortArray.c"
+#line 296 "ShortArray.c"
 
 static	objrtn	ShortArray_ifm_vChangeDoubleValue(object self, ...)
 {
@@ -317,13 +305,13 @@ static	objrtn	ShortArray_ifm_vChangeDoubleValue(object self, ...)
 }
 
 
-#line 130 "ShortArray.d"
+#line 118 "ShortArray.d"
 static void init_class(void) 
 { 
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 327 "ShortArray.c"
+#line 315 "ShortArray.c"
 
 objrtn	ShortArray_initialize(void)
 {

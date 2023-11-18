@@ -36,6 +36,7 @@ ifdef CYGWIN
 EXE = .exe
 endif
 
+# -fPIC required by WINE
 CFLAGS = -I$(INCDIR) $(OPT) -Wno-parentheses -fPIC
 
 LDFLAGS = -lm

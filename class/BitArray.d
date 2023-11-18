@@ -39,7 +39,6 @@ defclass  BitArray  :  Array;
 cvmeth	vNew(unsigned rank, ...)
 {
 	static	gNewArray_t	cnew = NULL;
-	MAKE_REST(rank);
 
 	if (!cnew)
 		cnew = cmcPointer(Array, gNewArray);

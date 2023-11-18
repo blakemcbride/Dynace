@@ -660,29 +660,12 @@ extern	void	JavaScript_init_app(void);
 #define vSprintf	fix_vSprintf
 #endif
 
-#ifdef	__WATCOMC__
-#define	ASSIGN_VA_LIST(t,f)	memcpy(&t, &f, sizeof t)
-#else
-#ifdef	__va_copy 
-#define	ASSIGN_VA_LIST(t,f)	__va_copy(t, f)
-#else 
-#define	ASSIGN_VA_LIST(t,f)	t = f
-#endif
-#endif
-
-#if	DPP_STRATEGY == 1
 #define	MAKE_REST(lst)		\
 	va_list	_rest_;		\
-	va_list _rest2_;	\
-	va_start(_rest_, lst);	\
-	ASSIGN_VA_LIST(_rest2_, _rest_)
-#else
-#define	MAKE_REST(lst)		\
-	va_list	_rest2_; 	\
-	ASSIGN_VA_LIST(_rest2_, _rest_)
-#endif
+	va_start(_rest_, lst)
 
-#define	RESET_REST	ASSIGN_VA_LIST(_rest_, _rest2_)
+#define	RESET_REST   va_end(_rest_)
+
 
 #if	defined(__WATCOMC__)  &&  defined(__cplusplus)
 #pragma warning 472 9

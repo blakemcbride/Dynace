@@ -59,14 +59,13 @@ cvmeth objrtn PointerArray_cvm_vNew(object self, va_list _rest_)
 
 #line 48 "PointerArray.d"
 	static gNewArray_t cnew = NULL; 
-	MAKE_REST(rank); 
 
 	if (!cnew) 
 		cnew = cmcPointer(Array, gNewArray); 
 	return cnew(self, AT_PNTR, rank, _rest_); 
 } 
 
-#line 70 "PointerArray.c"
+#line 69 "PointerArray.c"
 
 static	objrtn	PointerArray_cfm_vNew(object self, ...)
 {
@@ -80,14 +79,13 @@ static	objrtn	PointerArray_cfm_vNew(object self, ...)
 
 
 
-#line 56 "PointerArray.d"
+#line 55 "PointerArray.d"
 ivmeth void * PointerArray_ivm_vPointerValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 91 "PointerArray.c"
+#line 89 "PointerArray.c"
 
 static	void *	PointerArray_ifm_vPointerValue(object self, ...)
 {
@@ -101,15 +99,14 @@ static	void *	PointerArray_ifm_vPointerValue(object self, ...)
 
 
 
-#line 62 "PointerArray.d"
+#line 60 "PointerArray.d"
 ivmeth objrtn PointerArray_ivm_vChangeValue(object self, va_list _rest_)
 { void * val = va_arg(_rest_, void *);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = val; 
 	return self; 
 } 
 
-#line 113 "PointerArray.c"
+#line 110 "PointerArray.c"
 
 static	objrtn	PointerArray_ifm_vChangeValue(object self, ...)
 {
@@ -122,13 +119,13 @@ static	objrtn	PointerArray_ifm_vChangeValue(object self, ...)
 }
 
 
-#line 69 "PointerArray.d"
+#line 66 "PointerArray.d"
 static void init_class(void) 
 { 
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 132 "PointerArray.c"
+#line 129 "PointerArray.c"
 
 objrtn	PointerArray_initialize(void)
 {

@@ -651,51 +651,51 @@ imeth int String_im_gEndOfStream(object self)
 	return !iv->iLen; 
 } 
 
-cvmeth objrtn String_cvm_vSprintf(object self, va_list _rest_)
-{ 
-	char * fmt = va_arg(_rest_, char *);
 
-#line 638 "String.d"
+
+
+cmeth objrtn String_cm_vSprintf(object self, char *fmt, va_list _rest_)
+{ 
 	char buf[1024]; 
-	MAKE_REST(fmt); 
 
 	vsprintf(buf, fmt, _rest_); 
 	return gNewWithStr(self, buf); 
 } 
 
-#line 667 "String.c"
+#line 666 "String.c"
 
-static	objrtn	String_cfm_vSprintf(object self, ...)
+static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 {
 	va_list	_rest_;
 	objrtn	_ret_;
-	va_start(_rest_, self);
-	_ret_ = String_cvm_vSprintf(self, _rest_);
+	va_start(_rest_, fmt);
+	_ret_ = String_cm_vSprintf(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
 
 
 
-#line 645 "String.d"
-ivmeth objrtn String_ivm_vBuild(object self, va_list _rest_)
-{ String_iv_t *iv = GetIVs(String, self);char * f = va_arg(_rest_, char *);
+#line 647 "String.d"
+imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
+{ String_iv_t *iv = GetIVs(String, self);
 	object obj; 
 	char *str, *pbuf; 
-	va_list ap; 
 	int len, argn, tlen; 
 	static char fun[] = "Build"; 
-	MAKE_REST(f); 
-#line 657 "String.d"
+	va_list _rest2_; 
+	va_copy(_rest2_, _rest_); 
+#line 659 "String.d"
 	UPDATE_LEN; 
 	if (f) 
 		tlen = get_string((object) f, &str, fun, 2); 
 	else 
 		tlen = iv->iLen; 
-	ASSIGN_VA_LIST(ap, _rest_); 
-	for (argn=3 ; obj = va_arg(ap, object) ; ) 
+	for (argn=3 ; obj = va_arg(_rest_, object) ; ) 
 		tlen += get_string(obj, &str, fun, argn++); 
-#line 669 "String.d"
+
+
+
 	if (tlen >= iv->iSize) { 
 		if (iv->iBlksz == 1 && !f) 
 			iv->iBlksz = ABS; 
@@ -713,50 +713,53 @@ ivmeth objrtn String_ivm_vBuild(object self, va_list _rest_)
 		pbuf += len; 
 	} else 
 		pbuf += iv->iLen; 
-	for (argn=3 ; obj = GetArg(object) ; ) { 
+	for (argn=3 ; obj = va_arg(_rest2_, object) ; ) { 
 		len = get_string(obj, &str, fun, argn++); 
 		if (len) { 
 			memcpy(pbuf, str, len); 
 			pbuf += len; 
 		} 
 	} 
+	va_end(_rest2_); 
 	*pbuf = '\0'; 
 	iv->iLen = tlen; 
 	return self; 
 } 
 
-#line 729 "String.c"
+#line 730 "String.c"
 
-static	objrtn	String_ifm_vBuild(object self, ...)
+static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 {
 	va_list	_rest_;
 	objrtn	_ret_;
-	va_start(_rest_, self);
-	_ret_ = String_ivm_vBuild(self, _rest_);
+	va_start(_rest_, f);
+	_ret_ = String_im_vBuild(self, f, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
 
 
 
-#line 701 "String.d"
-cvmeth objrtn String_cvm_vBuild(object self, va_list _rest_)
+#line 702 "String.d"
+cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 { 
 	object obj; 
 	char *str, *pbuf; 
-	va_list ap; 
-	int len, argn, tlen=0; 
+	int len, argn, tlen; 
 	static char fun[] = "Build"; 
 	object newObj = oSuper(String_c, gNew, self)(self); 
 	ivType *iv = ivPtr(newObj); 
-	MAKE_REST(self); 
+	va_list _rest2_; 
+	va_copy(_rest2_, _rest_); 
 
 
 
-
-	ASSIGN_VA_LIST(ap, _rest_); 
-	for (argn=2 ; obj = va_arg(ap, object) ; ) 
-		tlen += get_string(obj, &str, fun, argn++); 
+	if (f) { 
+		tlen = get_string((object) f, &str, fun, 2); 
+		for (argn=3 ; obj = va_arg(_rest_, object) ; ) 
+			tlen += get_string(obj, &str, fun, argn++); 
+	} else 
+		tlen = 0; 
 
 
 
@@ -766,34 +769,41 @@ cvmeth objrtn String_cvm_vBuild(object self, va_list _rest_)
 
 
 
-
 	pbuf = iv->iStr; 
-	for (argn=2 ; obj = GetArg(object) ; ) { 
-		len = get_string(obj, &str, fun, argn++); 
+	if (f) { 
+		len = get_string((object) f, &str, fun, 2); 
 		if (len) { 
 			memcpy(pbuf, str, len); 
 			pbuf += len; 
 		} 
+		for (argn=3 ; obj = va_arg(_rest2_, object) ; ) { 
+			len = get_string(obj, &str, fun, argn++); 
+			if (len) { 
+				memcpy(pbuf, str, len); 
+				pbuf += len; 
+			} 
+		} 
 	} 
+	va_end(_rest2_); 
 	*pbuf = '\0'; 
 	iv->iLen = tlen; 
 	return newObj; 
 } 
 
-#line 784 "String.c"
+#line 794 "String.c"
 
-static	objrtn	String_cfm_vBuild(object self, ...)
+static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 {
 	va_list	_rest_;
 	objrtn	_ret_;
-	va_start(_rest_, self);
-	_ret_ = String_cvm_vBuild(self, _rest_);
+	va_start(_rest_, f);
+	_ret_ = String_cm_vBuild(self, f, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
 
 
-#line 741 "String.d"
+#line 751 "String.d"
 static int get_string(object obj, char **str, char *fun, int argn) 
 { 
 	ivType *iv2; 
@@ -1274,7 +1284,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1278 "String.c"
+#line 1288 "String.c"
 
 objrtn	String_initialize(void)
 {
@@ -1308,8 +1318,8 @@ objrtn	String_initialize(void)
 	cMethodFor(String, gNewWithInt, String_cm_gNewWithInt);
 	cMethodFor(String, gNew, String_cm_gNew);
 	cMethodFor(String, gNewWithObj, String_cm_gNewWithObj);
-	cvMethodFor(String, vBuild, String_cvm_vBuild, String_cfm_vBuild);
-	cvMethodFor(String, vSprintf, String_cvm_vSprintf, String_cfm_vSprintf);
+	cvMethodFor(String, vBuild, String_cm_vBuild, String_cfm_vBuild);
+	cvMethodFor(String, vSprintf, String_cm_vSprintf, String_cfm_vSprintf);
 	iMethodFor(String, gCompareNI, String_im_gCompareNI);
 	iMethodFor(String, gAppend, String_im_gAppend);
 	iMethodFor(String, gChangeStrValue, String_im_gChangeStrValue);
@@ -1328,7 +1338,7 @@ objrtn	String_initialize(void)
 	iMethodFor(String, gToLower, String_im_gToLower);
 	iMethodFor(String, gAdvance, String_im_gAdvance);
 	iMethodFor(String, gSize, String_im_gSize);
-	ivMethodFor(String, vBuild, String_ivm_vBuild, String_ifm_vBuild);
+	ivMethodFor(String, vBuild, String_im_vBuild, String_ifm_vBuild);
 	iMethodFor(String, gChangeCharAt, String_im_gChangeCharAt);
 	iMethodFor(String, gCharValueAt, String_im_gCharValueAt);
 	iMethodFor(String, gDispose, String_im_gDispose);

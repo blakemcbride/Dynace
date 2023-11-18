@@ -53,10 +53,12 @@ imeth	int	gPutc(int i)
 	return 1 == (gWrite(self, &c, 1)) ? i : EOF;
 }
 
-ivmeth	int	vPrintf(char *fmt, ...)
+/* The following is a imeth and not a ivmeth because all vPrintf methods take the exact same arguments.
+   ivmeth and cvmeth are reserved for methods that take DIFFERENT arguments.  */
+
+imeth	int	vPrintf(char *fmt, ...)
 {
 	char	buf[1024];
-	MAKE_REST(fmt);
 
 	buf[1020] = 'E';
 	buf[1021] = 'O';

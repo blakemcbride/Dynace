@@ -67,8 +67,6 @@ imeth	gError(char *msg)
 ivmeth	vError(char *fmt, ...)
 {
 	char	buf[4096];
-	MAKE_REST(fmt);
-
 	vsprintf(buf, fmt, _rest_);
 	return gError(self, buf);
 }

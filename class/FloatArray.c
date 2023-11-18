@@ -59,14 +59,13 @@ cvmeth objrtn FloatArray_cvm_vNew(object self, va_list _rest_)
 
 #line 49 "FloatArray.d"
 	static gNewArray_t cnew = NULL; 
-	MAKE_REST(rank); 
 
 	if (!cnew) 
 		cnew = cmcPointer(Array, gNewArray); 
 	return cnew(self, AT_FLOT, rank, _rest_); 
 } 
 
-#line 70 "FloatArray.c"
+#line 69 "FloatArray.c"
 
 static	objrtn	FloatArray_cfm_vNew(object self, ...)
 {
@@ -80,14 +79,13 @@ static	objrtn	FloatArray_cfm_vNew(object self, ...)
 
 
 
-#line 57 "FloatArray.d"
+#line 56 "FloatArray.d"
 ivmeth char FloatArray_ivm_vCharValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 91 "FloatArray.c"
+#line 89 "FloatArray.c"
 
 static	char	FloatArray_ifm_vCharValue(object self, ...)
 {
@@ -101,14 +99,13 @@ static	char	FloatArray_ifm_vCharValue(object self, ...)
 
 
 
-#line 63 "FloatArray.d"
+#line 61 "FloatArray.d"
 ivmeth short FloatArray_ivm_vShortValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 112 "FloatArray.c"
+#line 109 "FloatArray.c"
 
 static	short	FloatArray_ifm_vShortValue(object self, ...)
 {
@@ -122,14 +119,13 @@ static	short	FloatArray_ifm_vShortValue(object self, ...)
 
 
 
-#line 69 "FloatArray.d"
+#line 66 "FloatArray.d"
 ivmeth unsigned short FloatArray_ivm_vUnsignedShortValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 133 "FloatArray.c"
+#line 129 "FloatArray.c"
 
 static	unsigned short	FloatArray_ifm_vUnsignedShortValue(object self, ...)
 {
@@ -143,14 +139,13 @@ static	unsigned short	FloatArray_ifm_vUnsignedShortValue(object self, ...)
 
 
 
-#line 75 "FloatArray.d"
+#line 71 "FloatArray.d"
 ivmeth long FloatArray_ivm_vLongValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 154 "FloatArray.c"
+#line 149 "FloatArray.c"
 
 static	long	FloatArray_ifm_vLongValue(object self, ...)
 {
@@ -164,14 +159,13 @@ static	long	FloatArray_ifm_vLongValue(object self, ...)
 
 
 
-#line 81 "FloatArray.d"
+#line 76 "FloatArray.d"
 ivmeth double FloatArray_ivm_vDoubleValue(object self, va_list _rest_)
 { 
-	MAKE_REST(self); 
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 175 "FloatArray.c"
+#line 169 "FloatArray.c"
 
 static	double	FloatArray_ifm_vDoubleValue(object self, ...)
 {
@@ -185,16 +179,15 @@ static	double	FloatArray_ifm_vDoubleValue(object self, ...)
 
 
 
-#line 87 "FloatArray.d"
+#line 81 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeValue(object self, va_list _rest_)
 { object val = va_arg(_rest_, object);
-	MAKE_REST(val); 
 	ChkArg(val, 2); 
 	*((TYPE *) _index(self, _rest_)) = gDoubleValue(val); 
 	return self; 
 } 
 
-#line 198 "FloatArray.c"
+#line 191 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeValue(object self, ...)
 {
@@ -208,15 +201,14 @@ static	objrtn	FloatArray_ifm_vChangeValue(object self, ...)
 
 
 
-#line 95 "FloatArray.d"
+#line 88 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeCharValue(object self, va_list _rest_)
 { int val = va_arg(_rest_, int);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 220 "FloatArray.c"
+#line 212 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeCharValue(object self, ...)
 {
@@ -230,15 +222,14 @@ static	objrtn	FloatArray_ifm_vChangeCharValue(object self, ...)
 
 
 
-#line 102 "FloatArray.d"
+#line 94 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeShortValue(object self, va_list _rest_)
 { int val = va_arg(_rest_, int);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 242 "FloatArray.c"
+#line 233 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeShortValue(object self, ...)
 {
@@ -252,15 +243,14 @@ static	objrtn	FloatArray_ifm_vChangeShortValue(object self, ...)
 
 
 
-#line 109 "FloatArray.d"
+#line 100 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeUShortValue(object self, va_list _rest_)
 { unsigned val = va_arg(_rest_, unsigned);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 264 "FloatArray.c"
+#line 254 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeUShortValue(object self, ...)
 {
@@ -274,15 +264,14 @@ static	objrtn	FloatArray_ifm_vChangeUShortValue(object self, ...)
 
 
 
-#line 116 "FloatArray.d"
+#line 106 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeLongValue(object self, va_list _rest_)
 { long val = va_arg(_rest_, long);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 286 "FloatArray.c"
+#line 275 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeLongValue(object self, ...)
 {
@@ -296,15 +285,14 @@ static	objrtn	FloatArray_ifm_vChangeLongValue(object self, ...)
 
 
 
-#line 123 "FloatArray.d"
+#line 112 "FloatArray.d"
 ivmeth objrtn FloatArray_ivm_vChangeDoubleValue(object self, va_list _rest_)
 { double val = va_arg(_rest_, double);
-	MAKE_REST(val); 
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 308 "FloatArray.c"
+#line 296 "FloatArray.c"
 
 static	objrtn	FloatArray_ifm_vChangeDoubleValue(object self, ...)
 {
@@ -317,13 +305,13 @@ static	objrtn	FloatArray_ifm_vChangeDoubleValue(object self, ...)
 }
 
 
-#line 130 "FloatArray.d"
+#line 118 "FloatArray.d"
 static void init_class(void) 
 { 
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 327 "FloatArray.c"
+#line 315 "FloatArray.c"
 
 objrtn	FloatArray_initialize(void)
 {

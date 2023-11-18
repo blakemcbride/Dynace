@@ -64,10 +64,12 @@ imeth int Stream_im_gPutc(object self, int i)
 	return 1 == (gWrite(self, &c, 1)) ? i : EOF; 
 } 
 
-ivmeth int Stream_ivm_vPrintf(object self, va_list _rest_)
-{ char * fmt = va_arg(_rest_, char *);
+
+
+
+imeth int Stream_im_vPrintf(object self, char *fmt, va_list _rest_)
+{ 
 	char buf[1024]; 
-	MAKE_REST(fmt); 
 
 	buf[1020] = 'E'; 
 	buf[1021] = 'O'; 
@@ -82,21 +84,21 @@ ivmeth int Stream_ivm_vPrintf(object self, va_list _rest_)
 	return gWrite(self, buf, strlen(buf)); 
 } 
 
-#line 86 "Stream.c"
+#line 88 "Stream.c"
 
-static	int	Stream_ifm_vPrintf(object self, ...)
+static	int	Stream_ifm_vPrintf(object self, char *fmt, ...)
 {
 	va_list	_rest_;
 	int	_ret_;
-	va_start(_rest_, self);
-	_ret_ = Stream_ivm_vPrintf(self, _rest_);
+	va_start(_rest_, fmt);
+	_ret_ = Stream_im_vPrintf(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
 
 
 
-#line 74 "Stream.d"
+#line 76 "Stream.d"
 imeth objrtn Stream_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -111,7 +113,7 @@ static void class_init(void)
 	RegisterVariable(traceStream_o); 
 } 
 
-#line 115 "Stream.c"
+#line 117 "Stream.c"
 
 objrtn	Stream_initialize(void)
 {
@@ -134,7 +136,7 @@ objrtn	Stream_initialize(void)
 	INHIBIT_THREADER;
 	Stream_c = gNewClass(Class, "Stream", 0, 0, END);
 	iMethodFor(Stream, gPuts, Stream_im_gPuts);
-	ivMethodFor(Stream, vPrintf, Stream_ivm_vPrintf, Stream_ifm_vPrintf);
+	ivMethodFor(Stream, vPrintf, Stream_im_vPrintf, Stream_ifm_vPrintf);
 	iMethodFor(Stream, gPutc, Stream_im_gPutc);
 	iMethodFor(Stream, gCopy, Stream_im_gCopy);
 	iMethodFor(Stream, gDeepCopy, Stream_im_gCopy);

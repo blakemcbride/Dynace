@@ -610,10 +610,13 @@ imeth int OutputStream_im_gPuts(object self, char *str)
 	return iv->iStream ? gPuts(iv->iStream, str) : (int)strlen(str); 
 } 
 
-ivmeth int OutputStream_ivm_vPrintf(object self, va_list _rest_)
-{ OutputStream_iv_t *iv = GetIVs(OutputStream, self);char * fmt = va_arg(_rest_, char *);
+
+
+
+
+imeth int OutputStream_im_vPrintf(object self, char *fmt, va_list _rest_)
+{ OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	char buf[256]; 
-	MAKE_REST(fmt); 
 
 	vsprintf(buf, fmt, _rest_); 
 	iv->iOLine = -20L; 
@@ -622,21 +625,21 @@ ivmeth int OutputStream_ivm_vPrintf(object self, va_list _rest_)
 	return iv->iStream ? gPuts(iv->iStream, buf) : (int)strlen(buf); 
 } 
 
-#line 626 "OutputStream.c"
+#line 629 "OutputStream.c"
 
-static	int	OutputStream_ifm_vPrintf(object self, ...)
+static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 {
 	va_list	_rest_;
 	int	_ret_;
-	va_start(_rest_, self);
-	_ret_ = OutputStream_ivm_vPrintf(self, _rest_);
+	va_start(_rest_, fmt);
+	_ret_ = OutputStream_im_vPrintf(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
 
 
 
-#line 604 "OutputStream.d"
+#line 607 "OutputStream.d"
 imeth objrtn OutputStream_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	DISPOSE(iv->iCName); 
@@ -679,7 +682,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 683 "OutputStream.c"
+#line 692 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {
@@ -711,7 +714,7 @@ objrtn	OutputStream_initialize(void)
 	iMethodFor(OutputStream, gPut, OutputStream_im_gPut);
 	iMethodFor(OutputStream, gSLineDirective, OutputStream_im_gSLineDirective);
 	iMethodFor(OutputStream, gFlushm, OutputStream_im_gFlushm);
-	ivMethodFor(OutputStream, vPrintf, OutputStream_ivm_vPrintf, OutputStream_ifm_vPrintf);
+	ivMethodFor(OutputStream, vPrintf, OutputStream_im_vPrintf, OutputStream_ifm_vPrintf);
 	iMethodFor(OutputStream, gSetOSVars, OutputStream_im_gSetOSVars);
 	iMethodFor(OutputStream, gTLineDirective, OutputStream_im_gTLineDirective);
 	iMethodFor(OutputStream, gDeepDispose, OutputStream_im_gDispose);

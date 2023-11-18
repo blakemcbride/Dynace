@@ -46,7 +46,6 @@ static	gIndex_t	_index;
 cvmeth	vNew(unsigned rank, ...)
 {
 	static	gNewArray_t	cnew = NULL;
-	MAKE_REST(rank);
 
 	if (!cnew)
 		cnew = cmcPointer(Array, gNewArray);
@@ -55,13 +54,11 @@ cvmeth	vNew(unsigned rank, ...)
 
 ivmeth	void	*vPointerValue(...)
 {
-	MAKE_REST(self);
 	return *((TYPE *) _index(self, _rest_));
 }
 
 ivmeth	vChangeValue(void *val, ...)
 {
-	MAKE_REST(val);
 	*((TYPE *) _index(self, _rest_)) = val;
 	return self;
 }
