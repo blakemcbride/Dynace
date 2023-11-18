@@ -616,6 +616,13 @@ smooth, reliable, and efficient operation of an application without
 ever having to worry about freeing any objects.
 
 @subsection Threads
+
+Dynace provides two different methods of multi-thread support.  One is
+the Dynace-provided thread-sharing mechanism where all of the
+application threads share a single operating system thread.  The
+second capability is support of true multi-OS-threads so that your
+application can take advantage of multiple CPUs.
+
 In a normal C program when one function calls another the first function
 waits until the second function completes before it may continue.  The
 program follows a single line, or @emph{thread}, of execution.  In a
@@ -640,20 +647,16 @@ perform other data entry/query operations in another thread.
 Dynace supports multiple threads in a semi-preemptive, round robin,
 priority based system.  Dynace uses the system timer to assure that
 each thread gets equal access to CPU time.  Semi-preemptive operation
-is achieved by the fact that Dynace performs automatic thread switching
-whenever a generic function is called (if the thread's time is up).
-Each thread has a priority associated with it.  Higher priority
-threads get first access to CPU time, while threads of equal priority
-share CPU time equally.
+is achieved by the fact that Dynace performs automatic thread
+switching whenever a generic function is called (if the thread's time
+is up).  Each thread has a priority associated with it.  Higher
+priority threads get first access to CPU time, while threads of equal
+priority share CPU time equally.
 
 Dynace supports threads being put on hold, released, priority changed,
 waiting for other threads, getting thread return values, and a
 blocking @code{getkey} function.  Threads on hold or otherwise not
 running require no CPU time.
-
-In addition to Dynace's thread facility, Dynace also supports true
-native threads provided by the underlying system.
-
 
 @subsection Pipes
 Once there are multiple threads running there arises a need to coordinate

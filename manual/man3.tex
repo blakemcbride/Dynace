@@ -43,51 +43,19 @@ programs located under the @code{\DYNACE\EXAMPLES} directory in the
 order in which they appear.
 
 @subsection Build Utilities
-All the utilities used to build Dynace applications are contained within
-the Dynace package and the command line utilities (compiler, linker,
-etc.) which come with your compiler.  Dynace utilizes special utilities
-and build procedures designed to intelligently minimize the need for
-re-compilation.  These procedures are too complex for IDEs which come
-with the various compilers.  For this reason the IDE environments which
-come with your compiler are not used.  Instead, the included
-@code{dmake} make utility is used.
-
-Having said that, however, you may still use the IDE for editing and
-debugging.  You may also be able to find a way of integrating the
-supplied make files and procedures into your favorite IDE.
-
-@subsection DMAKE Build Setup
-This section lists environment variables which must be set for the
-DMAKE build.
-
-The @code{\DYANCE\BIN} directory should be part of the search path used
-by your system for executable programs (the @code{PATH} environment
-variable).
-
-The following environment variables should be set as follows (modify as
-appropriate):
-@example
-@group
-set MAKESTARTUP=c:\dynace\utils\startup.mk
-set TMPDIR=c:\tmp
-set DOS4G=quiet
-set DOS16M=:4M
-@end group
-@end example
-
-The @code{DOS4G} and @code{DOS16M} environment variables are only necessary
-when running the 32 bit DOS version of @code{dpp.exe} which has been
-compiled with the WATCOM compiler.  Win32 or other versions of @code{dpp}
-do not require these variables.
-
-Although not required by the example programs, Microsoft users may find
-it convenient to add @code{\DYNACE\INCLUDE} and @code{\DYNACE\LIB} to
-your compiler's include and library search paths respectively.
-
-Borland users will need to adjust the @code{BORLAND_HOME} path setting
-in the @code{B16.DM} and @code{B32.DM} makefiles located in all the
-example and Dynace source code directories.
-
+All the utilities used to build Dynace applications are contained
+within the Dynace package and the command line utilities (compiler,
+linker, etc.) which come with your compiler.  Dynace utilizes special
+utilities and build procedures designed to intelligently minimize the
+need for re-compilation.  These procedures are too complex for IDEs
+which come with the various compilers.  For this reason the IDE
+environments which come with your compiler are not used.  Instead,
+uder Windows, the Microsoft-supplied @emph{nmake} utility is used.  Under all
+other Unix-like operating system such as Linux and mac, GNU Make is
+utilized.  Having said that, however, you may still use the IDE for
+editing and debugging.  You may also be able to find a way of
+integrating the supplied make files and procedures into your favorite
+IDE.
 
 @subsection Building Dynace From Scratch
 The procedure used to build Dynace from scratch is fully described
@@ -101,9 +69,8 @@ New users will want to read all the files in the @code{docs} directory.
 
 
 @subsection Examples Setup
-All examples are buildable under all supported environments and build
-procedures including 16 and 32 bit environments.  The only difference is
-the makefile used.
+All examples are buildable under all supported environments.  The only
+difference is the makefile used.
 
 
 
@@ -128,31 +95,12 @@ In addition to the above, the following build/system specific make
 files are used.
 
 @table @asis
-@item M32.DM
-DMAKE makefile for Microsoft Visual C 32 bit
+@item MAKEFILE.MSC
+NMAKE makefile for Microsoft Visual C 32 & 64 bit
 
-@item MAKEFILE.UNX
-GNU MAKE makefile for Unix or Linux systems
-
-@item MKFILE
-Makefile for the Plan 9 operating system
-
-@item M16.DM
-DMAKE makefile for Microsoft Visual C 16 bit
-
-@item B16.DM
-DMAKE makefile for Borland C 16 bit
-
-@item B32.DM
-DMAKE makefile for Borland C 32 bit
-
-@item W32.DM
-DMAKE makefile for WATCOM C 32 bit
-
-@item S32.DM
-DMAKE makefile for Symantec C 32 bit
+@item MAKEFILE
+GNU MAKE makefile for Unix, Linux, Mac, BSD, etc.@ systems
 @end table
-
 
 Once an application is built, the only file needed to run it is
 @code{MAIN.EXE}.
@@ -160,20 +108,18 @@ Once an application is built, the only file needed to run it is
 
 
 @subsection Building The Examples
-In order to build with the DMAKE command line utility execute the
+In order to build with the NMAKE command line utility execute the
 following command.
 
 @example
-dmake -f MAKEFILE.DM
+nmake -f makefile.msc
 @end example
-
-where @code{MAKEFILE.DM} is one of the DMAKE makefiles listed above.
 
 Alternatively, you can use the following command to create a debug
 version of the example:
 
 @example
-dmake -f MAKEFILE.DM  DEBUG=1
+nmake -f makefile.msc  DEBUG=1
 @end example
 
 
@@ -203,15 +149,6 @@ all the compiler, linker and other options will be preset.  The best
 examples to start with would be one of the ones which define a new
 class.  Their makefiles are designed to handle class files in
 a very convenient and automated way.
-
-@subsection DMAKE
-DMAKE is a very powerful, portable and enhanced make utility developed
-by Dennis Vadura.  It is freely distributable and not owned by
-Algorithms Corporation or Blake McBride.  Complete documentation for this utility
-is contained in @code{\DYNACE\DOCS\DMAKE.MAN}
-
-
-
 
 
 @page
@@ -981,12 +918,13 @@ The following table lists the available method types:
 This indicates an instance method with compile time argument checking
 enabled.  Use of this option requires that all methods associated
 with a specific generic function all have the exact same argument
-signature.
+signature (even if they take a varible number of arguments (``...'')).
 
 @item cmeth
 This indicates a class method with compile time argument checking
-enabled.  Use of this option requires that all methods associated with a
-specific generic function all have the exact same argument signature.
+enabled.  Use of this option requires that all methods associated with
+a specific generic function all have the exact same argument signature
+(even if they take a varible number of arguments (``...'')).
 
 @item ivmeth
 This indicates an instance method with compile time argument checking
@@ -1169,12 +1107,22 @@ the @code{-X} @code{dpp} option is used.
 
 
 
+@subsubsection Variable Arguments
 
+Dynace methods may be defined to take a variable number of arguments
+(e.g. ``...'').  If all methods with the same name have the same number
+and type of fixed arguments then the method should be declared as an
+@code{imeth} or @code{cmeth}.  However, if the fixed arguments are not
+the same then @code{ivmeth} of @code{cvmeth} should be used.
 
+The method argument list should end in ``@code{...}''  However, internal
+to the method the variable @code{_rest_} will automatically be
+initialized to the variable argument list (@code{va_list}.  Normal
+@code{va_arg} may be used to obtain the arguments.  @code{va_end}
+should not be used on @code{_rest_}.
 
-
-
-
+@code{ivmeth} or @code{cvmeth} should be used only when the fixed argument list
+is different among methods with the same name.
 
 
 @subsubsection Private Method Definition
@@ -2265,19 +2213,22 @@ To use this option you would use @code{-Sn} where @code{n} is a number
 between 1 and 4.  There is no space between the @code{-S} and the number.
 The various strategies are as follows:
 
-Strategy 1 incorporates a small, system and compiler specific, piece of
-assembler code.  This strategy is the most efficient and the most
-recommended.  This assembler piece is supplied for many of the popular
-platforms.  Writing the assembler piece for a new platform is very easy
-for an assembler expert and documented in the next section of this manual.
+Strategy 1 incorporates a small, system and compiler specific, piece
+of assembler code.  This strategy is the most efficient.  This
+assembler piece is supplied for many of the popular platforms.
+Writing the assembler piece for a new platform is very easy for an
+assembler expert and documented in the next section of this manual.
 The only down side of this strategy is lack of portability (if the
-assembler piece is unavailable).
+assembler piece is unavailable). @strong{Note:} Due to the ever-changing
+CPU landscape, the difficulty in maintaining this code, the lack of portability,
+and the decreased value due to compiler optimizations, Strategy 1 has
+been deprecated.  Strategy 2 (the default strategy is recommended.)
 
-Strategy 2 uses a total C based approach.  This strategy maximizes
-portability and for that reason it is the default strategy and the one
-used to generate the Dynace system as shipped.  The down side to this
-strategy is that it is less efficient in terms of execution speed and
-stack space use than strategy 1.
+
+Strategy 2 uses a total C based approach.  This is the default and
+recommended method.  This strategy maximizes portability and for that
+reason it is the default strategy and the one used to generate the
+Dynace system as shipped.  
 
 Strategy 3 attempts to reduce the runtime overhead associated with
 strategy 2 by the use of C++'s inline function facility.  The resulting
@@ -2379,7 +2330,7 @@ the argument list or return type associated with a generic.
 With a little programmer cooperation and the disassociation (for make
 utility purposes) of the @code{generics.h} file from other source
 modules the need for re-compiles can be very drastically reduced.  The
-make utility DMAKE and the example programs (the ones which create
+make utility and the example programs (the ones which create
 classes) were designed with these concepts in mind.  Emulation of
 these approaches is highly advised.
 
@@ -3024,26 +2975,10 @@ The generics file must always be compiled with the optimization options
 (usually maximum) defined in the makefiles.
 
 
-@subsection DMAKE
-The makefile utility used for all builds, except unix, is DMAKE.
-DMAKE is a very powerful, portable and enhanced make utility developed
-by Dennis Vadura.  It is freely distributable and not owned by
-Algorithms Corporation or Blake McBride.  Complete documentation for this utility
-is contained in @code{\DYNACE\DOCS\DMAKE.MAN}
-
-@subsection MS--DOS
-
-All 16 bit MS--DOS libraries were built using the large memory model.  There
-is no reason why Dynace could not be run in other models other than the
-size restrictions they present.  
-
-Compilation for other memory model may require different jumpTo assembler
-code which is not needed when using the default @code{dpp} strategy of 2.
-
 @subsubsection Microsoft Visual C++
 
-The makefiles used for this compiler are all called @code{M16.DM} or
-@code{M32.DM} depending on whether it's for the 16 or 32 bit compiler.
+The makefiles used for this compiler are all called @code{makefile.msc}.
+These builds work in both 32 and 64 bits.
 
 Since the Dynace threader makes use of setjmp/longjmp and the Microsoft
 Visual C++ documentation recommends not to use most of the optimization
@@ -3056,98 +2991,16 @@ optimization may be used.
 Maximum optimization with no stack checking must always be used when
 compiling the generics file.
 
-Jumto assembler for both the 16 and 32 bit compilers are provided for
-this compiler so any @code{dpp} strategy may be used.
-
-@subsubsection WATCOM Compilers
-
-The makefiles used for this compiler are all called
-@code{W32.DM}.
-
-All testing was done with WATCOM C/C++^32 version 10.0.
-Versions 9.0 and 9.5 were used in the past.
-
-The flat memory model is used with argument passing on the stack.  The
-target system is DOS4G.  
-
-When switching between version 9.0 and 9.5 of the compiler two different
-jumpTo routines must be used.  @code{jumpto.w} is for version 9.5 and
-10.0, @code{jumpto.w90} is for version 9.0.
-
-Maximum optimization with no stack checking must always be used when
-compiling the generics file.
-
-@subsubsection Borland C++
-
-The makefiles used for this compiler are all called @code{B16.DM} or
-@code{B32.DM} depending on whether the 16 or 32 bit compiler is used.
-
-Since the Dynace threader makes use of setjmp/longjmp and the Borland C++
-documentation recommends not to use most of the optimization features
-when setjmp is used, it is recommended to use only the optimization
-options used in the included make files.  If the threader is not going
-to be used much heavier optimization may be used.
-
-The Dynace threader will not run under the huge model with the Borland
-compiler due to what is believed to be a problem with the Borland
-huge model setjmp/longjmp functions.
-
-Maximum optimization must always be used when compiling the generics
-file.
-
-Jumto assembler for both the 16 and 32 bit compilers are provided for
-this compiler so any @code{dpp} strategy may be used.
-
-@subsubsection Symantec C++
-
-The makefiles used for this compiler are all called 
-@code{S32.DM} for their 32 bit compiler.
-
-Symantec compilers version 7.2 and prior are known not to work due to
-compiler bugs.  Version 7.2 plus a patch from Symantec as well as 7.21
-did work.
-
-There is no jumpto assembler code for this compiler so @code{dpp}
-strategies 2 or above must be used.  The 16 bit version of their
-compiler was never tested.
-
 @subsection UNIX
 
-The makefiles associated with the UNIX build are all named makefile.unx.
+The makefiles associated with the UNIX build are all named @emph{makefile}.
 
-Only the GNU C compiler has been used.
+Only the GNU C compiler and GNU Make utility have been used.
 
-Because of the linear memory associated with UNIX (or other 32 bit
-environments) Dynace runs quite well under it.
-
-Since DOS puts CR/LF pairs at the end of each line and UNIX expects just
-a LF there is a problem with several source files.  Since Dynace uses
-multi-line macros UNIX expects lines which are continued to end in
-backslash/LF combinations.  In DOS they end in backslash/CR/LF
-combinations.  The extra CR causes a problem under UNIX.  In order to
-fix the source files (get rid of the extra CR) Dynace includes a utility
-(in source form) to correct the files.  The utility is called
-@code{delcr.c} and is located under the @code{bin} directory.  It may be
-compiled and applied to all @code{*.c, *.h, *.s, makefile.unx, readme}
-files.  The files which causes the most trouble are
-@code{dynl.h} under the @code{include} directory, @code{thread.c}
-under the @code{threads} directory, @code{array2.h} under the
-@code{class} directory and all the @code{makefile.unx} files.
-@code{delcr} may be used by simply naming the files to be converted on
-the command line.  Wild characters are ok.
+Because of the linear memory associated with UNIX Dynace runs quite well under it.
 
 In addition note that the top level makefile is set up to correct
 all the files in the system automatically.
-
-The @code{-O} option cannot be used with any GNU C compiler prior to
-version 2.5.  This is because functions declared volatile (returning
-type object) were assumed not to ever return (by design).  This
-feature has been eliminated in GNU C 2.5.
-
-Although we can not support it, Dynace has been ported to the Sun/SPARC
-and Alpha chip environments by some of our users.  The jumpTo code is
-contained in the file name @code{jumpto.s2}.  All necessary files are
-included with the system.  See the makefiles for additional information.
 
 @subsection Using A Debugger
 
