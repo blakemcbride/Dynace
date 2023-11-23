@@ -2,7 +2,7 @@
 ifdef DEBUG
 OPT = -g
 else
-OPT = -O
+OPT = -O3
 endif
 
 .SUFFIXES: .d .iv
