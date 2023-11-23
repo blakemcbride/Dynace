@@ -1,5 +1,5 @@
 *.obj
-*.o
+**/*.o
 *.bak
 *~
 TAGS
@@ -35,4 +35,3 @@ manual/*.toc
 manual/*.tp
 manual/*.vr
 manual/s-*
-core
