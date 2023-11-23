@@ -1,8 +1,8 @@
-*.obj
+**/*.obj
 **/*.o
-*.bak
-*~
-TAGS
+**/*.bak
+**/*~
+**/TAGS
 bin/delcr
 bin/dpp
 bin/*.exe
@@ -13,10 +13,10 @@ generics/generics.h
 lib/
 setup.unx
 setup.win
-allok
+**/allok
 allok.nm
 allok.cm
-curlib
+**/curlib
 curlib.nm
 curlib.cm
 generics.1
