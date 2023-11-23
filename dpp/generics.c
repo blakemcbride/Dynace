@@ -114,6 +114,7 @@ object	Generic(gChangeValueWithObj);
 object	Generic(gChangeValueWithStr);
 object	Generic(gCharValue);
 object	Generic(gCharValueAt);
+object	Generic(gCheckFreeList);
 object	Generic(gChild);
 object	Generic(gCloseLogFile);
 object	Generic(gCompare);
@@ -816,6 +817,11 @@ static	char	_gCharValue(object self)
 static	char	_gCharValueAt(object self, int i)
 {
 	return (*(gCharValueAt_t)_FindMethod(self, Generic(gCharValueAt)))(self, i);
+}
+
+static	int	_gCheckFreeList(object self)
+{
+	return (*(gCheckFreeList_t)_FindMethod(self, Generic(gCheckFreeList)))(self);
 }
 
 static	objrtn	_gChild(object self)
@@ -3035,6 +3041,7 @@ gChangeValueWithObj_t	gChangeValueWithObj = _gChangeValueWithObj;
 gChangeValueWithStr_t	gChangeValueWithStr = _gChangeValueWithStr;
 gCharValue_t	gCharValue = _gCharValue;
 gCharValueAt_t	gCharValueAt = _gCharValueAt;
+gCheckFreeList_t	gCheckFreeList = _gCheckFreeList;
 gChild_t	gChild = _gChild;
 gCloseLogFile_t	gCloseLogFile = _gCloseLogFile;
 gCompare_t	gCompare = _gCompare;
@@ -3505,6 +3512,7 @@ void	InitGenerics()
 	InitGeneric( gChangeValueWithStr );
 	InitGeneric( gCharValue );
 	InitGeneric( gCharValueAt );
+	InitGeneric( gCheckFreeList );
 	InitGeneric( gChild );
 	InitGeneric( gCloseLogFile );
 	InitGeneric( gCompare );

@@ -104,6 +104,7 @@ cmeth objrtn Dynace_cm_gDumpObjectsString(object self, int type){}
 cmeth objrtn Dynace_cm_gDumpObjectsDiff(object self, object sd1, object sd2){} 
 cmeth objrtn Dynace_cm_gMarkMemoryBeginning(object self){} 
 cmeth objrtn Dynace_cm_gDumpMemoryDiff(object self, object d1, char *fname){} 
+cmeth int Dynace_cm_gCheckFreeList(object self){} 
 
 #endif 
 

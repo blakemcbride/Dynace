@@ -107,6 +107,7 @@ typedef	struct	memory_range  {
 #define EVEN(x)		((x) + ((x) % 2))
 #endif
 
+//#define     ENABLE_CHECK_FREE_LIST   // for debugging
 
 int	_CheckObjects_ = 1;		/*  turn object checking on/off  */
 
@@ -575,8 +576,19 @@ LOCAL	void	extend_storage(Behavior_iv_t *cv)
 	cv->nai += cv->nipib;
 	fl = (free_list *) (ib + 1);
 	for (i=0 ; i != cv->nipib ; ++i)  {
-		((object) fl)->tag = (OBJ_FREE | ALLOC_HEAP);
-		((object) fl)->siz = 0;
+              int     sz;
+              unsigned char   *p;
+ 
+              object obj = (object) fl;
+              obj->tag = (OBJ_FREE | ALLOC_HEAP);
+              obj->siz = 0;
+#ifdef        ENABLE_CHECK_FREE_LIST
+              // set to known value for testing memory overwrites
+              sz = cv->effective_iv_size - sizeof(free_list);
+              p = (unsigned char *) fl + sizeof(free_list);
+              while (sz--)
+                      *p++ = 0xff;
+#endif
 		fl->next = cv->fl;
 		cv->fl = fl;
 		fl = (free_list *) ((char *) fl + is);
@@ -584,6 +596,76 @@ LOCAL	void	extend_storage(Behavior_iv_t *cv)
 }
 
 #endif
+
+static char *formatHex(char *buf, void *p)
+{
+	char	t[30], *pt, *pb;
+	int	len, nc, i;
+
+	sprintf(t, "%p", p);
+	for (pt=t ; *pt ; pt++);
+	len = pt - t;
+	pt--;
+	nc = (len - 2) / 4 - 1;
+	if (nc < 0)
+		nc = 0;
+	pb = buf + len + nc;
+	*pb-- = '\0';
+	for (i=0 ; pt >= t ; i++) {
+		if (i && !(i % 4) && pb-buf > 3)
+			*pb-- = ',';
+		*pb-- = *pt--;
+	}
+	return buf;
+}
+
+cmeth	int	Dynace_cm_gCheckFreeList(object self)
+{
+	int	r = 0;
+#ifdef	ENABLE_CHECK_FREE_LIST
+	object	c;
+	Behavior_iv_t	*cv;
+	free_list *fl;
+	int	inRange, ibs;
+	instance_block *ib;
+	char	buf1[30], buf2[30], buf3[30];
+
+	ENTERCRITICALSECTION(MCL_CS);
+	for (c=MCL ; c ; c = cv->next)  {
+		cv = SCIV(c);
+		ibs = cv->effective_iv_size * cv->nipib + sizeof(instance_block);
+		for (fl=cv->fl ; fl ; fl=fl->next) {
+			int sz = cv->effective_iv_size - sizeof(free_list);
+			unsigned char *p = (unsigned char *) fl + sizeof(free_list);
+
+			inRange = 0;
+			for (ib=cv->ib ; ib ; ib=ib->next) {
+				if ((char *) fl > (char *) ib && (char *) fl < (char *) ib + ibs) {
+					inRange = 1;
+					break;
+				}
+			}
+			if (!inRange) {
+				r = 2;  // error - bad freelist pointer
+				goto end;
+			}
+
+			while (sz--)
+				if (*p++ != 0xff) {
+					sz = cv->effective_iv_size - sizeof(free_list);
+					p = (unsigned char *) fl + sizeof(free_list);
+
+					r = 1;  //  error - data clobbered
+					goto end;
+				}
+		}
+	}
+end:
+	LEAVECRITICALSECTION(MCL_CS);
+#endif
+	USE(self);
+	return r;
+}
 
 imeth	objrtn	Behavior_im_gNew(object self)
 {
@@ -1566,6 +1648,15 @@ imeth	objrtn	Object_im_gDispose(object self)
 	cv = SCIV(ClassOf(self));
 	ENTERCRITICALSECTION(cv->cs);
 #ifndef	BOEHM_GC
+#ifdef	ENABLE_CHECK_FREE_LIST
+	{
+		// set to known value for testing memory overwrites
+		int sz = cv->effective_iv_size - sizeof(free_list);
+		unsigned char *p = (unsigned char *) self + sizeof(free_list);
+		while (sz--)
+			*p++ = 0xff;
+	}
+#endif
 	fl = (free_list *) self;
 	fl->next = cv->fl;
 	cv->fl = fl;
@@ -2549,6 +2640,7 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 	cMethodFor(Dynace, gMaxMemUsed, Dynace_cm_gMaxMemUsed);
 	cMethodFor(Dynace, gCurMemUsed, Dynace_cm_gCurMemUsed);
 	cMethodFor(Dynace, gNumbGC, Dynace_cm_gNumbGC);
+	cMethodFor(Dynace, gCheckFreeList, Dynace_cm_gCheckFreeList);
 	cMethodFor(Dynace, gMaxAfterGC, Dynace_cm_gMaxAfterGC);
 	cMethodFor(Dynace, gDumpObjects, Dynace_cm_gDumpObjects);
 	cMethodFor(Dynace, gDumpObjectsString, Dynace_cm_gDumpObjectsString);
