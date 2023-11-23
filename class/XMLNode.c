@@ -35,9 +35,11 @@
 
 
 
-#line 33 "XMLNode.d"
+#line 30 "XMLNode.d"
 #include "generics.h" 
 
+#include <stdio.h> 
+#include <stdlib.h> 
 #include <ctype.h> 
 #include <string.h> 
 
@@ -68,7 +70,7 @@ typedef struct {
 object	XMLNode_c;
 
 
-#line 72 "XMLNode.c"
+#line 74 "XMLNode.c"
 typedef struct  _XMLNode_iv_t  {
 	int iType;
 	char * iName;
@@ -86,7 +88,7 @@ typedef struct  _XMLNode_iv_t  {
 }	XMLNode_iv_t;
 
 
-#line 77 "XMLNode.d"
+#line 76 "XMLNode.d"
 typedef struct { 
 	char *buf; 
 	int sz; 
@@ -97,7 +99,7 @@ typedef struct {
 PMETHOD objrtn parse(object self, InputStream *is); 
 static char *strsave(char *x); 
 PMETHOD objrtn new_tag(object self, InputStream *is, string *pstr); 
-PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf, object owner); 
+PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf, object owner, string *pstr); 
 PMETHOD void dump_xml(object self, int lvl, object fp, int next); 
 PMETHOD objrtn parse_comment(object self, InputStream *is, string *pstr); 
 PMETHOD objrtn parse_cdata(object self, InputStream *is, string *pstr); 
@@ -161,7 +163,7 @@ cmeth objrtn XMLNode_cm_gParseString(object self, char *str, long *line, long *c
 	return r; 
 } 
 
-#line 157 "XMLNode.d"
+#line 156 "XMLNode.d"
 #define CHECK_SIZE if (p - pstr->buf == pstr->sz - 3) { char *tp = pstr->buf; pstr->sz *= 2; pstr->buf = (char *) realloc(pstr->buf, pstr->sz); p = pstr->buf + (p-tp); } 
 
 
@@ -250,7 +252,7 @@ PMETHOD objrtn parse(object self, InputStream *is)
 					goto er1; 
 				p = str.buf; 
 				while (isname(c)) { 
-					*p++ = c; 
+					ADDCHR(c); 
 					if (EOF == (c=GETC(is))) 
 						goto er1; 
 				} 
@@ -525,7 +527,7 @@ PMETHOD objrtn new_tag(object self, InputStream *is, string *pstr)
 	if (c == EOF) 
 		return NULL; 
 	while (EOF != c && isname(c)) { 
-		*p++ = c; 
+		ADDCHR(c); 
 		c = GETC(is); 
 	} 
 	if (c == EOF || p == pstr->buf) 
@@ -540,7 +542,7 @@ PMETHOD objrtn new_tag(object self, InputStream *is, string *pstr)
 	if (c == EOF) 
 		return gDispose(n); 
 	if (isname(c)) { 
-		if (!(niv->iAttributes = parse_attributes(self, c, is, pstr->buf, n))) 
+		if (!(niv->iAttributes = parse_attributes(self, c, is, pstr->buf, n, pstr))) 
 			return gDispose(n); 
 		c = GETC(is); 
 		if (c == EOF) 
@@ -555,7 +557,7 @@ PMETHOD objrtn new_tag(object self, InputStream *is, string *pstr)
 	return n; 
 } 
 
-PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf, object owner)
+PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf, object owner, string *pstr)
 { 
 	object s = NULL, a, pn = NULL; 
 	ivType *aiv, *piv=NULL; 
@@ -577,7 +579,8 @@ PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf,
 		pn = a; 
 		piv = aiv; 
 		for (p=buf ; isname(c) ; ) { 
-			*p++ = c; 
+			ADDCHR(c); 
+
 			c = GETC(is); 
 			if (c == EOF || !isname(c) && c != '=' && !isspace(c)) 
 				return gDeepDispose(s); 
@@ -628,7 +631,8 @@ PMETHOD objrtn parse_attributes(object self, char c, InputStream *is, char *buf,
 				else 
 					return gDeepDispose(s); 
 			} else 
-				*p++ = c; 
+				ADDCHR(c); 
+
 			c = GETC(is); 
 		} 
 		*p = '\0'; 
@@ -1018,7 +1022,7 @@ PMETHOD void dump_xml(object self, int lvl, object fp, int next)
 	tabs[0] = '\0'; 
 #endif 
 
-#line 1012 "XMLNode.d"
+#line 1013 "XMLNode.d"
 		for (; self ; self=next?iv->iNextNode:NULL) { 
 		iv = ivPtr(self); 
 		if (iv->iType == DOCUMENT_NODE) { 
@@ -1071,7 +1075,7 @@ static int isAllSpace(char *s)
 #endif 
 
 
-#line 1063 "XMLNode.d"
+#line 1064 "XMLNode.d"
 imeth char * XMLNode_im_gName(object self)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	return iv->iName; 
@@ -1430,7 +1434,7 @@ PMETHOD void xpath_recurse(object self, object *res2, char *name, int sub_type, 
 } 
 
 
-#line 1446 "XMLNode.d"
+#line 1447 "XMLNode.d"
 PMETHOD objrtn pXPath(object self, char *path)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	char name[128], *p, sub_attr[128], sub_val[128]; 
@@ -1716,7 +1720,7 @@ main(int argc, char *argv[])
 #else 
 
 
-#line 1729 "XMLNode.d"
+#line 1730 "XMLNode.d"
 	dom = gNewDocument(XMLNode); 
 	gAppendChild(dom, res=gCreateElement(XMLNode, "FatCat")); 
 	gSetAttribute(res, "COLOR", "Red"); 
@@ -1725,14 +1729,14 @@ main(int argc, char *argv[])
 #endif 
 
 
-#line 1735 "XMLNode.d"
+#line 1736 "XMLNode.d"
 	return 0; 
 } 
 
 #endif 
 
 
-#line 1736 "XMLNode.c"
+#line 1740 "XMLNode.c"
 
 objrtn	XMLNode_initialize(void)
 {

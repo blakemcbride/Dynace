@@ -26,12 +26,11 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
- 
-
-
 
 #include "generics.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
@@ -51,7 +50,7 @@ typedef	struct {
 
 #define	GETC(is)	(is->fp ? (getc(is->fp)) : (*is->ptr ? *is->ptr++ : EOF))
 #define	UNGETC(c, is)	(is->fp ? ungetc(c, is->fp) : *--is->ptr)
-#define	REWIND(is)	if (is->fp)  rewind(is->fp); else is->ptr = is->buf
+#define	REWIND(is)	if (is->fp) rewind(is->fp); else is->ptr = is->buf
 #define	FTELL(is)	(is->fp ? ftell(is->fp) : is->ptr - is->buf)
 
 
@@ -84,7 +83,7 @@ typedef	struct {
 private	cmeth	object	parse(InputStream *is);
 static	char	*strsave(char *x);
 private	cmeth	object	new_tag(InputStream *is, string *pstr);
-private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner);
+private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner, string *pstr);
 private	imeth	void	dump_xml(int lvl, object fp, int next);
 private	cmeth	object	parse_comment(InputStream *is, string *pstr);
 private	cmeth	object	parse_cdata(InputStream *is, string *pstr);
@@ -126,7 +125,7 @@ cmeth	gParseString(char *str, long *line, long *col, long *pos)
 {
 	InputStream	is;
 	object	r;
-	
+
 	is.fp = NULL;
 	is.buf = is.ptr = str;
 	is.error = 0;
@@ -160,14 +159,14 @@ cmeth	gParseString(char *str, long *line, long *col, long *pos)
 	CHECK_SIZE;	\
 	*p++ = c;	\
 }
-   
+
 private	cmeth	object	parse(InputStream *is)
 {
 	object	n = NULL, head = NULL, t;
 	char	c, *p;
 	string	str, *pstr = &str;
 	ivType	*tiv, *niv;
-	
+
 	while (EOF != (c=GETC(is))  &&  c != '<');
 	if (c == EOF)
 		return NULL;
@@ -242,7 +241,7 @@ private	cmeth	object	parse(InputStream *is)
 					goto er1;
 				p = str.buf;
 				while (isname(c)) {
-					*p++ = c;
+					ADDCHR(c);
 					if (EOF == (c=GETC(is)))
 						goto er1;
 				}
@@ -496,7 +495,7 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	object	n;
 	ivType	*niv;
 	char	c, *p = pstr->buf;
-	
+
 	if (EOF == (c = GETC(is)))
 		return NULL;
 	if (c == '!') {
@@ -517,7 +516,7 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	if (c == EOF)
 		return NULL;
 	while (EOF != c  &&  isname(c)) {
-		*p++ = c;
+		ADDCHR(c);
 		c = GETC(is);
 	}
 	if (c == EOF  ||  p == pstr->buf)
@@ -532,7 +531,7 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	if (c ==  EOF)
 		return gDispose(n);
 	if (isname(c)) {
-		if (!(niv->iAttributes = parse_attributes(self, c, is, pstr->buf, n)))
+		if (!(niv->iAttributes = parse_attributes(self, c, is, pstr->buf, n, pstr)))
 			return gDispose(n);
 		c = GETC(is);
 		if (c ==  EOF)
@@ -547,7 +546,7 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	return n;
 }
 
-private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner)
+private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner, string* pstr)
 {
 	object	s = NULL, a, pn = NULL;
 	ivType	*aiv, *piv=NULL;
@@ -569,7 +568,8 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 		pn = a;
 		piv = aiv;
 		for (p=buf ; isname(c) ; ) {
-			*p++ = c;
+			ADDCHR(c);
+//			*p++ = c;
 			c = GETC(is);
 			if (c == EOF  ||  !isname(c)  &&  c != '='  &&  !isspace(c))
 				return gDeepDispose(s);
@@ -620,7 +620,8 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 				else
 					return gDeepDispose(s);
 			} else
-				*p++ = c;
+				ADDCHR(c);
+//				*p++ = c;
 			c = GETC(is);
 		}
 		*p = '\0';
@@ -1738,7 +1739,15 @@ main(int argc, char *argv[])
 #endif
 
 
-
+/*
+ *
+ *	Copyright (c) 1993-1996 Blake McBride (blake@mcbride.name)
+ *
+ *	ALL RIGHTS RESERVED.
+ *
+ *
+ *
+ */
 
 
 
