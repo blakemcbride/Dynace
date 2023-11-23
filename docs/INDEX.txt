@@ -16,7 +16,9 @@ BUILD.txt	describes how to build the system from scratch
 
 dmake.man	DMAKE (make used under DOS & all Windows) manual
 
-classes		text list of Dynace classes
+classes		list of Dynace classes (This is an important file because this
+		file contains a list of all classes some of which have not yet 
+		been documented in the manual yet.)
 
 headers?.txt	discussion of Dynace's header file approach - used as part
 		of a discussion on the Dynace mailing list
