@@ -113,7 +113,7 @@ static void class_init(void)
 	RegisterVariable(traceStream_o); 
 } 
 
-#line 117 "Stream.c"
+#line 123 "Stream.c"
 
 objrtn	Stream_initialize(void)
 {

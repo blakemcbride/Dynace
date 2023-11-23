@@ -233,6 +233,7 @@ object	Generic(gGetCharFromNode);
 object	Generic(gGetCipher);
 object	Generic(gGetContentType);
 object	Generic(gGetErrorCode);
+object	Generic(gGetErrorMessage);
 object	Generic(gGetErrorStr);
 object	Generic(gGetFixedName);
 object	Generic(gGetFloatFromNode);
@@ -247,6 +248,9 @@ object	Generic(gGetName);
 object	Generic(gGetParent);
 object	Generic(gGetPeerCertificateIssuerName);
 object	Generic(gGetPeerCertificateSubjectName);
+object	Generic(gGetResponse);
+object	Generic(gGetResponseHeader);
+object	Generic(gGetResponseHeaders);
 object	Generic(gGetSessionInfo);
 object	Generic(gGetStr);
 object	Generic(gGetTotalBytesRead);
@@ -269,6 +273,8 @@ object	Generic(gInsertObjAt);
 object	Generic(gInstanceSize);
 object	Generic(gIntKey);
 object	Generic(gIntValue);
+object	Generic(gInternetSetOption);
+object	Generic(gInternetSetOptionDirect);
 object	Generic(gInvalidObject);
 object	Generic(gInvalidType);
 object	Generic(gIota);
@@ -324,6 +330,7 @@ object	Generic(gNewFindFile);
 object	Generic(gNewGeneric);
 object	Generic(gNewGlobalPool);
 object	Generic(gNewGlobalPoolWithSize);
+object	Generic(gNewHttpRequest);
 object	Generic(gNewMethod);
 object	Generic(gNewMimeBodyPart);
 object	Generic(gNewMultipartMime);
@@ -371,6 +378,7 @@ object	Generic(gPointerValue);
 object	Generic(gPop);
 object	Generic(gPopulateStringFromNode);
 object	Generic(gPosition);
+object	Generic(gPostAndSaveResponseAsFile);
 object	Generic(gPrevious);
 object	Generic(gPrint);
 object	Generic(gPrintArgs);
@@ -428,18 +436,26 @@ object	Generic(gSequenceLinks);
 object	Generic(gServerSocketConnect);
 object	Generic(gSetArgs);
 object	Generic(gSetAttribute);
+object	Generic(gSetAuth);
+object	Generic(gSetCertificate);
+object	Generic(gSetContent);
+object	Generic(gSetContentFromFile);
 object	Generic(gSetErrorFunction);
 object	Generic(gSetFunction);
 object	Generic(gSetLogFileName);
 object	Generic(gSetLogLevel);
 object	Generic(gSetLogMode);
+object	Generic(gSetLogger);
 object	Generic(gSetMaskFiller);
 object	Generic(gSetMemoryBufferArea);
 object	Generic(gSetMoreHandles);
 object	Generic(gSetNodeName);
 object	Generic(gSetNodeValue);
 object	Generic(gSetOSVars);
+object	Generic(gSetOutputFileName);
 object	Generic(gSetPropertyList);
+object	Generic(gSetResponseTimeoutSeconds);
+object	Generic(gSetSecure);
 object	Generic(gSetTempSubDir);
 object	Generic(gSetTopNode);
 object	Generic(gShape);
@@ -1413,6 +1429,11 @@ static	int	_gGetErrorCode(object self)
 	return (*(gGetErrorCode_t)_FindMethod(self, Generic(gGetErrorCode)))(self);
 }
 
+static	char *	_gGetErrorMessage(object self)
+{
+	return (*(gGetErrorMessage_t)_FindMethod(self, Generic(gGetErrorMessage)))(self);
+}
+
 static	char *	_gGetErrorStr(object self)
 {
 	return (*(gGetErrorStr_t)_FindMethod(self, Generic(gGetErrorStr)))(self);
@@ -1481,6 +1502,21 @@ static	char *	_gGetPeerCertificateIssuerName(object self)
 static	char *	_gGetPeerCertificateSubjectName(object self)
 {
 	return (*(gGetPeerCertificateSubjectName_t)_FindMethod(self, Generic(gGetPeerCertificateSubjectName)))(self);
+}
+
+static	char *	_gGetResponse(object self)
+{
+	return (*(gGetResponse_t)_FindMethod(self, Generic(gGetResponse)))(self);
+}
+
+static	char *	_gGetResponseHeader(object self, char *headerName)
+{
+	return (*(gGetResponseHeader_t)_FindMethod(self, Generic(gGetResponseHeader)))(self, headerName);
+}
+
+static	objrtn	_gGetResponseHeaders(object self)
+{
+	return (*(gGetResponseHeaders_t)_FindMethod(self, Generic(gGetResponseHeaders)))(self);
 }
 
 static	objrtn	_gGetSessionInfo(object self, char **session1, char **session2, char **session3)
@@ -1591,6 +1627,16 @@ static	int	_gIntKey(object self)
 static	int	_gIntValue(object self)
 {
 	return (*(gIntValue_t)_FindMethod(self, Generic(gIntValue)))(self);
+}
+
+static	void	_gInternetSetOption(object self, int option, char *buffer, int buflen)
+{
+	(*(gInternetSetOption_t)_FindMethod(self, Generic(gInternetSetOption)))(self, option, buffer, buflen);
+}
+
+static	void	_gInternetSetOptionDirect(object self, int option, void *buffer, int buflen)
+{
+	(*(gInternetSetOptionDirect_t)_FindMethod(self, Generic(gInternetSetOptionDirect)))(self, option, buffer, buflen);
 }
 
 static	void	_gInvalidObject(object self, int argn, object arg1)
@@ -1873,6 +1919,11 @@ static	objrtn	_gNewGlobalPoolWithSize(object self, int siz)
 	return (*(gNewGlobalPoolWithSize_t)_FindMethod(self, Generic(gNewGlobalPoolWithSize)))(self, siz);
 }
 
+static	objrtn	_gNewHttpRequest(object self, char *url, char *verb)
+{
+	return (*(gNewHttpRequest_t)_FindMethod(self, Generic(gNewHttpRequest)))(self, url, verb);
+}
+
 static	objrtn	_gNewMethod(object self, char *n, object c, object gen, ofun methf, ofun methf2)
 {
 	return (*(gNewMethod_t)_FindMethod(self, Generic(gNewMethod)))(self, n, c, gen, methf, methf2);
@@ -2111,6 +2162,11 @@ static	objrtn	_gPopulateStringFromNode(object self, char *to, char *node)
 static	long	_gPosition(object self)
 {
 	return (*(gPosition_t)_FindMethod(self, Generic(gPosition)))(self);
+}
+
+static	int	_gPostAndSaveResponseAsFile(object self, char *url, char *contentType, char *content, int flags, char *outputFileName)
+{
+	return (*(gPostAndSaveResponseAsFile_t)_FindMethod(self, Generic(gPostAndSaveResponseAsFile)))(self, url, contentType, content, flags, outputFileName);
 }
 
 static	objrtn	_gPrevious(object self)
@@ -2398,6 +2454,26 @@ static	objrtn	_gSetAttribute(object self, char *name, char *value)
 	return (*(gSetAttribute_t)_FindMethod(self, Generic(gSetAttribute)))(self, name, value);
 }
 
+static	objrtn	_gSetAuth(object self, char *user, char *pass)
+{
+	return (*(gSetAuth_t)_FindMethod(self, Generic(gSetAuth)))(self, user, pass);
+}
+
+static	void	_gSetCertificate(object self, void *cert)
+{
+	(*(gSetCertificate_t)_FindMethod(self, Generic(gSetCertificate)))(self, cert);
+}
+
+static	objrtn	_gSetContent(object self, char *content)
+{
+	return (*(gSetContent_t)_FindMethod(self, Generic(gSetContent)))(self, content);
+}
+
+static	objrtn	_gSetContentFromFile(object self, char *filename)
+{
+	return (*(gSetContentFromFile_t)_FindMethod(self, Generic(gSetContentFromFile)))(self, filename);
+}
+
 static	ifun	_gSetErrorFunction(object self, ifun fun)
 {
 	return (*(gSetErrorFunction_t)_FindMethod(self, Generic(gSetErrorFunction)))(self, fun);
@@ -2421,6 +2497,11 @@ static	int	_gSetLogLevel(object self, int level)
 static	int	_gSetLogMode(object self, int mode)
 {
 	return (*(gSetLogMode_t)_FindMethod(self, Generic(gSetLogMode)))(self, mode);
+}
+
+static	objrtn	_gSetLogger(object self, object logger)
+{
+	return (*(gSetLogger_t)_FindMethod(self, Generic(gSetLogger)))(self, logger);
 }
 
 static	char	_gSetMaskFiller(object self, char ch)
@@ -2453,9 +2534,24 @@ static	objrtn	_gSetOSVars(object self, object cname, object cvs, object ivs)
 	return (*(gSetOSVars_t)_FindMethod(self, Generic(gSetOSVars)))(self, cname, cvs, ivs);
 }
 
+static	objrtn	_gSetOutputFileName(object self, char *name)
+{
+	return (*(gSetOutputFileName_t)_FindMethod(self, Generic(gSetOutputFileName)))(self, name);
+}
+
 static	objrtn	_gSetPropertyList(object self, object pl)
 {
 	return (*(gSetPropertyList_t)_FindMethod(self, Generic(gSetPropertyList)))(self, pl);
+}
+
+static	void	_gSetResponseTimeoutSeconds(object self, int seconds)
+{
+	(*(gSetResponseTimeoutSeconds_t)_FindMethod(self, Generic(gSetResponseTimeoutSeconds)))(self, seconds);
+}
+
+static	objrtn	_gSetSecure(object self, int secure)
+{
+	return (*(gSetSecure_t)_FindMethod(self, Generic(gSetSecure)))(self, secure);
 }
 
 static	objrtn	_gSetTempSubDir(object self, char *dir)
@@ -3154,6 +3250,7 @@ gGetCharFromNode_t	gGetCharFromNode = _gGetCharFromNode;
 gGetCipher_t	gGetCipher = _gGetCipher;
 gGetContentType_t	gGetContentType = _gGetContentType;
 gGetErrorCode_t	gGetErrorCode = _gGetErrorCode;
+gGetErrorMessage_t	gGetErrorMessage = _gGetErrorMessage;
 gGetErrorStr_t	gGetErrorStr = _gGetErrorStr;
 gGetFixedName_t	gGetFixedName = _gGetFixedName;
 gGetFloatFromNode_t	gGetFloatFromNode = _gGetFloatFromNode;
@@ -3168,6 +3265,9 @@ gGetName_t	gGetName = _gGetName;
 gGetParent_t	gGetParent = _gGetParent;
 gGetPeerCertificateIssuerName_t	gGetPeerCertificateIssuerName = _gGetPeerCertificateIssuerName;
 gGetPeerCertificateSubjectName_t	gGetPeerCertificateSubjectName = _gGetPeerCertificateSubjectName;
+gGetResponse_t	gGetResponse = _gGetResponse;
+gGetResponseHeader_t	gGetResponseHeader = _gGetResponseHeader;
+gGetResponseHeaders_t	gGetResponseHeaders = _gGetResponseHeaders;
 gGetSessionInfo_t	gGetSessionInfo = _gGetSessionInfo;
 gGetStr_t	gGetStr = _gGetStr;
 gGetTotalBytesRead_t	gGetTotalBytesRead = _gGetTotalBytesRead;
@@ -3190,6 +3290,8 @@ gInsertObjAt_t	gInsertObjAt = _gInsertObjAt;
 gInstanceSize_t	gInstanceSize = _gInstanceSize;
 gIntKey_t	gIntKey = _gIntKey;
 gIntValue_t	gIntValue = _gIntValue;
+gInternetSetOption_t	gInternetSetOption = _gInternetSetOption;
+gInternetSetOptionDirect_t	gInternetSetOptionDirect = _gInternetSetOptionDirect;
 gInvalidObject_t	gInvalidObject = _gInvalidObject;
 gInvalidType_t	gInvalidType = _gInvalidType;
 gIota_t	gIota = _gIota;
@@ -3245,6 +3347,7 @@ gNewFindFile_t	gNewFindFile = _gNewFindFile;
 gNewGeneric_t	gNewGeneric = _gNewGeneric;
 gNewGlobalPool_t	gNewGlobalPool = _gNewGlobalPool;
 gNewGlobalPoolWithSize_t	gNewGlobalPoolWithSize = _gNewGlobalPoolWithSize;
+gNewHttpRequest_t	gNewHttpRequest = _gNewHttpRequest;
 gNewMethod_t	gNewMethod = _gNewMethod;
 gNewMimeBodyPart_t	gNewMimeBodyPart = _gNewMimeBodyPart;
 gNewMultipartMime_t	gNewMultipartMime = _gNewMultipartMime;
@@ -3292,6 +3395,7 @@ gPointerValue_t	gPointerValue = _gPointerValue;
 gPop_t	gPop = _gPop;
 gPopulateStringFromNode_t	gPopulateStringFromNode = _gPopulateStringFromNode;
 gPosition_t	gPosition = _gPosition;
+gPostAndSaveResponseAsFile_t	gPostAndSaveResponseAsFile = _gPostAndSaveResponseAsFile;
 gPrevious_t	gPrevious = _gPrevious;
 gPrint_t	gPrint = _gPrint;
 gPrintArgs_t	gPrintArgs = _gPrintArgs;
@@ -3349,18 +3453,26 @@ gSequenceLinks_t	gSequenceLinks = _gSequenceLinks;
 gServerSocketConnect_t	gServerSocketConnect = _gServerSocketConnect;
 gSetArgs_t	gSetArgs = _gSetArgs;
 gSetAttribute_t	gSetAttribute = _gSetAttribute;
+gSetAuth_t	gSetAuth = _gSetAuth;
+gSetCertificate_t	gSetCertificate = _gSetCertificate;
+gSetContent_t	gSetContent = _gSetContent;
+gSetContentFromFile_t	gSetContentFromFile = _gSetContentFromFile;
 gSetErrorFunction_t	gSetErrorFunction = _gSetErrorFunction;
 gSetFunction_t	gSetFunction = _gSetFunction;
 gSetLogFileName_t	gSetLogFileName = _gSetLogFileName;
 gSetLogLevel_t	gSetLogLevel = _gSetLogLevel;
 gSetLogMode_t	gSetLogMode = _gSetLogMode;
+gSetLogger_t	gSetLogger = _gSetLogger;
 gSetMaskFiller_t	gSetMaskFiller = _gSetMaskFiller;
 gSetMemoryBufferArea_t	gSetMemoryBufferArea = _gSetMemoryBufferArea;
 gSetMoreHandles_t	gSetMoreHandles = _gSetMoreHandles;
 gSetNodeName_t	gSetNodeName = _gSetNodeName;
 gSetNodeValue_t	gSetNodeValue = _gSetNodeValue;
 gSetOSVars_t	gSetOSVars = _gSetOSVars;
+gSetOutputFileName_t	gSetOutputFileName = _gSetOutputFileName;
 gSetPropertyList_t	gSetPropertyList = _gSetPropertyList;
+gSetResponseTimeoutSeconds_t	gSetResponseTimeoutSeconds = _gSetResponseTimeoutSeconds;
+gSetSecure_t	gSetSecure = _gSetSecure;
 gSetTempSubDir_t	gSetTempSubDir = _gSetTempSubDir;
 gSetTopNode_t	gSetTopNode = _gSetTopNode;
 gShape_t	gShape = _gShape;
@@ -3624,6 +3736,7 @@ void	InitGenerics()
 	InitGeneric( gGetCipher );
 	InitGeneric( gGetContentType );
 	InitGeneric( gGetErrorCode );
+	InitGeneric( gGetErrorMessage );
 	InitGeneric( gGetErrorStr );
 	InitGeneric( gGetFixedName );
 	InitGeneric( gGetFloatFromNode );
@@ -3638,6 +3751,9 @@ void	InitGenerics()
 	InitGeneric( gGetParent );
 	InitGeneric( gGetPeerCertificateIssuerName );
 	InitGeneric( gGetPeerCertificateSubjectName );
+	InitGeneric( gGetResponse );
+	InitGeneric( gGetResponseHeader );
+	InitGeneric( gGetResponseHeaders );
 	InitGeneric( gGetSessionInfo );
 	InitGeneric( gGetStr );
 	InitGeneric( gGetTotalBytesRead );
@@ -3660,6 +3776,8 @@ void	InitGenerics()
 	InitGeneric( gInstanceSize );
 	InitGeneric( gIntKey );
 	InitGeneric( gIntValue );
+	InitGeneric( gInternetSetOption );
+	InitGeneric( gInternetSetOptionDirect );
 	InitGeneric( gInvalidObject );
 	InitGeneric( gInvalidType );
 	InitGeneric( gIota );
@@ -3712,6 +3830,7 @@ void	InitGenerics()
 	InitGeneric( gNewFindFile );
 	InitGeneric( gNewGlobalPool );
 	InitGeneric( gNewGlobalPoolWithSize );
+	InitGeneric( gNewHttpRequest );
 	InitGeneric( gNewMimeBodyPart );
 	InitGeneric( gNewMultipartMime );
 	InitGeneric( gNewNode );
@@ -3758,6 +3877,7 @@ void	InitGenerics()
 	InitGeneric( gPop );
 	InitGeneric( gPopulateStringFromNode );
 	InitGeneric( gPosition );
+	InitGeneric( gPostAndSaveResponseAsFile );
 	InitGeneric( gPrevious );
 	InitGeneric( gPrint );
 	InitGeneric( gPrintArgs );
@@ -3815,18 +3935,26 @@ void	InitGenerics()
 	InitGeneric( gServerSocketConnect );
 	InitGeneric( gSetArgs );
 	InitGeneric( gSetAttribute );
+	InitGeneric( gSetAuth );
+	InitGeneric( gSetCertificate );
+	InitGeneric( gSetContent );
+	InitGeneric( gSetContentFromFile );
 	InitGeneric( gSetErrorFunction );
 	InitGeneric( gSetFunction );
 	InitGeneric( gSetLogFileName );
 	InitGeneric( gSetLogLevel );
 	InitGeneric( gSetLogMode );
+	InitGeneric( gSetLogger );
 	InitGeneric( gSetMaskFiller );
 	InitGeneric( gSetMemoryBufferArea );
 	InitGeneric( gSetMoreHandles );
 	InitGeneric( gSetNodeName );
 	InitGeneric( gSetNodeValue );
 	InitGeneric( gSetOSVars );
+	InitGeneric( gSetOutputFileName );
 	InitGeneric( gSetPropertyList );
+	InitGeneric( gSetResponseTimeoutSeconds );
+	InitGeneric( gSetSecure );
 	InitGeneric( gSetTempSubDir );
 	InitGeneric( gSetTopNode );
 	InitGeneric( gShape );
@@ -3912,7 +4040,7 @@ void	InitGenerics()
 
 void	InitDynace(void *s)
 {
-	int	nClasses = 81;
+	int	nClasses = 82;
 
 
 	InitKernel(s, nClasses*2);

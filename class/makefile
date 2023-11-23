@@ -13,6 +13,8 @@ CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.
 	IntegerDictionary.d BTree.d BTreeNode.d Memory.d crc.d Time.d DateTime.d ObjectPool.d \
 	PropertyList.d WeakPointer.d BufferedTempFile.d Socket.d Logger.d \
 	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d
+# include the following class if you have the curl development loaded on your machine
+#        HttpRequest.d
 
 WINCLASSES = FindFile.d memalloc.d MimeBodyPart.d MultipartMime.d
 
