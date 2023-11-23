@@ -13,8 +13,12 @@ CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.
 	IntegerDictionary.d BTree.d BTreeNode.d Memory.d crc.d Time.d DateTime.d ObjectPool.d \
 	PropertyList.d WeakPointer.d BufferedTempFile.d Socket.d Logger.d \
 	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d
-# include the following class if you have the curl development loaded on your machine
-#        HttpRequest.d
+# If you wish to include HttpRequest.d, follow these steps:
+#    1. Load the CURL development system on to your machine
+#    2. Build the system without changing this file (to add HttpRequest.d)
+#    3. Add HttpRequest.d to CLASSES in this file
+#    4. Type:  make newgens
+#    5. Type:  make
 
 WINCLASSES = FindFile.d memalloc.d MimeBodyPart.d MultipartMime.d
 

@@ -726,7 +726,7 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 	return self; 
 } 
 
-#line 736 "String.c"
+#line 730 "String.c"
 
 static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 {
@@ -790,7 +790,7 @@ cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 	return newObj; 
 } 
 
-#line 806 "String.c"
+#line 794 "String.c"
 
 static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 {
@@ -1284,7 +1284,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1306 "String.c"
+#line 1288 "String.c"
 
 objrtn	String_initialize(void)
 {
