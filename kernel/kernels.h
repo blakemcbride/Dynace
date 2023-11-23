@@ -56,6 +56,9 @@ typedef	struct	_instance_block  {
 
 typedef	struct	_free_list  {
 	struct	_free_list	*next;
+        unsigned short tag;
+        unsigned short siz;
+        unsigned long sn;
 }	free_list;
 
 
