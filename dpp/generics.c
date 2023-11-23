@@ -115,6 +115,7 @@ object	Generic(gChangeValueWithStr);
 object	Generic(gCharValue);
 object	Generic(gCharValueAt);
 object	Generic(gChild);
+object	Generic(gCloseLogFile);
 object	Generic(gCompare);
 object	Generic(gCompareI);
 object	Generic(gCompareN);
@@ -239,6 +240,8 @@ object	Generic(gGetGenericPtr);
 object	Generic(gGetHeader);
 object	Generic(gGetHeaders);
 object	Generic(gGetIntFromNode);
+object	Generic(gGetLogLevel);
+object	Generic(gGetLogMode);
 object	Generic(gGetMGName);
 object	Generic(gGetName);
 object	Generic(gGetParent);
@@ -288,6 +291,7 @@ object	Generic(gList);
 object	Generic(gLoadJavaClass);
 object	Generic(gLoadMask);
 object	Generic(gLock);
+object	Generic(gLoggerMessage);
 object	Generic(gLongValue);
 object	Generic(gLookup);
 object	Generic(gMakeServer);
@@ -353,6 +357,7 @@ object	Generic(gNumbPieces);
 object	Generic(gObjectChecking);
 object	Generic(gObjectSerialNumber);
 object	Generic(gOpenFile);
+object	Generic(gOpenLogFile);
 object	Generic(gOpenLowFile);
 object	Generic(gOpenStream2);
 object	Generic(gOpenTempFile);
@@ -425,6 +430,9 @@ object	Generic(gSetArgs);
 object	Generic(gSetAttribute);
 object	Generic(gSetErrorFunction);
 object	Generic(gSetFunction);
+object	Generic(gSetLogFileName);
+object	Generic(gSetLogLevel);
+object	Generic(gSetLogMode);
 object	Generic(gSetMaskFiller);
 object	Generic(gSetMemoryBufferArea);
 object	Generic(gSetMoreHandles);
@@ -472,6 +480,7 @@ object	Generic(gTracePrint);
 object	Generic(gTruncate);
 object	Generic(gType);
 object	Generic(gUnLock);
+object	Generic(gUnlockLogFile);
 object	Generic(gUnsignedShortValue);
 object	Generic(gUpdateLength);
 object	Generic(gUseStream);
@@ -812,6 +821,11 @@ static	char	_gCharValueAt(object self, int i)
 static	objrtn	_gChild(object self)
 {
 	return (*(gChild_t)_FindMethod(self, Generic(gChild)))(self);
+}
+
+static	void	_gCloseLogFile(object self, int fd)
+{
+	(*(gCloseLogFile_t)_FindMethod(self, Generic(gCloseLogFile)))(self, fd);
 }
 
 static	int	_gCompare(object self, object obj2)
@@ -1434,6 +1448,16 @@ static	int	_gGetIntFromNode(object self, char *node)
 	return (*(gGetIntFromNode_t)_FindMethod(self, Generic(gGetIntFromNode)))(self, node);
 }
 
+static	int	_gGetLogLevel(object self)
+{
+	return (*(gGetLogLevel_t)_FindMethod(self, Generic(gGetLogLevel)))(self);
+}
+
+static	int	_gGetLogMode(object self)
+{
+	return (*(gGetLogMode_t)_FindMethod(self, Generic(gGetLogMode)))(self);
+}
+
 static	objrtn	_gGetMGName(object self)
 {
 	return (*(gGetMGName_t)_FindMethod(self, Generic(gGetMGName)))(self);
@@ -1677,6 +1701,11 @@ static	char *	_gLoadMask(object self, char *inmask)
 static	int	_gLock(object self, unsigned long start, unsigned long len, int wait)
 {
 	return (*(gLock_t)_FindMethod(self, Generic(gLock)))(self, start, len, wait);
+}
+
+static	void	_gLoggerMessage(object self, int level, char *sfname, int line, char *msg)
+{
+	(*(gLoggerMessage_t)_FindMethod(self, Generic(gLoggerMessage)))(self, level, sfname, line, msg);
 }
 
 static	long	_gLongValue(object self)
@@ -2012,6 +2041,11 @@ static	unsigned long	_gObjectSerialNumber(object self)
 static	objrtn	_gOpenFile(object self, char *name, char *mode)
 {
 	return (*(gOpenFile_t)_FindMethod(self, Generic(gOpenFile)))(self, name, mode);
+}
+
+static	int	_gOpenLogFile(object self)
+{
+	return (*(gOpenLogFile_t)_FindMethod(self, Generic(gOpenLogFile)))(self);
 }
 
 static	objrtn	_gOpenLowFile(object self, char *name, int oflag, int pmode)
@@ -2374,6 +2408,21 @@ static	ofun	_gSetFunction(object self, int (*fun)())
 	return (*(gSetFunction_t)_FindMethod(self, Generic(gSetFunction)))(self, fun);
 }
 
+static	objrtn	_gSetLogFileName(object self, char *fname)
+{
+	return (*(gSetLogFileName_t)_FindMethod(self, Generic(gSetLogFileName)))(self, fname);
+}
+
+static	int	_gSetLogLevel(object self, int level)
+{
+	return (*(gSetLogLevel_t)_FindMethod(self, Generic(gSetLogLevel)))(self, level);
+}
+
+static	int	_gSetLogMode(object self, int mode)
+{
+	return (*(gSetLogMode_t)_FindMethod(self, Generic(gSetLogMode)))(self, mode);
+}
+
 static	char	_gSetMaskFiller(object self, char ch)
 {
 	return (*(gSetMaskFiller_t)_FindMethod(self, Generic(gSetMaskFiller)))(self, ch);
@@ -2607,6 +2656,11 @@ static	int	_gType(object self)
 static	int	_gUnLock(object self, unsigned long start, unsigned long len)
 {
 	return (*(gUnLock_t)_FindMethod(self, Generic(gUnLock)))(self, start, len);
+}
+
+static	void	_gUnlockLogFile(object self, int fd)
+{
+	(*(gUnlockLogFile_t)_FindMethod(self, Generic(gUnlockLogFile)))(self, fd);
 }
 
 static	unsigned short	_gUnsignedShortValue(object self)
@@ -2982,6 +3036,7 @@ gChangeValueWithStr_t	gChangeValueWithStr = _gChangeValueWithStr;
 gCharValue_t	gCharValue = _gCharValue;
 gCharValueAt_t	gCharValueAt = _gCharValueAt;
 gChild_t	gChild = _gChild;
+gCloseLogFile_t	gCloseLogFile = _gCloseLogFile;
 gCompare_t	gCompare = _gCompare;
 gCompareI_t	gCompareI = _gCompareI;
 gCompareN_t	gCompareN = _gCompareN;
@@ -3106,6 +3161,8 @@ gGetGenericPtr_t	gGetGenericPtr = _gGetGenericPtr;
 gGetHeader_t	gGetHeader = _gGetHeader;
 gGetHeaders_t	gGetHeaders = _gGetHeaders;
 gGetIntFromNode_t	gGetIntFromNode = _gGetIntFromNode;
+gGetLogLevel_t	gGetLogLevel = _gGetLogLevel;
+gGetLogMode_t	gGetLogMode = _gGetLogMode;
 gGetMGName_t	gGetMGName = _gGetMGName;
 gGetName_t	gGetName = _gGetName;
 gGetParent_t	gGetParent = _gGetParent;
@@ -3155,6 +3212,7 @@ gList_t	gList = _gList;
 gLoadJavaClass_t	gLoadJavaClass = _gLoadJavaClass;
 gLoadMask_t	gLoadMask = _gLoadMask;
 gLock_t	gLock = _gLock;
+gLoggerMessage_t	gLoggerMessage = _gLoggerMessage;
 gLongValue_t	gLongValue = _gLongValue;
 gLookup_t	gLookup = _gLookup;
 gMakeServer_t	gMakeServer = _gMakeServer;
@@ -3220,6 +3278,7 @@ gNumbPieces_t	gNumbPieces = _gNumbPieces;
 gObjectChecking_t	gObjectChecking = _gObjectChecking;
 gObjectSerialNumber_t	gObjectSerialNumber = _gObjectSerialNumber;
 gOpenFile_t	gOpenFile = _gOpenFile;
+gOpenLogFile_t	gOpenLogFile = _gOpenLogFile;
 gOpenLowFile_t	gOpenLowFile = _gOpenLowFile;
 gOpenStream2_t	gOpenStream2 = _gOpenStream2;
 gOpenTempFile_t	gOpenTempFile = _gOpenTempFile;
@@ -3292,6 +3351,9 @@ gSetArgs_t	gSetArgs = _gSetArgs;
 gSetAttribute_t	gSetAttribute = _gSetAttribute;
 gSetErrorFunction_t	gSetErrorFunction = _gSetErrorFunction;
 gSetFunction_t	gSetFunction = _gSetFunction;
+gSetLogFileName_t	gSetLogFileName = _gSetLogFileName;
+gSetLogLevel_t	gSetLogLevel = _gSetLogLevel;
+gSetLogMode_t	gSetLogMode = _gSetLogMode;
 gSetMaskFiller_t	gSetMaskFiller = _gSetMaskFiller;
 gSetMemoryBufferArea_t	gSetMemoryBufferArea = _gSetMemoryBufferArea;
 gSetMoreHandles_t	gSetMoreHandles = _gSetMoreHandles;
@@ -3339,6 +3401,7 @@ gTracePrint_t	gTracePrint = _gTracePrint;
 gTruncate_t	gTruncate = _gTruncate;
 gType_t	gType = _gType;
 gUnLock_t	gUnLock = _gUnLock;
+gUnlockLogFile_t	gUnlockLogFile = _gUnlockLogFile;
 gUnsignedShortValue_t	gUnsignedShortValue = _gUnsignedShortValue;
 gUpdateLength_t	gUpdateLength = _gUpdateLength;
 gUseStream_t	gUseStream = _gUseStream;
@@ -3443,6 +3506,7 @@ void	InitGenerics()
 	InitGeneric( gCharValue );
 	InitGeneric( gCharValueAt );
 	InitGeneric( gChild );
+	InitGeneric( gCloseLogFile );
 	InitGeneric( gCompare );
 	InitGeneric( gCompareI );
 	InitGeneric( gCompareN );
@@ -3567,6 +3631,8 @@ void	InitGenerics()
 	InitGeneric( gGetHeader );
 	InitGeneric( gGetHeaders );
 	InitGeneric( gGetIntFromNode );
+	InitGeneric( gGetLogLevel );
+	InitGeneric( gGetLogMode );
 	InitGeneric( gGetMGName );
 	InitGeneric( gGetName );
 	InitGeneric( gGetParent );
@@ -3616,6 +3682,7 @@ void	InitGenerics()
 	InitGeneric( gLoadJavaClass );
 	InitGeneric( gLoadMask );
 	InitGeneric( gLock );
+	InitGeneric( gLoggerMessage );
 	InitGeneric( gLongValue );
 	InitGeneric( gLookup );
 	InitGeneric( gMakeServer );
@@ -3677,6 +3744,7 @@ void	InitGenerics()
 	InitGeneric( gObjectChecking );
 	InitGeneric( gObjectSerialNumber );
 	InitGeneric( gOpenFile );
+	InitGeneric( gOpenLogFile );
 	InitGeneric( gOpenLowFile );
 	InitGeneric( gOpenStream2 );
 	InitGeneric( gOpenTempFile );
@@ -3749,6 +3817,9 @@ void	InitGenerics()
 	InitGeneric( gSetAttribute );
 	InitGeneric( gSetErrorFunction );
 	InitGeneric( gSetFunction );
+	InitGeneric( gSetLogFileName );
+	InitGeneric( gSetLogLevel );
+	InitGeneric( gSetLogMode );
 	InitGeneric( gSetMaskFiller );
 	InitGeneric( gSetMemoryBufferArea );
 	InitGeneric( gSetMoreHandles );
@@ -3796,6 +3867,7 @@ void	InitGenerics()
 	InitGeneric( gTruncate );
 	InitGeneric( gType );
 	InitGeneric( gUnLock );
+	InitGeneric( gUnlockLogFile );
 	InitGeneric( gUnsignedShortValue );
 	InitGeneric( gUpdateLength );
 	InitGeneric( gUseStream );
@@ -3840,7 +3912,7 @@ void	InitGenerics()
 
 void	InitDynace(void *s)
 {
-	int	nClasses = 80;
+	int	nClasses = 81;
 
 
 	InitKernel(s, nClasses*2);

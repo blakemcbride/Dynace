@@ -682,7 +682,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 692 "OutputStream.c"
+#line 686 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {

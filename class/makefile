@@ -11,7 +11,7 @@ CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.
 	Constant.d ShortArray.d UnsignedShortArray.d IntegerArray.d LongArray.d FloatArray.d \
 	DoubleFloatArray.d BitArray.d ObjectArray.d PointerArray.d NumberArray.d IntegerAssociation.d \
 	IntegerDictionary.d BTree.d BTreeNode.d Memory.d crc.d Time.d DateTime.d ObjectPool.d \
-	PropertyList.d WeakPointer.d BufferedTempFile.d Socket.d \
+	PropertyList.d WeakPointer.d BufferedTempFile.d Socket.d Logger.d \
 	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d
 
 WINCLASSES = FindFile.d memalloc.d MimeBodyPart.d MultipartMime.d

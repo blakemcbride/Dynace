@@ -666,6 +666,28 @@ extern	void	JavaScript_init_app(void);
 
 #define	RESET_REST   va_end(_rest_)
 
+	
+#define LOG_MODE_NONE	0
+#define LOG_MODE_FILE	1
+#define LOG_MODE_STDOUT	2
+#define LOG_MODE_STDERR	3
+#define LOG_MODE_BOTH	4
+
+#define LOG_LEVEL_NONE	0
+#define LOG_LEVEL_FATAL	1
+#define LOG_LEVEL_ERROR	2
+#define LOG_LEVEL_WARN	3
+#define LOG_LEVEL_INFO	4
+#define LOG_LEVEL_DEBUG	5
+#define LOG_LEVEL_ALL	6
+
+#define	LOG_ALL(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_ALL, __FILE__, __LINE__, msg)
+#define	LOG_DEBUG(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_DEBUG, __FILE__, __LINE__, msg)
+#define	LOG_INFO(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_INFO, __FILE__, __LINE__, msg)
+#define	LOG_WARN(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_WARN, __FILE__, __LINE__, msg)
+#define	LOG_ERROR(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_ERROR, __FILE__, __LINE__, msg)
+#define	LOG_FATAL(logger, msg)	if (logger) gLoggerMessage(logger, LOG_LEVEL_FATAL, __FILE__, __LINE__, msg)
+
 
 #if	defined(__WATCOMC__)  &&  defined(__cplusplus)
 #pragma warning 472 9
