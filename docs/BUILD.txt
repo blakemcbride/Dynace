@@ -91,7 +91,13 @@ commands:
 Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
 ------------------------------------------------------------
 
-GNU-make, bash and gcc are assumed.
+Note about the M1 Mac: Dynace has worked for more than 20 years on
+virtually every machine and OS we could find.  However, right now, it
+does not run on the M1 Mac.  (It runs fine on Intel Macs.)  We've
+spent a bunch of time on it and believe that the compiler or runtime
+library has a bug related to the passing of variable arguments.  So,
+Dynace does not run on the M1 Mac and won't until they fix their
+development environment or we find a work-around.
 
 1.  Build the system as follows:
 
