@@ -12,7 +12,8 @@ CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.
 	DoubleFloatArray.d BitArray.d ObjectArray.d PointerArray.d NumberArray.d IntegerAssociation.d \
 	IntegerDictionary.d BTree.d BTreeNode.d Memory.d crc.d Time.d DateTime.d ObjectPool.d \
 	PropertyList.d WeakPointer.d BufferedTempFile.d Socket.d Logger.d \
-	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d
+	Abort.d Condition.d Error.d Restart.d SeriousCondition.d SimpleRestart.d SimpleWarning.d Warning.d \
+	StackTracer.d
 # If you wish to include HttpRequest.d, follow these steps:
 #    1. Load the CURL development system on to your machine
 #    2. Build the system without changing this file (to add HttpRequest.d)

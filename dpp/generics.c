@@ -234,6 +234,7 @@ object	Generic(gGetCharFromNode);
 object	Generic(gGetCipher);
 object	Generic(gGetContentType);
 object	Generic(gGetErrorCode);
+object	Generic(gGetErrorMessage);
 object	Generic(gGetErrorStr);
 object	Generic(gGetFixedName);
 object	Generic(gGetFloatFromNode);
@@ -249,8 +250,11 @@ object	Generic(gGetParent);
 object	Generic(gGetPeerCertificateIssuerName);
 object	Generic(gGetPeerCertificateSubjectName);
 object	Generic(gGetSessionInfo);
+object	Generic(gGetStackDumpString);
+object	Generic(gGetStackDumpText);
 object	Generic(gGetStr);
 object	Generic(gGetTotalBytesRead);
+object	Generic(gGetTracer);
 object	Generic(gGets);
 object	Generic(gGroupRemove);
 object	Generic(gHasInputArg);
@@ -273,7 +277,9 @@ object	Generic(gIntValue);
 object	Generic(gInvalidObject);
 object	Generic(gInvalidType);
 object	Generic(gIota);
+object	Generic(gIsDisplayOn);
 object	Generic(gIsKindOf);
+object	Generic(gIsLogOn);
 object	Generic(gIsVarArg);
 object	Generic(gJulToCal);
 object	Generic(gJulian);
@@ -292,6 +298,7 @@ object	Generic(gList);
 object	Generic(gLoadJavaClass);
 object	Generic(gLoadMask);
 object	Generic(gLock);
+object	Generic(gLogMessage);
 object	Generic(gLoggerMessage);
 object	Generic(gLongValue);
 object	Generic(gLookup);
@@ -338,6 +345,7 @@ object	Generic(gNewWithChar);
 object	Generic(gNewWithDouble);
 object	Generic(gNewWithInt);
 object	Generic(gNewWithIntObj);
+object	Generic(gNewWithLogger);
 object	Generic(gNewWithLong);
 object	Generic(gNewWithObj);
 object	Generic(gNewWithObjObj);
@@ -429,11 +437,14 @@ object	Generic(gSequenceLinks);
 object	Generic(gServerSocketConnect);
 object	Generic(gSetArgs);
 object	Generic(gSetAttribute);
+object	Generic(gSetDisplayOn);
 object	Generic(gSetErrorFunction);
 object	Generic(gSetFunction);
 object	Generic(gSetLogFileName);
 object	Generic(gSetLogLevel);
 object	Generic(gSetLogMode);
+object	Generic(gSetLogOn);
+object	Generic(gSetLogger);
 object	Generic(gSetMaskFiller);
 object	Generic(gSetMemoryBufferArea);
 object	Generic(gSetMoreHandles);
@@ -446,11 +457,13 @@ object	Generic(gSetTopNode);
 object	Generic(gShape);
 object	Generic(gShortValue);
 object	Generic(gShouldNotImplement);
+object	Generic(gShowUsage);
 object	Generic(gSignal);
 object	Generic(gSize);
 object	Generic(gSocketConnect);
 object	Generic(gSpace);
 object	Generic(gStackAlloc);
+object	Generic(gStackDump);
 object	Generic(gState);
 object	Generic(gStringKey);
 object	Generic(gStringRep);
@@ -477,6 +490,7 @@ object	Generic(gToUpper);
 object	Generic(gToday);
 object	Generic(gToken);
 object	Generic(gTrace);
+object	Generic(gTraceCall);
 object	Generic(gTracePrint);
 object	Generic(gTruncate);
 object	Generic(gType);
@@ -1419,6 +1433,11 @@ static	int	_gGetErrorCode(object self)
 	return (*(gGetErrorCode_t)_FindMethod(self, Generic(gGetErrorCode)))(self);
 }
 
+static	char *	_gGetErrorMessage(object self)
+{
+	return (*(gGetErrorMessage_t)_FindMethod(self, Generic(gGetErrorMessage)))(self);
+}
+
 static	char *	_gGetErrorStr(object self)
 {
 	return (*(gGetErrorStr_t)_FindMethod(self, Generic(gGetErrorStr)))(self);
@@ -1494,6 +1513,16 @@ static	objrtn	_gGetSessionInfo(object self, char **session1, char **session2, ch
 	return (*(gGetSessionInfo_t)_FindMethod(self, Generic(gGetSessionInfo)))(self, session1, session2, session3);
 }
 
+static	char *	_gGetStackDumpString(object self)
+{
+	return (*(gGetStackDumpString_t)_FindMethod(self, Generic(gGetStackDumpString)))(self);
+}
+
+static	objrtn	_gGetStackDumpText(object self)
+{
+	return (*(gGetStackDumpText_t)_FindMethod(self, Generic(gGetStackDumpText)))(self);
+}
+
 static	int	_gGetStr(object self, char *str)
 {
 	return (*(gGetStr_t)_FindMethod(self, Generic(gGetStr)))(self, str);
@@ -1502,6 +1531,11 @@ static	int	_gGetStr(object self, char *str)
 static	long	_gGetTotalBytesRead(object self)
 {
 	return (*(gGetTotalBytesRead_t)_FindMethod(self, Generic(gGetTotalBytesRead)))(self);
+}
+
+static	objrtn	_gGetTracer(object self)
+{
+	return (*(gGetTracer_t)_FindMethod(self, Generic(gGetTracer)))(self);
 }
 
 static	char *	_gGets(object self, char *buf, int n)
@@ -1614,9 +1648,19 @@ static	objrtn	_gIota(object self, int n)
 	return (*(gIota_t)_FindMethod(self, Generic(gIota)))(self, n);
 }
 
+static	int	_gIsDisplayOn(object self)
+{
+	return (*(gIsDisplayOn_t)_FindMethod(self, Generic(gIsDisplayOn)))(self);
+}
+
 static	int	_gIsKindOf(object self, object aCls)
 {
 	return (*(gIsKindOf_t)_FindMethod(self, Generic(gIsKindOf)))(self, aCls);
+}
+
+static	int	_gIsLogOn(object self)
+{
+	return (*(gIsLogOn_t)_FindMethod(self, Generic(gIsLogOn)))(self);
 }
 
 static	int	_gIsVarArg(object self)
@@ -1707,6 +1751,11 @@ static	char *	_gLoadMask(object self, char *inmask)
 static	int	_gLock(object self, unsigned long start, unsigned long len, int wait)
 {
 	return (*(gLock_t)_FindMethod(self, Generic(gLock)))(self, start, len, wait);
+}
+
+static	void	_gLogMessage(object self, char *pszMessage)
+{
+	(*(gLogMessage_t)_FindMethod(self, Generic(gLogMessage)))(self, pszMessage);
 }
 
 static	void	_gLoggerMessage(object self, int level, char *sfname, int line, char *msg)
@@ -1947,6 +1996,11 @@ static	objrtn	_gNewWithInt(object self, int val)
 static	objrtn	_gNewWithIntObj(object self, int key, object value)
 {
 	return (*(gNewWithIntObj_t)_FindMethod(self, Generic(gNewWithIntObj)))(self, key, value);
+}
+
+static	objrtn	_gNewWithLogger(object self, object logger)
+{
+	return (*(gNewWithLogger_t)_FindMethod(self, Generic(gNewWithLogger)))(self, logger);
 }
 
 static	objrtn	_gNewWithLong(object self, long val)
@@ -2404,6 +2458,11 @@ static	objrtn	_gSetAttribute(object self, char *name, char *value)
 	return (*(gSetAttribute_t)_FindMethod(self, Generic(gSetAttribute)))(self, name, value);
 }
 
+static	void	_gSetDisplayOn(object self, int bOn)
+{
+	(*(gSetDisplayOn_t)_FindMethod(self, Generic(gSetDisplayOn)))(self, bOn);
+}
+
 static	ifun	_gSetErrorFunction(object self, ifun fun)
 {
 	return (*(gSetErrorFunction_t)_FindMethod(self, Generic(gSetErrorFunction)))(self, fun);
@@ -2427,6 +2486,16 @@ static	int	_gSetLogLevel(object self, int level)
 static	int	_gSetLogMode(object self, int mode)
 {
 	return (*(gSetLogMode_t)_FindMethod(self, Generic(gSetLogMode)))(self, mode);
+}
+
+static	void	_gSetLogOn(object self, int bOn)
+{
+	(*(gSetLogOn_t)_FindMethod(self, Generic(gSetLogOn)))(self, bOn);
+}
+
+static	objrtn	_gSetLogger(object self, object logger)
+{
+	return (*(gSetLogger_t)_FindMethod(self, Generic(gSetLogger)))(self, logger);
 }
 
 static	char	_gSetMaskFiller(object self, char ch)
@@ -2489,6 +2558,11 @@ static	objrtn	_gShouldNotImplement(object self, char *meth)
 	return (*(gShouldNotImplement_t)_FindMethod(self, Generic(gShouldNotImplement)))(self, meth);
 }
 
+static	void	_gShowUsage(object self, int flg)
+{
+	(*(gShowUsage_t)_FindMethod(self, Generic(gShowUsage)))(self, flg);
+}
+
 static	objrtn	_gSignal(object self)
 {
 	return (*(gSignal_t)_FindMethod(self, Generic(gSignal)))(self);
@@ -2512,6 +2586,11 @@ static	int	_gSpace(object self)
 static	objrtn	_gStackAlloc(object self, void *p)
 {
 	return (*(gStackAlloc_t)_FindMethod(self, Generic(gStackAlloc)))(self, p);
+}
+
+static	void	_gStackDump(object self, char *pszMessage)
+{
+	(*(gStackDump_t)_FindMethod(self, Generic(gStackDump)))(self, pszMessage);
 }
 
 static	int	_gState(object self)
@@ -2642,6 +2721,11 @@ static	objrtn	_gToken(object self)
 static	int	_gTrace(object self, int mode)
 {
 	return (*(gTrace_t)_FindMethod(self, Generic(gTrace)))(self, mode);
+}
+
+static	void	_gTraceCall(object self)
+{
+	(*(gTraceCall_t)_FindMethod(self, Generic(gTraceCall)))(self);
 }
 
 static	objrtn	_gTracePrint(object self, char *buf)
@@ -3161,6 +3245,7 @@ gGetCharFromNode_t	gGetCharFromNode = _gGetCharFromNode;
 gGetCipher_t	gGetCipher = _gGetCipher;
 gGetContentType_t	gGetContentType = _gGetContentType;
 gGetErrorCode_t	gGetErrorCode = _gGetErrorCode;
+gGetErrorMessage_t	gGetErrorMessage = _gGetErrorMessage;
 gGetErrorStr_t	gGetErrorStr = _gGetErrorStr;
 gGetFixedName_t	gGetFixedName = _gGetFixedName;
 gGetFloatFromNode_t	gGetFloatFromNode = _gGetFloatFromNode;
@@ -3176,8 +3261,11 @@ gGetParent_t	gGetParent = _gGetParent;
 gGetPeerCertificateIssuerName_t	gGetPeerCertificateIssuerName = _gGetPeerCertificateIssuerName;
 gGetPeerCertificateSubjectName_t	gGetPeerCertificateSubjectName = _gGetPeerCertificateSubjectName;
 gGetSessionInfo_t	gGetSessionInfo = _gGetSessionInfo;
+gGetStackDumpString_t	gGetStackDumpString = _gGetStackDumpString;
+gGetStackDumpText_t	gGetStackDumpText = _gGetStackDumpText;
 gGetStr_t	gGetStr = _gGetStr;
 gGetTotalBytesRead_t	gGetTotalBytesRead = _gGetTotalBytesRead;
+gGetTracer_t	gGetTracer = _gGetTracer;
 gGets_t	gGets = _gGets;
 gGroupRemove_t	gGroupRemove = _gGroupRemove;
 gHasInputArg_t	gHasInputArg = _gHasInputArg;
@@ -3200,7 +3288,9 @@ gIntValue_t	gIntValue = _gIntValue;
 gInvalidObject_t	gInvalidObject = _gInvalidObject;
 gInvalidType_t	gInvalidType = _gInvalidType;
 gIota_t	gIota = _gIota;
+gIsDisplayOn_t	gIsDisplayOn = _gIsDisplayOn;
 gIsKindOf_t	gIsKindOf = _gIsKindOf;
+gIsLogOn_t	gIsLogOn = _gIsLogOn;
 gIsVarArg_t	gIsVarArg = _gIsVarArg;
 gJulToCal_t	gJulToCal = _gJulToCal;
 gJulian_t	gJulian = _gJulian;
@@ -3219,6 +3309,7 @@ gList_t	gList = _gList;
 gLoadJavaClass_t	gLoadJavaClass = _gLoadJavaClass;
 gLoadMask_t	gLoadMask = _gLoadMask;
 gLock_t	gLock = _gLock;
+gLogMessage_t	gLogMessage = _gLogMessage;
 gLoggerMessage_t	gLoggerMessage = _gLoggerMessage;
 gLongValue_t	gLongValue = _gLongValue;
 gLookup_t	gLookup = _gLookup;
@@ -3265,6 +3356,7 @@ gNewWithChar_t	gNewWithChar = _gNewWithChar;
 gNewWithDouble_t	gNewWithDouble = _gNewWithDouble;
 gNewWithInt_t	gNewWithInt = _gNewWithInt;
 gNewWithIntObj_t	gNewWithIntObj = _gNewWithIntObj;
+gNewWithLogger_t	gNewWithLogger = _gNewWithLogger;
 gNewWithLong_t	gNewWithLong = _gNewWithLong;
 gNewWithObj_t	gNewWithObj = _gNewWithObj;
 gNewWithObjObj_t	gNewWithObjObj = _gNewWithObjObj;
@@ -3356,11 +3448,14 @@ gSequenceLinks_t	gSequenceLinks = _gSequenceLinks;
 gServerSocketConnect_t	gServerSocketConnect = _gServerSocketConnect;
 gSetArgs_t	gSetArgs = _gSetArgs;
 gSetAttribute_t	gSetAttribute = _gSetAttribute;
+gSetDisplayOn_t	gSetDisplayOn = _gSetDisplayOn;
 gSetErrorFunction_t	gSetErrorFunction = _gSetErrorFunction;
 gSetFunction_t	gSetFunction = _gSetFunction;
 gSetLogFileName_t	gSetLogFileName = _gSetLogFileName;
 gSetLogLevel_t	gSetLogLevel = _gSetLogLevel;
 gSetLogMode_t	gSetLogMode = _gSetLogMode;
+gSetLogOn_t	gSetLogOn = _gSetLogOn;
+gSetLogger_t	gSetLogger = _gSetLogger;
 gSetMaskFiller_t	gSetMaskFiller = _gSetMaskFiller;
 gSetMemoryBufferArea_t	gSetMemoryBufferArea = _gSetMemoryBufferArea;
 gSetMoreHandles_t	gSetMoreHandles = _gSetMoreHandles;
@@ -3373,11 +3468,13 @@ gSetTopNode_t	gSetTopNode = _gSetTopNode;
 gShape_t	gShape = _gShape;
 gShortValue_t	gShortValue = _gShortValue;
 gShouldNotImplement_t	gShouldNotImplement = _gShouldNotImplement;
+gShowUsage_t	gShowUsage = _gShowUsage;
 gSignal_t	gSignal = _gSignal;
 gSize_t	gSize = _gSize;
 gSocketConnect_t	gSocketConnect = _gSocketConnect;
 gSpace_t	gSpace = _gSpace;
 gStackAlloc_t	gStackAlloc = _gStackAlloc;
+gStackDump_t	gStackDump = _gStackDump;
 gState_t	gState = _gState;
 gStringKey_t	gStringKey = _gStringKey;
 gStringRep_t	gStringRep = _gStringRep;
@@ -3404,6 +3501,7 @@ gToUpper_t	gToUpper = _gToUpper;
 gToday_t	gToday = _gToday;
 gToken_t	gToken = _gToken;
 gTrace_t	gTrace = _gTrace;
+gTraceCall_t	gTraceCall = _gTraceCall;
 gTracePrint_t	gTracePrint = _gTracePrint;
 gTruncate_t	gTruncate = _gTruncate;
 gType_t	gType = _gType;
@@ -3632,6 +3730,7 @@ void	InitGenerics()
 	InitGeneric( gGetCipher );
 	InitGeneric( gGetContentType );
 	InitGeneric( gGetErrorCode );
+	InitGeneric( gGetErrorMessage );
 	InitGeneric( gGetErrorStr );
 	InitGeneric( gGetFixedName );
 	InitGeneric( gGetFloatFromNode );
@@ -3647,8 +3746,11 @@ void	InitGenerics()
 	InitGeneric( gGetPeerCertificateIssuerName );
 	InitGeneric( gGetPeerCertificateSubjectName );
 	InitGeneric( gGetSessionInfo );
+	InitGeneric( gGetStackDumpString );
+	InitGeneric( gGetStackDumpText );
 	InitGeneric( gGetStr );
 	InitGeneric( gGetTotalBytesRead );
+	InitGeneric( gGetTracer );
 	InitGeneric( gGets );
 	InitGeneric( gGroupRemove );
 	InitGeneric( gHasInputArg );
@@ -3671,7 +3773,9 @@ void	InitGenerics()
 	InitGeneric( gInvalidObject );
 	InitGeneric( gInvalidType );
 	InitGeneric( gIota );
+	InitGeneric( gIsDisplayOn );
 	InitGeneric( gIsKindOf );
+	InitGeneric( gIsLogOn );
 	InitGeneric( gIsVarArg );
 	InitGeneric( gJulToCal );
 	InitGeneric( gJulian );
@@ -3690,6 +3794,7 @@ void	InitGenerics()
 	InitGeneric( gLoadJavaClass );
 	InitGeneric( gLoadMask );
 	InitGeneric( gLock );
+	InitGeneric( gLogMessage );
 	InitGeneric( gLoggerMessage );
 	InitGeneric( gLongValue );
 	InitGeneric( gLookup );
@@ -3732,6 +3837,7 @@ void	InitGenerics()
 	InitGeneric( gNewWithDouble );
 	InitGeneric( gNewWithInt );
 	InitGeneric( gNewWithIntObj );
+	InitGeneric( gNewWithLogger );
 	InitGeneric( gNewWithLong );
 	InitGeneric( gNewWithObj );
 	InitGeneric( gNewWithObjObj );
@@ -3823,11 +3929,14 @@ void	InitGenerics()
 	InitGeneric( gServerSocketConnect );
 	InitGeneric( gSetArgs );
 	InitGeneric( gSetAttribute );
+	InitGeneric( gSetDisplayOn );
 	InitGeneric( gSetErrorFunction );
 	InitGeneric( gSetFunction );
 	InitGeneric( gSetLogFileName );
 	InitGeneric( gSetLogLevel );
 	InitGeneric( gSetLogMode );
+	InitGeneric( gSetLogOn );
+	InitGeneric( gSetLogger );
 	InitGeneric( gSetMaskFiller );
 	InitGeneric( gSetMemoryBufferArea );
 	InitGeneric( gSetMoreHandles );
@@ -3840,11 +3949,13 @@ void	InitGenerics()
 	InitGeneric( gShape );
 	InitGeneric( gShortValue );
 	InitGeneric( gShouldNotImplement );
+	InitGeneric( gShowUsage );
 	InitGeneric( gSignal );
 	InitGeneric( gSize );
 	InitGeneric( gSocketConnect );
 	InitGeneric( gSpace );
 	InitGeneric( gStackAlloc );
+	InitGeneric( gStackDump );
 	InitGeneric( gState );
 	InitGeneric( gStringKey );
 	InitGeneric( gStringRep );
@@ -3871,6 +3982,7 @@ void	InitGenerics()
 	InitGeneric( gToday );
 	InitGeneric( gToken );
 	InitGeneric( gTrace );
+	InitGeneric( gTraceCall );
 	InitGeneric( gTracePrint );
 	InitGeneric( gTruncate );
 	InitGeneric( gType );
@@ -3920,7 +4032,7 @@ void	InitGenerics()
 
 void	InitDynace(void *s)
 {
-	int	nClasses = 81;
+	int	nClasses = 82;
 
 
 	InitKernel(s, nClasses*2);
