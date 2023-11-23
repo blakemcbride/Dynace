@@ -68,5 +68,31 @@
 			PointerArray
 
 		FindFile
+		
+		Restart
+			SimpleRestart
+		Condition
+			SeriousCondition
+				Error
+					Abort
+			Warning
+				SimpleWarning
+					
+		HttpRequest
+		
+		Logger
+		
+		MimeBodyPart
+		MultipartMime
+		
+		ObjectPool
+		
+		PropertyList
+		
+		StackTracer
 
+		WeakPointer
+
+		XMLNode
+		
 * (DateTime inherits from Date and Time)
