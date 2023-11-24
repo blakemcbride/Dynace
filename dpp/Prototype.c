@@ -185,6 +185,22 @@ imeth objrtn Prototype_im_gPrintArgs(object self, object fobj)
 	return self; 
 } 
 
+imeth objrtn Prototype_im_gPrintMethArgsH(object self, object fobj)
+{ Prototype_iv_t *iv = GetIVs(Prototype, self);
+	object seq, nxt; 
+	int n=0; 
+
+	for (seq=gSequence(iv->iArgs) ; nxt = gNext(seq) ; ) { 
+		if (n++) 
+			gPuts(fobj, ", "); 
+		if (streq(gStringValue(nxt), "...")) 
+			gPuts(fobj, "va_list _rest_"); 
+		else 
+			gPuts(fobj, (char *) nxt); 
+	} 
+	return self; 
+} 
+
 imeth objrtn Prototype_im_gPrintFixedArgs(object self, object fobj)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
 	object seq, nxt; 
@@ -288,7 +304,7 @@ static void print_args(ivType *iv, object ar)
 #endif 
 
 
-#line 274 "Prototype.d"
+#line 290 "Prototype.d"
 imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
 	if (iv->iArgs) 
@@ -306,7 +322,7 @@ imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 	print_args(iv, iv->iProto); 
 #endif 
 
-#line 290 "Prototype.d"
+#line 306 "Prototype.d"
 		return self; 
 } 
 
@@ -361,7 +377,7 @@ imeth int Prototype_im_gMatchNoError(object self, object mproto)
 #endif 
 
 
-#line 343 "Prototype.d"
+#line 359 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) 
 		return 0; 
 
@@ -404,7 +420,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 #endif 
 
 
-#line 384 "Prototype.d"
+#line 400 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) { 
 		error = 1; 
 		vPrintf(stdoutStream, "Method %s and generic %s have different return types\n", 
@@ -450,7 +466,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 				gStringValue(iv->iName)); 
 			break; 
 		} 
-#line 433 "Prototype.d"
+#line 449 "Prototype.d"
 		if (gCompare(marg, garg)) { 
 			error = 1; 
 			vPrintf(stdoutStream, "Method %s and generic %s have different argument types (%d)\n", 
@@ -522,7 +538,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 526 "Prototype.c"
+#line 542 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {
@@ -556,6 +572,7 @@ objrtn	Prototype_initialize(void)
 	iMethodFor(Prototype, gGetFixedName, Prototype_im_gGetFixedName);
 	iMethodFor(Prototype, gGetMGName, Prototype_im_gGetMGName);
 	iMethodFor(Prototype, gCompare, Prototype_im_gCompare);
+	iMethodFor(Prototype, gPrintMethArgsH, Prototype_im_gPrintMethArgsH);
 	iMethodFor(Prototype, gHasInputArg, Prototype_im_gHasInputArg);
 	iMethodFor(Prototype, gPrototype, Prototype_im_gPrototype);
 	iMethodFor(Prototype, gPrintVars, Prototype_im_gPrintVars);

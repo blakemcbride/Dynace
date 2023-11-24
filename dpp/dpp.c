@@ -699,11 +699,11 @@ static	void	gen_inline(object fobj, char *name, object proto)
 			streq(rtn, "void")?"":"return", name);
 	} else {
 		if (streq(rtn, "void"))
-			vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 		else if (gIsVarArg(proto))
-			vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 		else
-			vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 	}
 	gPrintVars(proto, fobj);
 	gPuts(fobj, ");\n");
@@ -2173,10 +2173,17 @@ make_h(object	classes,
 			vPrintf(fobj, "#ifndef\t%s\n", td);
 			vPrintf(fobj, "#define\t%s\n", td);
 		}
+		
 		vPrintf(fobj, "typedef\t%s\t(*%s_t)(", 
 			gStringValue(gReturnType(proto)), name);
 		gPrintArgs(proto, fobj);
 		gPuts(fobj, ");\n");
+
+		vPrintf(fobj, "typedef\t%s\t(*%s_mt)(", 
+			gStringValue(gReturnType(proto)), name);
+		gPrintMethArgsH(proto, fobj);
+		gPuts(fobj, ");\n");
+		
 		if (Strategy == 3  ||  Strategy == 4  &&  !gIsVarArg(proto))
 			gen_inline(fobj, name, proto);
 		if (MacroGuard)
@@ -2314,11 +2321,11 @@ static	void	make_c(object	classes,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
-						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2365,9 +2372,9 @@ static	void	make_c(object	classes,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2512,11 +2519,11 @@ static	void	make_c2(object	generics,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
-						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\treturn (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2561,9 +2568,9 @@ static	void	make_c2(object	generics,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\t_ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2673,6 +2680,11 @@ static	void	proc_gen_generic(object generics, object fobj, object exceptions)
 		return;
 	}
 	gname = gStringValue(gen);
+	if (gname[strlen(gname)-1] == '_') {
+		DISPOSE(rtn);
+		DISPOSE(gen);
+		return;
+	}
 	if (!gFindEQ(generics, gen, NULL)) {
 		exception = NoProto || exceptions  &&  gFind(exceptions, gen);
 		if (!exception)
