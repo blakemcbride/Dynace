@@ -25,7 +25,9 @@ init: init_class;
 
 #include <stdio.h>
 #include <sys/wait.h>
+#ifdef __linux__
 #include <sys/prctl.h>
+#endif
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -219,7 +221,9 @@ static void print_trace(object logger)
 	sprintf(pid_buf, "%d", getpid());
 	char name_buf[512];
 	name_buf[readlink("/proc/self/exe", name_buf, 511)]=0;
+#ifdef __linux__
 	prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0);
+#endif
 	int child_pid = fork();
 	if (!child_pid) {
 		dup2(fh, 1);

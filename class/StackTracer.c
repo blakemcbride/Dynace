@@ -71,7 +71,12 @@ static	StackTracer_cv_t	*StackTracer_cv;
 #line 26 "StackTracer.d"
 #include <stdio.h> 
 #include <sys/wait.h> 
+#ifdef __linux__ 
 #include <sys/prctl.h> 
+#endif 
+
+
+#line 31 "StackTracer.d"
 #include <unistd.h> 
 #include <sys/types.h> 
 #include <sys/stat.h> 
@@ -265,7 +270,12 @@ static void print_trace(object logger)
 	sprintf(pid_buf, "%d", getpid()); 
 	char name_buf[512]; 
 	name_buf[readlink("/proc/self/exe", name_buf, 511)]=0; 
+#ifdef __linux__ 
 	prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0); 
+#endif 
+
+
+#line 227 "StackTracer.d"
 	int child_pid = fork(); 
 	if (!child_pid) { 
 		dup2(fh, 1); 
@@ -278,7 +288,7 @@ static void print_trace(object logger)
 	} 
 } 
 
-#line 282 "StackTracer.c"
+#line 292 "StackTracer.c"
 
 objrtn	StackTracer_initialize(void)
 {
