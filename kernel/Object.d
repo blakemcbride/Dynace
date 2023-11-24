@@ -38,9 +38,9 @@ public	defclass Object  {
 #include <math.h>
 #include <stdint.h>
 
-static	ifun	cErrorFunction;
+static	int	(*cErrorFunction)(char *);
 
-cmeth	ifun	gSetErrorFunction(ifun fun)
+cmeth	ifun	gSetErrorFunction(int (*fun)(char *))
 {
 	ifun	ret = cErrorFunction;
 	cErrorFunction = fun;

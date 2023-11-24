@@ -360,8 +360,7 @@ static int findbucket( union overhead *freep, int srchlen )
 /*
  * Allocate more memory to the indicated bucket.
  */
-static void morecore(bucket)
-int bucket;
+static void morecore(int bucket)
 {
 	union overhead *op;
 	long sz;        /* size of desired block */

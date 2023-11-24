@@ -58,7 +58,7 @@ defclass  String : Stream {
 
 class:
 	unsigned char	cMaskVal[MASK_MAX];
-	ifun		cMaskFun[MASK_MAX];
+	int		(*cMaskFun[MASK_MAX])(char);
 	char		cMaskBuf[MASK_MAX];
 
 init:	class_init;
@@ -96,7 +96,7 @@ init:	class_init;
 #define FREE_UNUSED
 #endif
 
-static	char	getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)());
+static	char	getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)(char));
 static	int	get_string(object, char **, char *, int);
 
 static	int	f_isdigit(char c)
@@ -119,13 +119,13 @@ static	void	class_init(void)
 	int	i = 0;
 
 	cMaskVal['#'] = MASK_BASE + i++;
-	cMaskFun[cMaskVal['#'] - MASK_BASE] = (ifun) f_isdigit;
+	cMaskFun[cMaskVal['#'] - MASK_BASE] = f_isdigit;
 	
 	cMaskVal['@'] = MASK_BASE + i++;
-	cMaskFun[cMaskVal['@'] - MASK_BASE] = (ifun) f_isalpha;
+	cMaskFun[cMaskVal['@'] - MASK_BASE] = f_isalpha;
 	
 	cMaskVal['&'] = MASK_BASE + i++;
-	cMaskFun[cMaskVal['&'] - MASK_BASE] = (ifun) f_isalnum;
+	cMaskFun[cMaskVal['&'] - MASK_BASE] = f_isalnum;
 }
 
 cmeth	gNewWithStr, <vNew> : String_New (char *so)
@@ -1156,7 +1156,7 @@ imeth	gApplyMask(char *inmask, char *intext)
 	return gChangeStrValue(self, buf);
 }
 
-static	char	getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)())
+static	char	getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)(char))
 {
 	char	ch;
 	int	inc = right ? -1 : 1;
@@ -1205,7 +1205,7 @@ imeth	gRemoveMask(char *inmask, char *text)
 
 cmeth	ifun	gMaskFunction(char ch)
 {
-	return cMaskFun[(unsigned char) ch - MASK_BASE];
+	return (ifun) cMaskFun[(unsigned char) ch - MASK_BASE];
 }
 
 imeth	char	gSetMaskFiller(char ch)

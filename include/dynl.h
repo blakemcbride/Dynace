@@ -559,7 +559,7 @@ extern	long	_SIG1, _SIG2;
 typedef struct HandlerCtx_s {
 	long	sig1;
 	long	sig2;
-	ofun	rstrt;
+	object	(*rstrt)(void *);
 	object	value;
 	jmp_buf unwind;
 }	HandlerCtx;

@@ -99,7 +99,7 @@ imeth	gDeepDispose()
 	return gDispose(super);
 }
 
-static	int	bsearch2(ivType *iv, ifun cfun, object key, int *idx)
+static	int	bsearch2(ivType *iv, int (*cfun)(void *, void *), object key, int *idx)
 {
 	int	low = 0, high = iUsed-1, mid, cond;
 

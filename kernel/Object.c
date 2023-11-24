@@ -50,9 +50,9 @@ object	Object_c;
 #include <math.h> 
 #include <stdint.h> 
 
-static ifun cErrorFunction; 
+static int (*cErrorFunction)(char *); 
 
-cmeth ifun Object_cm_gSetErrorFunction(object self, ifun fun)
+cmeth ifun Object_cm_gSetErrorFunction(object self, int (*fun)(char *))
 { 
 	ifun ret = cErrorFunction; 
 	cErrorFunction = fun; 

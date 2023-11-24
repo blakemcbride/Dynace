@@ -2469,7 +2469,7 @@ static	void	_gSetDisplayOn(object self, int bOn)
 	(*(gSetDisplayOn_mt)_FindMethod(self, Generic(gSetDisplayOn)))(self, bOn);
 }
 
-static	ifun	_gSetErrorFunction(object self, ifun fun)
+static	ifun	_gSetErrorFunction(object self, int (*fun)(char *))
 {
 	return (*(gSetErrorFunction_mt)_FindMethod(self, Generic(gSetErrorFunction)))(self, fun);
 }

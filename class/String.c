@@ -72,7 +72,7 @@ typedef struct  _String_iv_t  {
 #line 73 "String.c"
 typedef struct  _String_cv_t  {
 	unsigned char cMaskVal [ MASK_MAX ];
-	ifun cMaskFun [ MASK_MAX ];
+	int ( * cMaskFun [ MASK_MAX ] ) ( char );
 	char cMaskBuf [ MASK_MAX ];
 }	String_cv_t;
 
@@ -114,7 +114,7 @@ static	String_cv_t	*String_cv;
 
 
 #line 99 "String.d"
-static char getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)()); 
+static char getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)(char)); 
 static int get_string(object, char **, char *, int); 
 
 static int f_isdigit(char c) 
@@ -137,13 +137,13 @@ static void class_init(void)
 	int i = 0; 
 
 	String_cv->cMaskVal['#'] = MASK_BASE + i++; 
-	String_cv->cMaskFun[String_cv->cMaskVal['#'] - MASK_BASE] = (ifun) f_isdigit; 
+	String_cv->cMaskFun[String_cv->cMaskVal['#'] - MASK_BASE] = f_isdigit; 
 
 	String_cv->cMaskVal['@'] = MASK_BASE + i++; 
-	String_cv->cMaskFun[String_cv->cMaskVal['@'] - MASK_BASE] = (ifun) f_isalpha; 
+	String_cv->cMaskFun[String_cv->cMaskVal['@'] - MASK_BASE] = f_isalpha; 
 
 	String_cv->cMaskVal['&'] = MASK_BASE + i++; 
-	String_cv->cMaskFun[String_cv->cMaskVal['&'] - MASK_BASE] = (ifun) f_isalnum; 
+	String_cv->cMaskFun[String_cv->cMaskVal['&'] - MASK_BASE] = f_isalnum; 
 } 
 
 PMETHOD objrtn String_New(object self, char *so)
@@ -1212,7 +1212,7 @@ imeth objrtn String_im_gApplyMask(object self, char *inmask, char *intext)
 	return gChangeStrValue(self, buf); 
 } 
 
-static char getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)()) 
+static char getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)(char)) 
 { 
 	char ch; 
 	int inc = right ? -1 : 1; 
@@ -1261,7 +1261,7 @@ imeth objrtn String_im_gRemoveMask(object self, char *inmask, char *text)
 
 cmeth ifun String_cm_gMaskFunction(object self, char ch)
 { 
-	return String_cv->cMaskFun[(unsigned char) ch - MASK_BASE]; 
+	return (ifun) String_cv->cMaskFun[(unsigned char) ch - MASK_BASE]; 
 } 
 
 imeth char String_im_gSetMaskFiller(object self, char ch)
