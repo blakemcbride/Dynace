@@ -37,7 +37,24 @@
 
 #line 23 "Logger.d"
 #include <stdio.h> 
+#include <fcntl.h> 
+
+
+#ifdef _WIN32 
+#include <io.h> 
+#define close _close 
+#define write _write 
+#define open _open 
+#define read _read 
+#else 
+
+
+#line 34 "Logger.d"
 #include <unistd.h> 
+#endif 
+
+
+#line 40 "Logger.d"
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <fcntl.h> 
@@ -55,7 +72,7 @@
 object	Logger_c;
 
 
-#line 59 "Logger.c"
+#line 76 "Logger.c"
 typedef struct  _Logger_iv_t  {
 	char iLogFileName [ 1024 ];
 	int iMode;
@@ -64,7 +81,7 @@ typedef struct  _Logger_iv_t  {
 
 
 
-#line 40 "Logger.d"
+#line 55 "Logger.d"
 PMETHOD void out(object self, char *type, char *sfname, int line, char *msg); 
 static int hasNewline(char *s); 
 
@@ -241,7 +258,7 @@ static int hasNewline(char *s)
 	return *s == '\n'; 
 } 
 
-#line 245 "Logger.c"
+#line 262 "Logger.c"
 
 objrtn	Logger_initialize(void)
 {
