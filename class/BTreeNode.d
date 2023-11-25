@@ -53,6 +53,7 @@ class:
 	cData;					//  just some constant to be used as default data
 };
 
+typedef int (*ccfun)(void *, void *);
 
 cmeth	gNewNode(btree, int type)
 {
@@ -99,7 +100,7 @@ imeth	gDeepDispose()
 	return gDispose(super);
 }
 
-static	int	bsearch2(ivType *iv, int (*cfun)(void *, void *), object key, int *idx)
+static	int	bsearch2(ivType *iv, ccfun cfun, object key, int *idx)
 {
 	int	low = 0, high = iUsed-1, mid, cond;
 
@@ -126,7 +127,7 @@ imeth	gFindBTNEQ : find (ifun cfun, key, object *foundKey)
 {
 	int	found, idx;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (iType == 2)
 		if (found) {
 			if (foundKey)
@@ -162,7 +163,7 @@ imeth	gFindBTNGE : findGE (ifun cfun, object key, object *foundKey)
 	int	found, idx;
 	object	ret;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (iType == 2)
 		if (idx != iUsed) {
 			if (foundKey)
@@ -184,7 +185,7 @@ imeth	gFindBTNGT : findGT (ifun cfun, object key, object *foundKey)
 	int	found, idx;
 	object	ret;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (found)
 		idx++;
 	if (iType == 2)
@@ -208,7 +209,7 @@ imeth	gFindBTNLE : findLE (ifun cfun, object key, object *foundKey)
 	int	found, idx;
 	object	ret;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (iType == 2)
 		if (found) {
 			if (foundKey)
@@ -234,7 +235,7 @@ imeth	gFindBTNLT : findLT (ifun cfun, object key, object *foundKey)
 	int	idx;
 	object	ret;
 
-	bsearch2(iv, cfun, key, &idx);
+	bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (iType == 2)
 		if (idx) {
 			if (foundKey)
@@ -307,7 +308,7 @@ imeth	gDeleteBTNode : delete (ifun cfun, key, int deep, prev)
 	int	found, idx;
 	object	res;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun) cfun, key, &idx);
 	if (iType == 2) {
 		if (!found)
 			return NULL;
@@ -380,11 +381,11 @@ static	object	split(object lo, ivType *left, ifun cfun)
 		if (top->iUsed == OBJECTS_PER_NODE) {
 			ret = to = split(to, top, cfun);
 			top = ivPtr(to);
-			found = bsearch2(top, cfun, right->iKeys[0], &idx);
+			found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx);
 			to = top->iObjects[found+idx];
 			top = ivPtr(to);
 		}
-		found = bsearch2(top, cfun, right->iKeys[0], &idx);
+		found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx);
 		if (found)
 			gError(Dynace, "BTreeNode error");
 		n = top->iUsed - idx;
@@ -421,7 +422,7 @@ imeth	gAddBTreeNode : add (ifun cfun, key, data, int replace, int *replaced, pre
 	int	found, idx;
 	object	tmp,  ret;
 
-	found = bsearch2(iv, cfun, key, &idx);
+	found = bsearch2(iv, (ccfun)cfun, key, &idx);
 	if (iType == 1) {
 		iPrevious = prev;
 		ret = add(iObjects[found+idx], cfun, key, DATA, replace, replaced, self, old);

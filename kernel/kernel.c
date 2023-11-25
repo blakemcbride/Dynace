@@ -578,7 +578,9 @@ LOCAL	void	extend_storage(Behavior_iv_t *cv)
 	for (i=0 ; i != cv->nipib ; ++i)  {
               int     sz;
               unsigned char   *p;
- 
+
+	      USE(p);
+	      USE(sz);
               object obj = (object) fl;
               obj->tag = (OBJ_FREE | ALLOC_HEAP);
               obj->siz = 0;
@@ -604,7 +606,7 @@ static char *formatHex(char *buf, void *p)
 
 	sprintf(t, "%p", p);
 	for (pt=t ; *pt ; pt++);
-	len = pt - t;
+	len = (int)(pt - t);
 	pt--;
 	nc = (len - 2) / 4 - 1;
 	if (nc < 0)

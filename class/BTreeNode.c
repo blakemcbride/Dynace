@@ -72,8 +72,9 @@ typedef struct  _BTreeNode_cv_t  {
 static	BTreeNode_cv_t	*BTreeNode_cv;
 
 
+#line 56 "BTreeNode.d"
+typedef int (*ccfun)(void *, void *); 
 
-#line 57 "BTreeNode.d"
 cmeth objrtn BTreeNode_cm_gNewNode(object self, object btree, int type)
 { 
 	object obj = oSuper(BTreeNode_c, gNew, self)(self); 
@@ -119,7 +120,7 @@ imeth objrtn BTreeNode_im_gDeepDispose(object self)
 	return oSuper(BTreeNode_c, gDispose, self)(self); 
 } 
 
-static int bsearch2(ivType *iv, int (*cfun)(void *, void *), object key, int *idx) 
+static int bsearch2(ivType *iv, ccfun cfun, object key, int *idx) 
 { 
 	int low = 0, high = iv->iUsed-1, mid, cond; 
 
@@ -146,7 +147,7 @@ PMETHOD objrtn find(object self, ifun cfun, object key, object *foundKey)
 { BTreeNode_iv_t *iv = GetIVs(BTreeNode, self);
 	int found, idx; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (iv->iType == 2) 
 		if (found) { 
 		if (foundKey) 
@@ -182,7 +183,7 @@ PMETHOD objrtn findGE(object self, ifun cfun, object key, object *foundKey)
 	int found, idx; 
 	object ret; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (iv->iType == 2) 
 		if (idx != iv->iUsed) { 
 		if (foundKey) 
@@ -204,7 +205,7 @@ PMETHOD objrtn findGT(object self, ifun cfun, object key, object *foundKey)
 	int found, idx; 
 	object ret; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (found) 
 		idx++; 
 	if (iv->iType == 2) 
@@ -228,7 +229,7 @@ PMETHOD objrtn findLE(object self, ifun cfun, object key, object *foundKey)
 	int found, idx; 
 	object ret; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (iv->iType == 2) 
 		if (found) { 
 		if (foundKey) 
@@ -254,7 +255,7 @@ PMETHOD objrtn findLT(object self, ifun cfun, object key, object *foundKey)
 	int idx; 
 	object ret; 
 
-	bsearch2(iv, cfun, key, &idx); 
+	bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (iv->iType == 2) 
 		if (idx) { 
 		if (foundKey) 
@@ -327,7 +328,7 @@ PMETHOD objrtn delete(object self, ifun cfun, object key, int deep, object prev)
 	int found, idx; 
 	object res; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun) cfun, key, &idx); 
 	if (iv->iType == 2) { 
 		if (!found) 
 			return NULL; 
@@ -400,11 +401,11 @@ static object split(object lo, ivType *left, ifun cfun)
 		if (top->iUsed == OBJECTS_PER_NODE) { 
 			ret = to = split(to, top, cfun); 
 			top = ivPtr(to); 
-			found = bsearch2(top, cfun, right->iKeys[0], &idx); 
+			found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx); 
 			to = top->iObjects[found+idx]; 
 			top = ivPtr(to); 
 		} 
-		found = bsearch2(top, cfun, right->iKeys[0], &idx); 
+		found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx); 
 		if (found) 
 			gError(Dynace, "BTreeNode error"); 
 		n = top->iUsed - idx; 
@@ -424,7 +425,7 @@ static object split(object lo, ivType *left, ifun cfun)
 	return ret; 
 } 
 
-#line 417 "BTreeNode.d"
+#line 418 "BTreeNode.d"
 #define DATA data ? data : BTreeNode_cv->cData 
 
 PMETHOD objrtn add(object self, ifun cfun, object key, object data, int replace, int *replaced, object prev, object *old)
@@ -432,7 +433,7 @@ PMETHOD objrtn add(object self, ifun cfun, object key, object data, int replace,
 	int found, idx; 
 	object tmp, ret; 
 
-	found = bsearch2(iv, cfun, key, &idx); 
+	found = bsearch2(iv, (ccfun)cfun, key, &idx); 
 	if (iv->iType == 1) { 
 		iv->iPrevious = prev; 
 		ret = add(iv->iObjects[found+idx], cfun, key, DATA, replace, replaced, self, old); 
@@ -525,7 +526,7 @@ imeth objrtn BTreeNode_im_gPrintValue(object self, object stream)
 } 
 
 
-#line 529 "BTreeNode.c"
+#line 530 "BTreeNode.c"
 
 objrtn	BTreeNode_initialize(void)
 {

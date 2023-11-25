@@ -588,7 +588,7 @@ typedef struct HandlerCtx_s {
     __ctx.value = NULL;				\
 } (void)0
 
-#define callNextRestart		((ofun)1)
+#define callNextRestart		((object (*)(void *))1)
 #define catchKind(cls)		_catchKind(&__ctx.value, cls)
 #define declineHandling(cond)	(__ctx.value = cond)
 
