@@ -37,7 +37,7 @@ CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.
 	LookupKey.d Set.d Dictionary.d String.d LongInteger.d DoubleFloat.d \
 	Character.d SetSequence.d LinkObjectSequence.d StringAssociation.d StringDictionary.d LinkSequence.d UnsignedShortInteger.d \
 	Date.d Pointer.d memalloc.d Number.d ObjectAssociation.d Logger.d \
-	Sequence.d Stream.d File.d LowFile.d Array.d CharacterArray.d \
+	Sequence.d Stream.d File.d LowFile.d Array.d CharacterArray.d StackTracerWindows.d \
 	Constant.d ShortArray.d UnsignedShortArray.d IntegerArray.d LongArray.d FloatArray.d \
 	DoubleFloatArray.d BitArray.d ObjectArray.d PointerArray.d NumberArray.d IntegerAssociation.d \
 	IntegerDictionary.d FindFile.d BTree.d BTreeNode.d Memory.d Socket.d XMLNode.d \
