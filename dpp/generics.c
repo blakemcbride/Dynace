@@ -242,6 +242,7 @@ object	Generic(gGetGenericPtr);
 object	Generic(gGetHeader);
 object	Generic(gGetHeaders);
 object	Generic(gGetIntFromNode);
+object	Generic(gGetLogFileName);
 object	Generic(gGetLogLevel);
 object	Generic(gGetLogMode);
 object	Generic(gGetMGName);
@@ -1472,6 +1473,11 @@ static	objrtn	_gGetHeaders(object self)
 static	int	_gGetIntFromNode(object self, char *node)
 {
 	return (*(gGetIntFromNode_mt)_FindMethod(self, Generic(gGetIntFromNode)))(self, node);
+}
+
+static	objrtn	_gGetLogFileName(object self)
+{
+	return (*(gGetLogFileName_mt)_FindMethod(self, Generic(gGetLogFileName)))(self);
 }
 
 static	int	_gGetLogLevel(object self)
@@ -3259,6 +3265,7 @@ gGetGenericPtr_t	gGetGenericPtr = _gGetGenericPtr;
 gGetHeader_t	gGetHeader = _gGetHeader;
 gGetHeaders_t	gGetHeaders = _gGetHeaders;
 gGetIntFromNode_t	gGetIntFromNode = _gGetIntFromNode;
+gGetLogFileName_t	gGetLogFileName = _gGetLogFileName;
 gGetLogLevel_t	gGetLogLevel = _gGetLogLevel;
 gGetLogMode_t	gGetLogMode = _gGetLogMode;
 gGetMGName_t	gGetMGName = _gGetMGName;
@@ -3745,6 +3752,7 @@ void	InitGenerics()
 	InitGeneric( gGetHeader );
 	InitGeneric( gGetHeaders );
 	InitGeneric( gGetIntFromNode );
+	InitGeneric( gGetLogFileName );
 	InitGeneric( gGetLogLevel );
 	InitGeneric( gGetLogMode );
 	InitGeneric( gGetMGName );

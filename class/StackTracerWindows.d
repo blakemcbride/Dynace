@@ -287,7 +287,7 @@ imeth int gIsDisplayOn()
 imeth    gGetLogFileName()
 {
 	return gNewWithStr(String, iLogFileName);
-};
+}
 
 imeth	gSetLogFileName(char *logFileName)
 {

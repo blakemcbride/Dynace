@@ -148,6 +148,11 @@ imeth int StackTracer_im_gIsDisplayOn(object self)
 	return iv->iDisplayOn; 
 } 
 
+imeth objrtn StackTracer_im_gGetLogFileName(object self)
+{ 
+	return gNewWithStr(String, ""); 
+} 
+
 cmeth objrtn StackTracer_cm_gGetTracer(object self)
 { 
 	return StackTracer_cv->cTracer; 
@@ -275,7 +280,7 @@ static void print_trace(object logger)
 #endif 
 
 
-#line 227 "StackTracer.d"
+#line 232 "StackTracer.d"
 	int child_pid = fork(); 
 	if (!child_pid) { 
 		dup2(fh, 1); 
@@ -288,7 +293,7 @@ static void print_trace(object logger)
 	} 
 } 
 
-#line 292 "StackTracer.c"
+#line 297 "StackTracer.c"
 
 objrtn	StackTracer_initialize(void)
 {
@@ -321,6 +326,7 @@ objrtn	StackTracer_initialize(void)
 	iMethodFor(StackTracer, gSetDisplayOn, StackTracer_im_gSetDisplayOn);
 	iMethodFor(StackTracer, gGetStackDumpString, StackTracer_im_gGetStackDumpString);
 	iMethodFor(StackTracer, gIsLogOn, StackTracer_im_gIsLogOn);
+	iMethodFor(StackTracer, gGetLogFileName, StackTracer_im_gGetLogFileName);
 	iMethodFor(StackTracer, gSetLogOn, StackTracer_im_gSetLogOn);
 	iMethodFor(StackTracer, gGetErrorMessage, StackTracer_im_gGetErrorMessage);
 	iMethodFor(StackTracer, gDispose, StackTracer_im_gDispose);

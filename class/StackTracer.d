@@ -99,6 +99,11 @@ imeth int gIsDisplayOn()
 	return iDisplayOn; 
 }
 
+imeth    gGetLogFileName()
+{
+	return gNewWithStr(String, "");
+}
+
 cmeth   gGetTracer()
 {
 	return cTracer;
