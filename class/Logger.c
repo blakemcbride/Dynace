@@ -41,20 +41,30 @@
 
 
 #ifdef _WIN32 
+#include <windows.h> 
 #include <io.h> 
 #define close _close 
 #define write _write 
 #define open _open 
 #define read _read 
+#define S_IRUSR _S_IREAD 
+#define S_IWUSR _S_IWRITE 
+#define S_IRGRP 0 
+#define S_IROTH 0 
+#define S_IWGRP 0 
+#define S_IWOTH 0 
+#define STDOUT_FILENO 1 
+#define STDERR_FILENO 2 
+#define STDIN_FILENO 0 
 #else 
 
 
-#line 34 "Logger.d"
+#line 44 "Logger.d"
 #include <unistd.h> 
 #endif 
 
 
-#line 40 "Logger.d"
+#line 47 "Logger.d"
 #include <sys/types.h> 
 #include <sys/stat.h> 
 #include <fcntl.h> 
@@ -72,7 +82,7 @@
 object	Logger_c;
 
 
-#line 76 "Logger.c"
+#line 86 "Logger.c"
 typedef struct  _Logger_iv_t  {
 	char iLogFileName [ 1024 ];
 	int iMode;
@@ -81,7 +91,7 @@ typedef struct  _Logger_iv_t  {
 
 
 
-#line 55 "Logger.d"
+#line 62 "Logger.d"
 PMETHOD void out(object self, char *type, char *sfname, int line, char *msg); 
 static int hasNewline(char *s); 
 
@@ -208,7 +218,42 @@ PMETHOD void out(object self, char *type, char *sfname, int line, char *msg)
 
 imeth int Logger_im_gOpenLogFile(object self)
 { Logger_iv_t *iv = GetIVs(Logger, self);
-	int fd; 
+#ifdef _WIN32 
+		HANDLE hFile; 
+	DWORD dwDesiredAccess = FILE_APPEND_DATA; 
+	DWORD dwShareMode = 0; 
+	DWORD dwCreationDisposition = OPEN_ALWAYS; 
+	OVERLAPPED overlapped = { 0 }; 
+
+	if (iv->iMode == LOG_MODE_STDOUT) 
+		return _fileno(stdout); 
+	else if (iv->iMode == LOG_MODE_STDERR) 
+		return _fileno(stderr); 
+
+	hFile = CreateFileA(iv->iLogFileName, dwDesiredAccess, dwShareMode, NULL, dwCreationDisposition, FILE_ATTRIBUTE_NORMAL, NULL); 
+	if (hFile == INVALID_HANDLE_VALUE) 
+		return -1; 
+
+
+	overlapped.Offset = 0; 
+	overlapped.OffsetHigh = 0; 
+	if (LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, MAXDWORD, MAXDWORD, &overlapped) == 0) { 
+		CloseHandle(hFile); 
+		return -1; 
+	} 
+
+
+	int fd = _open_osfhandle((intptr_t)hFile, _O_APPEND); 
+	if (fd == -1) { 
+		CloseHandle(hFile); 
+		return -1; 
+	} 
+
+	return fd; 
+#else 
+
+#line 221 "Logger.d"
+		int fd; 
 	struct flock lock; 
 
 	if (iv->iMode == LOG_MODE_STDOUT) 
@@ -226,11 +271,31 @@ imeth int Logger_im_gOpenLogFile(object self)
 	lock.l_pid = getpid(); 
 	fcntl(fd, F_SETLKW, &lock); 
 	return fd; 
-} 
+#endif 
+
+#line 240 "Logger.d"
+	} 
 
 PMETHOD void unlock(object self, int fd)
 { 
-	struct flock lock; 
+#ifdef _WIN32 
+		HANDLE hFile; 
+	OVERLAPPED overlapped = { 0 }; 
+
+	if (fd == _fileno(stdout) || fd == _fileno(stderr) || fd == -1) 
+		return; 
+
+	hFile = (HANDLE)_get_osfhandle(fd); 
+	if (hFile == INVALID_HANDLE_VALUE) 
+		return; 
+
+	overlapped.Offset = 0; 
+	overlapped.OffsetHigh = 0; 
+	UnlockFileEx(hFile, 0, MAXDWORD, MAXDWORD, &overlapped); 
+#else 
+
+#line 259 "Logger.d"
+		struct flock lock; 
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO || fd == -1) 
 		return; 
@@ -240,7 +305,10 @@ PMETHOD void unlock(object self, int fd)
 	lock.l_len = 0; 
 	lock.l_pid = getpid(); 
 	fcntl(fd, F_SETLKW, &lock); 
-} 
+#endif 
+
+#line 270 "Logger.d"
+	} 
 
 imeth void Logger_im_gCloseLogFile(object self, int fd)
 { 
@@ -258,7 +326,7 @@ static int hasNewline(char *s)
 	return *s == '\n'; 
 } 
 
-#line 262 "Logger.c"
+#line 330 "Logger.c"
 
 objrtn	Logger_initialize(void)
 {

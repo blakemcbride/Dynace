@@ -25,17 +25,24 @@
 
 
 #ifdef _WIN32
+    #include <windows.h>
     #include <io.h>
     #define close _close
     #define write _write
     #define open _open
     #define read _read
+    #define S_IRUSR _S_IREAD
+    #define S_IWUSR _S_IWRITE
+    #define S_IRGRP 0
+    #define S_IROTH 0
+    #define S_IWGRP 0
+    #define S_IWOTH 0
+    #define STDOUT_FILENO 1
+    #define STDERR_FILENO 2
+    #define STDIN_FILENO 0
 #else
     #include <unistd.h>
 #endif
-
-
-
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -178,6 +185,39 @@ private imeth	void	out(char *type, char *sfname, int line, char *msg)
 
 imeth int gOpenLogFile()
 {
+#ifdef _WIN32
+    HANDLE hFile;
+    DWORD dwDesiredAccess = FILE_APPEND_DATA;
+    DWORD dwShareMode = 0;
+    DWORD dwCreationDisposition = OPEN_ALWAYS;
+    OVERLAPPED overlapped = { 0 };
+
+    if (iMode == LOG_MODE_STDOUT)
+        return _fileno(stdout);
+    else if (iMode == LOG_MODE_STDERR)
+        return _fileno(stderr);
+
+    hFile = CreateFileA(iLogFileName, dwDesiredAccess, dwShareMode, NULL, dwCreationDisposition, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE)
+        return -1;
+
+    // Setting up the lock - Lock the file exclusively
+    overlapped.Offset = 0;
+    overlapped.OffsetHigh = 0;
+    if (LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, MAXDWORD, MAXDWORD, &overlapped) == 0) {
+        CloseHandle(hFile);
+        return -1;
+    }
+
+    // Converting the Windows HANDLE to a file descriptor
+    int fd = _open_osfhandle((intptr_t)hFile, _O_APPEND);
+    if (fd == -1) {
+        CloseHandle(hFile);
+        return -1;
+    }
+
+    return fd;
+#else
 	int	fd;
 	struct flock lock;
 
@@ -196,10 +236,26 @@ imeth int gOpenLogFile()
 	lock.l_pid = getpid();
     	fcntl(fd, F_SETLKW, &lock);
 	return fd;
+#endif
 }
 
 imeth	void	gUnlockLogFile : unlock(int fd)
 {
+#ifdef _WIN32
+    HANDLE hFile;
+    OVERLAPPED overlapped = { 0 };
+
+    if (fd == _fileno(stdout) || fd == _fileno(stderr) || fd == -1)
+        return;
+
+    hFile = (HANDLE)_get_osfhandle(fd);
+    if (hFile == INVALID_HANDLE_VALUE)
+        return;
+
+    overlapped.Offset = 0;
+    overlapped.OffsetHigh = 0;
+    UnlockFileEx(hFile, 0, MAXDWORD, MAXDWORD, &overlapped);
+#else
 	struct flock lock;
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO || fd == -1)
@@ -210,6 +266,7 @@ imeth	void	gUnlockLogFile : unlock(int fd)
 	lock.l_len = 0;
 	lock.l_pid = getpid();
 	fcntl(fd, F_SETLKW, &lock);
+#endif
 }
 
 imeth	void	gCloseLogFile(int fd)
