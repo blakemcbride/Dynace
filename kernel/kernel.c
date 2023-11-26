@@ -2106,11 +2106,9 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	In_GC++;
 	ENTERCRITICALSECTION(GC_CS);
 	INHIBIT_THREADER;
-#ifdef sparc
-	asm("t 3");	/* flush out registers onto the stack */
-#endif
 
-#if	0  &&  defined(WIN32)  &&  !defined(BOEHM_GC)
+#if	0  &&  defined(WIN32)
+	/* There is no portable way to do this.  Therefore, you have to mark global variables manually.  */
 	_register_global_memory();
 #endif
 
@@ -2138,9 +2136,8 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			MARK_REG(Ebp);
 		}
 	}
-#endif
 
-#ifdef _M_X64  // 64-bit Windows
+#elif defined(_M_X64)  // 64-bit Windows
 	{
 #define MARK_REG(r)  if (IsObj((object)context.r)  &&  ((object)(context.r))->tag & OBJ_USED) \
 			Dynace_cm_gMarkObject(Dynace_c, (object) context.r)
@@ -2167,9 +2164,8 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			MARK_REG(Rip);
 		}
 	}
-#endif
 
-#if defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC and intel Mac
+#elif defined(__GNUC__)  &&  defined(__amd64__)  // 64-bit Linux under GNU CC and intel Mac
 #define MARK_REG(r)					\
 	__asm__	volatile ("mov %%" #r ", %0" : "=r" (c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
@@ -2190,10 +2186,8 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(r13);
 	MARK_REG(r14);
 	MARK_REG(r15);
-#endif
 
-	
-#if defined(__GNUC__) &&  defined(__i386__)	// 32-bit Linux
+#elif defined(__GNUC__) &&  defined(__i386__)	// 32-bit Linux
 #define MARK_REG(r)					\
 	__asm__	("movl %%" #r ",%0" : "=g" (c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
@@ -2206,9 +2200,8 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(edi);
 	MARK_REG(esi);
 	MARK_REG(ebp);
-#endif
 
-#if defined(__APPLE__) && TARGET_CPU_X86_64
+#elif defined(__APPLE__) && TARGET_CPU_X86_64
 #define MARK_REG(r)					\
 	__asm__ ("movq %%" #r ", %0" : "=r"(c));	\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
@@ -2229,9 +2222,8 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(r13);
 	MARK_REG(r14);
 	MARK_REG(r15);
-#endif
 
-#if defined(__APPLE__) && TARGET_CPU_ARM64
+#elif defined(__APPLE__) && TARGET_CPU_ARM64
 #define MARK_REG(r)					\
 	__asm__ ("mov %0, " #r : "=r"(c));		\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
@@ -2268,6 +2260,18 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(x28);
 	MARK_REG(x29);
 	MARK_REG(x30);
+
+#elif defined(sparc)
+	asm("t 3");	/* flush out registers onto the stack */
+#else
+
+	/* In this case we are dealing with a platform that the GC has not yet been ported.
+	   This port is unnecessary if you're not using the GC.  Simply commend out the #error.
+	   On the other hand, we just need to mark the registers on your platform here.
+	   The above examples should be all you need.
+	*/
+#error "There is no port for the GC on this platform."
+	
 #endif
 
 	for (p=LGMR ; p ; p=p->next)
