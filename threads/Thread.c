@@ -107,7 +107,7 @@ struct _priority_queue {
 
 #include <string.h> 
 
-#if !defined(unix) && !defined(__APPLE__) && !defined(PLAN9) && !defined(__minix) 
+#if defined(_MSC_VER) 
 #include <conio.h> 
 #ifdef _MSC_VER 
 #if _MSC_VER >= 1400 

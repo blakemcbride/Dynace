@@ -40,13 +40,13 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#if	!defined(unix)  &&  !defined(__APPLE__)  &&  !defined(__minix)
+#if	defined(_MSC_VER)
 #include <io.h>
 #include <sys/locking.h>
 #include <errno.h>
 #endif
 
-#if	defined(sparc)  ||  defined(unix)  ||  defined(__APPLE__)  ||  defined(PLAN9)  ||  defined(__minix)
+#if	!defined(_MSC_VER)
 #include <unistd.h>
 #define	tell(h)		lseek(h, 0L, SEEK_CUR)
 #endif
@@ -193,7 +193,7 @@ imeth	char	*gName()
 
 imeth	int	gEndOfStream()
 {
-#if	!defined(unix)  &&  !defined(__APPLE__)  &&  !defined(PLAN9)  &&  !defined(__minix) /*  eof() not available on unix  */
+#if	defined(_MSC_VER) /*  eof() not available on unix  */
 	return eof(iHandle);
 #else
 	gShouldNotImplement(self, "EndOfStream");
@@ -227,7 +227,7 @@ imeth	int	gLock(unsigned long start, unsigned long len, int wait)
 	gShouldNotImplement(self, "gLock");
 	return 0;
 #else
-#if	!defined(unix)  &&  !defined(__APPLE__)  &&  !defined(__minix)
+#if	defined(_MSC_VER)
 	int	r;
 	
 	_lseek(iHandle, start, SEEK_SET);
@@ -261,7 +261,7 @@ imeth	int	gUnLock(unsigned long start, unsigned long len)
 	gShouldNotImplement(self, "gUnLock");
 	return 0;
 #else
-#if	!defined(unix)  &&  !defined(__APPLE__)  &&  !defined(__minix)
+#if	defined(_MSC_VER)
 	_lseek(iHandle, start, SEEK_SET);
 	return _locking(iHandle, _LK_UNLCK, len);
 #else

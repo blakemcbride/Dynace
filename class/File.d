@@ -45,9 +45,10 @@
 #include <unistd.h>
 #endif
 #include <time.h>
-#if !defined(unix)  &&  !defined(__APPLE__)  &&  !defined(__minix)
+#if defined(_MSC_VER)
 #include <direct.h>
 #endif
+
 #include <string.h>
 
 defclass  File : Stream  {
@@ -64,7 +65,7 @@ defclass  File : Stream  {
  init:	class_init;
 };
 
-#if	defined(unix)  ||  defined(__APPLE__)  ||  defined(__minix)
+#if	defined(unix)  ||  defined(__APPLE__)  ||  defined(__minix) || defined(__HAIKU__)
 #define	MKDIR(d)	mkdir(d, 0777)
 #else
 #define	MKDIR(d)	mkdir(d)

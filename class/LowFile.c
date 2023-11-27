@@ -51,7 +51,7 @@
 #include <fcntl.h> 
 #include <sys/types.h> 
 #include <sys/stat.h> 
-#if !defined(unix) && !defined(__APPLE__) && !defined(__minix) 
+#if defined(_MSC_VER) 
 #include <io.h> 
 #include <sys/locking.h> 
 #include <errno.h> 
@@ -59,7 +59,7 @@
 
 
 #line 49 "LowFile.d"
-#if defined(sparc) || defined(unix) || defined(__APPLE__) || defined(PLAN9) || defined(__minix) 
+#if !defined(_MSC_VER) 
 #include <unistd.h> 
 #define tell(h) lseek(h, 0L, SEEK_CUR) 
 #endif 
@@ -237,7 +237,7 @@ imeth char * LowFile_im_gName(object self)
 
 imeth int LowFile_im_gEndOfStream(object self)
 { LowFile_iv_t *iv = GetIVs(LowFile, self);
-#if !defined(unix) && !defined(__APPLE__) && !defined(PLAN9) && !defined(__minix) 
+#if defined(_MSC_VER) 
 		return eof(iv->iHandle); 
 #else 
 
@@ -277,7 +277,7 @@ imeth int LowFile_im_gLock(object self, unsigned long start, unsigned long len, 
 #else 
 
 #line 230 "LowFile.d"
-#if !defined(unix) && !defined(__APPLE__) && !defined(__minix) 
+#if defined(_MSC_VER) 
 		int r; 
 
 	_lseek(iv->iHandle, start, SEEK_SET); 
@@ -327,7 +327,7 @@ imeth int LowFile_im_gUnLock(object self, unsigned long start, unsigned long len
 #else 
 
 #line 264 "LowFile.d"
-#if !defined(unix) && !defined(__APPLE__) && !defined(__minix) 
+#if defined(_MSC_VER) 
 		_lseek(iv->iHandle, start, SEEK_SET); 
 	return _locking(iv->iHandle, _LK_UNLCK, len); 
 #else 

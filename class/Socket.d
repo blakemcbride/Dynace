@@ -29,7 +29,7 @@
 
 
 
-#if	(defined(unix) || defined(__APPLE__)  ||  defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 #define	USE_FCNTL
 #endif
 
@@ -42,7 +42,7 @@
 #endif
 
 #include <stdio.h>
-#if	(!defined(unix) && !defined(__APPLE__)  &&  !defined(__minix))  ||  defined(__WINE__)
+#if	defined(_MSC_VER)
 #include <winsock.h>
 #endif
 #include <stdlib.h>
@@ -55,7 +55,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#if	(defined(unix) || defined(__APPLE__)  ||  defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 #include <unistd.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -69,7 +69,7 @@
 #endif
 
 
-#if	(defined(unix) || defined(__APPLE__) || defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 #define	closesocket     close
 #define	ioctlsocket	    ioctl
 #define	SOCKET          int
@@ -197,7 +197,7 @@ cmeth	gNew()
 ///////////////////////////////////////////////////////////////////
 static int initSockets()
 {
-#if	(!defined(unix) && !defined(__APPLE__) && !defined(__minix))  ||  defined(__WINE__)
+#if	defined(_MSC_VER)
 	WORD    wVersionRequested;
 	WSADATA wsaData;
 	int     err;
@@ -233,6 +233,7 @@ cmeth gSocketConnect(char *addr, int port, short int flag)
 {
 	return gProxyConnect(self, addr, port, flag, NULL, 0, NULL, NULL);
 }
+
 static	object	errorReturn(object obj, int e, char *msg)
 {
 	cError = e;
@@ -242,7 +243,6 @@ static	object	errorReturn(object obj, int e, char *msg)
 
 cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int proxy_port, char *proxy_user, char *proxy_pw)
 {
-
 	struct  hostent *he = NULL;
 	struct  sockaddr_in their_addr;   // server's address information
 	int     isip, isproxy = !!proxy_addr;
@@ -821,7 +821,7 @@ imeth	long	gGetTotalBytesRead()
 static object decrementUsage()
 {
 	if (cNumbInstances  &&  !--cNumbInstances)
-#if	(!defined(unix) && !defined(__APPLE__) && !defined(__minix))  ||  defined(__WINE__)
+#if	defined(_MSC_VER)
 		WSACancelBlockingCall(), 
 		WSACleanup()
 #endif
@@ -832,7 +832,7 @@ static object decrementUsage()
 
 static	int	what_error()
 {
-#if	(defined(unix) || defined(__APPLE__) || defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 	return errno;
 #else
 	return WSAGetLastError();
@@ -866,7 +866,7 @@ static int updateErrorStr(char * strBuf)
 //////////////////////////////////////////////////////////////////
 static void sleepInMilliSeconds(unsigned time)
 {
-#if	(defined(unix) || defined(__APPLE__) || defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 	struct timeval  tval;
 	tval.tv_sec = time/1000;
 	tval.tv_usec = time%1000;
@@ -1202,7 +1202,7 @@ imeth	unsigned long	gIPAddress()
 
 imeth	char	*gIPAddressStr(char *buf)
 {
-#if	(defined(unix) || defined(__APPLE__) || defined(__minix))  &&  !defined(__WINE__)
+#if	!defined(_MSC_VER)
 	char *addr = inet_ntoa(iAddress.sin_addr);
 	strcpy(buf, addr);
 #else
@@ -1234,7 +1234,7 @@ imeth	gAccept()
 
 	newsock = accept(sockfd, (struct sockaddr *)&client_addr, (unsigned int *)&sin_size);
 	if (newsock == INVALID_SOCKET) {
-#if	(!defined(unix) && !defined(__APPLE__) && !defined(__minix))  ||  defined(__WINE__)
+#if	defined(_MSC_VER)
 		int	e = WSAGetLastError();
 #endif
 		return NULL;

@@ -31,6 +31,7 @@ Dynace Object-Oriented Extension to C
 * Windows (all versions)
 * BSD
 * Solaris / OpenIndiana
+* Haiku
 * Plan 9
 * Minix
 

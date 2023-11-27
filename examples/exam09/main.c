@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	/*  The following line is used to turn on the automatic garbage
 	    collector (un-comment after the first run) */
 
-/*	gSetMemoryBufferArea(Dynace, 50000L);   */
+	gSetMemoryBufferArea(Dynace, 50000L);   
 
 
 

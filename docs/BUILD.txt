@@ -88,8 +88,8 @@ commands:
 
 ================================================================================
 
-Linux, Apple Mac, FreeBSD, Solaris, and Cygwin under Windows
-------------------------------------------------------------
+Linux, Apple Mac, FreeBSD, Haiku, Solaris, and Cygwin under Windows
+-------------------------------------------------------------------
 
 1.  Build the system as follows:
 

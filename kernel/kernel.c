@@ -38,7 +38,7 @@
 
 #if !defined(__COSMIC__)  &&  !defined(PLAN9)
 #include <time.h>
-#if	!defined(unix) && !defined(__APPLE__)  &&  !defined(__MWERKS__)  &&  !defined(__minix)
+#if	defined(_M_IX86) || defined(_M_X64)
 #include <dos.h>
 #endif
 #endif

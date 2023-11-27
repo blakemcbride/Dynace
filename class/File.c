@@ -67,12 +67,12 @@
 
 #line 47 "File.d"
 #include <time.h> 
-#if !defined(unix) && !defined(__APPLE__) && !defined(__minix) 
+#if defined(_MSC_VER) 
 #include <direct.h> 
 #endif 
 
 
-#line 51 "File.d"
+#line 52 "File.d"
 #include <string.h> 
 
 #define	CLASS	File_c
@@ -103,18 +103,18 @@ typedef struct  _File_cv_t  {
 static	File_cv_t	*File_cv;
 
 
-#line 67 "File.d"
-#if defined(unix) || defined(__APPLE__) || defined(__minix) 
+#line 68 "File.d"
+#if defined(unix) || defined(__APPLE__) || defined(__minix) || defined(__HAIKU__) 
 #define MKDIR(d) mkdir(d, 0777) 
 #else 
 
 
-#line 70 "File.d"
+#line 71 "File.d"
 #define MKDIR(d) mkdir(d) 
 #endif 
 
 
-#line 73 "File.d"
+#line 74 "File.d"
 cmeth objrtn File_cm_gNew(object self)
 { 
 	return gShouldNotImplement(self, "gNew"); 
@@ -185,12 +185,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 141 "File.d"
+#line 142 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 143 "File.d"
+#line 144 "File.d"
 		} 
 
 
@@ -205,12 +205,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 155 "File.d"
+#line 156 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 157 "File.d"
+#line 158 "File.d"
 		} 
 
 
@@ -220,12 +220,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 164 "File.d"
+#line 165 "File.d"
 		File_cv->cProcessID = time(NULL); 
 #endif 
 
 
-#line 175 "File.d"
+#line 176 "File.d"
 		sprintf(File_cv->cTempFileDir, "%s%u", tp, (unsigned) File_cv->cProcessID); 
 		while (MKDIR(File_cv->cTempFileDir)) 
 			sprintf(File_cv->cTempFileDir, "%s%u", tp, (unsigned) ++File_cv->cProcessID); 
@@ -236,13 +236,13 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 183 "File.d"
+#line 184 "File.d"
 	sprintf(file, "%s\\%u-%u.tmp", File_cv->cTempFileDir, (unsigned) File_cv->cProcessID, ++tfn); 
 	obj = gOpenFile(self, file, "w+b"); 
 #endif 
 
 
-#line 186 "File.d"
+#line 187 "File.d"
 	if (obj) { 
 		File_cv->cNumTempFiles++; 
 		return set_temp(obj); 
@@ -335,7 +335,7 @@ imeth long File_im_gLength(object self)
 	return r ? -1L : sb.st_size; 
 #else 
 
-#line 277 "File.d"
+#line 278 "File.d"
 		long sav = ftell(iv->iFP); 
 	long len; 
 
@@ -345,7 +345,7 @@ imeth long File_im_gLength(object self)
 	return len; 
 #endif 
 
-#line 285 "File.d"
+#line 286 "File.d"
 	} 
 
 imeth char * File_im_gName(object self)
