@@ -1,0 +1,116 @@
+
+
+Predefined Symbols defined by various compilers
+
+This is used to tell what environment we're operating under
+
+It could be:
+
+OS
+--
+Linux
+Windows
+macos
+Haiku
+BSD
+
+
+
+Architecture
+------------
+X86
+X86_64
+M1
+
+
+
+Compiler
+--------
+GCC
+Microsoft C
+
+
+
+
+
+
+To get pre-defined symbols under GNU C:  gcc -dM -E - </dev/null |sort >symbols
+
+
+
+
+Linux / 64-bit / GCC
+__amd64
+__amd64__
+__GNUC__
+__gnu_linux__
+__linux
+__linux__
+linux
+__unix
+__unix__
+unix
+__x86_64
+__x86_64__
+
+
+
+Apple M1
+__APPLE__
+__GNUC__  (not GNU C though!)
+__arm64
+__arm64__
+__clang__
+
+
+Microsoft C / Windows 32 bit
+_MSC_VER
+_M_IX86
+_WIN32
+
+
+Microsoft C / Windows 64 bit
+_MSC_VER
+_M_X64
+_WIN32
+
+
+GhostBSD 64 bit
+__amd64
+__amd64__
+__FreeBSD__
+__GNUC__
+__unix
+__unix__
+__x86_64
+__x86_64__
+unix
+
+
+
+OpenIndiana
+__amd64
+__amd64__
+__GNUC__
+__illumos
+__sun
+__sun__
+__SVR4
+__svr4__
+__unix
+__unix__
+_x86_64
+_x86_64__
+sun
+unix
+
+
+
+Haiku 64 bit
+__amd64
+__amd64__
+__GNUC__
+__HAIKU__
+__x86_64
+__x86_64__
+
