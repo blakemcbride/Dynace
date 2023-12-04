@@ -1241,7 +1241,7 @@ make_java_generic_impl(object	classes,
 		
 		argc = gSize(gParameters(proto));
 		for (i=1, seq=gSequence(gPrototype(proto)), gNext(seq) ; to = gNext(seq) ; i++) {
-			char szParmName[8];
+			char szParmName[16];
 			sprintf(szParmName, "parm%d", i);
 			type = gStringValue(to);
 			if (i > 1)
@@ -1255,7 +1255,7 @@ make_java_generic_impl(object	classes,
 			vPrintf(fobj, "\t\tObject vParms[] = new Object[sArgCnt*2];\n");
 
 			for (i=1, seq=gSequence(gPrototype(proto)), gNext(seq) ; to = gNext(seq) ; i++) {
-				char szParmName[8], *pszJavaType;
+				char szParmName[16], *pszJavaType;
 				sprintf(szParmName, "parm%d", i);
 				type = gStringValue(to);
 				pszJavaType = get_java_type(type);
