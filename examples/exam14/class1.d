@@ -9,7 +9,7 @@
      is rarely needed because it is the default state when defining a new
      class.
 
-     Note the use of the standard nameing convension of nameing class
+     Note the use of the standard naming convention of naming class
      variables with a leading 'c' (for class) followed by an upper case
      letter.  Again, this is just a convention which is not required by
      Dynace.
