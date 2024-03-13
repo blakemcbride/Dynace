@@ -61,7 +61,7 @@ setup.p9 :
 	bin/delcr examples/ex*/*.c
 	bin/delcr examples/ex*/*.d
 	bin/delcr examples/ex*/readme
-	bin/delcr examples/list
+	bin/delcr examples/list.txt
 	bin/delcr dropunx.sh
 	chmod 755 dropunx.sh
 	rm -f setup.dos
