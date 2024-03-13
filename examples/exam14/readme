@@ -6,12 +6,12 @@ defined.
 
 Class variables differ from instance variables in that there is only one
 copy of class variables and they are associated directly with the class
-object (as opposed to instance objects).  Therefore, when evoking class
+object (as opposed to instance objects).  Therefore, when invoking class
 methods the first argument is always a class - not an instance.
 
 What this example actually does is to define a class variable which
 automatically keeps track of the number of instances a particular
-class has in existance.  The main program creates and then destroys a
+class has in existence.  The main program creates and then destroys a
 number of instances while displaying the number of existing instances
 on a periodic basis.
 

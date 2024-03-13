@@ -9,7 +9,7 @@ methods to similar generics.  However, methods are unique to the classes
 which define them,  except that their functionality may be inherited by
 subclassing.
 
-When a generic is evoked, the generic determines the class of the
+When a generic is invoked, the generic determines the class of the
 first argument and then executes the method which is associated with
 a particular generic/class combination.  If an association is not found,
 the superclasses of the class of the first argument are searched.

@@ -1,7 +1,7 @@
 
 
 This example illustrates the procedure necessary to initialize
-instance variables while creating a new instances (via gNew).
+instance variables while creating a new instance (via gNew).
 
 Class1.d is modified to give its New method the additional functionality,
 and main.c is modified to utilize this changed interface to the

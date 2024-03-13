@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	obj1 = gNewWithInt(Class2, 45);
 	obj2 = gNewWithInt(Class1, 36);
 
-	/*  In order to insure the effectiveness of our new object's
+	/*  In order to ensure the effectiveness of our new object's
 	    initialization, print the code associated with each instance.  */
 	    
 	printf("obj1's code = %d\n", gGetCode(obj1));

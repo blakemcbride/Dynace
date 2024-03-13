@@ -3,7 +3,7 @@
 This example illustrates the process of creating a subclass.
 
 class2.d is added and is a subclass of class1.d.  No new functionality
-is added at this point.  main.c has been modified to show how instances
-of a subclass can behaive like it's superclass.
+is added at this point.  main.c has been modified to show how an instance
+of a subclass can behave like an instance of the superclass.
 
 (To build see the readme file in the first example.)

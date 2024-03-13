@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 	InitDynace(&argc);
 
 
-	/*  Create,  initialize and print an instance of StringDictionary  */
+	/*  Create, initialize and print an instance of StringDictionary  */
 
 	strDict = gNewWithInt(StringDictionary, 49);
 	gAddStr(strDict, "Key 1", gNewWithStr(String, "The first value added."));

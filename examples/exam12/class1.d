@@ -35,7 +35,7 @@ defclass  Class1  {
     convention is to use a leading 'g' followed by an uppercase letter to
     designate a generic (instance or class) which is using compile-time
     argument checking.  A leading 'v' followed by an uppercase letter is
-    used to indicate a variable argument generic, or one whos arguments are
+    used to indicate a variable argument generic, or one whose arguments are
     not checked at compile time.  The 'g' stands for generic,  and the 'v'
     stands for variable argument generic.
 
@@ -48,9 +48,9 @@ defclass  Class1  {
     This specific generic (gSetName) takes an additional argument 'char *name'.
 
     Notice how the instance variables associated with the instance passed to
-    the method (as the first argument) are immediatly accessable.  This is
+    the method (as the first argument) are immediately accessible.  This is
     one reason for the instance variable naming convention.  Otherwise,
-    it may be difficult to distinguish betweem instance variables and local
+    it may be difficult to distinguish between instance variables and local
     variables.
 
     This method simply copies the argument passed to the specified instance
@@ -71,7 +71,7 @@ imeth	gSetName(char *name)
 
     This new method, named get_name, is explictly defined to return a char *.
     Also, the method is explicitly associated with the gGetName generic.
-    If you wanted to associated it with several generics you would use the
+    If you wanted to associate it with several generics you would use the
     following syntax:
 
     	imeth  char  * gGetName, gAnotherGeneric, gAbc : get_name ()

@@ -1,6 +1,6 @@
 
 
-This example demonstrates the creation, use and disposal of aditional
+This example demonstrates the creation, use and disposal of additional
 simple objects.
 
 Notice how the same local variable can be used to represent arbitrary
