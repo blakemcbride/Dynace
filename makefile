@@ -62,7 +62,7 @@ setup.unx :
 	cd dpp      ; ../bin/delcr *.h
 	sleep 2
 	cd dpp      ; ../bin/delcr *.c
-	cd docs     ; ../bin/delcr  *.DOC *.txt *.tex
+	cd docs     ; ../bin/delcr *.txt
 	cd generics ; ../bin/delcr makefile README makegens mkgens3 mkgens4 mkgens4f mkgensx
 	cd include  ; ../bin/delcr *.h
 	cd generics ; chmod 775 makegens mkgens3 mkgens4 mkgens4f mkgensx
