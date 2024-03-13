@@ -6,7 +6,7 @@
     instance variables are those variables which will be uniquely allocated
     for each instance of the class.
 
-    Notice the nameing convention used.  The leading i (which identifies
+    Notice the naming convention used.  The leading i (which identifies
     the variable as an instance variable) and the following upper case
     letter make up the normal instance variable names.  The nameing of
     instance variables is just a convention and is not enforced by
