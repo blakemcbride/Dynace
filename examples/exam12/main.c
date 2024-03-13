@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	myObj = gNew(Class1);
 
 	/*  Call the SetName method via the gSetName generic.  Notice that
-	    the instance being effected is the first argument to the generic.
+	    the instance being affected is the first argument to the generic.
 	    This is always the case.  */
 	    
 	gSetName(myObj, "Tom Jones");

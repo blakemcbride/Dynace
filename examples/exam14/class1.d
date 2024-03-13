@@ -35,7 +35,7 @@ defclass  Class1  {
 
     Since no arguments are declared, this method will only have the minimum,
     and default argument 'object self'.  Note, however, that in the case of
-    class methods, 'self' will always refer to the class object as apposed
+    class methods, 'self' will always refer to the class object as opposed
     to an instance object as with instance methods.
 
     The first line increments the cNumInstances class variable in order
@@ -83,16 +83,16 @@ cmeth	int	gNumInstances()
     This is done because the Dispose method associated with the Object class
     is the only routine which has the ability to dispose of a Dynace object.
 
-    The final line return a NULL.  This is a convention which allows the
+    The final line returns a NULL.  This is a convention which allows the
     code which called the gDispose generic to NULL out the object pointer
     with the same expression.
 
     Note that prior to the definition of this method (as in the previous
-    examples), when the user evoked the gDispose generic on an instance of
+    examples), when the user invoked the gDispose generic on an instance of
     this class, since no Dispose method was defined, the system automatically
     executed the Dispose method associated with the Object class because
     the Object class is the superclass of this class and Dynace automatically
-    performs this search up the inheratince hierarchy until a matching method
+    performs this search up the inheritance hierarchy until a matching method
     is found.  This is also true of the New class method defined above.
 */
 

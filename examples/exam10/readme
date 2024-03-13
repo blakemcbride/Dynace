@@ -11,14 +11,14 @@ Note that any number of files may use or sub-class from any
 given class.
 
 The Dynace Pre-Processor (dpp) is used to read in class files (which end
-in .d), generate generics files (generics.c & .h), and create .c souce
+in .d), generate generics files (generics.c & .h), and create .c source
 files corresponding to the .d class files. The .c files which are
 generated from the .d files are compiled by your normal C compiler to
 generate linkable object files.  This program also ensures the argument
-consistancy between methods and generics.  If a discrepancy is detected,
+consistency between methods and generics.  If a discrepancy is detected,
 a message is displayed and the build process terminates.
 
-The elaborate makefile is used to insure the correct and minimum number
+The elaborate makefile is used to ensure the correct and minimum number
 of files get processed whenever a file is changed.  It should, however,
 be easy to modify by changing the variables at the beginning of the
 makefile.

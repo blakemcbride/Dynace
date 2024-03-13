@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	myObj = gNew(Class1);
 
 	/*  If the garbage collector is not being used you must dispose of
-	    an object which is no longer needed (unless of course you program
+	    an object which is no longer needed (unless of course your program
 	    is terminating, in which case all the objects will be freed
 	    anyway.)  This method is also being inherited from the Object
 	    class.  */

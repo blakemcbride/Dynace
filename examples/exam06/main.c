@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	    Note that although the dictionary is set up to hold roughly 49
 	    elements, it may actually hold any number,  it's just that
 	    the effeciency of the dictionary will start to go down at
-	    arount 49 elements.  */
+	    around 49 elements.  */
 
 	strDict = gNewWithInt(StringDictionary, 49);
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
 
 	/*  Dispose of the entire link object and all objects held  */
-	/*  (again only necessary of garbage collector not used)    */
+	/*  (again only necessary if garbage collector not used)    */
 
 	gDeepDispose(strDict);
 	

@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
 	InitDynace(&argc);
 
-	/*  Create two instances of the Class1 class.  This will evoke the
+	/*  Create two instances of the Class1 class.  This will invoke the
 	    newly defined New class method through the gNew generic.  */
 
 	obj1 = gNew(Class1);
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	printf("obj1's name is %s\n", gGetName(obj1));
 	printf("obj2's name is %s\n", gGetName(obj2));
 
-	/*  Evoke the NumInstances class method through the gNumInstances
+	/*  Invoke the NumInstances class method through the gNumInstances
 	    generic.  Notice that the argument passed is the class - not
 	    an instance object.  This is because class methods are associated
 	    with classes.  The returned value is printed.  */
