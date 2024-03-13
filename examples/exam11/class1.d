@@ -8,7 +8,7 @@
 
     Notice the naming convention used.  The leading i (which identifies
     the variable as an instance variable) and the following upper case
-    letter make up the normal instance variable names.  The nameing of
+    letter make up the normal instance variable names.  The naming of
     instance variables is just a convention and is not enforced by
     Dynace.  You may use another.
 

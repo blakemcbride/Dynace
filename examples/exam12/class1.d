@@ -49,7 +49,7 @@ defclass  Class1  {
 
     Notice how the instance variables associated with the instance passed to
     the method (as the first argument) are immediatly accessable.  This is
-    one reason for the instance variable nameing convension.  Otherwise,
+    one reason for the instance variable naming convention.  Otherwise,
     it may be difficult to distinguish betweem instance variables and local
     variables.
 
