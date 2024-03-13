@@ -62,7 +62,7 @@ setup.unx :
 	cd dpp      ; ../bin/delcr *.h
 	sleep 2
 	cd dpp      ; ../bin/delcr *.c
-	cd docs     ; ../bin/delcr  *.DOC *.txt *.tex
+	cd docs     ; ../bin/delcr *.txt
 	cd generics ; ../bin/delcr makefile README makegens mkgens3 mkgens4 mkgens4f mkgensx
 	cd include  ; ../bin/delcr *.h
 	cd generics ; chmod 775 makegens mkgens3 mkgens4 mkgens4f mkgensx
@@ -72,7 +72,7 @@ setup.unx :
 	find examples -name '*.h'          -exec bin/delcr \{\} \;
 	find examples -name '*.d'          -exec bin/delcr \{\} \;
 	find examples -name '*.c'          -exec bin/delcr \{\} \;
-	bin/delcr examples/list makefile makefile.inc
+	bin/delcr examples/list.txt makefile makefile.inc
 #	find multhead -type f -exec bin/delcr \{\} \;
 	rm -f setup.dos
 	touch setup.unx
@@ -90,7 +90,7 @@ setup.dos :
 	find examples -name '*.h'          -exec bin/addcr \{\} \;
 	find examples -name '*.d'          -exec bin/addcr \{\} \;
 	find examples -name '*.c'          -exec bin/addcr \{\} \;
-	bin/addcr examples/list
+	bin/addcr examples/list.txt
 	rm -f setup.unx
 	touch setup.dos
 

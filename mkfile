@@ -52,7 +52,7 @@ setup.p9 :
 	cd dpp      ; ../bin/delcr *.h ; cd ..
 	sleep 2
 	cd dpp      ; ../bin/delcr *.c ; cd ..
-	cd docs     ; ../bin/delcr  *.DOC *.txt *.tex ; cd ..
+	cd docs     ; ../bin/delcr *.txt ; cd ..
 	cd generics ; ../bin/delcr mkfile README makegens mkgens3 mkgens4 mkgens4f mkgensx ; cd ..
 	cd include  ; ../bin/delcr *.h ; cd ..
 	cd generics ; chmod 775 makegens mkgens3 mkgens4 mkgens4f mkgensx ; cd ..
@@ -61,7 +61,7 @@ setup.p9 :
 	bin/delcr examples/ex*/*.c
 	bin/delcr examples/ex*/*.d
 	bin/delcr examples/ex*/readme
-	bin/delcr examples/list
+	bin/delcr examples/list.txt
 	bin/delcr dropunx.sh
 	chmod 755 dropunx.sh
 	rm -f setup.dos
