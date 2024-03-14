@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 //	server = gSocketConnect(Socket, "192.168.202.3", 3490, 0);
 	server = gSocketConnect(Socket, "192.168.202.67", 3490, 0);
 #else
-	server = gSocketConnect(Socket, "blake.florida-software.com", 3490, 0);
+	server = gSocketConnect(Socket, "some.url.com", 3490, 0);
 #endif
 	if (!server) {
 		fprintf(stderr, "Couldn't connect\n");
