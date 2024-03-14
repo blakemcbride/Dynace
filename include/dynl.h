@@ -559,7 +559,7 @@ extern	long	_SIG1, _SIG2;
 typedef struct HandlerCtx_s {
 	long	sig1;
 	long	sig2;
-	object	(*rstrt)(void *);
+	object	(*rstrt)(object);
 	object	value;
 	jmp_buf unwind;
 }	HandlerCtx;
@@ -588,7 +588,7 @@ typedef struct HandlerCtx_s {
     __ctx.value = NULL;				\
 } (void)0
 
-#define callNextRestart		((object (*)(void *))1)
+#define callNextRestart		((object (*)(object))1)
 #define catchKind(cls)		_catchKind(&__ctx.value, cls)
 #define declineHandling(cond)	(__ctx.value = cond)
 

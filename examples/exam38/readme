@@ -1,6 +1,7 @@
 
 
-This example demonstrates the exception handling system.
+This example demonstrates the signal passing ability.  This is not
+an exception handling system (although it can be made to do that.)
 
 
 (To build see the readme file in the first example.)

@@ -59,8 +59,6 @@ void	driver()
 	endHandling;
 }
 
-#if 0
-
 int	main(int argc, char **argv)
 {
 	InitDynace(&argc);
@@ -75,27 +73,6 @@ int	main(int argc, char **argv)
 		}
 	}
 	endHandling;
-	return 0;
-}
-
-#endif
-
-int	main(int argc, char **argv)
-{
-	char	*p = NULL;
-	
-	InitDynace(&argc);
-	printf("Line start\n");
-	withHandling {
-		printf("Regular code\n");
-		*p = '\f';
-	}
-	onError {
-		printf("Error handling code\n");
-	}
-	endHandling;
-
-	printf("End code\n");
 	return 0;
 }
 
