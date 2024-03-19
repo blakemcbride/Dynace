@@ -75,11 +75,8 @@ to update setupenv.bat to reflect this change.
 
 The system is now built.
 
-The system has two major parts; the language, and the windows
-development system.  At this point the language portion of the system
-is built in the portable mode.  You can test it by going into
-examples\exam03, building and running the example using the following
-commands:
+You can test the system by going into examples\exam03, building and
+running the example using the following commands:
 
 	cd examples\exam03
 	nmake -f microsoft.msc
