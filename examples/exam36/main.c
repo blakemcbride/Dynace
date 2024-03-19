@@ -1,8 +1,6 @@
 
 #include "generics.h"
 
-/*  you need to include the file which declares alloca()  */
-#include <malloc.h>
 
 void	fun(int);
 
