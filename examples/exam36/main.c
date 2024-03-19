@@ -1,6 +1,9 @@
 
 #include "generics.h"
 
+#ifdef _MSC_VER
+#include <malloc.h>
+#endif
 
 void	fun(int);
 
