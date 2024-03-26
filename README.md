@@ -58,4 +58,4 @@ Build instructions are at:  docs/BUILD.txt
 
 Commercial support is available from [blake@mcbridemail.com](mailto:blake@mcbridemail.com)
 
-Please help fund this project at [https://www.gofundme.com/f/dynace](https://www.gofundme.com/f/dynace)
+Please help fund this project at [https://www.gofundme.com/dynace](https://www.gofundme.com/dynace)
