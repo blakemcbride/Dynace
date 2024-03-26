@@ -54,3 +54,8 @@ System overview is at:  docs/ORIENT.txt
 Build instructions are at:  docs/BUILD.txt
 
 
+### Support
+
+Commercial support is available from [blake@mcbridemail.com](mailto:blake@mcbridemail.com)
+
+Please help fund this project at [https://www.gofundme.com/f/dynace](https://www.gofundme.com/f/dynace)
