@@ -27,7 +27,7 @@ Dynace Object-Oriented Extension to C
 
 * 16, 32 & 64 bit environments
 * Linux
-* Mac OS X
+* Mac OS X (intel & M?)
 * Windows (all versions)
 * BSD
 * Solaris / OpenIndiana
