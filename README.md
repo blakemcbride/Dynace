@@ -9,7 +9,7 @@ Dynace Object-Oriented Extension to C
   * encapsulation
   * polymorphism
   * inheritance (multiple)
-* fully meta-class based (like Smalltalk or CLOS)
+* fully meta-class based (like Smalltalk)
 * dynamic binding and dispatching through generic functions (like CLOS)
 * garbage collection
 * threads (supports cooperative and native threads)
