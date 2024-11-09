@@ -42,7 +42,7 @@ Dynace was written to solve perceived problems with C++ as outlined in the user 
 Dynace is released under the BSD 2-Clause license.
 
 
-The main home for this system is:  [https://github.com/blakemcbride/Dynace](https://github.com/blakemcbride/Dynace)
+Source code at:  [https://github.com/blakemcbride/Dynace](https://github.com/blakemcbride/Dynace)
 
 Discussion is at: [https://github.com/blakemcbride/Dynace/discussions](https://github.com/blakemcbride/Dynace/discussions)
 
