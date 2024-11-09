@@ -18,7 +18,7 @@ Dynace Object-Oriented Extension to C
 ### Dynace:
 
 * written in standard C
-* includes over 300 pages of documentation (https://blakemcbride.github.io/Dynace/manual/Dynace.pdf)
+* includes over 300 pages of documentation ([https://blakemcbride.github.io/Dynace/manual/Dynace.pdf](https://blakemcbride.github.io/Dynace/manual/Dynace.pdf))
 * step-by-step tutorials
 * using classes involves no new syntax elements to standard C
 * easily added to existing C code
@@ -42,16 +42,16 @@ Dynace was written to solve perceived problems with C++ as outlined in the user 
 Dynace is released under the BSD 2-Clause license.
 
 
-The main home for this system is:  https://github.com/blakemcbride/Dynace
+The main home for this system is:  [https://github.com/blakemcbride/Dynace](https://github.com/blakemcbride/Dynace)
 
-Discussion is at: https://github.com/blakemcbride/Dynace/discussions
+Discussion is at: [https://github.com/blakemcbride/Dynace/discussions](https://github.com/blakemcbride/Dynace/discussions)
 
-Report issues at:  https://github.com/blakemcbride/Dynace/issues
+Report issues at:  [https://github.com/blakemcbride/Dynace/issues](https://github.com/blakemcbride/Dynace/issues)
 
 
-System overview is at:  docs/ORIENT.txt
+System overview is at:  [docs/ORIENT.txt](https://github.com/blakemcbride/Dynace/blob/master/docs/ORIENT.txt)
 
-Build instructions are at:  docs/BUILD.txt
+Build instructions are at:  [docs/BUILD.txt](https://github.com/blakemcbride/Dynace/blob/master/docs/BUILD.txt)
 
 
 ### Support
