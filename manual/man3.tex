@@ -27,10 +27,10 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Mechanics
-This chapter describes the actual steps necessary to use build and use
-Dynace.  First the steps necessary to configure, compile and link Dynace
-and Dynace applications is described, then the steps necessary to use
-existing classes is described.  Once this is understood, the creation of
+This chapter describes the actual steps necessary to build and use
+Dynace.  First the steps necessary to configure, compile, and link Dynace
+and Dynace applications are described; then the steps necessary to use
+existing classes are described.  Once this is understood, the creation of
 new classes is described.  Finally, Dynace customization and special
 techniques are discussed.
 
@@ -45,16 +45,16 @@ order in which they appear.
 @subsection Build Utilities
 All the utilities used to build Dynace applications are contained
 within the Dynace package and the command line utilities (compiler,
-linker, etc.) which come with your compiler.  Dynace utilizes special
+linker, etc.) that come with your compiler.  Dynace utilizes special
 utilities and build procedures designed to intelligently minimize the
-need for re-compilation.  These procedures are too complex for IDEs
-which come with the various compilers.  For this reason the IDE
-environments which come with your compiler are not used.  Instead,
-uder Windows, the Microsoft-supplied @emph{nmake} utility is used.  Under all
-other Unix-like operating system such as Linux and mac, GNU Make is
+need for re-compilation.  These procedures are too complex for the IDEs
+that come with the various compilers.  For this reason the IDE
+environments that come with your compiler are not used.  Instead,
+under Windows, the Microsoft-supplied @emph{nmake} utility is used.  Under all
+other Unix-like operating systems such as Linux and macOS, GNU Make is
 utilized.  Having said that, however, you may still use the IDE for
-editing and debugging.  You may also be able to find a way of
-integrating the supplied make files and procedures into your favorite
+editing and debugging.  You may also be able to find a way to
+integrate the supplied makefiles and procedures into your favorite
 IDE.
 
 @subsection Building Dynace From Scratch
@@ -75,23 +75,23 @@ difference is the makefile used.
 
 
 @subsection Example Files
-This section documents the files which are contained in each example
+This section documents the files that are contained in each example
 program.
 
 @table @asis
 @item README
-This file describes the object of the example.  It should be read
+This file describes the objective of the example.  It should be read
 first.
 
 @item MAIN.C
-This file is the complete source code to the example program.  It is
-fully commented and describes all aspects of the current example which
+This file is the complete source code for the example program.  It is
+fully commented and describes all aspects of the current example that
 are unique.
 
 @end table
 
 
-In addition to the above, the following build/system specific make 
+In addition to the above, the following build/system-specific make 
 files are used.
 
 @table @asis
@@ -126,17 +126,17 @@ nmake -f makefile.msc  DEBUG=1
 
 @subsection Debugging
 When @code{dpp} strategy 1 is selected Dynace uses a small amount of
-assembler.  This is not true for the default strategy of 2, however,
-when strategy 1 is used there are a couple of procedures which, when
-followed, will easy the debugging process.
+assembler.  This is not true for the default strategy of 2; however,
+when strategy 1 is used, there are a couple of procedures which, when
+followed, will ease the debugging process.
 
-First compile your application with debugging information.  Then when you
-wish to debug the application, set a break point at the beginning of any
+First, compile your application with debugging information.  Then, when you
+wish to debug the application, set a breakpoint at the beginning of any
 methods you wish to debug.  You may then step through your program as
 normal and when you enter a generic, the system will stop at the
-methods in which you placed the break points.
+methods in which you placed the breakpoints.
 
-Once you are fully into the method, you may access the instances
+Once you are fully into the method, you may access the instance's
 variables through the ``@code{iv}'' structure pointer and the
 class variables through the ``@code{cv}'' structure pointer.
 
@@ -144,9 +144,9 @@ class variables through the ``@code{cv}'' structure pointer.
 
 @subsection Building Your Own Application
 The best method of building your own application would be to start
-with one of the example programs and proceed from there.  This way
+with one of the example programs and proceed from there.  This way,
 all the compiler, linker and other options will be preset.  The best
-examples to start with would be one of the ones which define a new
+examples to start with would be one of the ones that define a new
 class.  Their makefiles are designed to handle class files in
 a very convenient and automated way.
 
@@ -156,14 +156,14 @@ a very convenient and automated way.
 Dynace usage can be divided into two categories: @emph{class user} or
 @emph{class creation}.  All a class user has to do to use Dynace classes
 is include a single file in the source code and call a function to
-initialize the system.  After these two easy steps the class user has full
+initialize the system.  After these two easy steps, the class user has full
 access to the entire set of existing classes.  A class user need not learn
 any special syntax or procedures.  Learning to use the existing classes
 is the same as learning to use any other library of routines.
 
 A @emph{class creator} will have to understand all aspects of being a
 class user first.  In addition, a class creator will have to understand
-the steps necessary to define classes, methods and generics.  These
+the steps necessary to define classes, methods, and generics.  These
 steps are well defined and simple to use.
 
 This section describes the actual steps necessary to @emph{use} a
@@ -171,39 +171,39 @@ pre-existing class.  The next section will discuss the steps necessary
 to create new classes.
 
 @subsection External Naming Conventions
-External naming conventions refers to those names that the programmer
-defines such as a new class name, an instance variable name or a method
-or generic name.  By contrast, internal naming conventions refers to
-those names which are generated by the Dynace preprocessor (@code{dpp}).
-These internal names are often made up from modifications or
+External naming conventions refer to those names that the programmer
+defines, such as a new class name, an instance variable name, or a method
+or generic name.  By contrast, internal naming conventions refer to
+those names that are generated by the Dynace preprocessor (@code{dpp}).
+These internal names are often made up of modifications or
 concatenations of the external names.
 
 In Dynace, generic function names, by convention only, always begin with
-a lower case ``@code{g}'' or ``@code{v}'', followed by an upper case
+a lowercase ``@code{g}'' or ``@code{v}'', followed by an uppercase
 letter, and then optionally followed by other letters (of any case),
 numbers, or underscores.  This convention allows a user to immediately
 know which functions may be used polymorphically or overloaded.
 
-Generics which begin with ``@code{g}'', by convention only, have compile
+Generics that begin with ``@code{g}'', by convention only, have compile
 time (as well as runtime) argument checking turned on and often, but not
 always, have a fixed number of arguments.
 
-Generics which begin with ``@code{v}'', by convention only, have compile
+Generics that begin with ``@code{v}'', by convention only, have compile
 time argument checking turned off and are often, but not always,
-associated with generics which take a variable number of arguments.  Use
+associated with generics that take a variable number of arguments.  The use
 of generics with argument checking turned off allows them to be
 associated with methods with arbitrary argument signatures.  It is up to
-the system and the programmer to assure that the correct arguments are
-passed.  Dynace provides ample tools necessary to assure correct
+the system and the programmer to ensure that the correct arguments are
+passed.  Dynace provides ample tools necessary to ensure correct
 arguments at runtime.  In fact, the runtime checking facilities are much
-more reliable and fool proof than compile time argument checking.  The
+more reliable and foolproof than compile-time argument checking.  The
 only disadvantage is that you don't know a problem exists until you run
-the system.  If, however, an error is discovered it can be handled many
+the system.  If, however, an error is discovered, it can be handled in many
 different ways and never crashes the system.
 
 Dynace uses the ``@code{g}'' type of generic as much as possible.
 However, some methods, such as indexing into a variable dimension
-array or @code{printf} like functionality, are implemented as
+array or @code{printf}-like functionality, are implemented as
 ``@code{v}'' generics.
 
 
@@ -213,24 +213,24 @@ functions.  So there is no name conflict.
 
 Classes normally begin with a capital letter.  Instance variables, by
 convention only, begin with ``@code{i}'' and are followed by an
-upper case letter.  Likewise, class variables, by convention only, begin
-with ``@code{c}'' and are followed by an upper case letter.
+uppercase letter.  Likewise, class variables, by convention only, begin
+with ``@code{c}'' and are followed by an uppercase letter.
 
 In the index the notation will specify a generic (minus the normal
-leading ``@code{g}'' or ``@code{v}''), two colons and its associated
-class.  For example @code{ChangeValue::Number} specifies a generic
+leading ``@code{g}'' or ``@code{v}''), two colons, and its associated
+class.  For example, @code{ChangeValue::Number} specifies a generic
 called @code{gChangeValue} which is associated with the @code{Number}
 class.
 
-The above naming scheme is used by the Dynace system, however, it
+The above naming scheme is used by the Dynace system; however, it
 is not enforced.  You may use any naming scheme you wish.
 
 @subsection Internal Naming Conventions
-External naming conventions refers to those names that the programmer
-defines such as a new class name, an instance variable name or a method
-or generic name.  By contrast, internal naming conventions refers to
+External naming conventions refer to those names that the programmer
+defines, such as a new class name, an instance variable name, or a method
+or generic name.  By contrast, internal naming conventions refer to
 those names which are generated by the Dynace preprocessor (@code{dpp}).
-These internal names are often made up from modifications or
+These internal names are often made up of modifications or
 concatenations of the external names.
 
 The following table lists the internal name structure used by Dynace.
@@ -240,51 +240,51 @@ The associated source external names for example purposes are the class
 @table @code
 @item String
 a macro which evaluates to the class object but also automatically
-initializes the class if it hasn't already been initialized
+initializes the class if it hasn't already been initialized.
 @item String_c
 the actual variable which contains the class object (@code{NULL} if the
-class hasn't been initialized yet
+class hasn't been initialized yet).
 @item String_t
 a typedef defining a String class (always object), used for documentation
-purposes only
+purposes only.
 @item String_cv
-pointer to the actual locally defined class variable structure
+pointer to the actual locally defined class variable structure.
 @item String_cv_t
-a typedef which defines the locally defined class variable structure
+a typedef which defines the locally defined class variable structure.
 @item String_iv_t
-a typedef which defines the locally defined instance variable structure
+a typedef which defines the locally defined instance variable structure.
 @item String_initialize
-the name of the class initialization function generated by @code{dpp}
+the name of the class initialization function generated by @code{dpp}.
 @item gNew_t
 a typedef defining a pointer to a function with the return type and argument
-signature of the generic
+signature of the generic.
 @item gNew_g
-a Dynace object representing the generic
+a Dynace object representing the generic.
 @item String_im_gNew
 default instance method name for methods with argument checking turned on
-(imeth)
+(imeth).
 @item String_cm_gNew
 default class method name for methods with argument checking turned on
-(cmeth)
+(cmeth).
 @item String_ivm_gNew
 default instance method name for methods with argument checking turned off
-(ivmeth)
+(ivmeth).
 @item String_cvm_gNew
 default class method name for methods with argument checking turned off
-(cvmeth)
+(cvmeth).
 @end table
 
 
 @subsection Class Hierarchy
-The only class in Dynace which has no superclasses is called
+The only class in Dynace that has no superclasses is called
 @code{Object}.  All classes in Dynace eventually inherit from the class
 @code{Object}.  The Object class defines those features that are common
 to all objects.  The class @code{Behavior} inherits from Object and
 defines the functionality common to classes and metaclasses.  The class
-@code{Class} inherits from Behavior, and describes the functionality
+@code{Class} inherits from Behavior and describes the functionality
 particular to all classes.  The class @code{MetaClass} also inherits
-from Behavior, and defines the operations particular to metaclasses.
-There is a class called @code{Dynace} which inherits from Object, and is
+from Behavior and defines the operations particular to metaclasses.
+There is a class called @code{Dynace} that inherits from Object and is
 used to effect various aspects of the Dynace kernel.  There are also
 classes called @code{Method} and @code{GenericFunction}, which both inherit
 from Object, and perform the expected functions.
@@ -304,14 +304,14 @@ The above class hierarchy can be depicted as follows:
 @end example
 
 These classes comprise the entire Dynace kernel.  Other facilities of Dynace,
-such as threads, pipes, dictionaries, are supplied as Dynace classes.
-Although an in depth understanding of each of the above classes is
+such as threads, pipes, and dictionaries, are supplied as Dynace classes.
+Although an in-depth understanding of each of the above classes is
 unnecessary, it is important to fully understand the relationship between
-the inheritance of the above classes, and the indentation of the diagram.
+the inheritance of the above classes and the indentation of the diagram.
 
 @subsection Example Code
-The following example illustrates a complete program which uses Dynace.
-Each line is explained in the following sub-sections.
+The following example illustrates a complete program that uses Dynace.
+Each line is explained in the following subsections.
 
 @example
 @group
@@ -357,7 +357,7 @@ main(int argc, char *argv[])
 @end example
 
 @subsection Include File
-Any source module which uses any Dynace objects must include @code{generics.h}.
+Any source module that uses any Dynace objects must include @code{generics.h}.
 This may be accomplished with the following line:
 @example
 #include "generics.h"
@@ -374,7 +374,7 @@ This declaration may be used anywhere you can define any other type of
 variable in the C language.
 
 @subsection Initializing Dynace
-The first thing which must be done prior to using any classes in Dynace is
+The first thing that must be done prior to using any classes in Dynace is
 to initialize the Dynace kernel and system classes.
 
 This initialization @emph{must} be called from the @code{main()}
@@ -396,24 +396,24 @@ numbers, or underscores.  This convention allows a user to immediately
 know which functions may be used polymorphically or overloaded.
 
 Generic functions are used like any other C language function.  However,
-generic functions always have at least one argument.  This first argument,
-is the object which will be performing the requested method.  Any remaining
+generic functions always have at least one argument.  This first argument
+is the object that will be performing the requested method.  Any remaining
 arguments will be passed to the appropriate method.
 
 When using variable argument generics (those beginning with
 ``@code{v}'') the number and types of arguments may be different from
-one call to a particular generic function call to another.  This is
+one call to a particular generic function to another.  This is
 because different methods, with different argument requirements, may be
 called.
 
 @subsection Creating Objects
 By convention, the generic function used to create new objects is called
 @code{gNew()} or @code{vNew()}.  The first argument to either should be
-the class of the new object (or instance) to be created.  Any, possible,
+the class of the new object (or instance) to be created.  Any possible
 remaining arguments (in the case of @code{vNew}) will be the ones
 required by a particular class.
 
-If compile time argument checking is used then the @code{gNew} function
+If compile-time argument checking is used, then the @code{gNew} function
 will possibly be renamed to avoid argument conflicts.
 
 The following are examples of some instances being created:
@@ -429,11 +429,11 @@ The following are examples of some instances being created:
 
 There are a number of interesting things about this example.  First of
 all, the syntax is normal C language syntax.  Second, the three objects
-created, each of a different type, had the same declaration.  Note also,
+created, each of a different type, had the same declaration.  Note also
 the standard naming of the generic function @code{gNewXXXX()}.
 
 @subsection Using Objects
-Once an object is created it may be used as arguments to generic functions.
+Once an object is created, it may be used as arguments to generic functions.
 For example:
 @example
 @group
@@ -446,17 +446,17 @@ For example:
 @end group
 @end example
 When the @code{gPrint()} generic function is called, as in the above
-example, Dynace checks the class of @code{myInt}, and finds that it is of type
-@code{ShortInteger}.  It then finds a method which is associated with the
-@code{gPrint()} generic function / @code{ShortInteger} class combination,
-and evokes it.  This association is defined by the person who wrote the
+example, Dynace checks the class of @code{myInt} and finds that it is of type
+@code{ShortInteger}.  It then finds a method that is associated with the
+@code{gPrint()} generic function / @code{ShortInteger} class combination
+and invokes it.  This association is defined by the person who wrote the
 @code{ShortInteger} class.
 
 @subsection Disposing of Objects
 All objects in Dynace are allocated from the heap.  Therefore, when an object
 is no longer needed, it must be returned to the heap.  If this is not
 done you would eventually run out of heap space.  Dynace has two methods
-of accomplishing this task, disposal generics and the garbage collector.
+of accomplishing this task: disposal generics and the garbage collector.
 
 @subsubsection Disposal Generics
 
@@ -469,13 +469,13 @@ associated allocated space it may reference.
 
 The @code{gDeepDispose} generic, in addition to performing the same
 functions as the @code{gDispose} generic, is typically used to dispose
-of whole group of related objects at the same time.  This method will
+of a whole group of related objects at the same time.  This method will
 typically recursively call the @code{gDeepDispose} generic on all
 objects being referenced within the object being disposed.
 
 Both @code{gDispose} and @code{gDeepDispose} always return @code{NULL}.
 This is done in order to allow the disposal generic to null out the
-variable which holds the object in the same expression which disposes
+variable that holds the object in the same expression that disposes
 of it.
 
 The following is an example of the @code{gDispose()} generic:
@@ -492,29 +492,29 @@ The following is an example of the @code{gDispose()} generic:
 @subsubsection Garbage Collection
 The second, and preferred, method Dynace has for disposing of objects is
 through a @emph{garbage collector}.  The garbage collector is an
-integral part of Dynace which constantly monitors the applications memory
+integral part of Dynace that constantly monitors the applications memory
 use.  Whenever certain conditions arise, such as low memory conditions,
-the garbage collector automatically, and transparently kicks in.  The
-garbage collector marks all objects which are directly or indirectly
+the garbage collector automatically and transparently kicks in.  The
+garbage collector marks all objects that are directly or indirectly
 accessible via the @emph{automatic} variables in the program.  It also
-marks any objects which are referenced by global or static variables
+marks any objects that are referenced by global or static variables
 which have been registered with Dynace.  Dynace also automatically marks all
 classes, methods, and generic function objects.  After this marking
 phase, the Dynace garbage collector goes through all objects and frees
 those that are not marked.
 
 The simple explanation is that by using the Dynace garbage collector, you
-never have to worry about freeing any objects which are no longer
+never have to worry about freeing any objects that are no longer
 needed.  The garbage collection process requires no additional coding
-on the developers part.  It runs entirely automatically and
+on the developer's part.  It runs entirely automatically and
 transparently to the application program.
 
-A few things to remember, though, the Dynace garbage collector may be used
+A few things to remember, though: the Dynace garbage collector may be used
 with the @code{gDispose} generic function.  The garbage collector is off
-by default, and must be turned on (as shown below).  Only those objects
-which are referenced by automatic variables, and those globals and
-statics which have been registered with the garbage collector (via the
-gRegisterMemory generic), will be marked.  Therefore, any objects which
+by default and must be turned on (as shown below).  Only those objects
+that are referenced by automatic variables, and those globals and
+statics that have been registered with the garbage collector (via the
+gRegisterMemory generic), will be marked.  Therefore, any objects that
 are only referenced by unregistered globals or statics will be disposed
 of by the garbage collector.
 
@@ -528,7 +528,7 @@ the Dynace system has been initialized):
         gSetMemoryBufferArea(Dynace, 40000L);
 @end example
 
-Dynace offers an alternative garbage collection scheme which has important
+Dynace offers an alternative garbage collection scheme that has important
 tradeoffs.  See the sub-section on the Boehm Garbage Collector under the
 Dynace Customization & Special Techniques section.
 
@@ -536,9 +536,9 @@ Dynace Customization & Special Techniques section.
 In any given program, only a single source file should contain all the
 generic functions used throughout the entire application.  This includes
 the generics used by the Dynace kernel, the class library, and any
-application specific generics.  The file used to define all the generics
+application-specific generics.  The file used to define all the generics
 is called @code{generics.c}.  There is also a file called @code{generics.h}
-which provides for the external declarations for all the classes and
+which provides the external declarations for all the classes and
 generics.  Both of these files are automatically generated by a program
 called @code{dpp}.
 
@@ -547,17 +547,17 @@ details.
 
 
 @subsection Compiling & Linking
-This section describes the necessary tools and steps necessary to create
-an application which uses the Dynace system.
+This section describes the necessary tools and steps to create
+an application that uses the Dynace system.
 
 @subsubsection Files
 
-In order to compile and link programs which use the Dynace kernel and class
+In order to compile and link programs that use the Dynace kernel and class
 library you will need the following files:
 @table @code
 
 @item dynl.h
-This file is included with the Dynace system and located in the
+This file is included with the Dynace system and is located in the
 include directory.
 
 @item generics.h
@@ -568,21 +568,21 @@ Otherwise, the @code{generics.h} file included with Dynace may
 be used.
 
 @item generics.c
-This is a file generated by @code{dpp} from the application specific
+This is a file generated by @code{dpp} from the application-specific
 @code{generics.h} file.  It should be created and kept in the
-applications source directory.  It is only needed if your application
+application's source directory.  It is only needed if your application
 creates its own classes.
 
 @item dpp.exe
 This program is used to generate the @code{generics.c} and
-@code{generics.h} files in the applications source directory.
+@code{generics.h} files in the application's source directory.
 @code{dpp.exe} should be kept somewhere in your normal path for
 executable programs.
 
 @item *.lib
 The Dynace library files are located under the @code{lib} directory.
 These libraries are specific to each supported compiler and whether
-they are for 16 or 32 bit versions of the compiler.  For 16 bit
+they are for 16 or 32-bit versions of the compiler.  For 16-bit
 compilers, only the large memory model is supported.
 
 @end table
@@ -590,17 +590,17 @@ compilers, only the large memory model is supported.
 @subsubsection Compiling & Linking
 The best way to compile and link your application is to start with one
 of the makefiles included with the example programs included with Dynace.
-There are specific make files for each supported compiler.
+There are specific makefiles for each supported compiler.
 
 @subsection Learning Dynace Classes
-Once the basics of using Dynace objects, and the mechanics of creating a
+Once the basics of using Dynace objects and the mechanics of creating a
 program are understood, a study of the Dynace library, including what
-facilities it has to offer, and how to use it, are strongly recommended.
+facilities it has to offer and how to use it, is strongly recommended.
 Nothing will get you up and running with the system faster.  The true
 value of Dynace cannot be appreciated until a full understanding of the Dynace
-class library, and what facilities it has to offer, as well as the
+class library and what facilities it has to offer, as well as an
 understanding of the simplicity and power offered by creating your own
-classes has been achieved.
+classes, has been achieved.
 
 @page
 @section Defining Dynace Classes
@@ -608,11 +608,11 @@ This section describes the syntax and procedure necessary to create
 Dynace classes.  It is recommended that all the information in the
 previous sections be understood prior to continuing in this section.  It
 is also recommended that some experience with the class library be
-accomplished.
+aquired.
 
 Each new class in Dynace is defined in its own unique source file.
 Multiple classes should never be defined in a single source file.
-However, it is possible to define a large class by several source files.
+However, it is possible to define a large class using several source files.
 This process is illustrated in one of the example programs.
 
 Dynace uses the static function ability of the C language to encapsulate
@@ -627,14 +627,14 @@ next subsection.
 
 When building the application, class definition files are processed
 by the Dynace pre-processor (@code{dpp}) which produces corresponding
-C source files (with a ``@code{.c}'' file extension) which may be
-compiled with your normal C compiler.  At the same time @code{dpp}
+C source files (with a ``@code{.c}'' file extension) that may be
+compiled with your normal C compiler.  At the same time, @code{dpp}
 also performs argument checking by comparing arguments to methods
 and their associated generics.  @code{dpp} also uses this information
 to produce the appropriate generic files.
 
 
-The following sub-sections describe the exact syntax
+The following subsections describe the exact syntax
 necessary to define your own Dynace classes.
 
 @iftex
@@ -644,19 +644,19 @@ necessary to define your own Dynace classes.
 @subsection Class Definition File Syntax
 Class definition files may contain normal C code without restriction.
 In addition, the following syntax elements may be used to define a class,
-methods and generics.
+methods, and generics.
 
 
 @example
 
 Legend:
 
-        Items between [ ] are optional
-        ... indicates any number (including 0) of the preceding
-        | indicates a choice
-        Identifiers in caps should be replaced by the appropriate name
-        Lines beginning with // are comments
-        Lower case identifiers and other symbols are typed as-is
+        Items between [ ] are optional.
+        ... indicates any number (including 0) of the preceding.
+        | indicates a choice.
+        Identifiers in caps should be replaced by the appropriate name.
+        Lines beginning with // are comments.
+        Lower case identifiers and other symbols are typed as-is.
 
 @iftex
 @hrule
@@ -752,7 +752,7 @@ All variables default to type @code{object} if not otherwise
 declared.
 
 Since most elements of a class definition are optional, the minimum
-that is requires is as follows:
+that is required is as follows:
 
 @example
 @group
@@ -761,10 +761,10 @@ defclass   MyClass;
 @end example
 
 
-This defines a class called @code{MyClass} which has no specific class
+This defines a class called @code{MyClass} that has no specific class
 or instance variables and has a single superclass (@code{Object}).
 
-The next example defines a class which is a subclass of @code{SomeClass}.
+The next example defines a class that is a subclass of @code{SomeClass}.
 
 @example
 @group
@@ -773,7 +773,7 @@ defclass   MyClass : SomeClass;
 @end example
 
 
-The next example defines a class which is a subclass of @code{SomeClass}
+The next example defines a class that is a subclass of @code{SomeClass}
 and @code{SomeOtherClass}.
 
 @example
@@ -783,7 +783,7 @@ defclass   MyClass : SomeClass, SomeOtherClass;
 @end example
 
 
-The next example defines a class which has a couple of specific
+The next example defines a class that has a couple of specific
 instance variables associated with it.  This class defaults to
 the single @code{Object} superclass.
 
@@ -811,7 +811,7 @@ defclass   MyClass  @{
 
 
 The next example adds to the previous example by adding a class variable.
-Note that since there is no type explicitly declared it defaults to
+Note that since there is no type explicitly declared, it defaults to
 @code{object}.
 
 @example
@@ -860,7 +860,7 @@ defclass   MyClass  :  SomeClass  @{
 
 
 The next example illustrates the fact that the various sections
-may be in any order, however, if the instance section is not first, it
+may be in any order; however, if the instance section is not first, it
 must be explicitly declared.
 
 @example
@@ -897,7 +897,7 @@ added to complement the @code{public} scoping which is also strongly
 discouraged but needed in certain circumstances.
 
 The @code{public defclass} declaration is used to cause the Dynace
-preprocessor (@code{dpp}) to create additional files which contain the
+preprocessor (@code{dpp}) to create additional files that contain the
 class and instance variable structures.  This is the same as the
 @code{-iv} and @code{-cv} @code{dpp} options.  See the @code{dpp}
 section for further explanation of this feature.
@@ -906,7 +906,7 @@ section for further explanation of this feature.
 
 @subsubsection Public Method Definition
 Public methods are only accessible through generic functions.
-The body of public methods is identical with normal C functions.
+The body of public methods is identical to normal C functions.
 The main difference between a C function definition and a public
 method is that a method of associating a method with generics
 and determining the method type is required.
@@ -917,22 +917,22 @@ The following table lists the available method types:
 @item imeth
 This indicates an instance method with compile time argument checking
 enabled.  Use of this option requires that all methods associated
-with a specific generic function all have the exact same argument
-signature (even if they take a varible number of arguments (``...'')).
+with a specific generic function have the exact same argument
+signature (even if they take a variable number of arguments (``...'')).
 
 @item cmeth
-This indicates a class method with compile time argument checking
+This indicates a class method with compile-time argument checking
 enabled.  Use of this option requires that all methods associated with
-a specific generic function all have the exact same argument signature
-(even if they take a varible number of arguments (``...'')).
+a specific generic function have the exact same argument signature
+(even if they take a variable number of arguments (``...'')).
 
 @item ivmeth
-This indicates an instance method with compile time argument checking
+This indicates an instance method with compile-time argument checking
 turned off.  Use of this feature allows methods with totally arbitrary
 argument signatures to be associated with the same generic function.
 
 @item cvmeth
-This indicates a class method with compile time argument checking
+This indicates a class method with compile-time argument checking
 turned off.  Use of this feature allows methods with totally arbitrary
 argument signatures to be associated with the same generic function.
 
@@ -942,10 +942,10 @@ argument signatures to be associated with the same generic function.
 The following example illustrates a minimum method declaration.  Note
 that a generic name is specified instead of the method's name.  This is
 done since all external access to a method is through its associated
-generic, the actual method name is rarely important.  Dynace will
+generic; the actual method name is rarely important.  Dynace will
 default a method's name to be the associated generic name prefixed with
-the class name, a code indicating the method type and the generic name.
-Each part is separated with an underscore.  So in the following example
+the class name, a code indicating the method type, and the generic name.
+Each part is separated with an underscore.  So, in the following example
 the actual method name will be @code{MyClass_im_gMyGeneric}.  You can,
 however, explicitly name a generic.  This will be shown in other
 examples.
@@ -961,7 +961,7 @@ public  imeth   object  gMyGeneric(object self)
 
 
 Since @emph{all} methods take @code{object self} as their first argument,
-Dynace defaults this information.  Therefore, the above example may also
+Dynace defaults to this information.  Therefore, the above example may also
 be written as follows.  
 
 
@@ -975,8 +975,8 @@ public  imeth   object  gMyGeneric()
 @end example
 
 
-If the method took an additional arguments, the first argument may,
-optionally, be skipped.  For example:
+If the method took additional arguments, the first argument may
+optionally be skipped.  For example:
 
 @example
 public  imeth   object  gSomeGeneric(object self, int age, char *name)
@@ -989,8 +989,8 @@ public  imeth   object  gSomeGeneric(int age, char *name)
 @end example
 
 
-In addition, all argument types default to @code{object}, therefore,
-any arguments which are of type object may exclude their type
+In addition, all argument types default to @code{object}; therefore,
+any arguments that are of type object may exclude their type
 declaration.  For example:
 
 @example
@@ -1007,7 +1007,7 @@ public  imeth   object  gSomeGeneric(int age, name)
 Also, since @code{public} and the return type of @code{object} are
 Dynace's defaults the first example may also be written as follows.
 Explicit use of the @code{public} declaration is provided in order to
-be consistent with the @code{private} declaration and not especially
+be consistent with the @code{private} declaration and is not especially
 recommended.
 
 @example
@@ -1051,7 +1051,7 @@ imeth   gMyGeneric : SomeMethod ()
 
 
 Explicit method naming can also be used with multiple generic
-association as follows.
+associations as follows.
 
 @example
 @group
@@ -1067,7 +1067,7 @@ imeth   gMyGeneric, gAnotherGeneric : SomeMethod ()
 
 
 The following example is a duplicate of the previous example, except
-that it returns an @code{char *}.
+that it returns a @code{char *}.
 
 @example
 @group
@@ -1080,9 +1080,9 @@ imeth   char * gMyGeneric, gAnotherGeneric : SomeMethod ()
 
 
 The following example illustrates the syntax used to associate a single
-method with generics which have argument checking turned on (imeth's)
-and generics which have them turned off (ivmeth's).  This syntax is
-only recognized by the @code{dpp} program when its @code{-X} option is enabled,
+method with generics that have argument checking turned on (imeth's)
+and generics that have them turned off (ivmeth's).  This syntax is
+only recognized by the @code{dpp} program when its @code{-X} option is enabled;
 otherwise this special syntax is just ignored.
 
 
@@ -1097,8 +1097,8 @@ imeth   gMyGeneric, <vAnotherGeneric> ()
 
 
 To use this feature the method must be declared as an @code{imeth} or
-@code{cmeth}.  You then surround the generic name which is to be
-treated as an @code{ivmeth} or @code{cvmeth} in angled brackets as
+@code{cmeth}.  You then surround the generic name, which is to be
+treated as an @code{ivmeth} or @code{cvmeth}, in angled brackets, as
 shown.  All the previously described syntactical elements may be
 used without restriction when this option is used.  And again,
 generic names in angled brackets will be ignored by the system unless
@@ -1113,11 +1113,11 @@ Dynace methods may be defined to take a variable number of arguments
 (e.g. ``...'').  If all methods with the same name have the same number
 and type of fixed arguments then the method should be declared as an
 @code{imeth} or @code{cmeth}.  However, if the fixed arguments are not
-the same then @code{ivmeth} of @code{cvmeth} should be used.
+the same, then @code{ivmeth} or @code{cvmeth} should be used.
 
-The method argument list should end in ``@code{...}''  However, internal
-to the method the variable @code{_rest_} will automatically be
-initialized to the variable argument list (@code{va_list}.  Normal
+The method argument list should end in ``@code{...}''.  However, internal
+to the method, the variable @code{_rest_} will automatically be
+initialized to the variable argument list (@code{va_list}).  Normal
 @code{va_arg} may be used to obtain the arguments.  @code{va_end}
 should not be used on @code{_rest_}.
 
@@ -1126,13 +1126,13 @@ is different among methods with the same name.
 
 
 @subsubsection Private Method Definition
-Private methods are methods who are not associated with any generic
+Private methods are methods that are not associated with any generic
 and are therefore only available for use within the file they are
-declared it - similar to static functions.  However, like public
+declared in - similar to static functions.  However, like public
 methods, private methods always take @code{object self} as their
 first argument.
 
-Private methods are mainly used as a way of creating method like
+Private methods are mainly used as a way of creating method-like
 functionality in cases where they are only used internally and no
 dynamic binding is needed.  They are more efficient.
 
@@ -1152,7 +1152,7 @@ private imeth   object  MyMethod(object self)
 @end example
 
 
-Like public methods, private methods default their return type and
+Like public methods, private methods default to their return type and
 argument list.  Therefore, the above declaration may also be written as
 follows.
 
@@ -1168,7 +1168,7 @@ private imeth   MyMethod()
 
 @subsubsection Super Messages
 Super messages are a way of evoking methods associated with a superclass
-of an object, as opposed to the method which is directly associated
+of an object, as opposed to the method that is directly associated
 with the class.  Typically, this is used to allow a method to wrap
 functionality around functionality already provided by a superclass.
 It is often used in the creation of new instances.
@@ -1187,8 +1187,8 @@ superclass if your instance, you would use the following syntax.
         gSomeGeneric(super  someInstance, someArg);
 @end example
 
-As a more complete example, lets say you have a class containing an
-instance variable which you wish to be initialized to some value
+As a more complete example, let's say you have a class containing an
+instance variable that you wish to be initialized to some value
 whenever a new instance is created.  The following illustrates the
 point.
 
@@ -1216,8 +1216,8 @@ In this example the instance variable is being initialized to a null
 string object for every new instance created.  Remember that since
 this is a class method, @code{self} will be a class object.  Since
 only one of the kernel classes knows how to actually create a new
-(blank) object, the @code{gNew} method must evoke the one above it
-in order to finally get to the one which can actually create the
+(blank) object, the @code{gNew} method must invoke the one above it
+in order to finally get to the one that can actually create the
 bare new object.  Once the new object is obtained, it may be initialized
 and returned.
 
@@ -1226,7 +1226,7 @@ because that would call the same method you're in to be called
 recursively and indefinitely.
 
 In addition, since sending the @code{super} message to @code{self}
-is the most common use of @code{super} the @code{self} is
+is the most common use of @code{super}, the @code{self} is
 actually optional.  Therefore, line 1 above could be written as follows:
 
 @example
@@ -1235,12 +1235,12 @@ actually optional.  Therefore, line 1 above could be written as follows:
 
 
 @subsubsection Comments
-In addition to normal C comments the @code{//} is used to signal comments
+In addition to normal C comments, the @code{//} is used to signal comments
 to the end of the line.
 
 
 @subsection Example Code
-The following example illustrates a complete program which defines a new
+The following example illustrates a complete program that defines a new
 Dynace class.  Each line is explained in the following sub-sections.
 
 @example
@@ -1300,47 +1300,47 @@ imeth   gPrint(FILE *fp)
 @subsection Class Definition
 The first step in defining a new class would be to create a @code{.d}
 file with a @code{defclass} specification.  This is discussed in
-detail in the section which describes the @code{defclasss} syntax.
+detail in the section that describes the @code{defclass} syntax.
 
 Note the naming convention used.  Class names begin with an upper case
-letter and are followed with upper and lower case letters.  Instance
-variables start with an ``@code{i}'' and are followed with an upper case
+letter and are followed by upper and lower case letters.  Instance
+variables start with an ``@code{i}'' and are followed by an uppercase
 letter.  Likewise, class variables start with a ``@code{c}'' and are
 followed with an upper case letter.
 
 This naming convention is just that -- a convention.  Dynace does
 not enforce or necessarily encourage this convention.  However,
 since Dynace allows direct access to instance and class variables
-from within methods, some naming convention is desirable, otherwise
+from within methods, some naming convention is desirable; otherwise
 it would be difficult to distinguish instance variables from locally
 declared variables.
 
 @subsection Defining Methods
 Once the @code{defclass} specification is given, the methods may be
-declared.  The syntax for this, as well as several examples are discussed
-in the section which described method syntax.
+declared.  The syntax for this, as well as several examples, is discussed
+in the section that describes method syntax.
 
 It is important to understand that @code{self} will always refer to the
-instance object which called the generic, if it is an instance method.
-And @code{self} will always refer to the class object if this is a
+instance object that called the generic, if it is an instance method,
+and @code{self} will always refer to the class object if this is a
 class method.
 
-The naming convention used is that generics with fixed number and
-type of arguments in which compile time argument checking is enabled
-start with ``@code{g}'' and are followed be an upper case letter.
+The naming convention used is that generics with a fixed number and
+type of arguments in which compile-time argument checking is enabled,
+start with ``@code{g}'' and are followed by an uppercase letter.
 
-Generics without compile time argument checking enabled may be passed
+Generics without compile-time argument checking enabled may be passed
 arbitrary arguments.  These generics start with ``@code{v}'' and are
-followed be an upper case letter.
+followed by an uppercase letter.
 
-This naming convention is not enforced or necessarily encourage by
+This naming convention is not enforced or necessarily encouraged by
 Dynace.  However, it is intended to help a programmer distinguish normal
-C functions from various points where Dynamic binding is occurring.
+C functions from various points where dynamic binding is occurring.
 
 
 @subsubsection Accessing Instance And Class Variables
 An object's instance and class variables may only be accessed from
-within a routine located in the source file which defines the class.
+within a routine located in the source file that defines the class.
 There are several ways available to access these variables.  This
 subsection will discuss all the ways from the most frequently used
 methods to the least.
@@ -1358,10 +1358,10 @@ Dynace, however, provides mechanisms to conveniently access instance
 variables in all circumstances.
 
 The first difficulty is when attempting to access a newly created instance's
-instance variables from within a class method which had just created the
+instance variables from within a class method that has just created the
 new object.  This is a common problem within @code{New} generics.  There
 are two solutions to this problem.  One solution is clean but a little
-less efficient than a more dirty solution.  Understanding of the dirty
+less efficient than a more dirty solution.  Understanding the dirty
 solution, however, is helpful when debugging code (regardless of which
 solution is used).
 
@@ -1385,8 +1385,8 @@ cmeth   gNewInstance(char *name, int age)
 @end group
 @end example
 
-In the above example @code{gNewInstance} first calls @code{gNew} to
-create a new instance.  It then passes the new instance along with the
+In the above example, @code{gNewInstance} first calls @code{gNew} to
+create a new instance.  It then passes the new instance, along with the
 initialization arguments to an instance method (@code{imeth}) because
 instance methods can access the new instance's instance variables.
 Since the @code{init} method returns the object passed, @code{gNewInstance}
@@ -1400,14 +1400,14 @@ provides all instance variable access through a structure pointed to
 by a locally declared pointer named @code{iv} (which stands for
 ``instance variables'').  In the case of instance methods, this
 procedure is automatically handled by the Dynace preprocessor.
-However, it must be done explicitly, when needed, in class methods.
+However it must be done explicitly when needed, in class methods.
 
-Dynace also declares a typedef which is a structure mirroring the
-instance variable definition contained with the @code{defclass}
+Dynace also declares a typedef, which is a structure mirroring the
+instance variable definition contained within the @code{defclass}
 statement.  Finally, Dynace provides macros for obtaining
 a pointer to the instance variables associated with a given object.
 
-The following example depicts the solution to the above mentioned problem.
+The following example depicts the solution to the above-mentioned problem.
 
 @example
 @group
@@ -1428,7 +1428,7 @@ cmeth   gNewInstance(char *name, int age)
 
 
 This example demonstrates all the above procedures.  Line 1 declares a
-variable which will hold the new instance object to be created.  Line 2
+variable that will hold the new instance object to be created.  Line 2
 declares the @code{iv} variable which Dynace needs in order to access
 the object's instance variables.
 
@@ -1447,7 +1447,7 @@ impossible for Dynace to know how to access the instance variables.
 However, a simple method of achieving this is provided.
 
 As stated above, Dynace uses the @code{iv} variable in order to
-access instance variables, therefore, all that has to be done is
+access instance variables; therefore, all that has to be done is
 to pass the @code{iv} pointer to the C function.  For example:
 
 @example
@@ -1480,7 +1480,7 @@ The third problem associated with accessing instance variables has to do
 with accessing the instance variables of more than one object within the
 same module at the same time.  The problem can be resolved (in a relatively
 inefficient, but clean manner) with instance variable accessing methods.
-However, Dynace provide a very efficient way to accommodate this situation.
+However, Dynace provides a very efficient way to accommodate this situation.
 
 Since Dynace gives a method of accessing the instance variable
 structure pointer associated with an object (@code{ivPtr} macro), these
@@ -1501,12 +1501,12 @@ imeth   gCopy()
 @end group
 @end example
 
-The above example defines an instance method which produces a new
+The above example defines an instance method that produces a new
 instance of the class and initializes it to have the same age as
-the instance object passed.  Line 1 declares the variable which will hold
+the instance object passed.  Line 1 declares the variable that will hold
 the new object being created.
 
-Line 2 declares a pointer which will point to the instance variables contained
+Line 2 declares a pointer that will point to the instance variables contained
 within @code{obj2}.  Note that you couldn't use the name @code{iv} because
 that would conflict with Dynace's use of that variable relative to the
 implied @code{self} argument.
@@ -1515,20 +1515,20 @@ Line 3 creates a new blank instance of the class.  Line 4 gives access
 to the instance variables contained within the new object.
 
 Line 5 is the neat part.  The left side of the assignment references
-an instance variable associated with @code{obj2} and the right side
-references an instance variable associates with the object passed
+an instance variable associated with @code{obj2}, and the right side
+references an instance variable associated with the object passed
 (self).  This line could have also been written as follows:
 
 @example
         iv2->iAge = iv->iAge;
 @end example
 
-since Dynace automatically creates the @code{iv} structure pointer and
+Dynace automatically creates the @code{iv} structure pointer and
 associates it with @code{self}.  The key point here is that
 all direct instance variable usage is always relative to the @code{iv}
 variable.
 
-The final difficulty is associated with instance variable access has to do
+The final difficulty associated with instance variable access has to do
 with the C preprocessor.  The following example will cause problems.
 
 @example
@@ -1570,13 +1570,13 @@ This macro must be placed in the variable declaration portion of the
 instance method's definition.  The @code{accessIVs} macro actually declares
 and initializes a variable called @code{iv} from the @code{self} argument
 to the method.  This @code{iv} variable will point to a normal C language
-structure which will look like the structure you defined when defining
+structure that will look like the structure you defined when defining
 the instance variables.
 
 
 
 @subsubsection Determining the Class of an Object
-There is a macro in Dynace which will return the class of any object.  This
+There is a macro in Dynace that will return the class of any object.  This
 macro is called @code{ClassOf}.  The following example illustrates its usage:
 @example
 @group
@@ -1588,16 +1588,16 @@ macro is called @code{ClassOf}.  The following example illustrates its usage:
 Now @code{o1} will contain the class of @code{o2}.
 
 @subsubsection Sending Super Messages
-The process of evoking a method which is located in a superclass is
+The process of evoking a method that is located in a superclass is
 sometimes necessary when executing a method within a particular class.
 Normally, when a generic function is evoked, the search for an applicable
-method starts at the class of the object which is the first argument to
+method starts at the class of the object that is the first argument to
 the generic.  If no method is found, the superclasses are then
 searched.  When sending a super message, the superclasses of the object
-are searched first.  If no method is found then the superclasses of the
+are searched first.  If no method is found, then the superclasses of the
 superclasses are searched, and so on.  The class of the object is bypassed.
 
-An example will clarify this concept.  Lets say you have a class defined
+An example will clarify this concept.  Let's say you have a class defined
 as follows:
 
 @example
@@ -1614,8 +1614,8 @@ imeth   gPrint()
 @end group
 @end example
 
-This is a simple class which just holds the integer @code{iA}, and has
-a method to print it.  Now let's define a second class which inherits
+This is a simple class that just holds the integer @code{iA} and has
+a method to print it.  Now let's define a second class that inherits
 from the above class.  The second class will look as follows:
 
 @example
@@ -1637,39 +1637,39 @@ Not that both class's print methods share the same generic function,
 @code{gPrint}.
 
 Since the second class inherits from the first class, instances of the
-second class will actually contain both the integer @code{iB}, and also
-the integer @code{iA}, defined in the first class.  Since the second
+second class will actually contain both the integer @code{iB} and also
+the integer @code{iA} defined in the first class.  Since the second
 class's print method has no direct access to the @code{iA} instance
 variable, because of strict encapsulation, there is no way for it to
 print the @code{iA} instance variable's value.  When the @code{self}
 argument to the @code{gPrint} generic function is of the second class's
-type, the second class's print method would always be evoked.  There needs
-to be a way to evoke the print method associated with the first class from
+type, the second class's print method would always be invoked.  There needs
+to be a way to invoke the print method associated with the first class from
 the print method in the second class.
 
 In the second class's print method, the super syntax shown would
-accomplish the desired effect.  This syntax works like evoking the
+accomplish the desired effect.  This syntax works like invoking the
 @code{gPrint} method on an instance of the current class, except that it
 starts its search with the superclasses.
 
 The end result of all this is that when a @code{gPrint} generic function is
 called with an instance of the second class, the second class's print method
-will be evoked.  Then the second class's print method will evoke the first
+will be invoked.  Then the second class's print method will invoke the first
 class's print method, printing the instance variable @code{iA}.  When the
 first class's print method is through, it returns to the second class's
 print method, which called it.  After that, the second class's print
-method prints the @code{iB} instance variable, and returns.
+method prints the @code{iB} instance variable and returns.
 
 This super message concept is very important to understand.  It is one
-of the key features which allows you to take a pre-existing class and
-modify its behavior to suit your needs without having to re-write the
+of the key features that allow you to take a pre-existing class and
+modify its behavior to suit your needs without having to rewrite the
 pre-existing code.
 
 @subsection Class Initialization
 During startup, when your application executes @code{InitDynace},
-Dynace initializes the Dynace kernel, the generic objects and
+Dynace initializes the Dynace kernel, the generic objects, and
 the Dynace kernel classes.  The remaining classes get initialized
-when they are used.  If you use a class which is a subclass of
+when they are used.  If you use a class that is a subclass of
 other classes, Dynace automatically initializes the parent classes
 first.
 
@@ -1684,11 +1684,11 @@ explicitly initializes the @code{MyClass} class.
 @subsubsection Class Initialization Function
 Sometimes it is desirable to perform some additional procedures at the
 time the class is initialized.  For this case it is possible to have
-Dynace evoke class specific initialization functions declared by the
+Dynace evoke class-specific initialization functions declared by the
 programmer.  Most often this feature is used to initialize class
 variables.
 
-A class specific initialization should be a static function which
+A class-specific initialization should be a static function that
 take no arguments and returns no results.  This function will
 get automatically evoked by Dynace immediately after the creation
 of the class it's associated with.  Therefore, it will have full
@@ -1696,7 +1696,7 @@ access to all the class variables.
 
 In order to inform Dynace of the existence of a class initialization
 function, it should be declared in the @code{defclass} statement as
-described in the @code{defclass} specification described in a previous
+described in the @code{defclass} specification detailed in a previous
 section.
 
 
@@ -1727,17 +1727,17 @@ static  void    class_init()
 @subsection What Gets Linked
 Regardless of what classes exist in a particular library or what
 classes are mentioned in the @code{generics.h} or @code{generics.c}
-files Dynace is designed in such a fashion so that at link time
+files, Dynace is designed in such a fashion that at link time
 only the classes which your application actually uses will get linked
 in.
 
 
 @subsection The @code{gNew} Class Method
 Most classes will have an instance creation method.  This is the method
-which is responsible for creating and initializing instances of the new
+that is responsible for creating and initializing instances of the new
 class, also called the @emph{constructor}.  If no local instance
-variable initializing is necessary, then no constructor method need be
-defined.  One of the superclasses, or the Dynace kernel will automatically
+variable initializing is necessary, then no constructor method needs to be
+defined.  One of the superclasses, or the Dynace kernel, will automatically
 create and initialize the instance.  In the absence of any explicitly
 initialized instance variables in a new instance, the Dynace kernel will
 zero out all instance variables of a new object.
@@ -1745,7 +1745,7 @@ zero out all instance variables of a new object.
 The @code{gNew} class method works like any other class method.  It
 receives, as its first argument, the object representing the class.
 If the constructor needs to take additional arguments you can either
-use the @code{vNew} generic (which has no compile time argument checking
+use the @code{vNew} generic (which has no compile-time argument checking
 so the method can have any signature) or you can use a different generic name
 (such as @code{gNewInstance}) which will have the desired argument
 signature.
@@ -1787,11 +1787,11 @@ than just freeing themselves, must define an instance disposal method.
 This method, called the @emph{destructor}, is usually associated with
 the @code{gDispose} and @code{gDeepDispose} generic functions.
 
-In the example in the previous section one of the instance variables
+In the example in the previous section, one of the instance variables
 (@code{iName}) contained a pointer to allocated storage.  If the instance
 was freed without regard for this allocated storage, the system would
 soon run out of heap space.  Even the garbage collector couldn't help.
-So what we do is define a destructor which will free the instance
+So what we do is define a destructor that will free the instance
 appropriately.  The following code will illustrate this procedure:
 @example
 @group
@@ -1802,20 +1802,20 @@ imeth   object    gDispose()
 @}
 @end group
 @end example
-There are several things which may be noted from this example.
+There are several things that may be noted from this example.
 
 First, the method returns what is returned from the @code{gDispose}
 super call.   By convention the disposal generics return @code{NULL}.
-This is often used to null out a variable which references an object
-which is being disposed and hence no longer valid.
+This is often used to null out a variable that references an object
+which is being disposed of and hence no longer valid.
 
-Second, the call to free, frees the storage allocated and assigned to
+Second, the call to free frees the storage allocated and assigned to
 the @code{iName} instance variable.  It does not free the entire
 instance.
 
 Third, the call to the super method is used to request any
 superclasses to perform their freeing.  Eventually, the super call will
-terminate at the Dynace @code{Object} class which will do the actual
+terminate at the Dynace @code{Object} class, which will do the actual
 freeing of the entire instance.
 
 As discussed before, there are two ways to dispose of an object.  The
@@ -1825,15 +1825,15 @@ collector to dispose of the object when necessary.
 
 If no special processes need to be performed to free an object, no
 destructor need be defined.  Dynace has a default disposal procedure
-which simply disposes of the individual object.
+that simply disposes of the individual object.
 
 
 @subsection Creating Generic Files
 The @code{generics.h} and @code{generics.c} files are created by the
 @code{dpp} program.  @code{dpp} reads in the pre-defined classes and
-generics from a pre-existing @code{generics.h} files as well as user
-added classes and generic information from class definition (@code{.d}
-files) files.  @code{dpp} is able to parse the necessary files and merge
+generics from a pre-existing @code{generics.h} file as well as user
+added classes and generic information from class definition (@code{.d})
+files.  @code{dpp} is able to parse the necessary files and merge
 the information in order to obtain sufficient information to generate
 the correct generic files for the application.   See the section describing
 @code{dpp} for a complete description of it.
@@ -1841,7 +1841,7 @@ the correct generic files for the application.   See the section describing
 
 @page
 @section Dynace Pre-Processor (DPP)
-The @code{dpp} program is the heart of the compile time functionality of
+The @code{dpp} program is the heart of the compile-time functionality of
 Dynace.  @code{Dpp} is capable of reading in pre-existing generics
 declaration files (normally @code{generics.h}) and class
 definition files (@code{*.d} files) and using this information to
@@ -1849,13 +1849,13 @@ perform five specific tasks.
 
 First, @code{dpp} is able to assimilate all the information read
 in and produce a merged generics declaration file (normally
-@code{generics.h}) which can be included by the application.
+@code{generics.h}), which can be included by the application.
 This file includes all necessary declarations for the entire application,
 including class and generic declarations and system includes.
 
 Second, @code{dpp} is also able to use the information read in
-to produce an application specific @code{generics.c} file.
-This is the file which contains all the actual generics as well
+to produce an application-specific @code{generics.c} file.
+This is the file that contains all the actual generics as well
 as the generic and class initialization procedures.
 
 Third, @code{dpp} is able to read in a class definition file
@@ -1866,14 +1866,14 @@ Fourth, @code{dpp} will validate the argument and return type
 declarations between methods and pre-existing generics to make sure
 there are no inconsistencies.  This will only be done for methods which
 have argument checking turned on.  If an inconsistency is encountered,
-@code{dpp} issues an error message, but does not stop its processing.
+@code{dpp} issues an error message but does not stop its processing.
 It will, however, optionally return an error code.
 
-Fifth, it provides facilities so that the application specific
-@code{generics.c} file only need be generated and compiled when
+Fifth, it provides facilities so that the application-specific
+@code{generics.c} file only needs to be generated and compiled when
 absolutely necessary.  It does this by comparing any pre-existing
 @code{generics.h} file with one it's about to create.  If they are the
-same (i.e. no new generics or classes have actually been added), then
+same (i.e., no new generics or classes have actually been added), then
 instead of generating the file, the @code{generics.h}, @code{generics.c}
 and @code{generics.obj} files are just touched.
 
@@ -1883,7 +1883,7 @@ and @code{generics.obj} files are just touched.
 of their order on the command line) and then using this information
 to check the input consistency and produce any requested output files.
 
-@code{Dpp} is non-interactive, all operational requests and parameters
+@code{Dpp} is non-interactive; all operational requests and parameters
 are given at the command line.  However, these command line arguments
 may also be located in files which @code{dpp} can read as an extension
 of the command line.  These files, called command files, may contain
@@ -1894,7 +1894,7 @@ command files.
 
 Command files are identified by a ``@@'' followed by a file name with
 no intervening spaces.  Command files and normal command line
-parameters may be freely intermixed.  For example the following
+parameters may be freely intermixed.  For example, the following
 is quite legal.
 
 @example
@@ -1904,7 +1904,7 @@ is quite legal.
 Unlike the DOS standard, @code{dpp} only supports a hyphen or dash
 as an option switch.  All options are case sensitive.
 
-A complete list of options may obtained by evoking @code{dpp} without
+A complete list of options may be obtained by evoking @code{dpp} without
 any arguments.  It will display a complete list of all options and
 exit.
 
@@ -1930,7 +1930,7 @@ The second line indicates the same thing for generics.
 
 
 @subsection Input Options (-g & -G)
-Input options are those which cause @code{dpp} to read a file.
+Input options are those that cause @code{dpp} to read a file.
 
 @subsubsection Generic Declaration Input
 It is important that @code{dpp} have complete access to all related
@@ -1940,21 +1940,21 @@ verify system consistency and produce complete generic files.
 
 Typically, the single @code{generics.h} file associated with the application
 is all that is needed.  The main exception to this rule is when initially
-building the application specific @code{generics.h} file or when wanting
-to build a new, clean one.  In that case you should read in all the
+building the application-specific @code{generics.h} file or when wanting
+to build a new, clean one.  In that case, you should read in all the
 @code{generics.h} files associated with all the subsystems you intend
 to use.
 
 As shipped, Dynace only includes two such files in the include directory.
 One called @code{generics.h} includes all the classes and generics
 defined by the Dynace kernel and class library.  A second, called
-@code{wingens.h}, includes all that's in @code{generics.h} file plus
+@code{wingens.h}, includes all that's in the @code{generics.h} file plus
 all the classes and generics associated with the Dynace Window
 Development System.  You would use one or the other, not both.
 
 The command line argument used for this purpose is @code{-g}.
 Immediately following this option may be a list of zero or more,
-space separated, generic file names to be read in.  There is always
+space-separated, generic file names to be read in.  There is always
 a space after the @code{-g}.  If no file names follow the option,
 the single @code{generics.h} file is assumed.
 
@@ -1964,7 +1964,7 @@ found.
 
 @subsubsection Source File Input (-s & -p)
 @code{Dpp} includes two options for reading in source files.  One
-command is for reading only and the other is for reading and
+command is for reading only, and the other is for reading and
 pre-processing.
 
 The @code{-s} option is for reading only.  It reads in the specified
@@ -1976,19 +1976,19 @@ class definition files (@code{*.c}).
 The @code{-p} option is for reading and pre-processing class
 definition files (@code{*.d}), thus producing associated
 C source files (@code{*.c}) with the same file name prefix.
-The information read in is also used as in the @code{-s} option,
+The information read in is also used as in the @code{-s} option;
 therefore, it would never be necessary to include the same
 file for processing under the @code{-s} and @code{-p} options.
 
 In addition to recognizing @code{*.d} files as class definition files,
-@code{dpp} will likewise recognize @code{*.dd, *.n, *.nn, *.i} and
+@code{dpp} will likewise recognize @code{*.dd, *.n, *.nn, *.i}, and
 @code{*.ii} in upper or lower case.  Input file names ending in
-@code{.dd, .nn} or @code{.ii} will produce corresponding @code{.cc} or
+@code{.dd, .nn}, or @code{.ii} will produce corresponding @code{.cc} or
 @code{.cpp} files depending on whether you are on Unix or DOS
 respectively.
 
 @subsection Output Options
-Output options are those options which cause @code{dpp} to create
+Output options are those options that cause @code{dpp} to create
 a file.
 
 @subsubsection Generic Declaration File Creation (-h)
@@ -2004,11 +2004,11 @@ file.  Otherwise, the default of @code{generics.h} will be used.
 
 @subsubsection Generic Source File Creation (-c)
 Use of the @code{-c} option causes @code{dpp} to generate the
-application specific C source file which contains all the
+application-specific C source file which contains all the
 generics used by the application as well as generic and class
-initialization code.  Typically, the application specific
+initialization code.  Typically, the application-specific
 generics declaration file (@code{generics.h}) contains
-all the information needed for creation of this file.
+all the information needed for the creation of this file.
 
 The @code{-c} option may, optionally, be followed by a space and file
 name.  If the file name is given, @code{dpp} will use that file for the
@@ -2020,18 +2020,18 @@ see the Splitting the Generics File (-M) @code{dpp} option.
 @subsubsection Processing Class Definition Files (-p)
 @code{Dpp} is capable, after reading in the appropriate generics
 declaration file, of reading a class definition file, verifying
-its consistency with the system and generating a corresponding
+its consistency with the system, and generating a corresponding
 C source file for compilation.
 
 The @code{-p} option is for reading and pre-processing class
 definition files (@code{*.d}), thus producing associated
 C source files (@code{*.c}) with the same file name prefix.
-The information read in is also used as in the @code{-s} option,
+The information read in is also used as in the @code{-s} option;
 therefore, it would never be necessary to include the same
 file for processing under the @code{-s} and @code{-p} options.
 
 Input files ending in @code{.dd} will produce corresponding
-@code{.cpp} or @code{.cc} files depending on whether you are
+@code{.cpp} or @code{.cc} files, depending on whether you are
 on Unix or DOS.
 
 @subsubsection Java Interface Files (-j)
@@ -2042,13 +2042,13 @@ This option also takes an optional package name argument.
 The files generated are named @code{object.java},
 @code{DynaceClassRef.java}, and @code{LoadDynClasses.c}.
 These Java interface files, in concert with the Dynace / Java interface DLL
-named @code{JavaDynace.dll} makes the interface possible.
+named @code{JavaDynace.dll}, make the interface possible.
 
 @subsubsection Scheme Interface Files (-L1 & -L2)
 @code{Dpp} has the ability to generate interface code to allow Dynace
 generic functions to be accessible from within a Scheme language
 environment.  Once the @code{generics.h} file is read in (via the -g
-option) these options cause @code{dpp} to generate the necessary
+option), these options cause @code{dpp} to generate the necessary
 interface files for two supported Scheme environments, LibScheme and
 MzScheme.  This interface file may be named after the option and
 will default to @code{scminter.c}.  This file must be compiled and
@@ -2060,14 +2060,14 @@ MzScheme is available at
 @subsection Misc. Options
 @code{Dpp} supports a variety of other options documented in this
 section.  Some options, however, are not documented.  This is because
-some features are either experimental and not ready for use or only used
-to support old versions of Dynace which are no longer supported in any
+some features are either experimental and not ready for use or are only used
+to support old versions of Dynace, which are no longer supported in any
 other fashion.
 
 @subsubsection Preventing Unnecessary Compiles (-t)
-Generic files (both .c and .h) files change whenever classes or generics
+Generic files (both .c and .h) change whenever classes or generics
 are added or deleted, or arguments to existing generics change.
-Whenever a class definition file is changed it must be pre-processed
+Whenever a class definition file is changed, it must be pre-processed
 to produce a compilable C file.  Also, when class definition files
 change, it may or may not be the case that new classes or generics
 have been added or existing generics have changed argument types.
@@ -2076,7 +2076,7 @@ generics is relatively rare when compared to other code changes.
 
 Given this fact, @code{dpp} is able to determine whether a significant
 change has occurred or not.  It does this by comparing the pre-existing
-application specific generics declaration file (@code{generics.h})
+application-specific generics declaration file (@code{generics.h})
 with one it's about to create.  If they are the same, @code{dpp}
 does not create the new generic file and instead remembers the fact
 that it was not necessary.
@@ -2088,23 +2088,23 @@ and compiling the corresponding @code{generics.c} file.  This
 can lead to a significant savings in time.
 
 
-The @code{-t} option may, optionally, be followed by a space and space
+The @code{-t} option may, optionally, be followed by a space
 delimited list of file names to touch.  If the file list is given,
-@code{dpp} will touch the given files in the order given.  Otherwise, the
+@code{dpp} will touch the given files in the order specified.  Otherwise, the
 default of @code{generics.h generics.c generics.obj} will be used.
-On unix systems @code{generics.o} is used instead.  If any of the
+On Unix systems @code{generics.o} is used instead.  If any of the
 files don't already exist, @code{dpp} will just skip it.
 
 @subsubsection Removing Classes or Generics (-r)
 It is sometimes necessary to cause @code{dpp} to remove classes or
 generics from an existing @code{generics.h} file.  This is necessary
 when an old class or generic is no longer used, or when the return type
-or arguments to a generic has been changed.  If the return type or
-arguments to a generic has been changed and you don't want to rebuild
+or arguments to a generic have been changed.  If the return type or
+arguments to a generic have been changed and you don't want to rebuild
 the @code{generics.h} file from scratch, it's often easier to remove the
 old generic from the @code{generics.h} file and then just re-scan the
 source file with the new generic definition to re-add the changed
-generic.  Once the @code{generics.h} file has been corrected a new
+generic.  Once the @code{generics.h} file has been corrected, a new
 @code{generics.c} file can be generated from the correct
 @code{generics.h} file (with the @code{-g -c} options).
 
@@ -2113,23 +2113,23 @@ To use this option when generating generics files simply follow the
 separated by a space).
 
 @subsubsection Splitting the Generics File (-M)
-As a system becomes increasingly complex the number of generic functions
+As a system becomes increasingly complex, the number of generic functions
 increases.  @code{Dpp} typically generates a single @code{generics.c}
 file which contains all the generic functions defined within the system.
 The problem with this is that in some limited environments (DOS or 16
 bit Windows) there is a limit to the size a single source (@code{.c})
-file can be so @code{generics.c} gets too big to be compiled.  The
+file can be, so @code{generics.c} gets too big to be compiled.  The
 solution is to split @code{generics.c} into multiple smaller files. Note
 that there isn't any problem associated with the size of the
 @code{generics.h} file in these environments.
 
 The @code{-M} option causes @code{dpp} to split the @code{generics.c}
 file at the time it is created (using the @code{-c} option).  As part
-of the @code{-M} option you must include the number of generic functions
+of the @code{-M} option, you must include the number of generic functions
 to split at.  This option is not separated with a space.  For example,
 using @code{-M900} will cause the first 900 generic functions to be
 defined in @code{generics.c} and the remaining generic functions will
-be placed in a file names @code{gens1.c}.  @code{Gens1.c} will have to
+be placed in a file named @code{gens1.c}.  @code{Gens1.c} will have to
 be compiled and linked into the application just as @code{generics.c}.
 
 @subsubsection Including Additional Header Files (-Isc, -Iac, -Ish & -Iah)
@@ -2141,7 +2141,7 @@ be included prior to declaring these generics.  @code{Dpp} has the
 @code{-I} series of options in order to support this feature.
 
 Any particular @code{-I} type option should be followed by a space and
-space delimited list of file names to include.  @code{Dpp} will cause
+a space-delimited list of file names to include.  @code{Dpp} will cause
 the specified files to be included by the generated @code{generics}
 file in the specified order.
 
@@ -2154,7 +2154,7 @@ include files to be added to the @code{generics.h} file. And use
 
 @subsubsection Ignoring Errors (-i)
 Normally, while processing the input files, if @code{dpp} encounters
-some kind of an error, it displays the error message and continues
+some kind of error, it displays the error message and continues
 processing the input files.  However, if an error occurs, @code{dpp}
 does not normally produce any output files.  The @code{-i} option
 causes @code{dpp} to produce the output files requested anyway.
@@ -2167,7 +2167,7 @@ used to cause all unnecessary messages not to be displayed.
 This option, however, will not inhibit error messages.
 
 @subsubsection Return Code (-z)
-Under normal operation @code{dpp} returns 0 if no error occurs and
+Under normal operation, @code{dpp} returns 0 if no error occurs and
 non-zero otherwise.  This is typically used to signal the make
 facility that an error occurred.  The @code{-z} option is used to cause
 @code{dpp} to return 0 regardless of whether or not an error occurs.
@@ -2179,8 +2179,8 @@ and generate code accordingly.  In this case all generics will take
 arbitrary arguments and depend entirely on runtime argument validation.
 
 This was the way Dynace versions 1 and 2 worked.  The capability is kept
-for two reasons.  First for backward compatibility.  And second, to
-support environment which require complete flexibility with respect to
+for two reasons: first for backward compatibility; and second, to
+support environments that require complete flexibility with respect to
 generic arguments.
 
 @subsubsection Disabling #line directives (-nld)
@@ -2194,14 +2194,14 @@ If this feature is not wanted use the @code{-nld} option.
 @subsubsection Extra #line directives (-eld)
 Normally @code{dpp} generates line directives only when necessary
 (when the files get out of line sync).  This option causes @code{dpp}
-to (in addition to it's normal #line directive output) output a
+to (in addition to its normal #line directive output) output a
 #line directive prior to each method.
 
 @subsubsection Preprocessing Strategies (-S)
 @code{Dpp} is capable of supporting four different code generation
 strategies.  The various strategies refer to different linkage
 conventions between generics and methods.  The various alternatives
-offer choices which determine the generated code's portability,
+offer choices that determine the generated code's portability,
 efficiency, and use of C++ specific features.
 
 Class definition files will work the same regardless of which strategy
@@ -2217,31 +2217,31 @@ Strategy 1 incorporates a small, system and compiler specific, piece
 of assembler code.  This strategy is the most efficient.  This
 assembler piece is supplied for many of the popular platforms.
 Writing the assembler piece for a new platform is very easy for an
-assembler expert and documented in the next section of this manual.
-The only down side of this strategy is lack of portability (if the
+assembler expert and is documented in the next section of this manual.
+The only downside of this strategy is the lack of portability (if the
 assembler piece is unavailable). @strong{Note:} Due to the ever-changing
 CPU landscape, the difficulty in maintaining this code, the lack of portability,
 and the decreased value due to compiler optimizations, Strategy 1 has
-been deprecated.  Strategy 2 (the default strategy is recommended.)
+been deprecated.  Strategy 2 (the default strategy) is recommended.
 
 
-Strategy 2 uses a total C based approach.  This is the default and
+Strategy 2 uses a total C-based approach.  This is the default and
 recommended method.  This strategy maximizes portability and for that
 reason it is the default strategy and the one used to generate the
 Dynace system as shipped.  
 
 Strategy 3 attempts to reduce the runtime overhead associated with
-strategy 2 by the use of C++'s inline function facility.  The resulting
+Strategy 2 by using C++'s inline function facility.  The resulting
 code will run faster but will incur a heavy penalty in code size due
 to the inline expansions.  This strategy is not typically recommended.
 
-Strategy 4 produces code similar to strategy 3 except that generics
-which have variable arguments are treated like strategy 2 instead.
+Strategy 4 produces code similar to Strategy 3, except that generics
+which have variable arguments are treated like Strategy 2 instead.
 This was done in order to accommodate compilers such as GCC which
 cannot inline variable argument functions.
 
-Remember, Dynace is shipped using strategy 2.  If you wish to use a
-different strategy you must rebuild the entire system with the selected
+Remember, Dynace is shipped using Strategy 2.  If you wish to use a
+different strategy, you must rebuild the entire system with the selected
 strategy.
 
 @subsubsection Generic Overloading (-X)
@@ -2249,10 +2249,10 @@ Dynace allows many methods to share the same generic function.  This
 option has no effect on that facility of Dynace.
 
 Dynace also has the ability to simultaneously associate a single method
-with a fixed argument generic which has compile time argument checking
-and a variable argument generic which has no compile time argument
-checking using the '<>' method declaration syntax.  Under normal
-operation @code{dpp} ignores the '<>' syntax and does not perform
+with a fixed argument generic, which has compile time argument checking
+and a variable argument generic, which has no compile time argument
+checking, using the '<>' method declaration syntax.  Under normal
+operation, @code{dpp} ignores the '<>' syntax and does not perform
 this association.  The @code{-X} option is used to enable @code{dpp}'s
 support for this feature.
 
@@ -2269,19 +2269,19 @@ and not generate a new file if the existing one is correct.  The
 regardless of its status.
 
 This feature is useful when changing strategies.  If none of the generics
-or classes have changed Dynace would not normally generate a new generics
+or classes have changed, Dynace would not normally generate a new generics
 file.  This option will force a new one, with the correct strategy, to
 be created.
 
 @subsubsection Generating External Structures (-iv & -cv)
 These options cause Dynace to generate external declarations for
-a class's instance and class variables respectively when preprocessing
+a class's instance and class variables, respectively, when preprocessing
 a class definition file.  The file names used will be the same as
-the source file except that the file will end in @code{.iv} or
-@code{.cv} respectively.
+the source file, except that the file will end in @code{.iv} or
+@code{.cv}, respectively.
 
 @subsubsection Class Initialization (-ni)
-Under normal operation @code{dpp} generates the necessary class
+Under normal operation, @code{dpp} generates the necessary class
 initialization file when preprocessing a class definition file.
 This option is used to cause @code{dpp} not to generate this
 function.  The programmer will then be responsible for this
@@ -2292,7 +2292,7 @@ Under normal operation @code{dpp} automatically adds code to include the
 @code{generics.h} file in generated @code{generics.c} and C source
 files.  This option causes @code{dpp} not to perform this auto inclusion.
 
-This option along with the @code{-mg} option are used to support
+This option, along with the @code{-mg} option, is used to support
 users who prefer a single header per class.
 
 @subsubsection Macro Guard Typedefs (-mg)
@@ -2305,16 +2305,16 @@ unrecommended configuration.
 @page
 @section Dynace Customization & Special Techniques
 The Dynace kernel includes a class called @code{Dynace}.  This class is used
-to query and set various parameters which effect the global operation
-of Dynace.  The following subsections detail the various parameters which
-may be effected in Dynace as well as other special issues.
+to query and set various parameters that affect the global operation
+of Dynace.  The following subsections detail the various parameters that
+may be affected in Dynace, as well as other special issues.
 
 @subsection Makefile / Generics.h File Dependencies
-All source files are technically dependent upon the application specific
+All source files are technically dependent upon the application-specific
 @code{generics.h} file.  However, it is important that the make utility
 not be made aware of this fact.  This is important because one of the main
 goals and advantages of Dynace is the fact that rarely do changes to a class
-require other modules to have to be recompiled - even when the changes
+require other modules to be recompiled - even when the changes
 cause changes to the @code{generics.h} file.  If the makefile were
 made aware of this dependency, there would be many, many totally
 unnecessary compiles performed.
@@ -2322,7 +2322,7 @@ unnecessary compiles performed.
 Most changes to a class definition file, including changes in the
 instances or class variables associated with the class, changes in the
 class hierarchy or algorithmic changes, have no effect on the
-@code{generics.h} file.  The only things which could potentially cause a
+@code{generics.h} file.  The only things that could potentially cause a
 change to the @code{generics.h} file are the addition or removal of an
 entire class, the addition or removal of a generic, or the changing of
 the argument list or return type associated with a generic.
@@ -2330,25 +2330,25 @@ the argument list or return type associated with a generic.
 With a little programmer cooperation and the disassociation (for make
 utility purposes) of the @code{generics.h} file from other source
 modules the need for re-compiles can be very drastically reduced.  The
-make utility and the example programs (the ones which create
+make utility and the example programs (the ones that create
 classes) were designed with these concepts in mind.  Emulation of
 these approaches is highly advised.
 
-The following subsections detail all the things which could change
+The following subsections detail all the things that could change
 a @code{generics.h} file and what effect it has on other modules.
 Advice on how to handle each situation will be discussed.
 
 @subsubsection Adding New Classes
 The addition of a new class never requires automatic recompilation
 of any other modules.  Since the class was just added, the only modules
-which could even use the new class must have also been edited in
+that could even use the new class must have also been edited in
 order to reference the new class object.  In that case, those modules
 will already be automatically recompiled anyway.  Other modules
 don't directly reference the new class object and don't require
 recompilation.
 
 Remember that because of Dynace's design, any previously compiled code
-which doesn't explicitly access a class by name, may still process
+that doesn't explicitly access a class by name may still process
 and use arbitrary objects without having knowledge of those objects
 prior to being compiled.
 
@@ -2356,7 +2356,7 @@ prior to being compiled.
 Again, the removal of a class should never cause the automatic
 recompilation of all modules.  For starters, any module which
 references that class object will have to be edited, causing it to
-be recompiled.  You can't possible forget to edit a file because
+be recompiled.  You can't possibly forget to edit a file because
 the system won't link until all references to the removed class
 are eliminated.
 
@@ -2366,16 +2366,16 @@ changes.
 
 In addition to the above, it should be noted that @code{dpp} never
 removes a class declaration from a @code{generics.h} file.  Of
-course it really doesn't matter if an unused declaration exists,
+course, it really doesn't matter if an unused declaration exists;
 however, periodic rebuilding of the @code{generics.h} file
 from scratch will remove the accumulated junk.
 
 @subsubsection Adding New Generics
 Adding new generics never causes the need for mass recompilation for the
 exact same reasons as the addition of new classes.  The only modules
-which could possible use it have to be edited to put the new generic in
+which could possibly use it have to be edited to put the new generic in,
 and that will cause only the appropriate modules to be recompiled.
-No other module is effected in any way.
+No other module is affected in any way.
 
 @subsubsection Generic Removal
 The removal of generics is a little more complex.  First of all,
@@ -2389,7 +2389,7 @@ whether or not any other module makes use of that generic.
 Therefore, Dynace leaves it in.
 
 Because of the above, there is no advantage to associating the
-@code{generics.h} file to other code.  The bottom line is that
+@code{generics.h} file with other code.  The bottom line is that
 if a generic is removed, you'll have to search the code for
 use of that generic and make appropriate changes.  This will
 cause the appropriate modules to be recompiled.
@@ -2400,17 +2400,17 @@ order to get rid of any unnecessary generics.
 
 @subsubsection Generic Argument Or Return Type Changes
 Of all the possible changes to a @code{generics.h} file this is the
-most troublesome.  It's also the change which is performed
+most troublesome.  It's also the change that is performed
 the least.  Once an application or class library reaches any level
 of maturity, the existing protocols tend to change little.  New
 features are implemented with new generics.
 
-It's also difficult to change generic arguments because of the fact that
+It's also difficult to change generic arguments because
 the person making the change must take into account the effect it will
-have on any other classes which use the same generic.  Generics with
-argument checking turned on must agree with all methods which they are
-associated with.  Generics with argument checking turned off are not
-effected with this issue.
+have on any other classes that use the same generic.  Generics with
+argument checking turned on must agree with which all methods which they are
+associated.  Generics with argument checking turned off are not
+affected by this issue.
 
 Having said that, however, there are only two ways of dealing with
 this situation.  First of all, if working on a team project, it should
@@ -2419,19 +2419,19 @@ It's more common to just create a new generic.
 
 The best way to deal with the problem is to search through all the
 code for references to the generic and make the appropriate changes.
-This will cause only the effected files to be recompiled.
+This will cause only the affected files to be recompiled.
 
 Another, and poor, answer is to recompile everything and fix the modules
-which get a compiler error.
+that get a compiler error.
 
 This issue is not bad if you think about it.  What would you normally
 have to do if you change the arguments to a regular C function?  Answer -
 the same thing.
 
 @subsection Compile Time Argument Checking
-Dynace supports the simultaneous use of generics which have compile
+Dynace supports the simultaneous use of generics that have compile
 time argument checking enabled and those that have the option
-turned off.  By convention only, generics which have compile time
+turned off.  By convention only, generics that have compile time
 argument checking turned on begin with ``@code{g}'' and those that
 have compile time argument checking turned off begin with ``@code{v}''. 
 
@@ -2441,13 +2441,13 @@ with @code{imeth} or @code{cmeth} have argument checking turned on and
 those introduced with @code{ivmeth} or @code{cvmeth} have argument checking
 turned off.
 
-For those generics which have compile time argument checking enabled,
+For those generics that have compile time argument checking enabled,
 the Dynace preprocessor (@code{dpp}) will validate the argument lists
 between generics and their associated methods during preprocessing time.
 All discrepancies between generics and their associated methods will be
-reported at this time.  Code which uses generics which have compile time
+reported at this time.  Code that uses generics with compile time
 argument checking enabled will be validated by your normal C compiler by
-use of the @code{dpp} generated declarations which exist in the
+use of the @code{dpp} generated declarations that exist in the
 @code{generics.h} file.
 
 For generics with compile time argument checking turned off none of
@@ -2456,12 +2456,12 @@ will be used to perform the necessary checks.
 
 @subsubsection Compile Time vs. Runtime Argument Checking
 Before jumping to the conclusion that it's always best to have compile
-time argument checking turned on a few things should be mentioned.
-First of all Dynace has ample facilities to perform argument validation
+time argument checking turned on, a few things should be mentioned.
+First of all, Dynace has ample facilities to perform argument validation
 at runtime.  Second, runtime-only argument checking is much more accurate
 and safe than compile-only time argument checking.  Third, enabling
 compile time argument checking on a generic causes inconvenient
-restrictions placed on that generic as follows.
+restrictions to be placed on that generic as follows.
 
 All methods associated with a generic which has compile time argument
 checking turned on must have the exact same argument signature.  On the
@@ -2474,19 +2474,19 @@ until runtime instead of compile time.
 
 The problem with compile time argument checking shows itself most with
 the @code{gNew} generic.  Instead of being able to use @code{gNew}
-for creation of instances of all classes, we have to use things
+for the creation of instances of all classes, we have to use things
 like @code{gNewWithInt} and @code{gNewWithStr} to differentiate
-the various argument signatures.  Not only is this ugly but it also
-causes the programmer to constantly ask ``now, which @code{gNew} do
-I use for this class?''.
+the various argument signatures.  Not only is this ugly, but it also
+causes the programmer to constantly ask, ``now, which @code{gNew} do
+I use for this class?''
 
 The next sub-section details an alternative approach.
 
 @subsubsection Sharing Methods
 In order to accommodate programmers with different demands Dynace has the
-ability to simultaneous support programmers who prefer compile time
+ability to simultaneously support programmers who prefer compile time
 argument checking turned on all the time and those who prefer more
-flexibility and better esthetics at the cost of not detecting argument 
+flexibility and better aesthetics at the cost of not detecting argument 
 errors until runtime.  Dynace has the ability to associate a single
 method with both compile time argument checking generics and those
 without compile time argument checking within a single code base.  The
@@ -2495,20 +2495,20 @@ programmer may enable this feature when building the system via the
 
 As shipped, Dynace includes several generics which are used to provide
 non-compile time argument checking versions of conveniently overloaded
-generic functions including @code{vNew}, @code{vFind}, @code{vRemove},
-@code{vFormat} and @code{vAdd}.  The entire system must be compiled with
-the @code{dpp} @code{-X} option in order to enable them however.
+generic functions, including @code{vNew}, @code{vFind}, @code{vRemove},
+@code{vFormat}, and @code{vAdd}.  The entire system must be compiled with
+the @code{dpp} @code{-X} option in order to enable them, however.
 
 @subsection Runtime Argument Validation
 Whenever a generic function is evoked in Dynace, the system checks the
 validity of the first argument.  It makes sure that the first argument
-is in fact a valid Dynace object.  If it is not, Dynace will report that fact
+is, in fact, a valid Dynace object.  If it is not, Dynace will report that fact
 and abort the program.  Otherwise, the continuation of the program could reek
-havoc with the entire system.
+havoc on the entire system.
 
 This @emph{object checking} comes at a runtime cost, however.  This cost
 is incurred at every evocation of any generic function.  While the cost
-is relatively minimal, programs which are well debugged may turn the
+is relatively minimal, programs that are well debugged may turn the
 checking off to maximize performance.  The following code fragment
 illustrates your control over object checking:
 @example
@@ -2531,17 +2531,17 @@ individual methods to validate their remaining arguments.
 
 Dynace provides several mechanisms to accomplish and simplify this task.
 The most convenient mechanism is the use of several macros called
-@code{ChkArg}, @code{ChkArgTyp}, @code{ChkArgNul} and
+@code{ChkArg}, @code{ChkArgTyp}, @code{ChkArgNul}, and
 @code{ChkArgTypNul}.  These macros provide a very simple way of
 validating an argument as being a valid Dynace object and, optionally,
-of being of a particular type.  If the argument is invalid an
+of being of a particular type.  If the argument is invalid, an
 appropriate and meaningful error message will appear.  These macros are
 also used internally by Dynace where appropriate and may be controlled
 by the object checking mode described in the previous section.
 
-Other mechanisms which may be used are the @code{IsObj} function, the
+Other mechanisms that may be used are the @code{IsObj} function, the
 @code{gIsKindOf} generic, the @code{ClassOf} macro, the
-@code{gInvalidObject} generic, the @code{gInvalidType} generic and the
+@code{gInvalidObject} generic, the @code{gInvalidType} generic, and the
 @code{gAbort} generic, as well as others.
 
 The following code fragment illustrates the use of the @code{ChkArgTyp}
@@ -2564,8 +2564,8 @@ executable statements in a method.
 @subsection Methods With A Variable Number Of Arguments
 Due to the way Dynace deals with the various method / generic interface
 strategies (described under @code{dpp} subsection ``Preprocessing
-Strategies'') it was necessary to construct a standard way of dealing
-with methods which implement variable arguments.  Use of these
+Strategies''), it was necessary to construct a standard way of dealing
+with methods that implement variable arguments.  The use of these
 conventions or standards assures the portability of method definitions
 across all support strategies without loss of functionality or
 convenience.
@@ -2577,7 +2577,7 @@ Dynace macros.
 @subsection Tracing Facility
 Dynace includes a powerful and flexible tracing facility to assist
 in the debugging of applications.  The facility traces generic calls
-of arbitrary combinations of classes, generics and methods.
+of arbitrary combinations of classes, generics, and methods.
 Each traced generic prints out the generic name, the type of the first
 argument to the generic, the name of the method found and the class
 of the method found.
@@ -2585,22 +2585,22 @@ of the method found.
 The tracing facility has three global modes controlled by
 @code{Trace::Dynace}.  It can be turned off (the default)
 to disable all generic tracing.  It can be turned on in order to
-trace generic calls associated with classes, generics or methods
-which have their tracing options activated (via @code{Trace::Behavior},
-@code{Trace::GenericFunction} and @code{Trace::Method}) and none
+trace generic calls associated with classes, generics, or methods
+that have their tracing options activated (via @code{Trace::Behavior},
+@code{Trace::GenericFunction}, and @code{Trace::Method}) and none
 deactivated.  The third mode is to turn tracing on all.  This traces
-all generic calls which do not have their tracing specifically
-deactivated or are not associated with classes or methods which
+all generic calls that do not have their tracing specifically
+deactivated or are not associated with classes or methods that
 are specifically turned off.
 
 Note that when referring to classes in the context of the tracing
 facility, it refers to both the class of the first argument to
-the generic and the class associated to the method found.
+the generic and the class associated with the method found.
 
 The tracing facility can be turned on and modified at any number of
-arbitrary points of the application.
+arbitrary points in the application.
 
-Trace output is sent to the stream @code{traceStream} which defaults
+Trace output is sent to the stream @code{traceStream}, which defaults
 to @code{stdout}.
 
 See @code{Trace::Dynace}, @code{Trace::Behavior},
@@ -2608,7 +2608,7 @@ See @code{Trace::Dynace}, @code{Trace::Behavior},
 @iftex 
 @hfil @break 
 @end iftex
-@code{TracePrint::Dynace} and @code{traceStream} for more information.
+@code{TracePrint::Dynace}, and @code{traceStream} for more information.
 
 
 
@@ -2617,15 +2617,15 @@ See @code{Trace::Dynace}, @code{Trace::Behavior},
 As stated earlier, all objects in Dynace are allocated from the heap.  In
 fact the @code{object} declaration actually declares a variable to be a
 pointer to this allocated memory.  Therefore, when an object is no
-longer needed, it must be returned to the heap.  If this is not done you
+longer needed, it must be returned to the heap.  If this is not done, you
 would eventually run out of heap space.  Dynace has two methods of
-accomplishing this task, disposal generics and the garbage collector.
+accomplishing this task: disposal generics and the garbage collector.
 
 Any class whose instances must do something more when
 being disposed of than just freeing themselves must define an instance
 disposal method.  The types of additional things this disposal method
-would normally do is free any additionally allocated storage which is
-local to the object being freed or perform any processing which needs
+would normally do are free any additionally allocated storage that is
+local to the object being freed or perform any processing that needs
 to be performed at object disposal time.
 
 The disposal methods are associated with the @code{gDispose}
@@ -2633,39 +2633,39 @@ and @code{gDeepDispose} generic functions.
 
 The @code{gDispose} generic is typically used to dispose of a single
 object and any associated allocated space it may reference.  The system
-default @code{gDispose} will handle getting rid of the single object so
+default @code{gDispose} will handle getting rid of the single object, so
 the only time a specific method is needed is when the object
 allocates its own memory from the heap or other processing needs to
-occur at the disposal time.  A programmer defined @code{gDispose} method
+occur at disposal time.  A programmer-defined @code{gDispose} method
 would typically free any allocated space associated with the object and
 then call its super @code{gDispose} method.
 
 The @code{gDeepDispose} generic, in addition to performing the same
 functions as the @code{gDispose} generic, is typically used to dispose
-of whole group of related objects at the same time.  This method will
+of a whole group of related objects at the same time.  This method will
 typically recursively call the @code{gDeepDispose} generic on all
-objects being referenced within the object being disposed.  The system
+objects being referenced within the object being disposed of.  The system
 default @code{gDeepDispose} method performs the same function as the
 system default @code{gDispose} method.
 
 @anchor{Speeding-Up-IsObj}
 @subsection Speeding Up IsObj
 
-@code{IsObj} is a function which validates a Dynace object pointer at
-runtime.  This function is a small and fast function but gets called
+@code{IsObj} is a function that validates a Dynace object pointer at
+runtime.  This function is small and fast but gets called
 quite a lot and often accounts for much of the overhead associated
-with Dynace.  This overhead is significantly exasperated in the
+with Dynace.  This overhead is significantly exacerbated in the
 Windows environment where the heap is non-contiguous.
 
 Dynace's allocation scheme is designed to be memory efficient.
 However, this scheme is at odds, under Windows, with the speed of the
 system. Dynace has facilities to eliminate this overhead under
-Windows.  If you build and run a Dynace based application, you can
+Windows.  If you build and run a Dynace-based application, you can
 call @code{gMAxMemUsed(Dynace)} after running through a representative
 run of the application and before exiting to determine the amount of
 Dynace memory the application used.  You can then use the
 @code{Dynace_GetInitialPageSize()} function to cause Dynace to
-allocate that amount as a single chunk of memory thus significantly
+allocate that amount as a single chunk of memory, thus significantly
 speeding up the application.  @code{Dynace_GetPageSize()} can also
 be used to set reasonable values.  See the relevant documentation
 for those functions in this manual.
@@ -2675,11 +2675,11 @@ in a Windows environment.  Unix / Linux don't suffer from these problems.
 
 @subsection Garbage Collection
 The way the garbage collector works is that it keeps track of your
-maximum real memory requirements, after a garbage collection.  Whenever
-your current memory usage exceeds a user defined number of bytes over
+maximum real memory requirements after a garbage collection.  Whenever
+your current memory usage exceeds a user-defined number of bytes over
 the maximum real memory requirements, a garbage collection is evoked.
 Thus, the automatic aspects of the garbage collection process may be
-controlled by specifying this user defined buffer area.  If the buffer
+controlled by specifying this user-defined buffer area.  If the buffer
 area is negative, no garbage collection process will take place.  You
 will just have to explicitly dispose of any unneeded objects.  The
 buffer area may be defined as follows:
@@ -2692,7 +2692,7 @@ garbage collection will be turned off.  The default setting is @code{-1L}.
 The smaller the buffer area is, the more often the garbage collector will
 have to run, and the slower the system will operate.  However, the memory
 requirements of the system will be as small as possible.  The larger the
-buffer area the less frequently the garbage collector will have to run, and
+buffer area, the less frequently the garbage collector will have to run, and
 therefore, the faster the system will run.  However, if the buffer area is
 too large, the system will experience delays when the very infrequently
 called garbage collector has to collect a large volume of garbage.  The
@@ -2707,33 +2707,33 @@ The garbage collector may be manually evoked with the following line:
 @end example
 
 Any class whose instances allocate memory from the heap must define an
-instance method which is associated with the @code{gGCDispose} generic.
+instance method that is associated with the @code{gGCDispose} generic.
 The garbage collector automatically calls this method when it frees an
 object.  It must free the allocated space and call the @code{gGCDispose}
 super method just like a @code{gDispose} method.  The only difference
 between the @code{gDispose} and @code{gGCDispose} methods is that the
 @code{gGCDispose} method should free allocated memory but must
-@emph{never} dispose of any other Dynace object.  Although it may perform
-any other necessary disposal type processing.  Typically the
+@emph{never} dispose of any other Dynace object, although it may perform
+any other necessary disposal-type processing.  Typically, the
 @code{gDispose} method is adequate as a @code{gGCDispose} method and is
 used as such.
 
-The garbage collector in Dynace uses an algorithm which does not require a
+The garbage collector in Dynace uses an algorithm that does not require a
 lot of stack space even while collecting highly recursive data
 structures.  The stack requirements are constant regardless of the
 objects being collected.
 
-Dynace offers an alternative garbage collection scheme which has important
-tradeoffs.  See the sub-section on the Boehm Garbage Collector.
+Dynace offers an alternative garbage collection scheme that has important
+trade-offs.  See the sub-section on the Boehm Garbage Collector.
 
 
 
 @subsection Global or Static Variables
-The Dynace garbage collector only marks objects which are accessible, either
+The Dynace garbage collector only marks objects that are accessible, either
 directly or indirectly, via automatic variables (those on the stack).
 Therefore, if you create an object and assign it to a global or static
 variable (a variable not on the stack) only, the garbage collector will
-not mark those objects.  If those objects are not marked they will be
+not mark those objects.  If those objects are not marked, they will be
 freed.  This is probably not what you want.
 
 Note that under Win32, Dynace has special code and can automatically
@@ -2747,7 +2747,7 @@ illustrates the registration of a single global variable, @code{GV}:
 @example
         RegisterVariable(GV);
 @end example
-This will cause the garbage collector to mark all objects which @code{GV}
+This will cause the garbage collector to mark all objects that @code{GV}
 refers to, either directly or indirectly.  It is OK for @code{GV} to not
 refer to a valid object.
 
@@ -2762,8 +2762,8 @@ The @code{RegisterVariable} macro actually calls @code{gRegisterMemory}.
 
 
 @subsection Boehm Garbage Collector
-In addition to the garbage collector (GC) which is part of Dynace,
-Dynace supports another GC which is freely available and widely used
+In addition to the garbage collector (GC) that is part of Dynace,
+Dynace supports another GC that is freely available and widely used
 throughout the industry.  This GC is not owned or supported by
 Algorithms Corporation or Blake McBride.  It is called the Boehm GC and is
 copyrighted by Hans-J. Boehm, Alan J. Demers and Xerox Corporation.
@@ -2776,14 +2776,14 @@ such that it will collect Dynace objects as well as application
 malloc'ed memory.  In addition, the Boehm GC requires somewhat less
 programmer effort in order to work correctly.  The main advantage of the
 Dynace GC is that it is more portable and comes with vanilla Dynace.
-The Boehm GC will not work in 16 bit environments such as DOS or 16 bit
+The Boehm GC will not work in 16-bit environments such as DOS or 16-bit
 Windows.
 
-In order to use the Boehm GC you must re-compile the entire Dynace
+In order to use the Boehm GC, you must re-compile the entire Dynace
 system with the macro @code{BOEHM_GC} defined.  In addition, the
 application must also be compiled with that macro defined and linked
 with the Boehm GC library.  Both collectors cannot be used at the same
-time, one or the other.  When using the Boehm GC there is no need to
+time; toy must use one or the other.  When using the Boehm GC, there is no need to
 enable it, set the buffer area, or register memory regions.  It's on all
 the time and functions automatically.  See the Boehm GC documentation.
 
@@ -2809,15 +2809,15 @@ but the true threads provided by the underlying system.  Dynace
 utilizes critical sections or semaphores to ensure safe operation
 in a true multi-threading environment.
 
-To enable this facility Dynace must be built from scratch with
+To enable this facility, Dynace must be built from scratch with
 @code{NATIVE_THREADS=1} set on the makefile line.  The same is
-true for all applications which intend to use native threads.
+true for all applications that intend to use native threads.
 @code{Dpp} generates class files with the structures defined
 and used by Dynace already protected.
 
 Additionally, the interface to the underlying system's critical
 section or semaphore facility will have to be provided.  With
-knowledge of this area it is simple to provide.  Dynace comes
+knowledge of this area, it is simple to provide.  Dynace comes
 shipped with native thread support for Win32 only at this time.
 See @code{include/dynl.h} and the @code{*.c} files generated by
 @code{dpp}.
@@ -2827,23 +2827,23 @@ See @code{include/dynl.h} and the @code{*.c} files generated by
 @subsection Method Cache
 As stated earlier, the Dynace system caches method dispatching.  This
 caching speeds up the system tremendously.  The larger the cache the
-better.  The default cache size is rather small, and may be user
+better.  The default cache size is rather small and may be user
 controlled.  The following line may be used to set the cache size:
 @example
         gResizeMethodCache(Dynace, 51, 101);
 @end example
 This example sets the cache size to 51 classes and 101 generics.  These
 numbers do not have to reflect the actual number of classes and generics
-you have.  They are just used to setup the cache.  Regardless of the
+you have.  They are just used to set up the cache.  Regardless of the
 numbers used, the system can handle any number of classes and generic
 functions.
 
-If this function is used, it should be used soon after initialization
+If this function is used, it should be used soon after the initialization
 of the Dynace system.
 
 
 @subsection Memory Compaction
-Dynace includes a memory allocator which is capable of performing memory
+Dynace includes a memory allocator that is capable of performing memory
 compaction.  This is used by the @code{String} class (as well as
 possibly other classes) to reduce or eliminate memory fragmentation.
 Since the compactor (@code{MA_compact()}) may relocate memory, it is
@@ -2852,23 +2852,23 @@ all pointers previously returned by Dynace generics such as
 @code{gStringValue} may be invalid.  All object pointers, however, will
 always be valid.
 
-The compactor would typically be called, manually, after a number of
-operations which would typically fragment memory.
+The compactor would typically be called manually after a number of
+operations that would typically fragment memory.
 
 
 @subsection Avoiding Runtime Method Lookup Costs
 There is a small runtime overhead associated with the runtime binding
-mechanism of Dynace (or any system which has runtime binding).  This
+mechanism of Dynace (or any system that has runtime binding).  This
 overhead is kept to a minimum by the Dynace method cache and other techniques
 employed by the Dynace system.  It is possible, however, to locally cache
-a method so as to reduce the future runtime overhead to zero.  This
+a method to reduce the future runtime overhead to zero.  This
 technique is normally only used in tight loops where there is no chance
 of using the wrong method.  Overuse of this technique is strongly
 discouraged.
 
 See the macros @code{cmcPointer}, @code{cmiPointer}, @code{imcPointer} and
 @code{imiPointer} for further details and examples.  There is also an
-example program which demonstrates the technique.
+example program that demonstrates the technique.
 
 
 
@@ -2880,8 +2880,8 @@ second class (or static) objects.  They may be defined but they
 can't be changed (at runtime) or localized in an arbitrary block.
 
 In Dynace generic functions are implemented in such a way that they
-are first class objects, just like variables.  That is they may
-be assigned to, passed and localized just like variables.
+are first class objects, just like variables.  That is, they may
+be assigned to, passed, and localized just like variables.
 
 See the relevant example for more details.
 
@@ -2894,16 +2894,16 @@ someone might want static binding is for efficiency reasons.  These
 needs, however, may be met by local method caching described above.
 (See the sub-section on Avoiding Runtime Method Lookup Costs.)
 
-In order to perform static binding you declare your method as a normal
+In order to perform static binding, you declare your method as a normal
 C function instead of using the method declaration syntax.  You must
-also declare its first argument to be @code{object self}, and explicitly use
+also declare its first argument to be @code{object self} and explicitly use
 the @code{accessIVs} macro.
 
-From that point on it will act as other methods and may then be called
+From that point on, it will act as other methods and may then be called
 directly, without going through the generic.
 
 
-When calling a method directly it is the programmers responsibility to
+When calling a method directly, it is the programmer's responsibility to
 validate the validity and type of the first argument.
 
 
@@ -2916,33 +2916,33 @@ allocate objects from the stack.
 The two advantages of allocating objects from the stack are that
 the allocation process, and hence the creation of the object, is very
 fast.  The second advantage is that no explicit object disposal is
-necessary. Stack based objects simply disappear when the code goes
+necessary. Stack-based objects simply disappear when the code goes
 out of scope in a fashion similar to automatic variables.  Thus,
 there is zero overhead associated with the object's disposal.
 
-The two disadvantages associated with stack based objects are that stack
+The two disadvantages associated with stack-based objects are that stack
 based objects are limited to the stack size and there is no provision
 for auto execution of an object destructor.  In addition, object
 creation is a bit clumsy.
 
-Dynace provides two ways to dispose of a heap based object.  First it
-can be explicitly disposed via the @code{gDispose} or similar generic.
-Second, it can be automatically disposed via the garbage collector.
+Dynace provides two ways to dispose of a heap-based object.  First, it
+can be explicitly disposed of via the @code{gDispose} or similar generic methods.
+Second, it can be automatically disposed of via the garbage collector.
 Both mechanisms allow the programmer to specify additional processing
-which must be performed when the object is disposed (such as freeing
-memory or closing files).  Unfortunately, stack based objects do not have
-this ability unless they are explicitly disposed and explicitly disposing
-of objects mostly negates the whole value of having stack based objects
+that must be performed when the object is disposed of (such as freeing
+memory or closing files).  Unfortunately, stack-based objects do not have
+this ability unless they are explicitly disposed of, and explicitly disposing
+of objects mostly negates the whole value of having stack-based objects
 in the first place.
 
-Explicit disposal of stack based objects does not free up any stack
+Explicit disposal of stack-based objects does not free up any stack
 space until the scope is exited.  Therefore, if five objects are created
-and freed in sequence in the same stack frame the stack space required
+and freed in sequence in the same stack frame, the stack space required
 will be that of all five objects.
 
-Due to the above facts stack based objects are generally discouraged.
+Due to the above facts, stack-based objects are generally discouraged.
 However, in cases where they are needed and no special disposal
-is required they can fit the bill.
+is required, they can fit the bill.
 
 See documentation on the @code{StackAlloc} for further details.
 
@@ -2956,20 +2956,20 @@ tested under MS--DOS, Windows 3.1, Windows 95, Windows NT, Interactive
 UNIX, UHC UNIX, Linux and Sun SPARC and the Alpha processor.  Compilers
 used were Microsoft Visual C++ 1.0 and above (16 and 32 bit), Borland
 C++ 3.1 and above (16 and 32 bit), WATCOM C/C++^32 9.0 and above,
-Symantec C++ version 7.21 (32 bit), GNU C 2.4 and above.  In addition
+Symantec C++ version 7.21 (32 bit), and GNU C 2.4 and above.  In addition,
 several prior versions of each of the above compilers were also tested.
 
 When @code{dpp} strategy 1 is selected there is one small piece of
 assembler (the jumpTo code) used by the Dynace system.  This code is
 specific to each compiler/model/OS combination.  All jumpTo assembler
-routines which have been developed have been included with the system.
+routines that have been developed have been included with the system.
 There is no assembler required for the default strategy of 2.
 
 The Dynace threader uses the C library functions setjmp/longjmp.  When using
 these functions it is important not to over-optimize a program (as most
-compiler documentation attest).  The included makefiles where designed
+compiler documentation attests).  The included makefiles were designed
 to maximize the reliability of the Dynace threader.  If the threader is not
-going to be used more aggressive optimization may be used.
+going to be used, more aggressive optimization may be used.
 
 The generics file must always be compiled with the optimization options
 (usually maximum) defined in the makefiles.
@@ -2983,38 +2983,38 @@ These builds work in both 32 and 64 bits.
 Since the Dynace threader makes use of setjmp/longjmp and the Microsoft
 Visual C++ documentation recommends not to use most of the optimization
 features when setjmp is used, it is recommended to use only the
-optimization options used in the included make files.  It has been
+optimization options used in the included makefiles.  It has been
 demonstrated that the @code{-Oe} option causes problems with the
-threader.  If the threader is not going to be used much heavier
+threader.  If the threader is not going to be used, much heavier
 optimization may be used.
 
 Maximum optimization with no stack checking must always be used when
 compiling the generics file.
 
-@subsection UNIX
+@subsection UNIX / Linux
 
-The makefiles associated with the UNIX build are all named @emph{makefile}.
+The makefiles associated with the UNIX/Linux build are all named @emph{makefile}.
 
 Only the GNU C compiler and GNU Make utility have been used.
 
-Because of the linear memory associated with UNIX Dynace runs quite well under it.
+Because of the linear memory associated with UNIX/Linux, Dynace runs quite well under it.
 
-In addition note that the top level makefile is set up to correct
+In addition note that the top-level makefile is set up to correct
 all the files in the system automatically.
 
 @subsection Using A Debugger
 
 Because of the way Dynace dispatches methods it is often difficult to
 trace through a generic call at the C source level.  It has been found
-that if a break point is placed at the beginning of the actual method
+that if a breakpoint is placed at the beginning of the actual method,
 the debugger will stop there when going through the generic.  So, for
 example, if you want to trace into a call to the @code{gNew} generic and
 you know you are dealing with the @code{ShortInteger} class, you may put
-a break point on the @code{ShortInteger_im_gNew} method in the
+a breakpoint on the @code{ShortInteger_im_gNew} method in the
 @code{shortint.c} file and continue.  The system will stop at the
-@code{ShortInteger_im_gNew} method and you should be able to continue as
-normal.  If you are not sure what class the object is just but a break
-point on all the possible methods the generic will dispatch to.
+@code{ShortInteger_im_gNew} method, and you should be able to continue as
+normal.  If you are not sure what class the object is, just put a breakpoint
+on all the possible methods the generic will dispatch to.
 
 There is not a problem when debugging a program at the machine instruction
 level.  Therefore, it is possible to step at the C level up to a generic
@@ -3039,7 +3039,7 @@ They are located under @code{\DYNACE\KERNEL\PORT}.
 @subsubsection JumpTo Assembler Code
 
 The Dynace preprocessor (@code{dpp}) is capable of supporting various
-method / generic interface strategies which are described on the section
+method / generic interface strategies which are described in the section
 documenting @code{dpp}.  While the default strategy (2) does not require
 any assembler code, the more efficient strategy (1) does.  Although
 Dynace comes with the necessary assembler code for many platforms, this
@@ -3051,11 +3051,11 @@ argument, pop two stack frames and jump (not jsr) to the function
 passed.
 
 The best way to create this code is to compile jumpto.c (provided
-with Dynace) into assembler, modify it and then assemble it.  Compiling
+with Dynace) into assembler, modify it, and then assemble it.  Compiling
 generics.c into assembler for reference is also helpful.  Running
 the code through a machine instruction debugger is a must.
 
-Basically what you need to do is write down the state of the stack
+Basically, what you need to do is write down the state of the stack
 pointer and registers upon entry of the generic function.  Next, allow
 the generic function to calculate the method to execute and call the
 jumpTo code.  Finally, (and this is the part that needs to be modified)
@@ -3063,17 +3063,17 @@ the jumpTo code should call the method such that upon entry of the
 method the stack pointer and registers look as though they did when
 the generic function was entered.
 
-For someone that knows assembler this process should take about an hour.
+For someone who knows assembler this process should take about an hour.
 
 @subsubsection  GC & CPU Registers
-If objects can exist in CPU registers, then the Dynace Garbage collector must
+If objects can exist in CPU registers, then the Dynace garbage collector must
 have access to them in order to mark them so as not to incorrectly collect
 them.  Dynace has two ways of dealing with this.
 
 The first way is to declare objects to be volatile.  This causes the
 compiler not to keep any objects in registers.  While this is a safe
-and portable solution it also slows the system down a bit.  It is,
-however, required by 16 bit compilers because they tend to split
+and portable solution, it also slows the system down a bit.  It is,
+however, required by 16-bit compilers because they tend to split
 far pointers and store them on the stack in non-contiguous locations.
 
 The second possibility is to explicitly mark objects which are
@@ -3083,18 +3083,18 @@ a small bit of inline assembler.  This code would be located in
 
 @subsubsection Memory Alignment
 Memory alignment determines where in memory objects can be stored.
-By selecting efficient memory alignments you can maximize the code
+By selecting efficient memory alignments, you can maximize the code
 and garbage collector efficiency.  Typically, alignment is on
-4 byte boundaries for 32 bit systems and 2 byte on 16 bit systems.
+4-byte boundaries for 32-bit systems and 2-byte on 16-bit systems.
 
-Dynace includes support for 2 and 4 byte alignments via the
+Dynace includes support for 2 and 4-byte alignments via the
 @code{ALIGN2} and @code{ALIGN4} macros located in @code{kernel.c}.
 
 
 @subsubsection  Linear vs. Segmented Memory
-As might be expected, Dynace runs much more efficiently in 32 bit,
+As might be expected, Dynace runs much more efficiently in 32-bit,
 linear memory mode.  Under linear mode Dynace can more quickly determine
-object validity, a function which is often performed.
+object validity, a function that is often performed.
 
 Dynace supports both modes via the @code{SEGMENTED_MEMORY} macro
 contained within @code{kernel.c}.
@@ -3102,12 +3102,12 @@ contained within @code{kernel.c}.
 
 @subsubsection Thread Timer
 The Dynace multi-threader requires some mechanism whereby the OS
-is able to execute an application defined function on a regular
+is able to execute an application-defined function on a regular
 basis.  The frequency would normally be between 50 and 100 times or
 more a second.
 
 @subsubsection Setjmp/longjmp Functionality
-Since the multi-threader makes heave use of the setjmp/longjmp
+Since the multi-threader makes heavy use of the setjmp/longjmp
 system functions, it is important that those functions save and
 restore the registers in addition to the stack frame.  This will
 enable maximum reliability of local variables associated with

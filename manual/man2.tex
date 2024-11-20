@@ -27,14 +27,14 @@
 @c  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @chapter Concepts
-Over time, the methods used in the development of computer software has
+Over time, the methods used in the development of computer software have
 evolved from a @emph{Goto} model, to a @emph{Structured Programming}
 model, and finally the @emph{Object Oriented model}.  In the
 beginning, the @code{goto} model was able to accommodate all the needs of the
 programmers.  However, as the size of programs became larger and
 more complex, the goto code began to look like spaghetti.  No one, except
 perhaps the original author, was able to understand, and therefore
-maintain, a complex program which was jumping all over the place.  The
+maintain, a complex program that was jumping all over the place.  The
 solution to this problem was the Structured Programming model.
 
 The Structured Programming model got rid of @code{goto} statements and
@@ -44,18 +44,18 @@ ending location of the loop or conditional, as well as what the specific
 conditions are for executing the contained code.  No more spaghetti.
 
 Structured Programming also stressed the use of subroutines.  This
-allowed blocks of code to be packaged in a form which could be easier
-understood as a small, well defined, unit.  It also enabled, to some
+allowed blocks of code to be packaged in a form that could be more easily
+understood as a small, well-defined unit.  It also enabled, to some
 degree, the ability to create reusable code.  It should be noted that
 while packaging blocks of code as subroutines greatly increased the
-programmers ability to manage large programs, it also comes at a cost.
+programmers' ability to manage large programs, it also comes at a cost.
 Calling blocks of code as subroutines is substantially more expensive,
 in terms of computer cycles, than a @code{goto} statement.  As time has
 progressed, however, it has generally been accepted that the benefits of
 subroutines far exceed the costs.
 
 The Structured Programming model worked well for many years.  However,
-as computer programs became still larger, the programmers ability to
+as computer programs became even larger, the programmers' ability to
 manage larger, more complex projects became increasingly difficult.  The
 ability to use common subroutines across varying applications was very
 limited.  It became very difficult to manage the relationship between
@@ -72,18 +72,18 @@ entire system.
 Second, any changes made to the related group of code and data should
 have minimal effect on any other code or data.  This way, if a
 programmer changes a module, he shouldn't then have to search every
-place it's used to see what additional changes had to be made in order
+place it's used to see what additional changes have to be made in order
 to accommodate the module change.
 
-The third problem is that of maximizing reusability.  For years
+The third problem is that of maximizing reusability.  For years,
 programmers have been writing the same linked list routines, the same
 sort routines, and the same hash table routines over and over.  The
-ability to create general purpose routines, which could be used in many
+ability to create general-purpose routines, which could be used in many
 places, over and over, is of immense value.  After the creation of
 a good general purpose library, applications development time would be
 reduced considerably, and code reliability increased considerably.
-In addition, any enhancements made to the general purpose library
-would have an automatic benefit to all applications which use the library.
+In addition, any enhancements made to the general-purpose library
+would have an automatic benefit to all applications that use the library.
 
 All three of the above issues are addressed in the Object Oriented
 model.  The first two are addressed by the @emph{encapsulation, data
@@ -105,48 +105,48 @@ The terminology will be introduced as it is encountered.
 
 @subsection Encapsulation
 Encapsulation allows the programmer to tightly bind a data structure
-with the routines which access it, into an item called an @emph{object}.
+with the routines that access it into an item called an @emph{object}.
 Encapsulation reduces the ways in which outside data or procedures may
-effect a given object.  Outside elements may only effect a given object
-by a limited number of well defined methods.  Using a limited number of
-ways to effect an object causes @emph{loose coupling}.  A well defined
+affect a given object.  Outside elements may only affect a given object
+by a limited number of well-defined methods.  Using a limited number of
+ways to affect an object causes @emph{loose coupling}.  A well defined
 method of effecting an object is a @emph{protocol}.
 
 A limited example of this idea can be achieved, for example, by creating
-a unique structure declaration inside a particular C source file, or
+a unique structure declaration inside a particular C source file or
 module, as opposed to inside an include file.  By doing this, only the
 functions in the same source file as the structure declaration may
 access elements of the structure, since those are the only routines
-which have any knowledge of its structure.  Anything outside the
+that have any knowledge of its structure.  Anything outside the
 defining module must call a non-static function, located within the
-module, in order to effect the data structure.  These non-static
-functions would, in effect, comprise the modules @emph{protocol}.  The
+module, in order to affect the data structure.  These non-static
+functions would, in effect, comprise the module's @emph{protocol}.  The
 module would have @emph{loose coupling} because the only way outside
-routines may effect the internal data structure, or state of the object,
+routines may affect the internal data structure, or state of the object,
 is, again, through the non-static functions.  External routines have no
-access to the static, or local, routines, and have no direct access to
+access to the static or local routines and have no direct access to
 the data structure itself.
 
 Further, a very important form of @emph{data abstraction} is achieved
 through encapsulation. Data abstraction refers to the ability to change
 the structure of data without having to change any external routines
-which, indirectly, use the data structure.  As in the previous example,
+that, indirectly, use the data structure.  As in the previous example,
 the data structure, as well as the entire implementation of the module
 may be changed entirely, and so long as the pre-existing protocol and
-module functionality remains intact, all other modules which use this
+module functionality remain intact, all other modules that use this
 module will continue to work without @emph{any} modifications.  Major
 implementation details may change and be made more efficient, and
-major additions to the module's functionality may be added, without
-any effect to external, pre-existing, code.
+major additions to the module's functionality may be made without
+any effect on external, pre-existing code.
 
 As opposed to the above example, the form of encapsulation implemented
-in most of the more advanced object oriented models, as well as Dynace, is
+in most of the more advanced object-oriented models, as well as Dynace, is
 much tighter.  External routines not only have no access to the elements
 of the data structure, but also have no direct access to @emph{any} of
-the routines which may effect the data structure!  The data structure
+the routines that may affect the data structure!  The data structure
 and associated routines are tightly packaged into a unique object.  The
-only way to effect the object is to request the object itself to make
-any modifications to itself, or perform any operation.  The meaning and
+only way to affect the object is to request the object itself to make
+any modifications to itself or perform any operation.  The meaning and
 methods to achieve this will become increasingly clear as we progress.
 
 
@@ -165,16 +165,16 @@ So, for example, in our previous example, you would be able to link two
 modules, each with non-local @code{fun1()}s.  If a third module called
 @code{fun1()} the system would know which @code{fun1()} to execute based
 on the types of the arguments passed to @code{fun1()}.  This ability to
-determine which specific routine to execute, among several possible, is
-called @emph{dynamic binding}.
+determine which specific routine to execute among several possible
+options is called @emph{dynamic binding}.
 
 At first, it may seem unclear what value polymorphism may have.  The
 following example will show that polymorphism is an extremely valuable
-tool, when trying to create general purpose, reusable, software
+tool when trying to create general-purpose, reusable software
 components.
 
-Lets say you had a @emph{box} object.  That is, a data structure
-representing a box (height and width), and a group of routines which
+Let's say you had a @emph{box} object.  That is, a data structure
+representing a box (height and width), and a group of routines that
 can create, modify, draw, and destroy a particular box data structure.
 Now we want to create a routine to draw an arbitrary number of a
 particular box.  We would probably write the routine as follows:
@@ -209,11 +209,11 @@ void    draw_n2(void *b, int n, int type)
 The first problem with the @code{draw_n2()} solution is that @code{draw_n()}
 had to be changed to handle the additional type.  The second problem is that
 the syntax has also been changed.  This means that everywhere @code{draw_n()}
-is called the syntax would have to be adjusted.  The third problem, is that
+is called the syntax would have to be adjusted.  The third problem is that
 now the programmer has to keep track of which type @code{b} really is.
 All this work is necessary just to add a little additional functionality.
 You can imagine what would be involved in making these types of changes
-to real, complex, applications.
+to real, complex applications.
 
 The facility of polymorphism alleviates the need for @emph{any} of these
 changes.  As an example, in Dynace, the code could have originally been
@@ -232,10 +232,10 @@ void    draw_n3(object b, int n)
 @end example
 
 If you then created a @code{circle} object, with all the appropriate supporting
-functions, and passed it to @code{draw_n3()} it would work fine!  No code
+functions, and passed it to @code{draw_n3()}, it would work fine!  No code
 changes anywhere!  You wouldn't even have to recompile @code{draw_n3()}!
 You could later pass @code{draw_n3()} a @code{triangle} or a @code{rectangle}
-and again, no code changes, and no re-compilation of @code{draw_n3()}.
+and again, no code changes, and no recompilation of @code{draw_n3()}.
 
 @subsubsection Early vs. Late Binding
 
@@ -245,15 +245,15 @@ there is a @code{draw()} function defined for the @code{square}, one for the
 the system is automatically determining which @code{draw()} to call based
 on the type of @code{b}, which is kept automatically.
 
-Some object oriented implementations have what's called @emph{early binding}.
-Early binding is when the relationship between the function call, and
+Some object-oriented implementations have what's called @emph{early binding}.
+Early binding is when the relationship between the function call and
 what's actually called is determined when the program is being compiled.
 The advantage of early binding is speed.  Since the determination is being
 performed at compile time, there is no runtime cost.  It is just as fast
 as a normal function call.
 
 There are, however, some serious disadvantages of early binding.  First
-of all, in order for the compiler to make the determination it must know
+of all, in order for the compiler to make the determination, it must know
 the type of the argument at compile time.  This means that the procedure
 could only work for @emph{one} type of object.  This is entirely
 inadequate for the above example.  Using early binding, one would
@@ -262,30 +262,30 @@ definitions for @code{draw()}, however, it would only work for a
 @code{box}.  Therefore, early binding provides only a partial solution to
 the problems polymorphism can solve.
 
-@emph{Late binding} refers to a system which determines which function
+@emph{Late binding} refers to a system that determines which function
 to call at runtime.  Late binding requires that the system knows, at
 runtime, the type of any object.  This information is typically kept
 automatically by the system, as it is in Dynace.  Late binding has the advantage
 that it gives all the benefits of polymorphism.  Therefore, one could
-define a very general purpose @code{draw_n3()} type of function within a system
+define a very general-purpose @code{draw_n3()} type of function within a system
 that supports late binding.  The only disadvantage normally associated
 with late binding is speed. The system must determine which
 @code{draw()} function, for example, to execute at runtime.
 
-Dynace normally uses late binding, and has a caching facility which minimizes
+Dynace normally uses late binding and has a caching facility that minimizes
 the runtime overhead associated with late binding.  Dynace also contains
 a method for reducing the runtime overhead to virtually zero.  This
-method may be used in tight loops.  Dynace can also use early binding,
+method may be used in tight loops.  Dynace can also use early binding;
 however, this is discouraged.
 
 @subsection Inheritance
-Inheritance allows you to create objects which are like other objects,
-or group of objects, but has some differences.  Inheritance is an
+Inheritance allows you to create objects that are like other objects
+or groups of objects, but have some differences.  Inheritance is an
 extremely powerful tool.  It enables a programmer to create a new
 module by using pre-existing modules.  The only parts the programmer has
-to write are the parts which make the new module unique.  In Dynace, all
+to write are the parts that make the new module unique.  In Dynace, all
 this can be achieved without any access to implementation details or
-source code to the pre-existing modules.
+source code of the pre-existing modules.
 
 Inheritance operates in a hierarchical form.  Thus, if object @code{B}
 inherits from object @code{A}, and a new object @code{C} is created
@@ -309,7 +309,7 @@ the data and functionality of objects @code{B} and @code{A}.  Object
 @code{B} has all the data and functionality locally defined as part of
 object @code{B}, as well as all the data and functionality of object
 @code{A}, but not object @code{C}.  Object @code{A} has only the
-immediate data and functionality which are locally defined.
+immediate data and functionality that are locally defined.
 
 This idea may be extended in a multiple inheritance form pictured below:
 
@@ -325,7 +325,7 @@ This idea may be extended in a multiple inheritance form pictured below:
 @end example
 
 In this example object @code{A} has only its locally defined data and
-functionality.  Object @code{B}, also, has only its locally defined
+functionality.  Object @code{B} also has only its locally defined
 data and functionality.  Object @code{C}, however, contains its locally
 defined data and functionality, as well as the data and functionality of both
 object @code{A} and @code{B}.
@@ -335,45 +335,45 @@ in both depth and width, whatever makes sense.
 
 @page
 @section Dynace
-Dynace is an object oriented extension to the C language.  It implements
+Dynace is an object-oriented extension to the C language.  It implements
 all of the features discussed in this manual.  Dynace is written in the
-C language, and designed to be portable, efficient, powerful, and
-simple to use.  Dynace was designed after an in depth study of Smalltalk--80,
+C language and designed to be portable, efficient, powerful, and
+simple to use.  Dynace was designed after an in-depth study of Smalltalk--80,
 the Common Lisp Object System (CLOS), Objective--C, C++, as well as
-object oriented principles in general.  Dynace was designed with the following
+object-oriented principles in general.  Dynace was designed with the following
 goals:
 
 @itemize @bullet
 @item  Implement as much power and flexibility, available in languages such
-as CLOS and Smalltalk--80, as possible.
-@item  Create a language which was as simple to use as possible, like
+as CLOS and Smalltalk--80 as possible.
+@item  Create a language that was as simple to use as possible, like
 Objective--C.
-@item  Create a language which stuck as close as possible to the standard
+@item  Create a language that stuck as close as possible to the standard
 C syntax.
-@item  Create a language which was as efficient as possible, such as C++
+@item  Create a language that was as efficient as possible, such as C++
 and Objective--C.
 @end itemize
 
 Dynace succeeds in the satisfaction of these specific goals better than any
 of the other languages above.
 
-The remainder of this manual will deal with more specifics aspects of Dynace,
+The remainder of this manual will deal with more specific aspects of Dynace,
 although the vast majority of these concepts are very closely related to
 most of the above languages.
 
 @subsection Object
 Dynace adds to the C language only @emph{one} new data type, the @emph{object}.
 An @emph{object} is a package consisting of data and the procedures
-necessary to create, destroy, modify, and otherwise effect the data.  An
+necessary to create, destroy, modify, and otherwise affect the data.  An
 object always knows what type it is.  Dynace operates on objects.  An
 object can be thought of as a fundamental data type.  In fact,
 @code{object}, much like @code{int} or @code{long}, is a fundamental
-type which may be used in declarations.  All other elements of Dynace, such
+type that may be used in declarations.  All other elements of Dynace, such
 as classes, metaclasses, instances, methods, and generic functions, are
 regular objects, just like any other object you may create in an
 application.  In this respect, @emph{all} objects are treated exactly
 the same throughout Dynace.  The exact same code which processes the pre-defined
-Dynace objects, which allow Dynace to operate, process the user added objects.
+Dynace objects, which allow Dynace to operate, processes the user-added objects.
 
 Variables containing objects may be declared as follows:
 
@@ -381,36 +381,36 @@ Variables containing objects may be declared as follows:
         object    a, b, c;
 @end example
 
-In this example three variables, @code{a, b} and @code{c}, which may
+In this example three variables, @code{a, b,} and @code{c}, which may
 refer to objects, have been defined.
 
 @subsection Classes & Instances
 In Dynace, @emph{each} and @emph{every} object refers to an object, called
 a @emph{class}, which defines that object.  One class object may define
-any number of objects.  Each object which is defined by a particular
+any number of objects.  Each object that is defined by a particular
 class object has the same data structure and performs the same functions
-as all the other objects which are directly defined by that class
-object.  The only thing which differentiates one object from another,
+as all the other objects that are directly defined by that class
+object.  The only thing that differentiates one object from another,
 when they are both defined by the same class object, is the values
 contained within their similar data structures.
 
-The objects which are defined by a particular class object are called
+The objects that are defined by a particular class object are called
 @emph{instance} objects of that class object.  Class objects have names. 
-For simplicity sake, we will call a class object with a name @code{X},
+For simplicity's sake, we will call a class object with a name @code{X},
 @code{X} class.  An instance object of @code{X} class is called an
 instance of class @code{X}.  In general terms, we can speak directly
 about classes and instances.
 
 Now that we have some terminology under our belt, I can restate exactly
-what classes and instances are, and what their relationship to each
+what classes and instances are and what their relationship to each
 other is.  One very important thing to keep in mind, and the main reason 
 all these terminology gyrations were necessary, is that classes and instances
 are both objects.  There is nothing more special about one than the other.
-There is no code in Dynace which treats classes any different from instances.
+There is no code in Dynace that treats classes any differently from instances.
 
 A class keeps track of the structure of the data located in its instances.
 A class also keeps track of the functions the instances are able to perform.
-Each instance has only a single class which defines it, and it always
+Each instance has only a single class that defines it, and it always
 knows which class it is.  There may be an arbitrary number of instances of
 a class, however.
 
@@ -419,13 +419,13 @@ Each class may have zero or more superclasses.  Classes normally have at
 least one superclass, though.  The data contained in an instance will
 be the sum of the data defined directly in the instance's class, and the
 data defined in all the superclasses of the instance's class.  In
-addition, the instance will also contain the data defined in it's
-superclass's superclasses.  This continues till there are no more
+addition, the instance will also contain the data defined in its
+superclass's superclasses.  This continues until there are no more
 superclasses.
 
-The instance's functionality follows the same path as it's data.
+The instance's functionality follows the same path as its data.
 
-If class @code{A} is a superclass of class @code{B} then, class @code{B}
+If class @code{A} is a superclass of class @code{B}, then class @code{B}
 is called a @emph{subclass} of class @code{A}.
 
 @subsubsection Instance Variables
@@ -437,52 +437,52 @@ structure, though.  You can think of instance variables as a C structure
 definition.  Each instance of a particular class contains the same
 structure.  It just contains different data within that structure.
 
-When dealing with an instance, only the procedures which are part of the
+When dealing with an instance, only the procedures that are part of the
 instance's class are able to access the instance variables.  This
 ensures encapsulation and data abstraction.
 
 @subsubsection Class Variables
 Each class may also contain data. This data, which is located in the class,
-are called @emph{class variables}.  The data in class variables is always
-unique to a particular class.  Class variables often serve as data which
+is called @emph{class variables}.  The data in class variables is always
+unique to a particular class.  Class variables often serve as data that
 is common among all the instances of the class.  With class variables
 you can keep track of how many instances of the class there are, or
 sums of their instance variables.  You can even keep a linked list of
 a class's instances if you like.
 
-Like instances variables, class variables may only be accessed by
-specific procedures which are bound to the class.
+Like instance variables, class variables may only be accessed by
+specific procedures that are bound to the class.
 
 @subsection Metaclasses
 As was discussed before, all things in Dynace are @emph{objects}, and
 are treated the same.  If this is true, you may be wondering why we are
-discussing classes and instances like they are two different things.
-The fact is, they are not!  In fact, it so happens, that like instances,
-classes are also instances, instances of another class.  The classes
-whose instances are themselves classes, are called @emph{metaclasses}.
+discussing classes and instances as if they are two different things.
+The fact is, they are not!  In fact, it so happens that, like instances,
+classes are also instances; instances of another class.  The classes
+whose instances are themselves classes are called @emph{metaclasses}.
 And as you might imagine, metaclasses are also instances of other
-classes.  This is a circular process which goes on without beginning or
+classes.  This is a circular process that goes on without beginning or
 end.
 
 In this sense Dynace is quite interesting.  Every part of Dynace, and all of
 its functionality, is defined by some other class.  Fortunately, though,
 Dynace hides much of its complexity.  You will rarely, if ever, have to
 concern yourself with any metaclasses or any aspects of its recursive
-design and operation.  There is one important thing to remember, though,
+design and operation.  There is one important thing to remember, though:
 every class is an instance of exactly one class (the metaclass) and has
 zero or more superclasses.
 
 @subsection Methods
-As was discussed earlier, the only procedures which may access instance
+As was discussed earlier, the only procedures that may access instance
 variables are the procedures associated with the class of the instance.
 These procedures are called @emph{methods}.  Methods are used to effect
 all aspects of an instance's variables.  In fact, methods are the only
-thing which can create or destroy instances.
+things that can create or destroy instances.
 
 There is one interesting thing about methods, though.  Like instance
-variables, there is not, normally, a way to evoke a method.  Methods,
+variables, there is not normally a way to evoke a method.  Methods,
 like instance variables, are tightly bound to the class, and there is
-no easy, external access to the method.  Thus, methods, like instance
+no easy external access to the method.  Thus, methods, like instance
 variables, are encapsulated and abstracted.
 
 After reading about instance variables and methods being so tightly
@@ -491,34 +491,34 @@ how one could ever effect an object.  Be patient.  The next few sections
 will wrap up all the ideas.
 
 These features are very important.  They are among the key elements
-which allow the object oriented model to be such a powerful tool.
+that allow the object-oriented model to be such a powerful tool.
 
 @subsubsection Instance Methods
-@emph{Instance methods} are methods which typically operate on instance
+@emph{Instance methods} are methods that typically operate on instance
 variables.  Instance methods are conceptually located in the class of
 an instance.
 
 @subsubsection Class Methods
-@emph{Class methods} are methods which typically operate on class
+@emph{Class methods} are methods that typically operate on class
 variables.  Class methods are conceptually located in the class of
 the class, or the metaclass.
 
 @subsection Generic Functions
 Given how tightly bound and inaccessible instance (or class) variables and
-methods are bound to an object, one might wonder just how anything external
-to the object can cause any change in an object.  The answer to this is
+methods are to an object, one might wonder just how anything external
+to the object can cause any change in the object.  The answer to this is
 @emph{generic functions}.
 
-Generic functions act as special C functions which take one or more
+Generic functions act as special C functions that take one or more
 arguments.  What a generic function does is check the class of the first
-argument to the generic function, for a method which has been associated
-to this generic function.  If one is found, it is evoked.  If one is not
-found, the generic will search all the superclasses of the class of
+argument to the generic function for a method that has been associated
+with this generic function.  If one is found, it is invoked.  If one is not
+found, the generic function will search all the superclasses of the class of
 the first argument.  This superclass search will continue until a method
-is found, or there are no more superclasses to check.  If no method
-is found an error is signaled.
+is found or there are no more superclasses to check.  If no method
+is found, an error is signaled.
 
-Although this search process sounds quite involved and time consuming, it
+Although this search process sounds quite involved and time-consuming, it
 really is not.  Dynace employs a caching scheme, so there is almost never
 an actual search.
 
@@ -528,28 +528,28 @@ dynamic binding and method inheritance facilities are implemented.
 
 Dynamic binding is achieved, for example, through the fact that class
 @code{A} could have a method called @code{M1}, as can class @code{B}.
-The generic function will evoke the correct method, based on the class
-of its first argument.  If the first argument to the generic is an
+The generic function will invoke the correct method based on the class
+of its first argument.  If the first argument to the generic function is an
 instance of class @code{A} then class @code{A}'s @code{M1} method will
-be evoked.  Likewise, if the first argument to the generic is an
+be invoked.  Likewise, if the first argument to the generic function is an
 instance of class @code{B} then class @code{B}'s @code{M1} method will
-be evoked.  The two methods could perform entirely different functions.
+be invoked.  The two methods could perform entirely different functions.
 
-The method inheritance facility of Dynace are realized by the fact that
+The method inheritance facility of Dynace is realized by the fact that
 generic functions search the superclasses until an appropriate
 method is found.  It will keep searching up the tree until a class
-which implements the necessary operation is found.
+that implements the necessary operation is found.
 
 All the arguments passed to a generic function are passed directly to
-the appropriate method, just as if the method was called directly.
+the appropriate method, just as if the method were called directly.
 Therefore, since one implementation of an @code{M1} method may take a
-different number of arguments (or different types) as another @code{M1}
+different number of arguments (or different types) than another @code{M1}
 method, generic functions take different arguments (or different types)
-depending on the method which will eventually be evoked.  In addition,
-the return value of a generic is whatever the method returns.
+depending on the method that will eventually be invoked.  In addition,
+the return value of a generic function is whatever the method returns.
 
-The process of evoking a generic function may also be referred to as
-sending a @emph{message} to the object which is the first argument to
+The process of invoking a generic function may also be referred to as
+sending a @emph{message} to the object that is the first argument to
 the generic function.
 
 @subsubsection Method Lookup
@@ -558,7 +558,7 @@ is important to understand.  The first place searched is always the
 class of the object in the first argument to the generic function.  If
 the method is not found, the first superclass (the one listed first when
 the class was created) is searched and then its superclasses.  After
-checking the entire branch the method is still not found then the next
+checking the entire branch, if the method is still not found, then the next
 superclass to the first class will be searched.  This process will
 continue until a method is found or there are no more superclasses.  If
 no method is found, an error is signaled.  The search method, therefore,
@@ -582,7 +582,7 @@ would be searched in the following order @code{E--C--A--D--B}.  Note that
 the order of @code{C} and @code{D} is determined by the order they are
 listed when class @code{E} is created.
 
-One important point.  If the first argument to the generic function is
+One important point:  If the first argument to the generic function is
 an instance, the class of the instance will be searched first.  And
 since instance methods are kept in classes, an @emph{instance} method
 will be evoked.  However, if the first argument to the generic function
@@ -596,7 +596,7 @@ first argument to a generic function is a class, then a class method
 will be found.
 
 @subsection Memory Management and Garbage Collection
-All objects in Dynace are dynamic entities which are allocated from the C
+All objects in Dynace are dynamic entities that are allocated from the C
 heap.  When a new object is created, it is allocated from the heap, but
 when an object is no longer needed, it must be returned to the heap,
 lest we use up all the memory.  This can be done in Dynace explicitly via
@@ -604,13 +604,13 @@ one of the disposal generics.  However, as an application gets larger
 and more complex, it becomes more and more difficult to know exactly
 when an object is no longer needed.  Also, there is often a larger than
 desired level of complexity added to an application when trying to keep
-track of when an object should be disposed of, and being sure it is.
+track of when an object should be disposed of and being sure it is.
 
 @emph{Garbage collection} is a system used to free the programmer of
-most all concern of when an object should be freed, and making sure it
-is done.  The garbage collector works by marking all the objects which
-your program is using, and then going through memory and freeing any
-object which is not marked.  This process happens automatically, and
+most concerns about when an object should be freed and making sure it
+is done.  The garbage collector works by marking all the objects that
+your program is using and then going through memory and freeing any
+object that is not marked.  This process happens automatically and
 without any programmer intervention.  The algorithms used in Dynace assure
 smooth, reliable, and efficient operation of an application without
 ever having to worry about freeing any objects.
@@ -620,32 +620,32 @@ ever having to worry about freeing any objects.
 Dynace provides two different methods of multi-thread support.  One is
 the Dynace-provided thread-sharing mechanism where all of the
 application threads share a single operating system thread.  The
-second capability is support of true multi-OS-threads so that your
+second capability is support for true multi-OS threads so that your
 application can take advantage of multiple CPUs.
 
-In a normal C program when one function calls another the first function
+In a normal C program, when one function calls another the first function
 waits until the second function completes before it may continue.  The
 program follows a single line, or @emph{thread}, of execution.  In a
-multi-threading language a function may call a second function, and
-while the second function executes the first function is able to continue
-running.  Thus two threads would be running.  Either thread could even
+multi-threading language, a function may call a second function, and
+while the second function executes, the first function is able to continue
+running.  Thus, two threads would be running.  Either thread could even
 start more threads.
 
 Threads share the same global variables and opened files just like the
-functions of a normal single threading system.  Each thread, however,
+functions of a normal single-threading system.  Each thread, however,
 has its own stack space for local variables and function calls.
 
 The advantage of having multiple threads is that it adds the ability to
-create applications which make more efficient use of user and computer
+create applications that make more efficient use of user and computer
 CPU time.  While a user is updating information in an application, the
 same application program could be printing a report.  Any time an
-application has to perform an operation which the user would normally
+application has to perform an operation that the user would normally
 have to wait for, such as report printing or other processing of
 information, it could continue in a thread while the user is able to
 perform other data entry/query operations in another thread.
 
-Dynace supports multiple threads in a semi-preemptive, round robin,
-priority based system.  Dynace uses the system timer to assure that
+Dynace supports multiple threads in a semi-preemptive, round-robin,
+priority-based system.  Dynace uses the system timer to assure that
 each thread gets equal access to CPU time.  Semi-preemptive operation
 is achieved by the fact that Dynace performs automatic thread
 switching whenever a generic function is called (if the thread's time
@@ -659,29 +659,29 @@ blocking @code{getkey} function.  Threads on hold or otherwise not
 running require no CPU time.
 
 @subsection Pipes
-Once there are multiple threads running there arises a need to coordinate
+Once there are multiple threads running, there arises a need to coordinate
 and communicate among the multiple threads.  @emph{Pipes} are a
-streams based facility which allows one thread to pass information
+stream-based facility that allows one thread to pass information
 to another using a @code{puts/gets} type of interface.  @emph{Named pipes}
-allows one thread to create a pipe and give it a name.  Later, if another
+allow one thread to create a pipe and give it a name.  Later, if another
 thread wants to use the pipe all it needs to know is the name.  It can
 get access to the pipe object via the name.
 
 Dynace supports named and anonymous pipes with blocking and non-blocking
-io.
+I/O.
 
 @subsection Semaphores
 Thread coordination is achieved with @emph{semaphores}.  Semaphores allow
-the programmer to control the number of threads which may have simultaneous
+the programmer to control the number of threads that may have simultaneous
 access to arbitrary system resources or blocks of code.
 
-Semaphores may be thought of as a global variable which is initialized
-to zero.  When one thread wants access to a resource it first increments
+Semaphores may be thought of as a global variable that is initialized
+to zero.  When one thread wants access to a resource, it first increments
 the global variable.  Later, if a different thread wants access to the
-same resource it first checks the value of the global variable.  If it
-is greater than zero it means that another thread is utilizing the
-resource and that the second thread should wait till the first thread is
-done.  When the first thread is done with the resource it decrements the
+same resource, it first checks the value of the global variable.  If it
+is greater than zero, it means that another thread is utilizing the
+resource and that the second thread should wait until the first thread is
+done.  When the first thread is done with the resource, it decrements the
 global variable.  This allows the second thread to start up and use
 the resource.
 
@@ -690,20 +690,20 @@ destruction of semaphores, the maintenance of the semaphore count, and
 the holding and automatic release of threads.
 
 Dynace supports named and anonymous counting semaphores.  Dynace semaphores
-are implemented in such a fashion so that threads which are waiting for
+are implemented in such a fashion that threads that are waiting for
 a semaphore require no CPU time!
 
 @subsection Dynace Kernel & Class Library
 Dynace consists of two separable parts.  One part is called the @emph{kernel},
 and the other is the @emph{class library}.  The kernel contains all the
-raw functionality of Dynace.  It contains all the features which allow the
+raw functionality of Dynace.  It contains all the features that allow the
 creation and functionality of classes, instances, methods, generics, and
 garbage collection.  
 
-The class library provides a set of general purpose classes which are
+The class library provides a set of general purpose classes that are
 built on top of the Dynace kernel.  These classes provide basic facilities
 to create object representations of all the basic C language data types.
-It also provides other general use classes to handle object collection
+It also provides other general-use classes to handle object collection
 and ordering.
 
 The Dynace kernel is entirely functional without the class library.
