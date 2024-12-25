@@ -2323,7 +2323,11 @@ static	void	make_c(object	classes,
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 4 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
+#ifdef __arm64__
 						vPrintf(fobj, "\t/* 5 */ _ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+#else
+						vPrintf(fobj, "\t/* 5 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+#endif
 					else
 						vPrintf(fobj, "\t/* 6 */ return (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
