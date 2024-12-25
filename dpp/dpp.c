@@ -699,11 +699,11 @@ static	void	gen_inline(object fobj, char *name, object proto)
 			streq(rtn, "void")?"":"return", name);
 	} else {
 		if (streq(rtn, "void"))
-			vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\t/* 1 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 		else if (gIsVarArg(proto))
-			vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\t/* 2 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 		else
-			vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+			vPrintf(fobj, "\t/* 3 */ return (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 	}
 	gPrintVars(proto, fobj);
 	gPuts(fobj, ");\n");
@@ -2321,11 +2321,11 @@ static	void	make_c(object	classes,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 4 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
-						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 5 */ _ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 6 */ return (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2372,9 +2372,9 @@ static	void	make_c(object	classes,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 7 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 8 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2519,11 +2519,11 @@ static	void	make_c2(object	generics,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 9 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
-						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 10 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\treturn (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 11 */ return (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
@@ -2568,9 +2568,9 @@ static	void	make_c2(object	generics,
 						streq(rtn, "void")?"":"return", name);
 				} else {
 					if (streq(rtn, "void"))
-						vPrintf(fobj, "\t(*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 12 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else
-						vPrintf(fobj, "\t_ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
+						vPrintf(fobj, "\t/* 13 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 				}
 				gPrintVars(proto, fobj);
 				gPuts(fobj, ");\n");
