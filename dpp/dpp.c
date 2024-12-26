@@ -2323,9 +2323,11 @@ static	void	make_c(object	classes,
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 4 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 					else if (gIsVarArg(proto))
-#ifdef __arm64__
-						vPrintf(fobj, "\t/* 5 */ _ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
+#if defined(__arm64__) || 1
+// This line was required under ARM and works in all other environments except with Wine
+						vPrintf(fobj, "\t/* 5A */ _ret_ = (*(%s_t)_FindMethod(self, Generic(%s)))(", name, name);
 #else
+// for reasons yet unknown, I needed to use the following line instead when building WDS
 						vPrintf(fobj, "\t/* 5 */ _ret_ = (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
 #endif
 					else

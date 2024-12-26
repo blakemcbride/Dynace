@@ -1900,7 +1900,7 @@ static	objrtn	_gNewClass(object self, char *name, int ivsize, int cvsize, object
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, superclasses);
-	/* 5 */ _ret_ = (*(gNewClass_mt)_FindMethod(self, Generic(gNewClass)))(self, name, ivsize, cvsize, superclasses, _rest_);
+	/* 5A */ _ret_ = (*(gNewClass_t)_FindMethod(self, Generic(gNewClass)))(self, name, ivsize, cvsize, superclasses, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -1970,7 +1970,7 @@ static	objrtn	_gNewStdClass(object self, char *name, int ivsize, object mc, int 
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, superclasses);
-	/* 5 */ _ret_ = (*(gNewStdClass_mt)_FindMethod(self, Generic(gNewStdClass)))(self, name, ivsize, mc, nipib, superclasses, _rest_);
+	/* 5A */ _ret_ = (*(gNewStdClass_t)_FindMethod(self, Generic(gNewStdClass)))(self, name, ivsize, mc, nipib, superclasses, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2850,7 +2850,7 @@ static	int	_vBitValue(object self, ...)
 	va_list _rest_;
 	int _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vBitValue_mt)_FindMethod(self, Generic(vBitValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vBitValue_t)_FindMethod(self, Generic(vBitValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2860,7 +2860,7 @@ static	objrtn	_vBuild(object self, char *f, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, f);
-	/* 5 */ _ret_ = (*(vBuild_mt)_FindMethod(self, Generic(vBuild)))(self, f, _rest_);
+	/* 5A */ _ret_ = (*(vBuild_t)_FindMethod(self, Generic(vBuild)))(self, f, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2870,7 +2870,7 @@ static	objrtn	_vChangeBitValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeBitValue_mt)_FindMethod(self, Generic(vChangeBitValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeBitValue_t)_FindMethod(self, Generic(vChangeBitValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2880,7 +2880,7 @@ static	objrtn	_vChangeCharValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeCharValue_mt)_FindMethod(self, Generic(vChangeCharValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeCharValue_t)_FindMethod(self, Generic(vChangeCharValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2890,7 +2890,7 @@ static	objrtn	_vChangeDoubleValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeDoubleValue_mt)_FindMethod(self, Generic(vChangeDoubleValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeDoubleValue_t)_FindMethod(self, Generic(vChangeDoubleValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2900,7 +2900,7 @@ static	objrtn	_vChangeLongValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeLongValue_mt)_FindMethod(self, Generic(vChangeLongValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeLongValue_t)_FindMethod(self, Generic(vChangeLongValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2910,7 +2910,7 @@ static	objrtn	_vChangeShortValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeShortValue_mt)_FindMethod(self, Generic(vChangeShortValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeShortValue_t)_FindMethod(self, Generic(vChangeShortValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2920,7 +2920,7 @@ static	objrtn	_vChangeUShortValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeUShortValue_mt)_FindMethod(self, Generic(vChangeUShortValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeUShortValue_t)_FindMethod(self, Generic(vChangeUShortValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2930,7 +2930,7 @@ static	objrtn	_vChangeValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vChangeValue_mt)_FindMethod(self, Generic(vChangeValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vChangeValue_t)_FindMethod(self, Generic(vChangeValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2940,7 +2940,7 @@ static	char	_vCharValue(object self, ...)
 	va_list _rest_;
 	char _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vCharValue_mt)_FindMethod(self, Generic(vCharValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vCharValue_t)_FindMethod(self, Generic(vCharValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2950,7 +2950,7 @@ static	double	_vDoubleValue(object self, ...)
 	va_list _rest_;
 	double _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vDoubleValue_mt)_FindMethod(self, Generic(vDoubleValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vDoubleValue_t)_FindMethod(self, Generic(vDoubleValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2960,7 +2960,7 @@ static	objrtn	_vError(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vError_mt)_FindMethod(self, Generic(vError)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vError_t)_FindMethod(self, Generic(vError)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2970,7 +2970,7 @@ static	objrtn	_vGetValues(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vGetValues_mt)_FindMethod(self, Generic(vGetValues)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vGetValues_t)_FindMethod(self, Generic(vGetValues)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2980,7 +2980,7 @@ static	long	_vLongValue(object self, ...)
 	va_list _rest_;
 	long _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vLongValue_mt)_FindMethod(self, Generic(vLongValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vLongValue_t)_FindMethod(self, Generic(vLongValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -2990,7 +2990,7 @@ static	objrtn	_vMakeList(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vMakeList_mt)_FindMethod(self, Generic(vMakeList)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vMakeList_t)_FindMethod(self, Generic(vMakeList)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3000,7 +3000,7 @@ static	objrtn	_vNew(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vNew_mt)_FindMethod(self, Generic(vNew)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vNew_t)_FindMethod(self, Generic(vNew)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3010,7 +3010,7 @@ static	void *	_vPointerValue(object self, ...)
 	va_list _rest_;
 	void * _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vPointerValue_mt)_FindMethod(self, Generic(vPointerValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vPointerValue_t)_FindMethod(self, Generic(vPointerValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3020,7 +3020,7 @@ static	int	_vPrintf(object self, char *fmt, ...)
 	va_list _rest_;
 	int _ret_;
 	va_start(_rest_, fmt);
-	/* 5 */ _ret_ = (*(vPrintf_mt)_FindMethod(self, Generic(vPrintf)))(self, fmt, _rest_);
+	/* 5A */ _ret_ = (*(vPrintf_t)_FindMethod(self, Generic(vPrintf)))(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3030,7 +3030,7 @@ static	objrtn	_vReshape(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vReshape_mt)_FindMethod(self, Generic(vReshape)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vReshape_t)_FindMethod(self, Generic(vReshape)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3040,7 +3040,7 @@ static	short	_vShortValue(object self, ...)
 	va_list _rest_;
 	short _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vShortValue_mt)_FindMethod(self, Generic(vShortValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vShortValue_t)_FindMethod(self, Generic(vShortValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3050,7 +3050,7 @@ static	objrtn	_vSprintf(object self, char *fmt, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, fmt);
-	/* 5 */ _ret_ = (*(vSprintf_mt)_FindMethod(self, Generic(vSprintf)))(self, fmt, _rest_);
+	/* 5A */ _ret_ = (*(vSprintf_t)_FindMethod(self, Generic(vSprintf)))(self, fmt, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3060,7 +3060,7 @@ static	unsigned short	_vUnsignedShortValue(object self, ...)
 	va_list _rest_;
 	unsigned short _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vUnsignedShortValue_mt)_FindMethod(self, Generic(vUnsignedShortValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vUnsignedShortValue_t)_FindMethod(self, Generic(vUnsignedShortValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
@@ -3070,7 +3070,7 @@ static	objrtn	_vValue(object self, ...)
 	va_list _rest_;
 	objrtn _ret_;
 	va_start(_rest_, self);
-	/* 5 */ _ret_ = (*(vValue_mt)_FindMethod(self, Generic(vValue)))(self, _rest_);
+	/* 5A */ _ret_ = (*(vValue_t)_FindMethod(self, Generic(vValue)))(self, _rest_);
 	va_end(_rest_);
 	return _ret_;
 }
