@@ -424,7 +424,7 @@ imeth	gFormatTime(char *msk)
 
 imeth	gStringRepValue, gTimeStringRepValue()
 {
-	char	buf[25];
+	char	buf[32];
 
 	return gNewWithStr(String, Tmfmt(iVal, buf));
 }

@@ -2223,7 +2223,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(r14);
 	MARK_REG(r15);
 
-#elif defined(__APPLE__) && TARGET_CPU_ARM64
+#elif defined(__APPLE__) && TARGET_CPU_ARM64 || defined(__arm__) || defined(__ARM_ARCH_ISA_A64)
 #define MARK_REG(r)					\
 	__asm__ ("mov %0, " #r : "=r"(c));		\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\

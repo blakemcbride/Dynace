@@ -459,7 +459,7 @@ imeth objrtn Time_im_gFormatTime(object self, char *msk)
 
 imeth objrtn Time_im_gStringRepValue(object self)
 { Time_iv_t *iv = GetIVs(Time, self);
-	char buf[25]; 
+	char buf[32]; 
 
 	return gNewWithStr(String, Tmfmt(iv->iVal, buf)); 
 } 

@@ -3416,7 +3416,7 @@ pp_method(object  tkn,
 	  object  className)
 {
 	char	type[256], mname[MAXWORDSZ+1], gname[MAXWORDSZ+1], *p=NULL, *g;
-	char	olmname[MAXWORDSZ+1]; /* overloaded method name - name of dpp
+	char	olmname[MAXWORDSZ+10]; /* overloaded method name - name of dpp
 				       generated method  */
 	char	fmname[MAXWORDSZ+1];  /* fixed arg method name - generated  */
 	char	ename[MAXWORDSZ+1];   /* explicit method name  */

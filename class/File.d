@@ -117,7 +117,7 @@ private	imeth	set_temp()
 
 cmeth	gOpenTempFile()
 {
-	char	file[256];
+	char	file[300];
 	static	unsigned	tfn = 0;
 	object	obj;
 

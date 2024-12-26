@@ -159,7 +159,7 @@ private imeth	void	out(char *type, char *sfname, int line, char *msg)
 	int fd;
 	time(&tb);
 	ts = localtime(&tb);
-	char where[50], sline[24], buf[80];
+	char where[50], sline[24], buf[128];
 	static const char msk[] = "[%-5.5s] [%-40.40s] - %d-%02d-%02d %2d:%02d:%02d  ";
 
 	sprintf(sline, "%d", line);

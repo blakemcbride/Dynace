@@ -161,7 +161,7 @@ PMETHOD objrtn set_temp(object self)
 
 cmeth objrtn File_cm_gOpenTempFile(object self)
 { 
-	char file[256]; 
+	char file[300]; 
 	static unsigned tfn = 0; 
 	object obj; 
 
