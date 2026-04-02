@@ -122,7 +122,7 @@ imeth objrtn BTree_im_gAddValue(object self, object key, object val)
 	ENTERCRITICALSECTION(iv->iCS); 
 	if (!iv->iNodes) { 
 		if (!iv->iCmpFun) 
-			iv->iCmpFun = gCompare; 
+			iv->iCmpFun = (ifun) gCompare; 
 		iv->iNodes = gNewNode(BTreeNode, self, 2); 
 	} 
 	gAddBTreeNode(iv->iNodes, iv->iCmpFun, key, val, 1, &replaced, NULL, &old); 

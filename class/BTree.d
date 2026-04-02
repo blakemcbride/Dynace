@@ -105,7 +105,7 @@ imeth	gAddValue(key, val)
 	ENTERCRITICALSECTION(iCS);
 	if (!iNodes) {
 		if (!iCmpFun)
-			iCmpFun = gCompare;
+			iCmpFun = (ifun) gCompare;
 		iNodes = gNewNode(BTreeNode, self, 2);
 	}
 	gAddBTreeNode(iNodes, iCmpFun, key, val, 1, &replaced, NULL, &old);

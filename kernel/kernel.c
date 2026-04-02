@@ -251,10 +251,10 @@ extern void _register_global_memory(void);
 
 void	*Chkmem(void *p, char *file, int line)
 {
-	char	buf[90];
-	
+	char	buf[256];
+
 	if (!p)  {
-		sprintf(buf, "\nDynace: Out of memory in %s at line %d.\n", file, line);
+		snprintf(buf, sizeof(buf), "\nDynace: Out of memory in %s at line %d.\n", file, line);
 		gError(Dynace_c, buf);
 	}
 	return p;
@@ -395,9 +395,10 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 
 	/*  chk_ptr is called so much that even a critical section call becomes prohibitively expensive.
 	    As an alternative I am making sure that the writes/updates are atomic but that they are done
-	    such that a critical section in the reads should not be necessary.  */
+	    such that a critical section in the reads should not be necessary.
+	    A volatile read of the list head provides acquire semantics on most architectures.  */
 /*	ENTERCRITICALSECTION(MMB_CS);    */
-	for (mb = MMB ; mb  ; mb = mb->next)
+	for (mb = *(volatile MMB_t **)&MMB ; mb  ; mb = mb->next)
 		if (p >= mb->memBlock  &&  p < mb->memBlock + mb->size) {
 			r = 1;
 			break;
@@ -523,7 +524,7 @@ LOCAL	_INLINE_	int	_IsObj(object obj)
 	cls = ClassOf(obj);
 	if (!chk_ptr((char *) cls, (sizeof(Behavior_iv_t)+sizeof(Object_iv_t))))
 		goto done;
-	if ((cls->tag & OBJ_MASK) != OBJ_USED  &&  (cls->tag & OBJ_MASK) != OBJ_MARKED  ||
+	if (((cls->tag & OBJ_MASK) != OBJ_USED  &&  (cls->tag & OBJ_MASK) != OBJ_MARKED)  ||
 		(cls->tag & ALLOC_MASK) != ALLOC_HEAP)
 		goto done;
 	cv = SCIV(cls);
@@ -549,7 +550,7 @@ LOCAL	int	IsClass(object cls)
 
 	if (!chk_ptr((char *) cls, (sizeof(Behavior_iv_t)+sizeof(Object_iv_t))))
 		return 0;
-	if ((cls->tag & OBJ_MASK) != OBJ_USED  &&  (cls->tag & OBJ_MASK) != OBJ_MARKED  ||
+	if (((cls->tag & OBJ_MASK) != OBJ_USED  &&  (cls->tag & OBJ_MASK) != OBJ_MARKED)  ||
 		(cls->tag & ALLOC_MASK) != ALLOC_HEAP)
 		return 0;
 	cv = SCIV(cls);
@@ -719,9 +720,11 @@ imeth	objrtn	Behavior_im_gStackAlloc(object self, void *p)
 	set_class(instance, self);
 	instance->tag = (OBJ_USED | ALLOC_STACK);
 	instance->siz = 0;
+	ENTERCRITICALSECTION(CMU_CS);
 	if (!++ObjectSN)
 		++ObjectSN;
 	instance->sn = ObjectSN;
+	LEAVECRITICALSECTION(CMU_CS);
 	memset(instance+1, 0, cv->effective_iv_size-EVEN(sizeof(Object_iv_t)));
 	return instance;
 }
@@ -1132,7 +1135,7 @@ LOCAL	void	tracefn(object i, GenericFunction_iv_t *giv, object mo)
 	Behavior_iv_t	*cv = aClass ? SCIV(i) : SCIV(ClassOf(i));
 	Method_iv_t	*miv = (Method_iv_t *) direct_ivs(mo);
 	Behavior_iv_t	*cv2 = SCIV(miv->cls);
-	char	buf[100];
+	char	buf[512];
 	int	none_off, any_on;
 	int	traces = TRACES;
 
@@ -1141,12 +1144,12 @@ LOCAL	void	tracefn(object i, GenericFunction_iv_t *giv, object mo)
 	any_on = T_ON(cv)  ||  T_ON(cv2)  ||  T_ON(giv)  ||  T_ON(miv);
 	if (none_off  &&  (traces == DYNACE_TRACE_ALL  ||  any_on))  {
 		if (aClass)
-			sprintf(buf, "Trace: %s(class %s) -> ",
+			snprintf(buf, sizeof(buf), "Trace: %s(class %s) -> ",
 			       tname(giv), tname(cv));
 		else
-			sprintf(buf, "Trace: %s(%s instance) -> ",
+			snprintf(buf, sizeof(buf), "Trace: %s(%s instance) -> ",
 			       tname(giv), tname(cv));
-		sprintf(buf+strlen(buf), "%s::%s\n", tname(miv), tname(cv2));
+		snprintf(buf+strlen(buf), sizeof(buf)-strlen(buf), "%s::%s\n", tname(miv), tname(cv2));
 		gTracePrint(Dynace_c, buf);
 	}
 	TRACES = traces;
@@ -1235,7 +1238,7 @@ ofun	_FindMethod(object i, object generic)
 		LEAVECRITICALSECTION(MC_CS);
 #endif    
 	if (!Generic(gDoesNotImplement))  /* in case kernel hasn't booted yet  */
-		gDoesNotImplement(cls, generic);
+		gError(Dynace_c, "\nDynace: Method not found (kernel not yet booted).\n");
 	gDoesNotImplement(cls, generic);
 	return NULL;
 }
@@ -1292,7 +1295,7 @@ ofun	_FindMethod2(object cls, object generic, int lev)
 		LEAVECRITICALSECTION(MC_CS);
 #endif    
 	if (!Generic(gDoesNotImplement))  /* in case kernel hasn't booted yet  */
-		gDoesNotImplement(cls, generic);
+		gError(Dynace_c, "\nDynace: Method not found (kernel not yet booted).\n");
 	gDoesNotImplement(cls, generic);
 	return NULL;
 }
@@ -1540,7 +1543,7 @@ LOCAL	objrtn	Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 	object	sc;	/*  superclass object			*/
 	int	n;	/*  number of superclasses		*/
 	object	scvp[MIS];/*  array of superclasses		*/
-	char	buf[80];
+	char	buf[256];
 
 	ChkArg(mc, 4);
 	if (!IsClass(mc))
@@ -1550,7 +1553,7 @@ LOCAL	objrtn	Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 		for (n=0, sc=superclasses ; sc && n < MIS ; sc = GetArg(object), ++n)  {
 			ChkArg(sc, n+6);
 			if (!IsClass(sc))  {
-				sprintf(buf, "gNewStdClass argument %d is not a class.\n", n+6);
+				snprintf(buf, sizeof(buf), "gNewStdClass argument %d is not a class.\n", n+6);
 				gError(self, buf);
 			}
 			scvp[n] = sc;
@@ -1560,7 +1563,7 @@ LOCAL	objrtn	Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 		scvp[0] = Object_c;
 	}
 	if (n == MIS)  {
-		sprintf(buf, "Attempt to create class %s with more than %d superclasses", name, MIS);
+		snprintf(buf, sizeof(buf), "Attempt to create class %s with more than %d superclasses", name, MIS);
 		gError(self, buf);
 	}
 
@@ -1585,13 +1588,13 @@ LOCAL objrtn	Class_cm_gNewClass(object self, char *name, int ivsize, int cvsize,
 	object	scvp1[MIS];/*  array of superclasses		*/
 	object	scvp2[MIS];/*  array of meta superclasses	*/
 	object	mc;	   /*  metaclass			*/
-	char	meta[100]; /*  metaclass name			*/
-	
+	char	meta[256]; /*  metaclass name			*/
+
 	if (superclasses)
 		for (n=0, sc=superclasses ; sc && n < MIS ; sc = GetArg(object), ++n)  {
 			ChkArg(sc, n+5);
 			if (!IsClass(sc))  {
-				sprintf(meta, "gNewClass(Class..) argument %d is not a class.\n", n+5);
+				snprintf(meta, sizeof(meta), "gNewClass(Class..) argument %d is not a class.\n", n+5);
 				gError(self, meta);
 			}
 			scvp1[n] = sc;
@@ -1603,12 +1606,11 @@ LOCAL objrtn	Class_cm_gNewClass(object self, char *name, int ivsize, int cvsize,
 		n = 1;
 	}
 	if (n == MIS)  {
-		sprintf(meta, "Attempt to create class %s with more than %d superclasses", name, MIS);
+		snprintf(meta, sizeof(meta), "Attempt to create class %s with more than %d superclasses", name, MIS);
 		gError(self, meta);
 	}
-	
-	strcpy(meta, "meta");
-	strcat(meta, name);
+
+	snprintf(meta, sizeof(meta), "meta%s", name);
 
 	n = n > MIS ? MIS : n;
 
@@ -1839,7 +1841,7 @@ cmeth	object	Dynace_cm_gDumpObjects(object self, char *file, int type)
 		return NULL;
 	ENTERCRITICALSECTION(MCL_CS);
 	for (c=MCL ; c ; c=SCIV(c)->next)
-		if (type  ||  !IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction)
+		if (type  ||  (!IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction))
 			if (num = count_instances(c))
 				fprintf(fp, "%s\t%ld\n", SCIV(c)->name, num);
 	LEAVECRITICALSECTION(MCL_CS);
@@ -1857,7 +1859,7 @@ cmeth	object	Dynace_cm_gDumpObjectsString(object self, int type)
 	sd = gNewWithInt(StringDictionary, 201);
 	ENTERCRITICALSECTION(MCL_CS);
 	for (c=MCL ; c ; c=SCIV(c)->next)
-		if (type  ||  !IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction) {
+		if (type  ||  (!IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction)) {
 			num = count_instances(c);
 			if (!strcmp(SCIV(c)->name, "StringDictionary"))
 				num--;
@@ -2223,7 +2225,7 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(r14);
 	MARK_REG(r15);
 
-#elif defined(__APPLE__) && TARGET_CPU_ARM64 || defined(__arm__) || defined(__ARM_ARCH_ISA_A64)
+#elif (defined(__APPLE__) && TARGET_CPU_ARM64) || defined(__aarch64__) || defined(__ARM_ARCH_ISA_A64)
 #define MARK_REG(r)					\
 	__asm__ ("mov %0, " #r : "=r"(c));		\
 	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
@@ -2260,6 +2262,27 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	MARK_REG(x28);
 	MARK_REG(x29);
 	MARK_REG(x30);
+
+#elif defined(__arm__)   /*  32-bit ARM  */
+#undef MARK_REG
+#define MARK_REG(r)					\
+	__asm__ ("mov %0, " #r : "=r"(c));		\
+	if (IsObj(c)  &&  c->tag & OBJ_USED)		\
+		Dynace_cm_gMarkObject(Dynace_c, c)
+
+	MARK_REG(r0);
+	MARK_REG(r1);
+	MARK_REG(r2);
+	MARK_REG(r3);
+	MARK_REG(r4);
+	MARK_REG(r5);
+	MARK_REG(r6);
+	MARK_REG(r7);
+	MARK_REG(r8);
+	MARK_REG(r9);
+	MARK_REG(r10);
+	MARK_REG(r11);
+	MARK_REG(r12);
 
 #elif defined(sparc)
 	asm("t 3");	/* flush out registers onto the stack */
@@ -2348,8 +2371,10 @@ cmeth	void	*Dynace_cm_gChangeRegisteredMemory(object self, void *pp, void *beg, 
 {
 	GMR	*p = (GMR *) pp;
 	USE(self);
+	ENTERCRITICALSECTION(GMR_CS);
 	p->beg = beg;
 	p->size = size;
+	LEAVECRITICALSECTION(GMR_CS);
 	return (void *) p;
 }
 

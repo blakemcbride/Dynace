@@ -42,7 +42,7 @@ static	int	(*cErrorFunction)(char *);
 
 cmeth	ifun	gSetErrorFunction(int (*fun)(char *))
 {
-	ifun	ret = cErrorFunction;
+	ifun	ret = (ifun) cErrorFunction;
 	cErrorFunction = fun;
 	return ret;
 }

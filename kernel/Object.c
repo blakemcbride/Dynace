@@ -54,7 +54,7 @@ static int (*cErrorFunction)(char *);
 
 cmeth ifun Object_cm_gSetErrorFunction(object self, int (*fun)(char *))
 { 
-	ifun ret = cErrorFunction; 
+	ifun ret = (ifun) cErrorFunction; 
 	cErrorFunction = fun; 
 	return ret; 
 } 
