@@ -10,7 +10,7 @@ DPPOPTS = -C $(STRAT)
 
 # re-builds changes files
 all:
-	-mkdir lib
+	if not exist lib mkdir lib
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE)
 	@rem
@@ -29,7 +29,7 @@ all:
 
 # rebuilds entire system from scratch
 all-scratch: setup.win
-	-mkdir lib
+	if not exist lib mkdir lib
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE) NEW=1
 	@rem

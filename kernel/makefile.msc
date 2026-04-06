@@ -31,7 +31,7 @@ curlib.cm : $(OBJ) # jumpto.obj
 	del libs
 !ELSE
 	echo $? >libs
-	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @libs
+	if exist $(LIBDIR)\dynlcm.lib (lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @libs) else (lib /nologo /out:$(LIBDIR)\dynlcm.lib @libs)
 	del libs
 !ENDIF
 	echo Done >$@

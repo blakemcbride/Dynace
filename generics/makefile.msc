@@ -21,7 +21,7 @@ CFLAGS = -I$(INCDIR) -nologo -Oityb1 -Gs -Gy $(CFEXTRA)
 curlib.cm : $(INCDIR)\generics.h
 	dpp $(STRAT) -C -g $(INCDIR)\generics.h -c -h
 	$(CC) -c $(CFLAGS) generics.c
-	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib generics.obj
+	if exist $(LIBDIR)\dynlcm.lib (lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib generics.obj) else (lib /nologo /out:$(LIBDIR)\dynlcm.lib generics.obj)
 	-del /Q *.obj generics.* 2>NUL
 	echo Done >$@
 

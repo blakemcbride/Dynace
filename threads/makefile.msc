@@ -28,7 +28,7 @@ OBJ = $(CLASSES:.d=.obj) nttimer.obj
 
 curlib.cm : $(OBJ)
 	echo $? >lib
-	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @lib
+	if exist $(LIBDIR)\dynlcm.lib (lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @lib) else (lib /nologo /out:$(LIBDIR)\dynlcm.lib @lib)
 	-del /Q lib 2>NUL
 	echo Done >$@
 
