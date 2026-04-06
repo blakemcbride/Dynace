@@ -14,14 +14,14 @@ all: setup.win
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE)
 	@rem
-	cd ..\dpp
-	$(MAKE) /nologo /f $(MAKEFILE) install
-	@rem
 	cd ..\class
 	$(MAKE) /nologo /f $(MAKEFILE)
 	@rem
 	cd ..\threads
 	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) install
 	@rem
 	cd ..\generics
 	$(MAKE) /nologo /f $(MAKEFILE)
@@ -33,14 +33,14 @@ all-scratch: setup.win
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE) NEW=1
 	@rem
-	cd ..\dpp
-	$(MAKE) /nologo /f $(MAKEFILE) install
-	@rem
 	cd ..\class
 	$(MAKE) /nologo /f $(MAKEFILE)
 	@rem
 	cd ..\threads
 	$(MAKE) /nologo /f $(MAKEFILE)
+	@rem
+	cd ..\dpp
+	$(MAKE) /nologo /f $(MAKEFILE) install
 	@rem
 	cd ..\generics
 	$(MAKE) /nologo /f $(MAKEFILE)
