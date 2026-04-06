@@ -66,7 +66,7 @@ clean:
 	call cleanall.bat
 	@rem
 	cd ..\..
-	rm -zq setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
+	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
 
 	
 realclean:
@@ -89,13 +89,13 @@ realclean:
 	call cleanall.bat
 	@rem
 	cd ..\..
-	rm -zq setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
-	rm -zq lib\d*.* bin\dpp bin\dpp.exe 
-	rm -zq bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.*
+	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
+	-del /Q lib\d*.* bin\dpp bin\dpp.exe 
+	-del /Q bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.*
 
 
 dist:
-	rm -zq dynace*.zip
+	-del /Q dynace*.zip
 	zip -r dynace README msc.dm makefile.unx makefile.inc change.log
 	zip dynace bin\* class\* docs\* dpp\* generics\* lib\*
 	zip dynace include\* kernel\* threads\* utils\*
@@ -104,23 +104,23 @@ dist:
 # rebuilds generics.h from scratch
 makegens:
 	cd kernel
-	rm -zq generics.* 
+	-del /Q generics.* 
 	$(DPP) $(DPPOPTS) -h -i -s *.d
-	mv generics.h ../include
+	move generics.h ..\include
 	@rem
 	cd ..\class
 	$(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d
-	mv generics.h ../include
+	move generics.h ..\include
 	@rem
 	cd ..\threads
 	$(DPP) $(DPPOPTS) -h -i -g ../include/generics.h -s *.d
-	mv generics.h ../include
+	move generics.h ..\include
 	@rem
 	cd ..
 
 # rebuilds generics.h from scratch and pre-processes all .d files
 newgens : 
-	rm include\generics.h
+	-del /Q include\generics.h
 	@rem
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE) reallynewgens
@@ -138,14 +138,14 @@ newgens :
 
 # make sure file times are correct on a new system so the build order is correct
 setup.win :
-	touch kernel\*.c
-	touch class\*.c
-	touch threads\*.c
-	touch dpp\*.c
-	touch dpp\generics.h
-	touch dpp\generics.c
+	copy /b kernel\*.c+,, kernel\*.c
+	copy /b class\*.c+,, class\*.c
+	copy /b threads\*.c+,, threads\*.c
+	copy /b dpp\*.c+,, dpp\*.c
+	copy /b dpp\generics.h+,, dpp\generics.h
+	copy /b dpp\generics.c+,, dpp\generics.c
 	pause
-	touch include\generics.h
-	touch $@
+	copy /b include\generics.h+,, include\generics.h
+	echo Done >$@
 
 

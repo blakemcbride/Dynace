@@ -56,8 +56,8 @@ reallynewgens:
 
 
 clean :
-	rm -zq *.obj generics.* *.o *.pdb *.err
-	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj generics.* *.o *.pdb *.err
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
 
 realclean : clean
-	rm -zq curlib.*
+	-del /Q curlib.*

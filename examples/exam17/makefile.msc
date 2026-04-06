@@ -69,23 +69,23 @@ newgens:
 	echo Done >generics.1
 
 clean:
-	$(BINDIR)\rm -zq $(CLASS_SRC:.d=.c)
-	$(BINDIR)\rm -zq *.obj
-	$(BINDIR)\rm -zq *.exe
-	$(BINDIR)\rm -zq *.ex1
-	$(BINDIR)\rm -zq *.res
-	$(BINDIR)\rm -zq *.aps
-	$(BINDIR)\rm -zq *.pdb
-	$(BINDIR)\rm -zq *.wsp
-	$(BINDIR)\rm -zq *.ilk
-	$(BINDIR)\rm -zq *.bsc
-	$(BINDIR)\rm -zq *.vcp
-	$(BINDIR)\rm -zq *.pch
-	$(BINDIR)\rm -zq *.sbr
-	$(BINDIR)\rm -zq *.vcw
-	$(BINDIR)\rm -zq *.map
-	$(BINDIR)\rm -zq generics.*
-	$(BINDIR)\rm -zqr WinDebug
-	$(BINDIR)\rm -zqr WinRel
-	$(BINDIR)\rm -zq *.idb *.mdp *.ncb
+	-del /Q $(CLASS_SRC:.d=.c)
+	-del /Q *.obj
+	-del /Q *.exe
+	-del /Q *.ex1
+	-del /Q *.res
+	-del /Q *.aps
+	-del /Q *.pdb
+	-del /Q *.wsp
+	-del /Q *.ilk
+	-del /Q *.bsc
+	-del /Q *.vcp
+	-del /Q *.pch
+	-del /Q *.sbr
+	-del /Q *.vcw
+	-del /Q *.map
+	-del /Q generics.*
+	-rmdir /S /Q WinDebug
+	-rmdir /S /Q WinRel
+	-del /Q *.idb *.mdp *.ncb
 

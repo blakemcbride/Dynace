@@ -44,8 +44,7 @@ docs below rather than this section.
 
 This procedure will work for 32 and 64 bit builds.
 
-Dynace is built from the command line using the included DMAKE
-program.  DMAKE is just an enhanced nmake or make program.
+Dynace is built from the command line using nmake.
 
 First, make sure that your command line compiler is set up correctly.
 You can do this by using the "Visual Studio Command Prompt" that comes
@@ -57,19 +56,14 @@ All of the following commands should be executed in the root of the
 Dynace tree.  For example, you should see sub-directories named
 kernel, class, dpp, and generics at this level.
 
-1.  Setup the build environment by executing the following file:
-
-	setupenv.bat
-
-2.  If your login ID has a period in it, you need to set the TMP
+1.  If your login ID has a period in it, you need to set the TMP
 environment variable explicitly as follows:
 
         set TMP=C:\TEMP
-	
-or any other suitable location.  If you need to do this, you may want
-to update setupenv.bat to reflect this change.
 
-3.  Build the system
+or any other suitable location.
+
+2.  Build the system
 
 	nmake -f makefile.msc all-scratch
 
@@ -79,7 +73,7 @@ You can test the system by going into examples\exam03, building and
 running the example using the following commands:
 
 	cd examples\exam03
-	nmake -f microsoft.msc
+	nmake -f makefile.msc
 	main
 
 

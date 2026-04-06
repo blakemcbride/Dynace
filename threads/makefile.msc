@@ -29,15 +29,15 @@ OBJ = $(CLASSES:.d=.obj) nttimer.obj
 curlib.cm : $(OBJ)
 	echo $? >lib
 	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @lib
-	rm -zq lib
+	-del /Q lib
 	echo Done >$@
 
 newgens:
 	dpp $(STRAT) -C -g $(INCDIR)/generics.h -p *.d -h $(INCDIR)\generics.h
 
 clean :
-	rm -zq *.obj generics.* *.o *.pdb *.err
-	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj generics.* *.o *.pdb *.err
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
 
 realclean : clean
-	rm -zq curlib.*
+	-del /Q curlib.*

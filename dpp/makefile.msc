@@ -43,7 +43,7 @@ $(TARGET) : generics.1 generics.h generics.obj $(OBJS)
 
 
 install : $(TARGET)
-	cp $(TARGET) $(BINDIR)
+	copy $(TARGET) $(BINDIR)
 
 generics.h : $(CLASSES)
 	dpp $(STRAT) -C -g -t -h -p $(CLASSES)
@@ -55,14 +55,14 @@ generics.obj : generics.c
 	$(CC) $(GFLAGS) -c generics.c
 
 generics.1 newgens:
-	rm -zq generics.*
+	-del /Q generics.*
 	dpp $(STRAT) -C -g $(INCDIR)\generics.h -h -p $(CLASSES)
 	@echo Done >generics.1
 
 
 clean realclean:
-	rm -zq *.obj *.o *.pdb *.err *.exe *.vcp *.ilk *.mdp *.ncb *.opt *.dsp *.dsw
-	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj *.o *.pdb *.err *.exe *.vcp *.ilk *.mdp *.ncb *.opt *.dsp *.dsw
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
 
 
 

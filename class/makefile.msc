@@ -52,7 +52,7 @@ allok.cm :  $(INCDIR)\generics.h curlib.cm
 curlib.cm : $(OBJ)
 	echo $? >libs
 	lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib @libs
-	rm libs
+	del libs
 	echo Done >$@
 
 
@@ -76,14 +76,14 @@ makegens:
 
 XPath.exe : XMLNode.c
 	$(CC) $(CFLAGS) /Fe$@ -DTEST $? $(LIBDIR)\dynlcm.lib
-	rm -zq XMLNode.obj
+	-del /Q XMLNode.obj
 
 clean :
-	rm -zq *.obj generics.* *.o *.pdb *.err
-	rm -zq *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj generics.* *.o *.pdb *.err
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
 
 realclean : clean
-	rm -zq curlib.* allok.*
+	-del /Q curlib.* allok.*
 
 
 
