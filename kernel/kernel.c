@@ -398,7 +398,7 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	    such that a critical section in the reads should not be necessary.
 	    A volatile read of the list head provides acquire semantics on most architectures.  */
 /*	ENTERCRITICALSECTION(MMB_CS);    */
-	for (mb = *(volatile MMB_t **)&MMB ; mb  ; mb = mb->next)
+	for (mb = (MMB_t *)*(volatile MMB_t **)&MMB ; mb  ; mb = mb->next)
 		if (p >= mb->memBlock  &&  p < mb->memBlock + mb->size) {
 			r = 1;
 			break;
