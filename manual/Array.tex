@@ -38,7 +38,7 @@ is set to one that same array would be indexed by 1, 2, 3, 4.
 
 The index origin may be changed any number of times and has no actual effect
 on any arrays (either created previously or subsequently).  It only
-effects how indexing works.
+affects how indexing works.
 @c @example
 @c @group
 @c @exdent Example:
@@ -76,8 +76,8 @@ void    *p;
 @end group
 @end example
 This method returns a pointer to the first element of an array represented
-be @code{s}.  The return type will be a pointer to the type of array it
-is.  For example a @code{ShorArray} will return a pointer to a @code{short}
+by @code{s}.  The return type will be a pointer to the type of array it
+is.  For example a @code{ShortArray} will return a pointer to a @code{short}
 and a @code{DoubleFloatArray} will return a pointer to a @code{double}.
 Consecutive elements may be accessed by incrementing the pointer (although
 this is not the preferred way of going through an array).
@@ -244,7 +244,7 @@ int     r;
 @end example
 This method is used to determine the equality of two arrays.  If they
 (@code{i} and @code{a}) are instances of the same class, same rank,
-same shape and same values than @code{Equal} returns a 1.  @code{Equal}
+same shape and same values then @code{Equal} returns a 1.  @code{Equal}
 returns 0 otherwise.
 @c @example
 @c @group
@@ -342,7 +342,7 @@ unsigned   r;
 This method is used to change the rank and shape of an array (@code{i}).
 @code{r} is the new rank (number of dimensions) of the array and
 the remaining arguments (type @code{unsigned}) indicate the size of
-each consecutive dimension.  Not that the number of arguments after
+each consecutive dimension.  Note that the number of arguments after
 @code{r} @emph{must} be equal to the number @code{r}.
 
 If the new shape has fewer elements than the original, the remaining

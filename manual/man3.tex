@@ -608,7 +608,7 @@ This section describes the syntax and procedure necessary to create
 Dynace classes.  It is recommended that all the information in the
 previous sections be understood prior to continuing in this section.  It
 is also recommended that some experience with the class library be
-aquired.
+acquired.
 
 Each new class in Dynace is defined in its own unique source file.
 Multiple classes should never be defined in a single source file.
@@ -1181,7 +1181,7 @@ instance, you would use the following syntax.
 @end example
 
 However, if you wanted to instead evoke the method associated with the
-superclass if your instance, you would use the following syntax.
+superclass of your instance, you would use the following syntax.
 
 @example
         gSomeGeneric(super  someInstance, someArg);
@@ -1633,7 +1633,7 @@ imeth   gPrint()
 @end group
 @end example
 
-Not that both class's print methods share the same generic function,
+Note that both classes' print methods share the same generic function,
 @code{gPrint}.
 
 Since the second class inherits from the first class, instances of the
@@ -2408,7 +2408,7 @@ features are implemented with new generics.
 It's also difficult to change generic arguments because
 the person making the change must take into account the effect it will
 have on any other classes that use the same generic.  Generics with
-argument checking turned on must agree with which all methods which they are
+argument checking turned on must agree with all methods with which they are
 associated.  Generics with argument checking turned off are not
 affected by this issue.
 
@@ -2503,7 +2503,7 @@ the @code{dpp} @code{-X} option in order to enable them, however.
 Whenever a generic function is evoked in Dynace, the system checks the
 validity of the first argument.  It makes sure that the first argument
 is, in fact, a valid Dynace object.  If it is not, Dynace will report that fact
-and abort the program.  Otherwise, the continuation of the program could reek
+and abort the program.  Otherwise, the continuation of the program could wreak
 havoc on the entire system.
 
 This @emph{object checking} comes at a runtime cost, however.  This cost
@@ -2783,7 +2783,7 @@ In order to use the Boehm GC, you must re-compile the entire Dynace
 system with the macro @code{BOEHM_GC} defined.  In addition, the
 application must also be compiled with that macro defined and linked
 with the Boehm GC library.  Both collectors cannot be used at the same
-time; toy must use one or the other.  When using the Boehm GC, there is no need to
+time; you must use one or the other.  When using the Boehm GC, there is no need to
 enable it, set the buffer area, or register memory regions.  It's on all
 the time and functions automatically.  See the Boehm GC documentation.
 

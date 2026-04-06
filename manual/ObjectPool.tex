@@ -4,7 +4,7 @@
 The @code{ObjectPool} class provides a means to group arbitrary objects in a pool.
 This pool may later be disposed causing all the objects contained in the pool to
 be disposed as well.  This is useful when running a particular functional module.
-All the new objects can be added to a pool and then disposed en-mass when the functional
+All the new objects can be added to a pool and then disposed en masse when the functional
 unit is complete.  This makes object disposal a little easier to organize.
 
 This class can maintain numerous pools as well as global pools.
@@ -25,14 +25,10 @@ i = gNew(ObjectPool);
 object  i;
 @end group
 @end example
-This class method creates instances of the ObjectPool class.  It is usually
-only used by subclasses of the @code{ObjectPool} class.  The new link
-will not point to anything.  It will just be an empty link.
+This class method creates instances of the ObjectPool class.  The new pool
+will not contain anything.  It will just be an empty pool.
 
-This method is actually just inherited from @code{Object} in order
-to create a null link.
-
-The value returned is the instance object created (the new link).
+The value returned is the instance object created (the new pool).
 @c @example
 @c @group
 @c @exdent Example:

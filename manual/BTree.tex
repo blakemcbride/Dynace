@@ -63,7 +63,7 @@ This method is used to add an arbitrary key / value pair to BTree
 objects.
 
 By default the built in generic @code{gCompare} is used for all key comparisons.
-This may be over written via @code{gSetFunction::BTree}.
+This may be overridden via @code{gSetFunction::BTree}.
 
 Each key added to a particular @code{BTree} must be unique
 (i.e. duplicate keys are not allowed).
@@ -658,7 +658,7 @@ object  val;
 @end example
 This method is used to retrieve a key / value pair which comes
 immediately after the key pointed to by @code{fkey}.  If @code{fkey}
-points to @code{NULL} than the first key / value pair is retrieved.  If
+points to @code{NULL} then the first key / value pair is retrieved.  If
 none is found @code{NULL} is returned.
 
 @code{fkey} will be updated to point to the key associated to the value
@@ -711,7 +711,7 @@ object  val;
 @end example
 This method is used to retrieve a key / value pair which comes
 immediately before the key pointed to by @code{fkey}.  If @code{fkey}
-points to @code{NULL} than the last key / value pair is retrieved.  If
+points to @code{NULL} then the last key / value pair is retrieved.  If
 none is found @code{NULL} is returned.
 
 @code{fkey} will be updated to point to the key associated to the value

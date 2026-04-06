@@ -135,7 +135,7 @@ int     r;
 @end group
 @end example
 This method is used to obtain an error code which describes the last
-error on more detail.
+error in more detail.
 @c @example
 @c @group
 @c @exdent Example:
@@ -222,7 +222,7 @@ int     r;
 @end group
 @end example
 This method is used to receive a whole file over a socket connection.
-@code{ff} is the name (and path) of the local file to where the received
+@code{tf} is the name (and path) of the local file to where the received
 file is to be saved.
 
 This method returns 0 on success or non-zero upon failure.  This method
@@ -386,7 +386,7 @@ it is probably not valid anymore.
 requested bytes.  If part of the data is sent @code{gTimedWrite} will again
 wait up to @code{w} seconds for the remaining data.  @code{gTimedWrite} continues to
 wait until @emph{all} the data is sent unless a connection error occurs
-or no data is able to send for at least @code{w} seconds.
+or no data is able to be sent for at least @code{w} seconds.
 
 Successfully sending data does not guarantee that the data was received
 on the other end.  You must send back some kind of acknowledgement to
@@ -440,7 +440,7 @@ it is probably not valid anymore.
 requested bytes.  If part of the data is sent @code{gWrite} will again
 wait up to 60 seconds for the remaining data.  @code{gWrite} continues to
 wait until @emph{all} the data is sent unless a connection error occurs
-or no data is able to send for at least 60 seconds.
+or no data is able to be sent for at least 60 seconds.
 
 Successfully sending data does not guarantee that the data was received
 on the other end.  You must send back some kind of acknowledgement to

@@ -3,7 +3,7 @@
 @section SetSequence Class
 This class is a subclass of @code{Sequence} and is used to provide a
 mechanism to enumerate through all the objects in a @code{Set} (or one
-of its subclasses) without effecting the structure.
+of its subclasses) without affecting the structure.
 
 Typically, the @code{Sequence} instance method of the @code{Set} class
 is used to create the instances of the @code{SetSequence} class.  
@@ -37,7 +37,7 @@ object  obj;
 This method is used to enumerate through all the objects in a @code{Set}.
 Each time @code{Next} is called the following object in the @code{Set}
 is returned.  It does this in a non-destructive way so the associated
-@code{Set} is not effected.
+@code{Set} is not affected.
 
 When @code{Next} is called after the last object has been returned (or
 if there are no objects in the @code{Set}) it will return @code{NULL} and

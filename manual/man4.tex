@@ -179,7 +179,7 @@ of the same class as @code{obj} is created.  Then the information
 contained in @code{obj} is copied to the new object created (@code{new}).
 The new object is returned.
 
-Any classes whose instance's allocate memory may need to override this method.
+Any classes whose instances allocate memory may need to override this method.
 
 This default method is the same as the @code{DeepCopy::Object} method and
 would need to be overridden if they need to be different.
@@ -223,7 +223,7 @@ of the same class as @code{obj} is created.  Then the information
 contained in @code{obj} is copied to the new object created (@code{new}).
 The new object is returned.
 
-Any classes whose instance's allocate memory may need to override this method.
+Any classes whose instances allocate memory may need to override this method.
 
 This default method is the same as the @code{Copy::Object} method and
 would need to be overridden if they need to be different.
@@ -349,7 +349,7 @@ into account storage other than the local instance storage.  The
 @group
 @exdent Example:
 
-object  a, c, c, d, e;
+object  a, b, c, d, e;
 int     r;
 
 a = gNewWithInt(ShortInteger, 77);
@@ -699,7 +699,7 @@ int     sz;
 @end group
 @end example
 This is the default method used to obtain the size of an object.
-It returns the total number of bytes use by the objects instance variables.
+It returns the total number of bytes used by the object's instance variables.
 This method is often overridden.
 @example
 @group
@@ -742,13 +742,13 @@ instance objects.  It creates an instance of the @code{String} class
 which represents the class of the object, its address and value.  The
 value is obtained by calling the object's @code{StringRepValue} method.
 This is often used to print or display a representation of an object.
-It is also used by by @code{Print::Object} (a method useful during the
+It is also used by @code{Print::Object} (a method useful during the
 debugging phase of a project) in order to directly print an object to a
 stream.
 @c @example
 @c @group
 @c @exdent Example:
-@c 
+@c
 @c @end group
 @c @end example
 @sp 1
@@ -823,7 +823,7 @@ This method is used to display an error message indicating that method
 @code{obj}.  @code{meth} is the name of the method.
 
 This method may be useful when grouping common interfaces in an
-abstract class to insure that its subclasses implement the correct
+abstract class to ensure that its subclasses implement the correct
 methods.
 
 The message is output via @code{Error::Object} which also aborts the
@@ -922,7 +922,7 @@ gDoesNotImplement(MyClass, Generic(MyGeneric));
 @end group
 @end example
 @sp 1
-See also:  @code{RespondesTo, InvalidObject::Method}
+See also:  @code{RespondsTo, InvalidObject::Method}
 @end deffn
 
 
@@ -946,8 +946,8 @@ object  obj;
 @end group
 @end example
 This method is used to turn garbage collection off for a single
-class of objects.  It doesn't effect any of its superclasses or subclasses and
-has no effect of garbage collection is not being used.  It returns
+class of objects.  It doesn't affect any of its superclasses or subclasses and
+has no effect if garbage collection is not being used.  It returns
 @code{cls}.
 @example
 @group
@@ -1056,7 +1056,7 @@ function).  @code{cls} is the class where the search should start and
 @code{lev} tells whether this is a regular or superclass type search.
 1 is regular and 2 indicates a superclass search.
 
-This method return the method object found.  If no method is found
+This method returns the method object found.  If no method is found
 @code{NULL} is returned.
 
 There is a similar method called @code{FindMethod::Behavior} which
@@ -1095,7 +1095,7 @@ object  cls;    /* class                */
 int     is;     /* instance size        */
 @end group
 @end example
-This method is used to obtain the total size a direct instances of class
+This method is used to obtain the total size a direct instance of class
 @code{cls} would be.  This includes space used by the instance variables
 defined in class @code{cls} as well as all the superclasses of
 @code{cls}.
@@ -1332,7 +1332,7 @@ which represents the object @code{i} and its value.  The @code{String}
 contains the name of the class, and its address.  It then calls the
 @code{StringRepValue} method to obtain its contents.  This is often used
 to print or display a representation of a class object.  It is also used
-by by @code{Print::Object} (a method useful during the debugging phase
+by @code{Print::Object} (a method useful during the debugging phase
 of a project) in order to directly print an object to a stream.
 @c @example
 @c @group
@@ -2289,7 +2289,7 @@ methods.
 
 
 @subsection Dynace Class Methods
-All functionality of the Dynace class is accessed through it's class methods.
+All functionality of the Dynace class is accessed through its class methods.
 
 
 
@@ -2839,7 +2839,7 @@ automatic variables and function parameters.
 
 Dynace has no way of knowing about objects which are referenced by global
 and static variables or objects which are being referenced by memory
-allocated from the heap.  If an objects is only being referenced by
+allocated from the heap.  If an object is only being referenced by
 one of these methods Dynace will dispose of it the next time the
 garbage collector is called.  If the program later tries to use the
 object an error will occur.  The solution to this problem is to
@@ -3782,8 +3782,8 @@ and Generic object contains a list of Method objects which it relates
 to so there is not normally a need to save the returned value.
 
 The difference between this macro and @code{cMethodFor} is the extra @code{ff}
-parameter.  When using @code{dpp} strategies other then 1 (see the @code{dpp}
-section) under certain circumstance @code{dpp} will alter the argument
+parameter.  When using @code{dpp} strategies other than 1 (see the @code{dpp}
+section) under certain circumstances @code{dpp} will alter the argument
 signature of the defined method in order to accommodate the non-assembler
 generic / method interface.  It will then create a new function which has
 the correct signature in case the programmer requests a pointer to the
@@ -4634,8 +4634,8 @@ and Generic object contains a list of Method objects which it relates
 to so there is not normally a need to save the returned value.
 
 The difference between this macro and @code{iMethodFor} is the extra @code{ff}
-parameter.  When using @code{dpp} strategies other then 1 (see the @code{dpp}
-section) under certain circumstance @code{dpp} will alter the argument
+parameter.  When using @code{dpp} strategies other than 1 (see the @code{dpp}
+section) under certain circumstances @code{dpp} will alter the argument
 signature of the defined method in order to accommodate the non-assembler
 generic / method interface.  It will then create a new function which has
 the correct signature in case the programmer requests a pointer to the

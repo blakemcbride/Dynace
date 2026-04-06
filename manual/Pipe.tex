@@ -3,7 +3,7 @@
 @section Pipe Class
 The @code{Pipe} class is used to provide a mechanism for threads
 to transfer information via a uni-directional byte stream.  If
-bi-directional communications is needed two pipes may be used.
+bi-directional communication is needed two pipes may be used.
 
 The @code{Pipe} class is a subclass of @code{Stream} and as such shares
 much of its functionality with other subclasses of the @code{Stream}
@@ -106,13 +106,13 @@ no name is to be associated with the pipe.
 
 @code{bufsiz} is the size of the buffer associated with the pipe.  The
 size of the buffer determines how many bytes of information may be
-buffered before a thread has to held.  If set too small the system will
+buffered before a thread has to be held.  If set too small the system will
 become inefficient because of the constant switching between threads.
 Typical values are 128 or 512.  It depends on the quantity and size of
 the data being transferred.
 
 The value returned (@code{p}) is the pipe object created.  Other
-threads may obtain the thread object by the use of the @code{FindStr::Pipe}
+threads may obtain the pipe object by the use of the @code{FindStr::Pipe}
 method.  
 @c @example
 @c @group
@@ -285,11 +285,11 @@ the thread requesting the read or write will go into a hold state
 until another thread can either supply the requested bytes or
 make the necessary room available.  If blocking is not turned on
 then the particular read or write request will only perform the
-operation with as many bytes is available at the time.  There
+operation with as many bytes as are available at the time.  There
 will be no waiting.
 
-The @code{rblock} flag effects read requests and the @code{wblock}
-effects write requests.
+The @code{rblock} flag affects read requests and the @code{wblock}
+affects write requests.
 
 This method returns the @code{Pipe} instance passed.
 @c @example

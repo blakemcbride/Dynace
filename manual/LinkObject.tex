@@ -13,13 +13,13 @@ the @code{LinkList} class deals with instances of the @code{Link} class
 (or one of its subclasses) which may contain arbitrary objects and the
 @code{LinkObject} class deals with arbitrary objects directly.  There is
 no need to deal with link objects at all.  While this simplifies the
-usage of a linked lists quite a bit it comes at the expense of
+usage of a linked list quite a bit it comes at the expense of
 flexibility.  However, since the @code{LinkList} class is a superclass
 of the @code{LinkObject} class you can often use the inherited
 functionality of the @code{LinkList} class in conjunction with the
 @code{LinkObject} object.  It is, therefore, recommended that the
 @code{LinkObject} class be used whenever possible to simplify linked
-list operations
+list operations.
 
 This class (@code{LinkObject}) inherits much of its functionality from its
 superclass (@code{LinkList}), therefore, in addition to the specific
@@ -132,7 +132,7 @@ object  obj;
 @end example
 This method is used to obtain the object stored in the first link of the
 list @code{i}.  If there are no links on the list this method will
-return @code{NULL}.  The list, @code{i}, is not effected by this operation.
+return @code{NULL}.  The list, @code{i}, is not affected by this operation.
 @example
 @group
 @exdent Example:
@@ -172,14 +172,14 @@ object  ll;
 @end group
 @end example
 This method is used to extract numerous values from a @code{LinkObject} instance.
-It does this without modifing the list.  Each argument must be a pointer to a
+It does this without modifying the list.  Each argument must be a pointer to a
 variable which is to hold one of the values.  The first variable gets the first
 object on the list and the second gets the second, etc.  The argument list must
 end in @code{NULL} to signify the end.
 
 If there are more variables than links on the list the remaining variables will be
 set to @code{NULL}.  If there are more elements on the list than variables the
-remiaining list elements are ignored.
+remaining list elements are ignored.
 
 The @code{LinkObject} instance passed is returned unaltered.
 @example
@@ -221,7 +221,7 @@ object  obj;
 @end example
 This method is used to obtain the object stored in the last link of the
 list @code{i}.  If there are no links on the list this method will
-return @code{NULL}.  The list, @code{i}, is not effected by this operation.
+return @code{NULL}.  The list, @code{i}, is not affected by this operation.
 @example
 @group
 @exdent Example:
@@ -399,7 +399,7 @@ object  s;
 @end example
 This method takes an instance of the @code{LinkObject} class (@code{i})
 and returns an instance of the @code{LinkObjectSequence} class
-(@code{s}).  The link list represented by @code{i} is not effected by
+(@code{s}).  The link list represented by @code{i} is not affected by
 this operation.  The link sequence item, @code{s}, is used to enumerate
 through all the objects in link list @code{i}.  See the
 @code{LinkObjectSequence} class for documentation of other methods
@@ -454,7 +454,7 @@ object  s;
 @end example
 This method takes an instance of the @code{LinkObject} class (@code{i})
 and returns an instance of the @code{LinkSequence} class
-(@code{s}).  The link list represented by @code{i} is not effected by
+(@code{s}).  The link list represented by @code{i} is not affected by
 this operation.  The link sequence item, @code{s}, is used to enumerate
 through all the links in link list @code{i}.  See the
 @code{LinkSequence} class for documentation of other methods

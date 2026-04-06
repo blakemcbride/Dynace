@@ -60,7 +60,7 @@ See also:  @code{Dispose::Link}
 
 
 @subsection Link Instance Methods
-The instances methods associated with the @code{Link} class are used to
+The instance methods associated with the @code{Link} class are used to
 link, unlink, move and dispose of particular instances of the
 @code{Link} class or (more often) one of its subclasses.
 
@@ -166,7 +166,7 @@ object  nxt;
 @end example
 This method is used to change the next pointer of a particular link
 represented by instance @code{i}.  @code{nxt} is the link to be pointed
-to or @code{NULL}.  This method does not effect the instance pointed to
+to or @code{NULL}.  This method does not affect the instance pointed to
 by @code{nxt}.
 
 This method returns the link passed in its first argument.
@@ -196,7 +196,7 @@ object  prev;
 @end example
 This method is used to change the previous link pointer of a particular
 link represented by instance @code{i}.  @code{prev} is the link to be
-pointed to or @code{NULL}.  This method does not effect the instance
+pointed to or @code{NULL}.  This method does not affect the instance
 pointed to by @code{prev}.
 
 This method returns the link passed in its first argument.
@@ -665,7 +665,7 @@ object  i;
 @end group
 @end example
 This method is used to remove a link (@code{i}) from a linked list.  In
-addition to effecting link @code{i}, it also effects the pointers
+addition to affecting link @code{i}, it also affects the pointers
 associated with the links which link @code{i} points to in its next and
 previous pointers (which may be NULL) to make the removal complete.
 
@@ -701,13 +701,13 @@ object  s;
 @end example
 This method is used to generate an instance of the @code{String} class
 which represents the object @code{i} and its value.  This is often used
-to print or display a representation of an object.  It is also used by
+to print or display a representation of an object.  It is also used
 by @code{Print::Object} (a method useful during the debugging phase of
 a project) in order to directly print an object to a stream.
 @c @example
 @c @group
 @c @exdent Example:
-@c 
+@c
 @c @end group
 @c @end example
 @sp 1

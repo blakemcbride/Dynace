@@ -75,12 +75,12 @@ exceed this number, however, some loss of efficiency will occur.
 Since a @code{Set} is implemented as a hash table it is best if @code{size}
 is actually larger than the number of objects to be held.  It should
 be an odd number or better yet a prime number.  Keep in mind, however,
-that there is storage requirements associated with this number and
+that there are storage requirements associated with this number and
 the use of a very large number will consume large memory resources.
 In reality most reasonable numbers will work fine.
 
 Regardless of the size specified the set object will never overflow.
-It will just be less efficient if many more elements then @code{size}
+It will just be less efficient if many more elements than @code{size}
 are added.
 
 The new instance is returned.
@@ -517,7 +517,7 @@ object  i;
 @end example
 This method is used to remove all objects in a @code{Set} instance
 without disposing of the set itself.  Each object or association in the
-set are disposed of via @code{Dispose}.
+set is disposed of via @code{Dispose}.
 
 The value returned is always the instance passed.
 @c @example
@@ -908,7 +908,7 @@ was created.
 Since a @code{Set} is implemented as a hash table it is best if
 @code{size} is actually larger than the number of objects to be held.
 It should be an odd number or better yet a prime number.  Keep in mind,
-however, that there is storage requirements associated with this number
+however, that there are storage requirements associated with this number
 and the use of a very large number will consume large memory resources.
 The @code{Set} will support more objects than defined by @code{size} at
 a lesser efficiency.  In reality most reasonable numbers will work fine.
@@ -949,7 +949,7 @@ object  s;
 @end example
 This method takes an instance of the @code{Set} class (@code{i})
 and returns an instance of the @code{SetSequence} class
-(@code{s}).  The @code{Set} represented by @code{i} is not effected by
+(@code{s}).  The @code{Set} represented by @code{i} is not affected by
 this operation.  The @code{Set} sequence item, @code{s}, is used to enumerate
 through all the objects in @code{Set} @code{i}.  See the
 @code{SetSequence} class for documentation of other methods
@@ -1034,9 +1034,9 @@ object  s;
 @end example
 This method is used to generate an instance of the @code{String} class
 which represents the object @code{i} and its value.  This is often used
-to print or display a representation of an object.  It is also used by
-by @code{Print::Object} (a method useful during the debugging phase of
-a project) in order to directly print an object to a stream.
+to print or display a representation of an object.  It is also used
+by @code{Print::Object} (a method useful during the debugging phase of a
+project) in order to directly print an object to a stream.
 
 This method obtains the values of each object by calling
 @code{StringRepValue} on each element.

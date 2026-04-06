@@ -2,7 +2,7 @@
 
 @section Stream Class
 The @code{Stream} class is an abstract class used to group other classes
-which poses the ability to read and write characters sequentially.
+which possess the ability to read and write characters sequentially.
 Although much of the actual functionality is implemented by its
 subclasses, the methods are documented here because of their common
 interface.
@@ -67,7 +67,6 @@ int     r;
 @end example
 This method returns 1 if @code{Stream} @code{i} is at the end of available
 characters and 0 otherwise.
-by @code{i}.
 @c @example
 @c @group
 @c @exdent Example:
@@ -131,7 +130,7 @@ object  i;
 long    r;
 @end group
 @end example
-This method is used obtain the total length of the @code{Stream} represented
+This method is used to obtain the total length of the @code{Stream} represented
 by @code{i}.
 @c @example
 @c @group
@@ -161,7 +160,7 @@ object  i;
 long    r;
 @end group
 @end example
-This method is used obtain the current position in the stream
+This method is used to obtain the current position in the stream
 relative to its beginning.
 @c @example
 @c @group
@@ -379,7 +378,7 @@ long    r;
 @end example
 This method is used to seek to position @code{n} of @code{Stream}
 @code{i} relative to the beginning of the stream.
-The value returned is the actual position seeked to or 0 on error.
+The value returned is the actual position sought, or 0 on error.
 @c @example
 @c @group
 @c @exdent Example:
