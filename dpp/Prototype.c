@@ -190,13 +190,17 @@ imeth objrtn Prototype_im_gPrintMethArgsH(object self, object fobj)
 	object seq, nxt; 
 	int n=0; 
 
-	for (seq=gSequence(iv->iArgs) ; nxt = gNext(seq) ; ) { 
-		if (n++) 
-			gPuts(fobj, ", "); 
-		if (streq(gStringValue(nxt), "...")) 
-			gPuts(fobj, "va_list _rest_"); 
-		else 
-			gPuts(fobj, (char *) nxt); 
+	if (iv->iVararg) { 
+		gPuts(fobj, "object self, va_list _rest_"); 
+	} else { 
+		for (seq=gSequence(iv->iArgs) ; nxt = gNext(seq) ; ) { 
+			if (n++) 
+				gPuts(fobj, ", "); 
+			if (streq(gStringValue(nxt), "...")) 
+				gPuts(fobj, "va_list _rest_"); 
+			else 
+				gPuts(fobj, (char *) nxt); 
+		} 
 	} 
 	return self; 
 } 
@@ -304,7 +308,7 @@ static void print_args(ivType *iv, object ar)
 #endif 
 
 
-#line 290 "Prototype.d"
+#line 294 "Prototype.d"
 imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
 	if (iv->iArgs) 
@@ -322,7 +326,7 @@ imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 	print_args(iv, iv->iProto); 
 #endif 
 
-#line 306 "Prototype.d"
+#line 310 "Prototype.d"
 		return self; 
 } 
 
@@ -377,7 +381,7 @@ imeth int Prototype_im_gMatchNoError(object self, object mproto)
 #endif 
 
 
-#line 359 "Prototype.d"
+#line 363 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) 
 		return 0; 
 
@@ -420,7 +424,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 #endif 
 
 
-#line 400 "Prototype.d"
+#line 404 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) { 
 		error = 1; 
 		vPrintf(stdoutStream, "Method %s and generic %s have different return types\n", 
@@ -466,7 +470,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 				gStringValue(iv->iName)); 
 			break; 
 		} 
-#line 449 "Prototype.d"
+#line 453 "Prototype.d"
 		if (gCompare(marg, garg)) { 
 			error = 1; 
 			vPrintf(stdoutStream, "Method %s and generic %s have different argument types (%d)\n", 
@@ -538,7 +542,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 542 "Prototype.c"
+#line 546 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {

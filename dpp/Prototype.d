@@ -174,13 +174,17 @@ imeth	gPrintMethArgsH(object fobj)
 	object	seq, nxt;
 	int	n=0;
 
-	for (seq=gSequence(iArgs) ; nxt = gNext(seq) ; )  {
-		if (n++)
-			gPuts(fobj, ", ");
-		if (streq(gStringValue(nxt), "..."))
-		    gPuts(fobj, "va_list _rest_");
-		else
-		    gPuts(fobj, (char *) nxt);
+	if (iVararg) {
+		gPuts(fobj, "object self, va_list _rest_");
+	} else {
+		for (seq=gSequence(iArgs) ; nxt = gNext(seq) ; )  {
+			if (n++)
+				gPuts(fobj, ", ");
+			if (streq(gStringValue(nxt), "..."))
+			    gPuts(fobj, "va_list _rest_");
+			else
+			    gPuts(fobj, (char *) nxt);
+		}
 	}
 	return self;
 }

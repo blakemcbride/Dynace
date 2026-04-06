@@ -35,3 +35,4 @@ manual/*.toc
 manual/*.tp
 manual/*.vr
 manual/s-*
+examples/**/class*.c
