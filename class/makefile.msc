@@ -4,6 +4,7 @@
 
 LIBDIR = ..\lib
 INCDIR = ..\include
+DPP = ..\bin\dpp
 
 #MY_SSL = 1
 
@@ -30,7 +31,7 @@ CFLAGS = -I$(INCDIR) -WX -nologo -W2 -O2 $(MY_SSL_CFLAGS) $(CFEXTRA)
 !ENDIF
 
 .d.c:
-	dpp $(STRAT) -C -g $(INCDIR)\generics.h -p $<
+	$(DPP) $(STRAT) -C -g $(INCDIR)\generics.h -p $<
 
 
 CLASSES = LinkList.d Link.d LinkValue.d LinkObject.d ShortInteger.d Association.d \
@@ -57,7 +58,7 @@ curlib.cm : $(OBJ)
 
 
 $(INCDIR)\generics.h : $(CLASSES)
-	dpp $(STRAT) -C -g $(INCDIR)\generics.h -t $(INCDIR)\generics.h -h $(INCDIR)\generics.h -p $(CLASSES)
+	$(DPP) $(STRAT) -C -g $(INCDIR)\generics.h -t $(INCDIR)\generics.h -h $(INCDIR)\generics.h -p $(CLASSES)
 
 dict.obj set.obj setseq.obj strdict.obj intdict.obj : set1.h
 
@@ -69,21 +70,21 @@ array.obj charary.obj  shortary.obj ushrtary.obj longary.obj floatary.obj \
 	dblary.obj bitary.obj objary.obj pntrary.obj: array1.h
 
 newgens:
-	dpp $(STRAT) -C -g $(INCDIR)/generics.h -p *.d -h $(INCDIR)\generics.h
+	$(DPP) $(STRAT) -C -g $(INCDIR)/generics.h -p *.d -h $(INCDIR)\generics.h
 
 makegens:
-	dpp $(STRAT) -C -g $(INCDIR)/generics.h -s *.d -h $(INCDIR)\generics.h
+	$(DPP) $(STRAT) -C -g $(INCDIR)/generics.h -s *.d -h $(INCDIR)\generics.h
 
 XPath.exe : XMLNode.c
 	$(CC) $(CFLAGS) /Fe$@ -DTEST $? $(LIBDIR)\dynlcm.lib
-	-del /Q XMLNode.obj 2>NUL
+	-del /Q XMLNode.obj 2>NUL
 
 clean :
-	-del /Q *.obj generics.* *.o *.pdb *.err 2>NUL
-	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
+	-del /Q *.obj generics.* *.o *.pdb *.err 2>NUL
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
 
 realclean : clean
-	-del /Q curlib.* allok.* 2>NUL
+	-del /Q curlib.* allok.* 2>NUL
 
 
 

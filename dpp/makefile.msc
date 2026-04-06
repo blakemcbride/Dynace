@@ -5,6 +5,7 @@
 BINDIR = ..\bin
 LIBDIR = ..\lib
 INCDIR = ..\include
+DPP = ..\bin\dpp
 
 CFEXTRA = -MT
 
@@ -34,7 +35,7 @@ CFILES = dpp.c
 OBJS = $(CFILES:.c=.obj) $(CLASSES:.d=.obj)
 
 .d.c :
-	dpp $(STRAT) -C -g -p $<
+	$(DPP) $(STRAT) -C -g -p $<
 
 LIBS = $(LIBDIR)\dynlcm.lib 
 
@@ -46,17 +47,17 @@ install : $(TARGET)
 	copy $(TARGET) $(BINDIR)
 
 generics.h : $(CLASSES)
-	dpp $(STRAT) -C -g -t -h -p $(CLASSES)
+	$(DPP) $(STRAT) -C -g -t -h -p $(CLASSES)
 
 generics.c : generics.h
-	dpp $(STRAT) -C -g -c 
+	$(DPP) $(STRAT) -C -g -c 
 
 generics.obj : generics.c 
 	$(CC) $(GFLAGS) -c generics.c
 
 generics.1 newgens:
 	-del /Q generics.* 2>NUL
-	dpp $(STRAT) -C -g $(INCDIR)\generics.h -h -p $(CLASSES)
+	$(DPP) $(STRAT) -C -g $(INCDIR)\generics.h -h -p $(CLASSES)
 	@echo Done >generics.1
 
 

@@ -5,6 +5,7 @@
 CC = cl
 LIBDIR = ..\lib
 INCDIR = ..\include
+DPP = ..\bin\dpp
 
 CFEXTRA = -MT
 
@@ -19,15 +20,15 @@ CFLAGS = -I$(INCDIR) -nologo -Oityb1 -Gs -Gy $(CFEXTRA)
 !ENDIF
 
 curlib.cm : $(INCDIR)\generics.h
-	dpp $(STRAT) -C -g $(INCDIR)\generics.h -c -h
+	$(DPP) $(STRAT) -C -g $(INCDIR)\generics.h -c -h
 	$(CC) -c $(CFLAGS) generics.c
 	if exist $(LIBDIR)\dynlcm.lib (lib /nologo /out:$(LIBDIR)\dynlcm.lib $(LIBDIR)\dynlcm.lib generics.obj) else (lib /nologo /out:$(LIBDIR)\dynlcm.lib generics.obj)
-	-del /Q *.obj generics.* 2>NUL
+	-del /Q *.obj generics.* 2>NUL
 	echo Done >$@
 
 clean:
-	-del /Q *.obj generics.* *.o *.pdb *.err 2>NUL
-	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
+	-del /Q *.obj generics.* *.o *.pdb *.err 2>NUL
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
 
 realclean : clean
-	-del /Q curlib.* 2>NUL
+	-del /Q curlib.* 2>NUL
