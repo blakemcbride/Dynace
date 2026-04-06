@@ -66,7 +66,7 @@ clean:
 	call cleanall.bat
 	@rem
 	cd ..\..
-	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
+	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{* 2>NUL
 
 	
 realclean:
@@ -89,13 +89,13 @@ realclean:
 	call cleanall.bat
 	@rem
 	cd ..\..
-	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{*
-	-del /Q lib\d*.* bin\dpp bin\dpp.exe 
-	-del /Q bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.*
+	-del /Q setup.unx setup.win setup.p9 *.~ *.?~ *.??~ #*.* *.{* 2>NUL
+	-del /Q lib\d*.* bin\dpp bin\dpp.exe  2>NUL
+	-del /Q bin\addcr bin\addcr.exe bin\delcr bin\delcr.exe lib\d*.* 2>NUL
 
 
 dist:
-	-del /Q dynace*.zip
+	-del /Q dynace*.zip 2>NUL
 	zip -r dynace README msc.dm makefile.unx makefile.inc change.log
 	zip dynace bin\* class\* docs\* dpp\* generics\* lib\*
 	zip dynace include\* kernel\* threads\* utils\*
@@ -104,7 +104,7 @@ dist:
 # rebuilds generics.h from scratch
 makegens:
 	cd kernel
-	-del /Q generics.* 
+	-del /Q generics.*  2>NUL
 	$(DPP) $(DPPOPTS) -h -i -s *.d
 	move generics.h ..\include
 	@rem
@@ -120,7 +120,7 @@ makegens:
 
 # rebuilds generics.h from scratch and pre-processes all .d files
 newgens : 
-	-del /Q include\generics.h
+	-del /Q include\generics.h 2>NUL
 	@rem
 	cd kernel
 	$(MAKE) /nologo /f $(MAKEFILE) reallynewgens

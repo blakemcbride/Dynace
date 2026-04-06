@@ -76,14 +76,14 @@ makegens:
 
 XPath.exe : XMLNode.c
 	$(CC) $(CFLAGS) /Fe$@ -DTEST $? $(LIBDIR)\dynlcm.lib
-	-del /Q XMLNode.obj
+	-del /Q XMLNode.obj 2>NUL
 
 clean :
-	-del /Q *.obj generics.* *.o *.pdb *.err
-	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj generics.* *.o *.pdb *.err 2>NUL
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
 
 realclean : clean
-	-del /Q curlib.* allok.*
+	-del /Q curlib.* allok.* 2>NUL
 
 
 

@@ -55,14 +55,14 @@ generics.obj : generics.c
 	$(CC) $(GFLAGS) -c generics.c
 
 generics.1 newgens:
-	-del /Q generics.*
+	-del /Q generics.* 2>NUL
 	dpp $(STRAT) -C -g $(INCDIR)\generics.h -h -p $(CLASSES)
 	@echo Done >generics.1
 
 
 clean realclean:
-	-del /Q *.obj *.o *.pdb *.err *.exe *.vcp *.ilk *.mdp *.ncb *.opt *.dsp *.dsw
-	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.*
+	-del /Q *.obj *.o *.pdb *.err *.exe *.vcp *.ilk *.mdp *.ncb *.opt *.dsp *.dsw 2>NUL
+	-del /Q *.~ *.?~ *.??~ *.{* *.bak #*.* 2>NUL
 
 
 

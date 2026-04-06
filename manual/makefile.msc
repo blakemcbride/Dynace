@@ -70,11 +70,11 @@ Dynace.dvi : Dynace.tex man1.tex man2.tex man3.tex man4.tex man5.tex classes1.te
 	UnsignedShortInteger.tex
 
 clean:
-	-del /Q s-*.tex
-	-del /Q *.cp *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.aux *.log
-	-del /Q *~ *.bak
+	-del /Q s-*.tex 2>NUL
+	-del /Q *.cp *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.aux *.log 2>NUL
+	-del /Q *~ *.bak 2>NUL
 
 realclean: clean
-	-del /Q *.dvi *.ps *.pdf
+	-del /Q *.dvi *.ps *.pdf 2>NUL
 
 

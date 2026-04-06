@@ -69,23 +69,23 @@ newgens:
 	echo Done >generics.1
 
 clean:
-	-del /Q $(CLASS_SRC:.d=.c)
-	-del /Q *.obj
-	-del /Q *.exe
-	-del /Q *.ex1
-	-del /Q *.res
-	-del /Q *.aps
-	-del /Q *.pdb
-	-del /Q *.wsp
-	-del /Q *.ilk
-	-del /Q *.bsc
-	-del /Q *.vcp
-	-del /Q *.pch
-	-del /Q *.sbr
-	-del /Q *.vcw
-	-del /Q *.map
-	-del /Q generics.*
-	-rmdir /S /Q WinDebug
-	-rmdir /S /Q WinRel
-	-del /Q *.idb *.mdp *.ncb
+	-del /Q $(CLASS_SRC:.d=.c) 2>NUL
+	-del /Q *.obj 2>NUL
+	-del /Q *.exe 2>NUL
+	-del /Q *.ex1 2>NUL
+	-del /Q *.res 2>NUL
+	-del /Q *.aps 2>NUL
+	-del /Q *.pdb 2>NUL
+	-del /Q *.wsp 2>NUL
+	-del /Q *.ilk 2>NUL
+	-del /Q *.bsc 2>NUL
+	-del /Q *.vcp 2>NUL
+	-del /Q *.pch 2>NUL
+	-del /Q *.sbr 2>NUL
+	-del /Q *.vcw 2>NUL
+	-del /Q *.map 2>NUL
+	-del /Q generics.* 2>NUL
+	-rmdir /S /Q WinDebug 2>NUL
+	-rmdir /S /Q WinRel 2>NUL
+	-del /Q *.idb *.mdp *.ncb 2>NUL
 
