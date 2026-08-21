@@ -36,3 +36,7 @@ manual/*.tp
 manual/*.vr
 manual/s-*
 examples/**/class*.c
+
+# Code-RAG local index files (written by bld; machine-local, not part of the project)
+.mcp.json
+CLAUDE.local.md
