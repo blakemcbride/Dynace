@@ -30,6 +30,7 @@
 
 
 #include <math.h>
+#include <stdlib.h>
 
 
 defclass  Number;
@@ -80,7 +81,8 @@ static	int	Ndrgtb(double n, int b)	/* returns the number of digits	right of deci
 *
 *	int  w		total field width
 *	ind  d		number of decimal places
-*	char  s[w+1]	result of format
+*	char  s[ssz]	result of format
+*	int  ssz	size of s; a field that won't fit is filled with '*'
 *	int  r		pointer	to result of format
 *
 *	example:
@@ -90,13 +92,17 @@ static	int	Ndrgtb(double n, int b)	/* returns the number of digits	right of deci
 *		result in s:	(12,345.35)
 */
 
-static	char	*Nfmtb(double n, int b, char *t, int wth, int d, char *s)
+static	char	*Nfmtb(double n, int b, char *t, int wth, int d, char *s, int ssz)
 {
 	register int	si, i;
 	int	sign, blnk, comma, left, paren,	zfill, nd, dol,	tw, dl,	ez, ucase, cf=3, w=wth, percent;
 	double	base;
 	static	char	alpha[]	= "0123456789abcdefghijklmnopqrstuvwxyz";
 
+	if ((n - n) != 0.0)  {	/*  infinity or NaN  */
+		w = wth < 1 ? 1 : wth;
+		goto nofit;
+	}
 	if (b <	2  ||  b > (int)(sizeof(alpha)-1))
 		b = 10;
 	base = b;
@@ -108,6 +114,10 @@ static	char	*Nfmtb(double n, int b, char *t, int wth, int d, char *s)
 		double	r = pow(base, (double) d);
 //		n = floor(base/20.0 + n * r) / r;
 		n = floor(.5 + n * r) / r;
+	}
+	if ((n - n) != 0.0)  {	/*  too many places or too big to scale  */
+		w = wth < 1 ? 1 : wth;
+		goto nofit;
 	}
 	
 	switch (b)  {
@@ -174,6 +184,8 @@ static	char	*Nfmtb(double n, int b, char *t, int wth, int d, char *s)
 			tw -= percent--;
 		if (tw > w)  {
 nofit:
+			if (w >= ssz)
+				w = ssz - 1;
 			for (i=0 ; i < w ; )
 				s[i++] = '*';
 			s[i] = '\0';
@@ -181,11 +193,16 @@ nofit:
 		}
 	}
 
+	if (w >= ssz)		/*  doesn't fit the result buffer  */
+		goto nofit;
+
 	n = floor(.5 + n * floor(.5 + pow(base,	(double) d)));
+	if ((n - n) != 0.0)	/*  overflowed when scaled  */
+		goto nofit;
 	if (blnk && n == 0.0)  {
-		for (i=0 ; i < wth ; )
+		for (i=0 ; i < w ; )
 			s[i++] = ' ';
-		s[wth] = '\0';
+		s[w] = '\0';
 		return(s);
 	}
 	s[si = w] = '\0';
@@ -244,10 +261,20 @@ nofit:
 
 imeth	gFormatNumber, <vFormat> (char *msk, int wth, int dp)
 {
-	char	buf[80];
+	/*  room for the requested width, or for the widest double (309 digits,
+	    their commas, sign, $, parens, % and dp decimal places)  */
+	long	sz = (wth > 0 ? (long) wth : 0L) + (dp > 0 ? (long) dp : 0L) + 512L;
+	char	*buf;
+	object	r;
 
-	Nfmtb(gDoubleValue(self), 10, msk, wth, dp, buf);
-	return gNewWithStr(String, buf);
+	if (sz > 65536L)
+		sz = 65536L;
+	if (!(buf = (char *) malloc((size_t) sz)))
+		gError(Dynace, "gFormatNumber:  Out of memory.\n");
+	Nfmtb(gDoubleValue(self), 10, msk, wth, dp, buf, (int) sz);
+	r = gNewWithStr(String, buf);
+	free(buf);
+	return r;
 }
 
 #if 0

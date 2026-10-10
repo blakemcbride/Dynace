@@ -357,92 +357,74 @@ static char *Time2(char *buf)
 	return(buf); 
 } 
 
-static char *DateFmt(char *buf, long dt, char *msk) 
+
+
+static object DateFmt(long dt, char *msk) 
 { 
 	int y, m, d; 
-	char tmp[20], *bp = buf; 
+	char tmp[40], *p; 
+	object r = gNewWithStr(String, ""); 
 
-	if (dt <= 0L) { 
-		*buf = '\0'; 
-		return(buf); 
-	} 
+	if (dt <= 0L) 
+		return r; 
 	Date_ymd(dt, &y, &m, &d); 
-	while (*msk) 
-		if (*msk != '%') 
-		*bp++ = *msk++; 
-	else 
+	while (*msk) { 
+		if (*msk != '%') { 
+			for (p=msk ; *p && *p != '%' ; p++); 
+			gWrite(r, msk, (unsigned) (p - msk)); 
+			msk = p; 
+			continue; 
+		} 
+		p = tmp; 
 		switch (*++msk) { 
-		case '\0': 
-		break; 
-		case '%': 
-		default: 
-		*bp++ = *msk++; 
-		break; 
-		case 'W': 
-		case 'w': 
-		strcpy(bp, Dyofwk(dt, NULL)); 
-		bp += strlen(bp); 
+			case '\0': 
+			continue; 
+			case '%': 
+			default: 
+			tmp[0] = *msk; 
+			tmp[1] = '\0'; 
+			break; 
+			case 'W': 
+			case 'w': 
+			p = Dyofwk(dt, NULL); 
+			break; 
+			case 'M': 
+			p = Mmofyr(m, NULL); 
+			break; 
+			case 'm': 
+			snprintf(tmp, sizeof tmp, "%.3s", Mmofyr(m, NULL)); 
+			break; 
+			case 'd': 
+			snprintf(tmp, sizeof tmp, "%d", d); 
+			break; 
+			case 'D': 
+			snprintf(tmp, sizeof tmp, "%02d", d); 
+			break; 
+			case 'y': 
+			snprintf(tmp, sizeof tmp, "%02d", y%100); 
+			break; 
+			case 'Y': 
+			snprintf(tmp, sizeof tmp, "%4d", y); 
+			break; 
+			case 'S': 
+			case 's': 
+			p = Num_sufx(d); 
+			break; 
+			case 'n': 
+			snprintf(tmp, sizeof tmp, "%d", m); 
+			break; 
+			case 'N': 
+			snprintf(tmp, sizeof tmp, "%02d", m); 
+			break; 
+			case 'T': 
+			case 't': 
+			Time2(tmp); 
+			break; 
+		} 
+		gAppend(r, (object) p); 
 		msk++; 
-		break; 
-		case 'M': 
-		strcpy(bp, Mmofyr(m, NULL)); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'm': 
-		strcpy(bp, Mmofyr(m, NULL)); 
-		bp += 3; 
-		msk++; 
-		break; 
-		case 'd': 
-		sprintf(bp, "%d", d); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'D': 
-		sprintf(bp, "%02d", d); 
-		for ( ; *bp ; ++bp) 
-			if (*bp == ' ') 
-			*bp = '0'; 
-		msk++; 
-		break; 
-		case 'y': 
-		sprintf(bp, "%02d", y%100); 
-		for ( ; *bp ; ++bp) 
-			if (*bp == ' ') 
-			*bp = '0'; 
-		msk++; 
-		break; 
-		case 'Y': 
-		sprintf(bp, "%4d", y); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'S': 
-		case 's': 
-		strcpy(bp, Num_sufx(d)); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'n': 
-		sprintf(bp, "%d", m); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'N': 
-		sprintf(bp, "%02d", m); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'T': 
-		case 't': 
-		strcpy(bp, Time2(tmp)); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
 	} 
-	*bp = '\0'; 
-	return(buf); 
+	return r; 
 } 
 
 static long Add_days(long date, long days) 
@@ -539,9 +521,7 @@ imeth objrtn Date_im_gMonthName(object self)
 
 imeth objrtn Date_im_gFormatDate(object self, char *msk)
 { 
-	char buf[80]; 
-
-	return gNewWithStr(String, DateFmt(buf, longValue(self), msk)); 
+	return DateFmt(longValue(self), msk); 
 } 
 
 imeth objrtn Date_im_gStringRepValue(object self)
@@ -634,7 +614,7 @@ cmeth int Date_cm_gFixInvalidDate(object self, int mode)
 	return pm; 
 } 
 
-#line 638 "Date.c"
+#line 618 "Date.c"
 
 objrtn	Date_initialize(void)
 {

@@ -331,92 +331,74 @@ static	char	*Time2(char *buf)
 	return(buf);
 }
 
-static	char	*DateFmt(char *buf, long dt, char *msk)
+/*  Format date dt by mask msk into a new String (no fixed-size buffer)  */
+
+static	object	DateFmt(long dt, char *msk)
 {
 	int	y, m, d;
-	char	tmp[20], *bp = buf;
+	char	tmp[40], *p;
+	object	r = gNewWithStr(String, "");
 
-	if (dt <= 0L)  {
-		*buf = '\0';
-		return(buf);
-	}
+	if (dt <= 0L)
+		return r;
 	Date_ymd(dt, &y, &m, &d);
-	while (*msk)
-		if (*msk != '%')
-			*bp++ = *msk++;
-		else
-			switch (*++msk)  {
-			case '\0':
-				break;
-			case '%':
-			default:
-				*bp++ = *msk++;
-				break;
-			case 'W':		/*  Day of week  */
-			case 'w':
-				strcpy(bp, Dyofwk(dt, NULL));
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'M':	/*  Month of the year  */
-				strcpy(bp, Mmofyr(m, NULL));
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'm':	/*  Month name abreveation  */
-				strcpy(bp, Mmofyr(m, NULL));
-				bp += 3;
-				msk++;
-				break;
-			case 'd':	/*  Day of the month  */
-				sprintf(bp, "%d", d);
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'D':	/*  Day of the month  */
-				sprintf(bp, "%02d", d);
-				for ( ; *bp ; ++bp)
-					if (*bp == ' ')
-						*bp = '0';
-				msk++;
-				break;
-			case 'y':		/*  Year  93  */
-				sprintf(bp, "%02d", y%100);
-				for ( ; *bp ; ++bp)
-					if (*bp == ' ')
-						*bp = '0';
-				msk++;
-				break;
-			case 'Y':	/*  Year  1993  */
-				sprintf(bp, "%4d", y);
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'S':	/*  Numeric Suffix  */
-			case 's':
-				strcpy(bp, Num_sufx(d));
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'n':	/*  Month number  */
-				sprintf(bp, "%d", m);
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'N':	/*  Month number  */
-				sprintf(bp, "%02d", m);
-				bp += strlen(bp);
-				msk++;
-				break;
-			case 'T':	/*  current time  */
-			case 't':
-				strcpy(bp, Time2(tmp));
-				bp += strlen(bp);
-				msk++;
-				break;
-			}
-	*bp = '\0';
-	return(buf);
+	while (*msk)  {
+		if (*msk != '%')  {	/*  copy literal text up to the next %  */
+			for (p=msk ; *p  &&  *p != '%' ; p++);
+			gWrite(r, msk, (unsigned) (p - msk));
+			msk = p;
+			continue;
+		}
+		p = tmp;
+		switch (*++msk)  {
+		case '\0':
+			continue;
+		case '%':
+		default:
+			tmp[0] = *msk;
+			tmp[1] = '\0';
+			break;
+		case 'W':		/*  Day of week  */
+		case 'w':
+			p = Dyofwk(dt, NULL);
+			break;
+		case 'M':	/*  Month of the year  */
+			p = Mmofyr(m, NULL);
+			break;
+		case 'm':	/*  Month name abreveation  */
+			snprintf(tmp, sizeof tmp, "%.3s", Mmofyr(m, NULL));
+			break;
+		case 'd':	/*  Day of the month  */
+			snprintf(tmp, sizeof tmp, "%d", d);
+			break;
+		case 'D':	/*  Day of the month  */
+			snprintf(tmp, sizeof tmp, "%02d", d);
+			break;
+		case 'y':		/*  Year  93  */
+			snprintf(tmp, sizeof tmp, "%02d", y%100);
+			break;
+		case 'Y':	/*  Year  1993  */
+			snprintf(tmp, sizeof tmp, "%4d", y);
+			break;
+		case 'S':	/*  Numeric Suffix  */
+		case 's':
+			p = Num_sufx(d);
+			break;
+		case 'n':	/*  Month number  */
+			snprintf(tmp, sizeof tmp, "%d", m);
+			break;
+		case 'N':	/*  Month number  */
+			snprintf(tmp, sizeof tmp, "%02d", m);
+			break;
+		case 'T':	/*  current time  */
+		case 't':
+			Time2(tmp);
+			break;
+		}
+		gAppend(r, (object) p);
+		msk++;
+	}
+	return r;
 }
 
 static	long	Add_days(long date, long days)
@@ -513,9 +495,7 @@ imeth	gMonthName()
 
 imeth	gFormatDate, <vFormat> (char *msk)
 {
-	char	buf[80];
-
-	return gNewWithStr(String, DateFmt(buf, longValue(self), msk));
+	return DateFmt(longValue(self), msk);
 }
 
 imeth	gStringRepValue()

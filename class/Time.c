@@ -112,10 +112,13 @@ static long fromMilli(long ms)
 	return BUILD_TIME(h, m, s, l); 
 } 
 
+
+
+
 static long Add_hours(long tm, long hrs) 
 { 
 	long ms = toMilli(tm); 
-	long ha = hrs * 3600000L; 
+	long ha = (hrs % 24L) * 3600000L; 
 
 	return fromMilli(ms + ha); 
 } 
@@ -123,7 +126,7 @@ static long Add_hours(long tm, long hrs)
 static long Add_minutes(long tm, long min) 
 { 
 	long ms = toMilli(tm); 
-	long ma = min * 60000L; 
+	long ma = (min % 1440L) * 60000L; 
 
 	return fromMilli(ms + ma); 
 } 
@@ -131,14 +134,14 @@ static long Add_minutes(long tm, long min)
 static long Add_seconds(long tm, long sec) 
 { 
 	long ms = toMilli(tm); 
-	long sa = sec * 1000L; 
+	long sa = (sec % 86400L) * 1000L; 
 
 	return fromMilli(ms + sa); 
 } 
 
 static long Add_milliseconds(long tm, long msec) 
 { 
-	return fromMilli(toMilli(tm) + msec); 
+	return fromMilli(toMilli(tm) + msec % 86400000L); 
 } 
 
 static int Valid_time(long tm) 
@@ -174,7 +177,7 @@ static short *Timemark(short int *v)
 #else 
 
 
-#line 152 "Time.d"
+#line 155 "Time.d"
 #ifdef PLAN9 
 	Tm *a; 
 	time_t t; 
@@ -190,7 +193,7 @@ static short *Timemark(short int *v)
 #else 
 
 
-#line 165 "Time.d"
+#line 168 "Time.d"
 	struct tm *a; 
 	time_t t; 
 	time(&t); 
@@ -205,11 +208,11 @@ static short *Timemark(short int *v)
 #endif 
 
 
-#line 177 "Time.d"
+#line 180 "Time.d"
 #endif 
 
 
-#line 178 "Time.d"
+#line 181 "Time.d"
 	return v; 
 } 
 
@@ -241,103 +244,75 @@ static char *Tmfmt(long t, char *s)
 	return s; 
 } 
 
-static char *TimeFmt(char *buf, long tm, char *msk) 
-{ 
-	int h, m, s, l; 
-	char *bp = buf; 
-	int temp; 
 
-	if (tm < 0L) { 
-		*buf = '\0'; 
-		return(buf); 
-	} 
+
+static object TimeFmt(long tm, char *msk) 
+{ 
+	int h, m, s, l, h12; 
+	char tmp[40], *p; 
+	object r = gNewWithStr(String, ""); 
+
+	if (tm < 0L) 
+		return r; 
 	Time_hmsl(tm, &h, &m, &s, &l); 
-	while (*msk) 
-		if (*msk != '%') 
-		*bp++ = *msk++; 
-	else 
+	h12 = !h ? 12 : h > 12 ? h - 12 : h; 
+	while (*msk) { 
+		if (*msk != '%') { 
+			for (p=msk ; *p && *p != '%' ; p++); 
+			gWrite(r, msk, (unsigned) (p - msk)); 
+			msk = p; 
+			continue; 
+		} 
+		p = tmp; 
 		switch (*++msk) { 
-		case '\0': 
-		break; 
-		case '%': 
-		default: 
-		*bp++ = *msk++; 
-		break; 
-		case 'G': 
-		sprintf(bp, "%02d", h); 
-		bp += strlen(bp); 
+			case '\0': 
+			continue; 
+			case '%': 
+			default: 
+			tmp[0] = *msk; 
+			tmp[1] = '\0'; 
+			break; 
+			case 'G': 
+			snprintf(tmp, sizeof tmp, "%02d", h); 
+			break; 
+			case 'g': 
+			snprintf(tmp, sizeof tmp, "%d", h); 
+			break; 
+			case 'H': 
+			snprintf(tmp, sizeof tmp, "%02d", h12); 
+			break; 
+			case 'h': 
+			snprintf(tmp, sizeof tmp, "%d", h12); 
+			break; 
+			case 'M': 
+			snprintf(tmp, sizeof tmp, "%02d", m); 
+			break; 
+			case 'm': 
+			snprintf(tmp, sizeof tmp, "%d", m); 
+			break; 
+			case 'S': 
+			snprintf(tmp, sizeof tmp, "%02d", s); 
+			break; 
+			case 's': 
+			snprintf(tmp, sizeof tmp, "%d", s); 
+			break; 
+			case 'L': 
+			snprintf(tmp, sizeof tmp, "%03d", l); 
+			break; 
+			case 'l': 
+			snprintf(tmp, sizeof tmp, "%d", l); 
+			break; 
+			case 'P': 
+			p = h >= 12 ? "PM" : "AM"; 
+			break; 
+			case 'p': 
+			p = h >= 12 ? "pm" : "am"; 
+			break; 
+		} 
+		gAppend(r, (object) p); 
 		msk++; 
-		break; 
-		case 'g': 
-		sprintf(bp, "%d", h); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'H': 
-		if (!h) 
-			temp = 12; 
-		else if (h > 12) 
-			temp = h - 12; 
-		else 
-			temp = h; 
-		sprintf(bp, "%02d", temp); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'h': 
-		if (!h) 
-			temp = 12; 
-		else if (h > 12) 
-			temp = h - 12; 
-		else 
-			temp = h; 
-		sprintf(bp, "%d", temp); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'M': 
-		sprintf(bp, "%02d", m); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'm': 
-		sprintf(bp, "%d", m); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'S': 
-		sprintf(bp, "%02d", s); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 's': 
-		sprintf(bp, "%d", s); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'L': 
-		sprintf(bp, "%03d", l); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'l': 
-		sprintf(bp, "%d", l); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'P': 
-		strcpy(bp, h >= 12 ? "PM" : "AM"); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
-		case 'p': 
-		strcpy(bp, h >= 12 ? "pm" : "am"); 
-		bp += strlen(bp); 
-		msk++; 
-		break; 
 	} 
-	*bp = '\0'; 
-	return(buf); 
+	return r; 
 } 
 
 static long Time_dif(long t1, long t2) 
@@ -399,6 +374,8 @@ imeth int Time_im_gCompare(object self, object obj)
 	long sv, ov; 
 
 	ChkArg(obj, 2); 
+	if (!gIsKindOf(obj, CLASS)) 
+		return oSuper(Time_c, gCompare, self)(self, obj); 
 	if ((sv=iv->iVal) < (ov=ivPtr(obj)->iVal)) 
 		return -1; 
 	else if (sv == ov) 
@@ -452,9 +429,7 @@ imeth int Time_im_gMilliseconds(object self)
 
 imeth objrtn Time_im_gFormatTime(object self, char *msk)
 { Time_iv_t *iv = GetIVs(Time, self);
-	char buf[80]; 
-
-	return gNewWithStr(String, TimeFmt(buf, iv->iVal, msk)); 
+	return TimeFmt(iv->iVal, msk); 
 } 
 
 imeth objrtn Time_im_gStringRepValue(object self)
@@ -505,7 +480,7 @@ imeth long Time_im_gDifference(object self, object tm)
 } 
 
 
-#line 509 "Time.c"
+#line 484 "Time.c"
 
 objrtn	Time_initialize(void)
 {
