@@ -33,6 +33,9 @@ Debug libraries may be produced as follows:
 
 dmake -d MAKEFILE.DM  DEBUG=1
 
+NOTE: the default dpp Strategy 2 is faster than Strategy 1 on modern systems
+(see docs/BUILD.txt).  Strategy 1 is deprecated.
+
 If you want to build for a different dpp Strategy (like S1) use:
 Note that ../include/generics.h must be rebuilt first.
 

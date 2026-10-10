@@ -3827,6 +3827,41 @@ static	void	expand_get_args(object	prototype,
 
 /*  process between braces  */
 
+/*  Strategy 1 methods receive their variable arguments as a real "...", so the
+    va_list _rest_ that strategy 2 passes in must be built in the method.
+    Returns the name of the argument before "...", or NULL if there is none.  */
+
+static	char	*s1_rest_arg(object prototype)
+{
+	object	pseq, vseq, pnxt, vnxt;
+	char	*last = NULL;
+
+	if (Strategy != 1  ||  !prototype)
+		return NULL;
+	if (!(pseq = gPrototype(prototype))  ||  !(vseq = gParameters(prototype)))
+		return NULL;
+	pseq = gSequence(pseq);
+	vseq = gSequence(vseq);
+	while (pnxt = gNext(pseq), vnxt = gNext(vseq))
+		if (streq(gStringValue(pnxt), "..."))  {
+			gDispose(pseq);
+			gDispose(vseq);
+			return last;
+		} else
+			last = gStringValue(vnxt);
+	return NULL;
+}
+
+static	void	put_text(object sobj, int mclass, char *x, int s)
+{
+	object	tkn = gNewToken(Token, x, 0L, s);
+
+	if (mclass == 1)
+		gPutm(sobj, tkn);
+	else
+		gPut(sobj, tkn);
+}
+
 static	void
 pp_body(char	*p,
 	object  fobj,
@@ -3837,6 +3872,7 @@ pp_body(char	*p,
 	object	prototype)
 {
 	int	bracelevel = 1;
+	char	*rest_arg;
 
 	if (!tkn)
 		return;
@@ -3857,12 +3893,27 @@ pp_body(char	*p,
 	}
 	if (convert  &&  Strategy != 1  &&  prototype)
 		expand_get_args(prototype, mclass, sobj);
+	if (rest_arg = s1_rest_arg(prototype))  {
+		/*  the method body goes in an inner block so its declarations stay first  */
+		put_text(sobj, mclass, "va_list", 1);
+		put_text(sobj, mclass, "_rest_", 0);
+		put_text(sobj, mclass, ";", 1);
+		put_text(sobj, mclass, "va_start", 0);
+		put_text(sobj, mclass, "(", 0);
+		put_text(sobj, mclass, "_rest_", 0);
+		put_text(sobj, mclass, ",", 1);
+		put_text(sobj, mclass, rest_arg, 0);
+		put_text(sobj, mclass, ")", 0);
+		put_text(sobj, mclass, ";", 1);
+		put_text(sobj, mclass, "{", 1);
+	}
 			
 	while (bracelevel  &&  tkn  &&  (tkn = gNextToken(fobj)))  {
 		p = gStringValue(tkn);
-		if (*p == '}'  &&  bracelevel)
-			bracelevel--;
-		else if (*p == '{')
+		if (*p == '}'  &&  bracelevel)  {
+			if (!--bracelevel  &&  rest_arg)
+				put_text(sobj, mclass, "}", 1);
+		} else if (*p == '{')
 			bracelevel++;
 #if 0
 		if (streq(p, "GET_ARGS"))  {

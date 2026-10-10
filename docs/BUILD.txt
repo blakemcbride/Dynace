@@ -214,6 +214,26 @@ manage threads.  Use the native mechanisms.  Dynace will be native thread safe.
 
 ================================================================================
 
+Dispatch strategy (STRAT): use the default, -S2
+--------------------------------------
+-S2 (portable C) is the default and is FASTER than -S1 (assembler) on modern
+compilers and CPUs.  Measured on x86-64 Linux, gcc -O2, 50M generic calls:
+
+	-S2	0.35 s		-S1	0.38 s
+
+The compiler already turns each -S2 generic into a single tail jump, while the
+-S1 x86-64 stub must save and restore every argument register on each call.
+-S1 is kept only for compatibility and is deprecated.  To build with it anyway,
+everything (libraries, generics and applications) must use the same strategy:
+
+	make STRAT=-S1 newgens
+	make STRAT=-S1
+
+The single biggest dispatch speedup is turning off object checking in
+production (_CheckObjects_ = 0), about 4x.
+
+================================================================================
+
 Valid Targets
 --------------------------------------
 all			builds changes

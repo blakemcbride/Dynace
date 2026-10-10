@@ -22,7 +22,7 @@ Plan 9: `mk`
 - `DEBUG=1` — debug build (-g)
 - `NATIVE_THREADS=1` — enable pthreads support
 - `BOEHM_GC=1` — use Boehm GC instead of built-in mark-and-sweep
-- `STRAT=-S1|-S2|-S3|-S4` — dispatch strategy (S1=asm fastest, S2=portable C default, S3/S4=C++ inline)
+- `STRAT=-S1|-S2|-S3|-S4` — dispatch strategy (S2=portable C, the default and **faster than S1**; S1=asm, deprecated; S3/S4=C++ inline). See docs/BUILD.txt
 - `ARM32SF=1` — cross-compile for 32-bit ARM
 - `FASTWIDE=1` — fast-and-wide generic cache
 - `THIRTYTWOBIT=1` — force 32-bit build

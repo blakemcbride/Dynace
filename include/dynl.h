@@ -383,14 +383,74 @@ extern	void	_start_threader(char *stkpos), _start_thread(void);
 
 /*  End of thread specific stuff  */
 
-#ifndef	MSC32
-#define IGTYPE	static
-#else
-#define IGTYPE	static	__declspec(naked) 
+#if	defined(__GNUC__)  &&  defined(__x86_64__)  &&  defined(__ELF__)
+#define	DYN_X64_GENERIC
 #endif
 
-#if	!defined(MSC32)  &&  !defined(__alpha)
+#if	defined(MSC32)
+#define IGTYPE	static	__declspec(naked) 
+#elif	defined(DYN_X64_GENERIC)
+#define IGTYPE	static	__attribute__((naked, used))
+#else
+#define IGTYPE	static
+#endif
+
+#if	!defined(MSC32)  &&  !defined(__alpha)  &&  !defined(DYN_X64_GENERIC)
 #define GenericBody(g)   _jumpToMethod( _FindMethod(self, Generic(g)) )
+#endif
+
+#ifdef	DYN_X64_GENERIC
+/*  Strategy 1 generic on x86-64 System V (gcc/clang, ELF).  The arguments are
+    in registers, so they are saved around the _FindMethod call and restored
+    before jumping to the method, which then sees the original call exactly.
+    That includes %al, the vector register count for variable arguments.
+    216 bytes keep %rsp 16-byte aligned for the call and the movaps.  */
+#define	_dyn_str2(x)	#x
+#define	_dyn_str(x)	_dyn_str2(x)
+#ifdef	__CET__
+#define	_DYN_ENDBR	"endbr64\n\t"
+#else
+#define	_DYN_ENDBR
+#endif
+#define GenericBody(g)						\
+	__asm__ (_DYN_ENDBR					\
+		 "subq	$216, %rsp\n\t"				\
+		 "movq	%rdi, 0(%rsp)\n\t"			\
+		 "movq	%rsi, 8(%rsp)\n\t"			\
+		 "movq	%rdx, 16(%rsp)\n\t"			\
+		 "movq	%rcx, 24(%rsp)\n\t"			\
+		 "movq	%r8, 32(%rsp)\n\t"			\
+		 "movq	%r9, 40(%rsp)\n\t"			\
+		 "movq	%rax, 48(%rsp)\n\t"			\
+		 "movaps	%xmm0, 64(%rsp)\n\t"			\
+		 "movaps	%xmm1, 80(%rsp)\n\t"			\
+		 "movaps	%xmm2, 96(%rsp)\n\t"			\
+		 "movaps	%xmm3, 112(%rsp)\n\t"			\
+		 "movaps	%xmm4, 128(%rsp)\n\t"			\
+		 "movaps	%xmm5, 144(%rsp)\n\t"			\
+		 "movaps	%xmm6, 160(%rsp)\n\t"			\
+		 "movaps	%xmm7, 176(%rsp)\n\t"			\
+		 "movq	" _dyn_str(Generic(g)) "@GOTPCREL(%rip), %rsi\n\t" \
+		 "movq	(%rsi), %rsi\n\t"				\
+		 "call	_FindMethod@PLT\n\t"			\
+		 "movq	%rax, %r11\n\t"				\
+		 "movq	0(%rsp), %rdi\n\t"			\
+		 "movq	8(%rsp), %rsi\n\t"			\
+		 "movq	16(%rsp), %rdx\n\t"			\
+		 "movq	24(%rsp), %rcx\n\t"			\
+		 "movq	32(%rsp), %r8\n\t"			\
+		 "movq	40(%rsp), %r9\n\t"			\
+		 "movq	48(%rsp), %rax\n\t"			\
+		 "movaps	64(%rsp), %xmm0\n\t"			\
+		 "movaps	80(%rsp), %xmm1\n\t"			\
+		 "movaps	96(%rsp), %xmm2\n\t"			\
+		 "movaps	112(%rsp), %xmm3\n\t"			\
+		 "movaps	128(%rsp), %xmm4\n\t"			\
+		 "movaps	144(%rsp), %xmm5\n\t"			\
+		 "movaps	160(%rsp), %xmm6\n\t"			\
+		 "movaps	176(%rsp), %xmm7\n\t"			\
+		 "addq	$216, %rsp\n\t"				\
+		 "jmp	*%r11\n\t")
 #endif
 
 #ifdef	__alpha

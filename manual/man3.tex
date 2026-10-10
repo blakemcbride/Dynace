@@ -2223,6 +2223,8 @@ assembler piece is unavailable). @strong{Note:} Due to the ever-changing
 CPU landscape, the difficulty in maintaining this code, the lack of portability,
 and the decreased value due to compiler optimizations, Strategy 1 has
 been deprecated.  Strategy 2 (the default strategy) is recommended.
+@strong{Strategy 2 is also faster than Strategy 1} on modern compilers and
+CPUs (see @code{docs/BUILD.txt}).
 
 
 Strategy 2 uses a total C-based approach.  This is the default and

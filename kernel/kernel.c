@@ -1694,6 +1694,11 @@ LOCAL	objrtn	Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 	int	n;	/*  number of superclasses		*/
 	object	scvp[MIS];/*  array of superclasses		*/
 	char	buf[256];
+#if	DPP_STRATEGY == 1
+	va_list	_rest_;
+
+	va_start(_rest_, superclasses);
+#endif
 
 	ChkArg(mc, 4);
 	if (!IsClass(mc))
@@ -1739,6 +1744,11 @@ LOCAL objrtn	Class_cm_gNewClass(object self, char *name, int ivsize, int cvsize,
 	object	scvp2[MIS];/*  array of meta superclasses	*/
 	object	mc;	   /*  metaclass			*/
 	char	meta[256]; /*  metaclass name			*/
+#if	DPP_STRATEGY == 1
+	va_list	_rest_;
+
+	va_start(_rest_, superclasses);
+#endif
 
 	if (superclasses)
 		for (n=0, sc=superclasses ; sc && n < MIS ; sc = GetArg(object), ++n)  {
