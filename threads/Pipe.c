@@ -70,13 +70,18 @@ static	Pipe_cv_t	*Pipe_cv;
 
 #line 50 "Pipe.d"
 #include <string.h> 
+#include <limits.h> 
 
 
 PMETHOD objrtn Pipe_New(object self, char *name, int bufsiz)
 { 
-	object obj = oSuper(Pipe_c, gNew, self)(self); 
-	ivType *iv = ivPtr(obj); 
+	object obj; 
+	ivType *iv; 
 
+	if (bufsiz <= 0) 
+		return gError(self, "Pipe buffer size must be positive\n"); 
+	obj = oSuper(Pipe_c, gNew, self)(self); 
+	iv = ivPtr(obj); 
 	iv->iObj = obj; 
 	if (name) { 
 		iv->iName = Tnalloc(char, strlen(name)+1); 
@@ -101,6 +106,8 @@ imeth int Pipe_im_gWrite(object self, char *buf, unsigned sz)
 
 	if (iv->iWblk) 
 		return 0; 
+	if (sz > INT_MAX) 
+		sz = INT_MAX; 
 	while (sz) { 
 
 
@@ -131,12 +138,14 @@ imeth int Pipe_im_gWrite(object self, char *buf, unsigned sz)
 		} 
 
 
+		INHIBIT_THREADER; 
 		room = (int)(iv->iBufsiz - (iv->iWptr - iv->iRptr)); 
 		if (sz && !room && iv->iWblock) { 
 			iv->iWblk = gFindStr(Thread, NULL); 
 			gHold(iv->iWblk); 
 			iv->iWblk = NULL; 
 		} 
+		ENABLE_THREADER; 
 		if (!iv->iWblock) 
 			break; 
 	} 
@@ -151,6 +160,8 @@ imeth int Pipe_im_gRead(object self, char *buf, unsigned sz)
 
 	if (iv->iRblk) 
 		return 0; 
+	if (sz > INT_MAX) 
+		sz = INT_MAX; 
 	while (sz) { 
 		ba = (int)(iv->iWptr - iv->iRptr); 
 		bg = ba < (int) sz ? ba : (int) sz; 
@@ -164,12 +175,14 @@ imeth int Pipe_im_gRead(object self, char *buf, unsigned sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
+		INHIBIT_THREADER; 
 		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 
 			iv->iRblk = NULL; 
 		} 
+		ENABLE_THREADER; 
 		if (!iv->iRblock) 
 			break; 
 	} 
@@ -204,12 +217,14 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
+		INHIBIT_THREADER; 
 		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 
 			iv->iRblk = NULL; 
 		} 
+		ENABLE_THREADER; 
 		if (!iv->iRblock) 
 			break; 
 	} 
@@ -265,7 +280,7 @@ imeth long Pipe_im_gLength(object self)
 	} 
 #endif 
 
-#line 245 "Pipe.d"
+#line 260 "Pipe.d"
 		return (long)(iv->iWptr - iv->iRptr); 
 } 
 
@@ -279,7 +294,7 @@ imeth int Pipe_im_gRoom(object self)
 	} 
 #endif 
 
-#line 257 "Pipe.d"
+#line 272 "Pipe.d"
 		return (int)(iv->iBufsiz - (iv->iWptr - iv->iRptr)); 
 } 
 
@@ -306,7 +321,7 @@ imeth long Pipe_im_gAdvance(object self, long sz)
 	int bg; 
 	long tr=0; 
 
-	if (iv->iRblk) 
+	if (iv->iRblk || sz <= 0) 
 		return 0; 
 	while (sz) { 
 		ba = (int)(iv->iWptr - iv->iRptr); 
@@ -319,12 +334,14 @@ imeth long Pipe_im_gAdvance(object self, long sz)
 				gRelease(iv->iWblk, 0); 
 		} 
 
+		INHIBIT_THREADER; 
 		ba = (int)(iv->iWptr - iv->iRptr); 
 		if (sz && !ba && iv->iRblock) { 
 			iv->iRblk = gFindStr(Thread, NULL); 
 			gHold(iv->iRblk); 
 			iv->iRblk = NULL; 
 		} 
+		ENABLE_THREADER; 
 		if (!iv->iRblock) 
 			break; 
 	} 
@@ -343,7 +360,7 @@ imeth int Pipe_im_gEndOfStream(object self)
 } 
 
 
-#line 347 "Pipe.c"
+#line 364 "Pipe.c"
 
 objrtn	Pipe_initialize(void)
 {

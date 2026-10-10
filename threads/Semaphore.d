@@ -47,15 +47,19 @@ defclass  Semaphore  {
 
 cmeth	gNewSemaphore, <vNew> : Semaphore_New (object self, char *name, int cnt, int mx)
 {
-	object	obj = gNew(super);
-	ivType	*iv = ivPtr(obj);
+	object	obj;
+	ivType	*iv;
 	
+	if (mx < 1)
+		return gError(self, "Semaphore maximum must be at least 1\n");
+	obj = gNew(super);
+	iv = ivPtr(obj);
 	iObj = obj;
 	if (name)  {
 		iName = Tnalloc(char, strlen(name)+1);
 		strcpy(iName, name);
 	}
-	iCount = cnt;
+	iCount = cnt < 0 ? 0 : cnt > mx ? mx : cnt;
 	iMaximum = mx;
 	iNext = cMsl;
 	cMsl = iv;
@@ -76,7 +80,7 @@ imeth	int	gWaitFor(object self)
 		ENABLE_THREADER;
 		return 0;
 	}
-	if (iCount)  {
+	if (iCount > 0)  {
 		iCount--;
 		ENABLE_THREADER;
 		return 0;
@@ -96,11 +100,13 @@ imeth	gRelease : Release (object self, int cnt)
 {
 	object	thread;
 
+	INHIBIT_THREADER;
 	iCount += cnt;
 	if (iCount > iMaximum)
 		iCount = iMaximum;
-	INHIBIT_THREADER;
-	while (iCount  &&  iWaiting_threads  &&  (thread = gFirst(iWaiting_threads)))  {
+	else if (iCount < 0)
+		iCount = 0;
+	while (iCount > 0  &&  iWaiting_threads  &&  (thread = gFirst(iWaiting_threads)))  {
 		gDisposeFirst(iWaiting_threads);
 		gReleaseSemaphore(thread);
 		iCount--;
@@ -112,10 +118,13 @@ imeth	gRelease : Release (object self, int cnt)
 imeth	object	gDispose, gDeepDispose (object self)
 {
 	ivType	*t, *p;
+	object	thread;
 	
 	INHIBIT_THREADER;
-	while (iWaiting_threads  &&  gFirst(iWaiting_threads))
-		Release(self, iMaximum);
+	while (iWaiting_threads  &&  (thread = gFirst(iWaiting_threads)))  {
+		gDisposeFirst(iWaiting_threads);
+		gReleaseSemaphore(thread);
+	}
 	if (iWaiting_threads)
 		gDispose(iWaiting_threads);
 	if (iName)

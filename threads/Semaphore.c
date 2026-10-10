@@ -69,15 +69,19 @@ static	Semaphore_cv_t	*Semaphore_cv;
 
 PMETHOD objrtn Semaphore_New(object self, char *name, int cnt, int mx)
 { 
-	object obj = oSuper(Semaphore_c, gNew, self)(self); 
-	ivType *iv = ivPtr(obj); 
+	object obj; 
+	ivType *iv; 
 
+	if (mx < 1) 
+		return gError(self, "Semaphore maximum must be at least 1\n"); 
+	obj = oSuper(Semaphore_c, gNew, self)(self); 
+	iv = ivPtr(obj); 
 	iv->iObj = obj; 
 	if (name) { 
 		iv->iName = Tnalloc(char, strlen(name)+1); 
 		strcpy(iv->iName, name); 
 	} 
-	iv->iCount = cnt; 
+	iv->iCount = cnt < 0 ? 0 : cnt > mx ? mx : cnt; 
 	iv->iMaximum = mx; 
 	iv->iNext = Semaphore_cv->cMsl; 
 	Semaphore_cv->cMsl = iv; 
@@ -98,7 +102,7 @@ imeth int Semaphore_im_gWaitFor(object self)
 		ENABLE_THREADER; 
 		return 0; 
 	} 
-	if (iv->iCount) { 
+	if (iv->iCount > 0) { 
 		iv->iCount--; 
 		ENABLE_THREADER; 
 		return 0; 
@@ -118,11 +122,13 @@ PMETHOD objrtn Release(object self, int cnt)
 { Semaphore_iv_t *iv = GetIVs(Semaphore, self);
 	object thread; 
 
+	INHIBIT_THREADER; 
 	iv->iCount += cnt; 
 	if (iv->iCount > iv->iMaximum) 
 		iv->iCount = iv->iMaximum; 
-	INHIBIT_THREADER; 
-	while (iv->iCount && iv->iWaiting_threads && (thread = gFirst(iv->iWaiting_threads))) { 
+	else if (iv->iCount < 0) 
+		iv->iCount = 0; 
+	while (iv->iCount > 0 && iv->iWaiting_threads && (thread = gFirst(iv->iWaiting_threads))) { 
 		gDisposeFirst(iv->iWaiting_threads); 
 		gReleaseSemaphore(thread); 
 		iv->iCount--; 
@@ -134,10 +140,13 @@ PMETHOD objrtn Release(object self, int cnt)
 imeth objrtn Semaphore_im_gDispose(object self)
 { Semaphore_iv_t *iv = GetIVs(Semaphore, self);
 	ivType *t, *p; 
+	object thread; 
 
 	INHIBIT_THREADER; 
-	while (iv->iWaiting_threads && gFirst(iv->iWaiting_threads)) 
-		Release(self, iv->iMaximum); 
+	while (iv->iWaiting_threads && (thread = gFirst(iv->iWaiting_threads))) { 
+		gDisposeFirst(iv->iWaiting_threads); 
+		gReleaseSemaphore(thread); 
+	} 
 	if (iv->iWaiting_threads) 
 		gDispose(iv->iWaiting_threads); 
 	if (iv->iName) 
@@ -231,7 +240,7 @@ imeth objrtn Semaphore_im_gCopy(object self)
 } 
 
 
-#line 235 "Semaphore.c"
+#line 244 "Semaphore.c"
 
 objrtn	Semaphore_initialize(void)
 {

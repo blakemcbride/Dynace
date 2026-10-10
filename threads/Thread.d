@@ -59,6 +59,7 @@ defclass  Thread  {
 	struct _Thread_iv_t *iTwait;	/*  thread this thread is waiting for */
 	struct _Thread_iv_t *iNext, *iPrev;/*  thread queue		*/
 	object		iSema;		/*  semaphore waiting for	*/
+	int		iNo_switch;	/*  saved _no_context_switch while not running */
 /*	void		*iKmrp;		/*  kernel memory range pointer */
 
  class:
@@ -131,14 +132,13 @@ static	void del_tnr(ivType *t);
 #define NEXT_THREAD			\
 	if (cCpq)			\
 		cCpq->thread = cCpq->thread->iNext;\
-	if (cGkt  &&  kbhit())  {	\
+	if (cGkt  &&  (!cMpq  ||  kbhit()))  {	\
 		Release(cGkt->iObj, 0);	\
 		cGkt = NULL;		\
 	}				\
-	if (cCpq = cMpq)		\
-		cCt = cCpq->thread;	\
-	else				\
-		exit(0)		/*  no ready threads  */
+	if (!(cCpq = cMpq))		\
+		no_ready_threads();	\
+	cCt = cCpq->thread
 
 #define add_tnr(t)			\
 	if (t->iNext = cTnr)		\
@@ -168,6 +168,8 @@ static	void free_pq(PQ t);
 static	void delete_sema_waits(ivType *t);
 static	void _dynace_yield(void);
 static  char *strsave(char *);
+static	void	no_ready_threads(void);
+static	PQ	find_pq(int priority);
 
 #ifdef	FUNCTIONS
 
@@ -175,17 +177,31 @@ static	void	next_thread(void)
 {
 	if (cCpq)
 		cCpq->thread = cCpq->thread->iNext;
-	if (cGkt  &&  kbhit())  {
+	if (cGkt  &&  (!cMpq  ||  kbhit()))  {
 		Release(cGkt->iObj, 0);
 		cGkt = NULL;
 	}
-	if (cCpq = cMpq)
-		cCt = cCpq->thread;
-	else
-		exit(0);	/*  no ready threads  */
+	if (!(cCpq = cMpq))
+		no_ready_threads();
+	cCt = cCpq->thread;
 }
 
 #endif
+
+/*  Called when no thread is ready to run.  If every remaining thread is done
+    the program is finished; otherwise the remaining threads are deadlocked.  */
+
+static	void	no_ready_threads(void)
+{
+	ivType	*t;
+
+	for (t=cTnr ; t ; t=t->iNext)
+		if (t->iState != DONE_THREAD)  {
+			fprintf(stderr, "Dynace: deadlock - no threads are ready to run\n");
+			exit(1);
+		}
+	exit(0);
+}
 
 /*  start_thread takes a thread and puts it in the running threads priority
     queue	*/
@@ -295,7 +311,8 @@ imeth	gKill : Kill (object self, int rtn)
 	if (iState == NEW_THREAD  ||  iState == RUNNING_THREAD)  {
 		stop_thread(iv);
 		add_tnr(iv);
-	} else if (iState == WAITING_FOR_THREAD)
+	} else if (iState == WAITING_FOR_THREAD  ||
+		   iState == HOLD_THREAD  &&  iPrev_state == WAITING_FOR_THREAD)
 		delete_wait(iv);
 	iState = DONE_THREAD;
 	if (iSema)
@@ -315,7 +332,7 @@ imeth	gKill : Kill (object self, int rtn)
 	}
 #endif
 	ENABLE_THREADER;
-	if (!cCpq  ||  cCt == iv)  {
+	if (cCt == iv)  {
 		cCt = NULL;
 		_dynace_yield();
 	}
@@ -330,7 +347,8 @@ imeth	object	gDispose, gDeepDispose : Dispose (object self)
 	if (iState == NEW_THREAD  ||  iState == RUNNING_THREAD)
 		stop_thread(iv);
 	else  {
-		if (iState == WAITING_FOR_THREAD)
+		if (iState == WAITING_FOR_THREAD  ||
+		    iState == HOLD_THREAD  &&  iPrev_state == WAITING_FOR_THREAD)
 			delete_wait(iv);
 		del_tnr(iv);
 	}
@@ -361,7 +379,7 @@ imeth	object	gDispose, gDeepDispose : Dispose (object self)
 	free(iName);
 	gDispose(super);
 	ENABLE_THREADER;
-	if (!cCpq  ||  cCt == iv)  {
+	if (cCt == iv)  {
 		cCt = NULL;
 		_dynace_yield();
 	}
@@ -383,27 +401,26 @@ cmeth	gNew()
 cmeth	gNewThread, <vNew> (object self, char *name, ifun fun, int priority, void *arg, int run, int autoDispose)
 {
 	char	buf[30];
-	object	obj = gNew(super);
-	ivType	*iv = ivPtr(obj);
+	object	obj;
+	ivType	*iv;
 	static	gFindStr_t	find = NULL;
 	static	gAddStr_t	add = NULL;
 
 	INHIBIT_THREADER;
-	iObj = obj;
-	if (name)
-		iName = strsave(name);
-	else  {
-		sprintf(buf, "unnamed-%ld", ++cThrno);
-		iName = strsave(buf);
+	if (!name)  {
+		sprintf(buf, "unnamed-%lu", ++cThrno);
+		name = buf;
 	}
 	if (!find)
 		find = imcPointer(StringDictionary, gFindStr);
-	if ((*find)(cThreads, iName))  {
-		free(iName);
-		gDispose(super);
+	if ((*find)(cThreads, name))  {
 		ENABLE_THREADER;
 		return NULL;
 	}
+	obj = gNew(super);
+	iv = ivPtr(obj);
+	iObj = obj;
+	iName = strsave(name);
 		
 	iFun = (int (*)(void *)) fun;
 	iPriority = priority;
@@ -587,6 +604,7 @@ static	void	_dynace_yield(void)
 		/* save current stack frame (approximately 0x70 byte), too */
 		mark -= 0x80;
 #endif
+		cCt->iNo_switch = _no_context_switch;
 		cCt->iStack_location = mark;
 		if ((cCt->iStack_size = cTs_stkpos - cCt->iStack_location) < 0)
 			cCt->iStack_size = 0;
@@ -618,6 +636,9 @@ static	void	_dynace_yield(void)
 	/*  choose next thread  */
 
 	NEXT_THREAD;
+
+	/*  the inhibit count belongs to the thread that set it  */
+	_no_context_switch = cCt->iState == NEW_THREAD ? 0 : cCt->iNo_switch;
 
 	if (cCt->iState == NEW_THREAD)
 		longjmp(_t_start, 1);
@@ -680,8 +701,14 @@ imeth	gChangePriority(object self, int p)
 	if (f = iState == NEW_THREAD  ||  iState == RUNNING_THREAD)
 		stop_thread(iv);
 	iPriority = p;
-	if (f)
+	if (f)  {
 		start_thread(iv);
+		if (cCt == iv)  {
+			/*  stop_thread cleared cCpq; make this thread current in its new queue  */
+			cCpq = find_pq(p);
+			cCpq->thread = iv;
+		}
+	}
 	if (cCt == iv  &&  p < oldp  &&  cMpq->thread->iPriority > p  ||
 	    cCt != iv  &&  f  &&  p > cCt->iPriority)
 		_dynace_yield();
@@ -729,11 +756,15 @@ static	void	resolve_waits(ivType *t)
 		ivType	*tt;
 
 		tt = ivPtr(thread);
-		tt->iState = RUNNING_THREAD;
-		del_tnr(tt);
-		start_thread(tt);
+		if (tt->iState == HOLD_THREAD)
+			tt->iPrev_state = RUNNING_THREAD;
+		else  {
+			tt->iState = RUNNING_THREAD;
+			del_tnr(tt);
+			start_thread(tt);
+		}
 		tt->iWr = t->iRtnVal;
-		t->iTwait = NULL;
+		tt->iTwait = NULL;
 		(*disposeFirst)(t->iWait);
 	}
 	ENABLE_THREADER;
@@ -773,6 +804,14 @@ static	void	delete_wait(ivType *t)
 	ENABLE_THREADER;
 }
 
+static	PQ	find_pq(int priority)
+{
+	PQ	pq;
+
+	for (pq=cMpq ; pq  &&  pq->priority != priority ; pq=pq->next);
+	return pq;
+}
+
 static	PQ	new_pq(void)
 {
 	PQ	t;
@@ -809,7 +848,7 @@ cmeth	int	gBlockingGetkey(object self)
 	USE(self);
 	if (cGkt)
 		return -1;
-	if (!kbhit())  {
+	if (cCt  &&  !kbhit())  {
 		cGkt = cCt;
 		Hold(cCt->iObj);
 	}
@@ -866,12 +905,34 @@ static	objrtn	MarkThreadStacks(object self)
 
 #if	defined(unix)  ||  defined(__APPLE__)  ||  defined(PLAN9)  ||  defined(__minix)
 
-/*  not implemented yet on unix.  */
+#ifdef	PLAN9
+
+/*  not implemented on Plan 9  */
 
 int	kbhit(void)
 {
 	return 0;
 }
+
+#else
+
+#include <sys/select.h>
+#include <unistd.h>
+
+/*  true if input is ready on stdin (a whole line when the terminal is line buffered)  */
+
+int	kbhit(void)
+{
+	fd_set		fds;
+	struct timeval	tv;
+
+	FD_ZERO(&fds);
+	FD_SET(STDIN_FILENO, &fds);
+	tv.tv_sec = tv.tv_usec = 0;
+	return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+}
+
+#endif
 
 int	getch(void)
 {

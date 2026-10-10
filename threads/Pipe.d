@@ -48,13 +48,18 @@ defclass  Pipe : Stream  {
 
 
 #include <string.h>
+#include <limits.h>
 
 
 cmeth	gNewWithStrInt, <vNew> : Pipe_New (object self, char *name, int bufsiz)
 {
-	object	obj = gNew(super);
-	ivType	*iv = ivPtr(obj);
+	object	obj;
+	ivType	*iv;
 	
+	if (bufsiz <= 0)
+		return gError(self, "Pipe buffer size must be positive\n");
+	obj = gNew(super);
+	iv = ivPtr(obj);
 	iObj = obj;
 	if (name)  {
 		iName = Tnalloc(char, strlen(name)+1);
@@ -79,6 +84,8 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 	
 	if (iWblk)
 		return 0;
+	if (sz > INT_MAX)
+		sz = INT_MAX;
 	while (sz)  {
 		/*  how much room is left on the write end of the buffer?  */
 
@@ -109,12 +116,14 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 		}
 		/*  the following line is needed because the above release might have cause
 		    more room - if the read thread has a higher priority  */
+		INHIBIT_THREADER;  /*  so the reader can't run between the check and the hold  */
 		room = (int)(iBufsiz - (iWptr - iRptr));
 		if (sz  &&  !room  &&  iWblock)  { /*  there is more - block  */
 			iWblk = gFindStr(Thread, NULL);
 			gHold(iWblk); /*  does a yield  */
 			iWblk = NULL;
 		}
+		ENABLE_THREADER;
 		if (!iWblock)
 			break;
 	}
@@ -129,6 +138,8 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 	
 	if (iRblk)
 		return 0;
+	if (sz > INT_MAX)
+		sz = INT_MAX;
 	while (sz)  {
 		ba = (int)(iWptr - iRptr);
 		bg = ba < (int) sz ? ba : (int) sz;
@@ -142,12 +153,14 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
+		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */
 			iRblk = NULL;
 		}
+		ENABLE_THREADER;
 		if (!iRblock)
 			break;
 	}
@@ -182,12 +195,14 @@ imeth	char	*gGets(object self, char *buf, int sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
+		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */
 			iRblk = NULL;
 		}
+		ENABLE_THREADER;
 		if (!iRblock)
 			break;
 	}
@@ -280,7 +295,7 @@ imeth	long	gAdvance(object self, long sz)
 	int	bg;	/*  bytes to get	*/
 	long	tr=0;	/*  total bytes read	*/
 	
-	if (iRblk)
+	if (iRblk  ||  sz <= 0)
 		return 0;
 	while (sz)  {
 		ba = (int)(iWptr - iRptr);
@@ -293,12 +308,14 @@ imeth	long	gAdvance(object self, long sz)
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
+		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
 			iRblk = gFindStr(Thread, NULL);
 			gHold(iRblk); /*  does a yield  */
 			iRblk = NULL;
 		}
+		ENABLE_THREADER;
 		if (!iRblock)
 			break;
 	}
