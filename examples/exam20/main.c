@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	StartThreader(argc);
 
 
-	t2 = gNewThread(Thread, "t2", myThread, DEFAULT_PRIORITY, "t2", 1, 0);
+	t2 = gNewThread(Thread, "t2", (ifun) myThread, DEFAULT_PRIORITY, "t2", 1, 0);
 
 	myThread("main");
 

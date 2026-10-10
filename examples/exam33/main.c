@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 	/*  Note that the argument list to vBuild MUST ALWAYS end with a
 	    NULL!!  */
 	printf("\nBuild\n");
-	vBuild(a, c, "Part 2", gNewWithStr(String, " Part 3"), NULL);
+	vBuild(a, (char *) c, "Part 2", gNewWithStr(String, " Part 3"), NULL);
 	vBuild(a, NULL, " The last part", NULL);
 	gPrint(a, stdoutStream);
 

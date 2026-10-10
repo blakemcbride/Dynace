@@ -111,6 +111,16 @@ typedef	struct	memory_range  {
 #define EVEN(x)		((((x) + sizeof(void *) - 1) / sizeof(void *)) * sizeof(void *))
 #endif
 
+/*  Objects start on an EVEN() boundary (heap blocks are at least that aligned,
+    stack objects are naturally aligned), so no other address can be an object.  */
+#if	defined(SEGMENTED_MEMORY)
+#define	MISALIGNED(p)	0	/*  16-bit far pointers: offset alignment not checked  */
+#elif	defined(ALIGN4)
+#define	MISALIGNED(p)	((intptr_t)(p) & 3)
+#else
+#define	MISALIGNED(p)	((intptr_t)(p) & (sizeof(void *) - 1))
+#endif
+
 /*  The GC scans conservatively at 2-byte steps, so a probed slot may be
     misaligned.  memcpy keeps those accesses defined (it is a plain move on x86).  */
 #define	SLOT_GET(a)	(memcpy(&slot_tmp_, (a), sizeof(object)), slot_tmp_)
@@ -350,11 +360,7 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 {
 	char	*b;
 
-#ifdef	ALIGN4
-	if ((intptr_t)p & 3)
-#else
-	if ((intptr_t)p & 1)
-#endif
+	if (MISALIGNED(p))
 		return 0;
 	b = (char *) GC_base(p);
 	return b  &&  p + len <= b + GC_size(b);
@@ -523,11 +529,7 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	MBT_t	*t = MBT;
 	long	i;
 
-#ifdef	ALIGN4
-	if ((intptr_t)p & 3)
-#else
-	if ((intptr_t)p & 1)
-#endif
+	if (MISALIGNED(p))
 		return 0;
 	if (!t)
 		return 0;
@@ -634,6 +636,8 @@ LOCAL	_INLINE_	int	_IsObj(object obj)
 	sigsegv_error = 0;
 #endif
 
+	if (MISALIGNED(obj))
+		goto done;
 	if (!chk_ptr((char *) obj, sizeof(Object_iv_t))  &&
 	    !(stack=chk_sptr(obj, sizeof(Object_iv_t))))
 		goto done;

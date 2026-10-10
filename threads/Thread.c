@@ -511,26 +511,64 @@ PMETHOD objrtn Release(object self, int yld)
 	return self; 
 } 
 
+#line 505 "Thread.d"
+static void stack_mark(char **p) 
+{ 
+	void * volatile c; 
+
+	*p = (char *) &c; 
+} 
+
+
+static void (* volatile stack_mark_fp)(char **) = stack_mark; 
+
+#define RESTORE_PAD 256 
+
+static void restore_stack(ivType *t) 
+{ 
+	volatile char pad[RESTORE_PAD]; 
+
+	pad[0] = 0; 
+	if ((char *) pad >= t->iStack_location - 2 * RESTORE_PAD) { 
+		restore_stack(t); 
+		pad[0]++; 
+	} 
+#ifdef sparc 
+	asm("t 3"); 
+#endif 
+
+
+#line 529 "Thread.d"
+	memcpy(t->iStack_location, t->iStack_buf, t->iStack_size); 
+	longjmp(t->iRtn, 1); 
+} 
+
 static void _dynace_yield(void) 
 { 
-	ivType *t; 
+	char *mark; 
 
 
 
 	if (Thread_cv->cCt && Thread_cv->cCt->iState != DONE_THREAD) { 
-#ifdef sparc 
-
-		Thread_cv->cCt->iStack_location = (char *) &t - 0x80; 
-#else 
+#ifdef __GNUC__ 
 
 
-#line 509 "Thread.d"
-		Thread_cv->cCt->iStack_location = (char *) &t; 
+
+		__builtin_unwind_init(); 
 #endif 
 
 
-#line 511 "Thread.d"
-		if ((int)(Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
+#line 546 "Thread.d"
+		(*stack_mark_fp)(&mark); 
+#ifdef sparc 
+
+		mark -= 0x80; 
+#endif 
+
+
+#line 551 "Thread.d"
+		Thread_cv->cCt->iStack_location = mark; 
+		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
 		if (Thread_cv->cCt->iStack_size > Thread_cv->cCt->iStack_buf_size) { 
 			Thread_cv->cCt->iStack_buf_size = ((Thread_cv->cCt->iStack_size / STACKINC) + 1) * STACKINC; 
@@ -538,26 +576,6 @@ static void _dynace_yield(void)
 				Thread_cv->cCt->iStack_buf = Tnrealloc(char, Thread_cv->cCt->iStack_buf_size, Thread_cv->cCt->iStack_buf); 
 			else 
 				Thread_cv->cCt->iStack_buf = Tnalloc(char, Thread_cv->cCt->iStack_buf_size); 
-#if 0 
-			{ 
-				static gChangeRegisteredMemory_t crm=NULL; 
-				static gRegisterMemory_t rm; 
-
-				if (!crm) { 
-					INHIBIT_THREADER; 
-					crm = cmcPointer(Dynace, gChangeRegisteredMemory); 
-					rm = cmcPointer(Dynace, gRegisterMemory); 
-					ENABLE_THREADER; 
-				} 
-				if (Thread_cv->cCt->iKmrp) 
-					(*crm)(Dynace, Thread_cv->cCt->iKmrp, Thread_cv->cCt->iStack_buf, (long) Thread_cv->cCt->iStack_buf_size); 
-				else 
-					Thread_cv->cCt->iKmrp = (void *)(*rm)(Dynace, Thread_cv->cCt->iStack_buf, (long) Thread_cv->cCt->iStack_buf_size); 
-			} 
-#endif 
-
-
-#line 536 "Thread.d"
 		} 
 		if (Thread_cv->cCt->iStack_size) { 
 #ifdef sparc 
@@ -565,7 +583,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 541 "Thread.d"
+#line 565 "Thread.d"
 			memcpy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
@@ -575,8 +593,6 @@ static void _dynace_yield(void)
 
 
 
-			if (Thread_cv->cCt->iStack_size) 
-				memcpy(Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_size); 
 			_tick_count = NTICKS; 
 			return; 
 		} 
@@ -588,18 +604,10 @@ static void _dynace_yield(void)
 
 	if (Thread_cv->cCt->iState == NEW_THREAD) 
 		longjmp(_t_start, 1); 
-	else { 
-#ifdef sparc 
-		if (Thread_cv->cCt->iStack_size){ 
-			asm("t 3"); 
-			memcpy(Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_size); 
-		} 
-#endif 
-
-
-#line 570 "Thread.d"
+	else if (Thread_cv->cCt->iStack_size) 
+		restore_stack(Thread_cv->cCt); 
+	else 
 		longjmp(Thread_cv->cCt->iRtn, 1); 
-	} 
 } 
 
 cmeth objrtn Thread_cm_gFindStr(object self, char *name)
@@ -627,7 +635,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 597 "Thread.d"
+#line 614 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -859,7 +867,7 @@ int getch(void)
 #endif 
 
 
-#line 827 "Thread.d"
+#line 844 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -877,7 +885,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 881 "Thread.c"
+#line 889 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {

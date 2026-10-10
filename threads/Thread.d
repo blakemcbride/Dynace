@@ -495,20 +495,61 @@ imeth	gRelease : Release (object self, int yld)
 	return self;
 }
 
+/*  Thread switching copies each thread's part of the C stack (from the
+    threader's starting position down to the switch point) to and from a
+    buffer.  The saved region must include all of _dynace_yield's frame, so its
+    low end is taken from a frame below it.  A thread's stack is restored from
+    a frame below the region being written, then the thread is resumed with
+    longjmp.  Stacks are assumed to grow down.  */
+
+static	void	stack_mark(char **p)
+{
+	void	* volatile	c;  /*  pointer-typed so the saved region keeps pointer alignment for the GC  */
+
+	*p = (char *) &c;
+}
+
+/*  called through a volatile pointer so it can't be inlined into the caller's frame  */
+static	void	(* volatile stack_mark_fp)(char **) = stack_mark;
+
+#define	RESTORE_PAD	256
+
+static	void	restore_stack(ivType *t)
+{
+	volatile char	pad[RESTORE_PAD];
+
+	pad[0] = 0;
+	if ((char *) pad >= t->iStack_location - 2 * RESTORE_PAD)  {
+		restore_stack(t);  /*  grow the stack until this frame is below the region  */
+		pad[0]++;	   /*  not a tail call  */
+	}
+#ifdef sparc
+	asm("t 3");	/*  flush out registers */
+#endif
+	memcpy(t->iStack_location, t->iStack_buf, t->iStack_size);
+	longjmp(t->iRtn, 1);
+}
+
 static	void	_dynace_yield(void)
 {
-	ivType	*t;
+	char	*mark;
 
 	/*  save current thread stack  */
 
 	if (cCt  &&  cCt->iState != DONE_THREAD)  {
+#ifdef	__GNUC__
+		/*  Spill callee-saved registers into this frame so the saved stack holds
+		    every live object pointer.  setjmp may mangle some (e.g. glibc ebp),
+		    hiding them from the GC.  */
+		__builtin_unwind_init();
+#endif
+		(*stack_mark_fp)(&mark);
 #ifdef sparc
 		/* save current stack frame (approximately 0x70 byte), too */
-		cCt->iStack_location = (char *) &t - 0x80;
-#else
-		cCt->iStack_location = (char *) &t;
+		mark -= 0x80;
 #endif
-		if ((int)(cCt->iStack_size = cTs_stkpos - cCt->iStack_location) < 0)
+		cCt->iStack_location = mark;
+		if ((cCt->iStack_size = cTs_stkpos - cCt->iStack_location) < 0)
 			cCt->iStack_size = 0;
 		if (cCt->iStack_size > cCt->iStack_buf_size)  {
 			cCt->iStack_buf_size = ((cCt->iStack_size / STACKINC) + 1) * STACKINC;
@@ -516,23 +557,6 @@ static	void	_dynace_yield(void)
 				cCt->iStack_buf = Tnrealloc(char, cCt->iStack_buf_size, cCt->iStack_buf);
 			else
 				cCt->iStack_buf = Tnalloc(char, cCt->iStack_buf_size);
-#if 0
-			{
-				static	gChangeRegisteredMemory_t crm=NULL;
-				static	gRegisterMemory_t	  rm;
-
-				if (!crm)  {
-					INHIBIT_THREADER;
-					crm = cmcPointer(Dynace, gChangeRegisteredMemory);
-					rm = cmcPointer(Dynace, gRegisterMemory);
-					ENABLE_THREADER;
-				}
-				if (cCt->iKmrp)
-					(*crm)(Dynace, cCt->iKmrp, cCt->iStack_buf, (long) cCt->iStack_buf_size);
-				else
-					cCt->iKmrp = (void *)(*rm)(Dynace, cCt->iStack_buf, (long) cCt->iStack_buf_size);
-			}
-#endif
 		}
 		if (cCt->iStack_size)  {
 #ifdef sparc
@@ -545,10 +569,8 @@ static	void	_dynace_yield(void)
 
 		if (setjmp(cCt->iRtn))  {
 
-			/*  restore & resume thread  */
+			/*  resumed by restore_stack, stack already restored  */
 
-			if (cCt->iStack_size)
-				memcpy(cCt->iStack_location, cCt->iStack_buf, cCt->iStack_size);
 			_tick_count = NTICKS;
 			return;	
 		}
@@ -560,15 +582,10 @@ static	void	_dynace_yield(void)
 
 	if (cCt->iState == NEW_THREAD)
 		longjmp(_t_start, 1);
-	else  {
-#ifdef sparc
-		if (cCt->iStack_size){
-			asm("t 3");	/*  flush out registers */
-			memcpy(cCt->iStack_location, cCt->iStack_buf, cCt->iStack_size);
-		}
-#endif
+	else if (cCt->iStack_size)
+		restore_stack(cCt);
+	else
 		longjmp(cCt->iRtn, 1);
-	}
 }
 
 cmeth	gFindStr, <vFind> (object self, char *name)

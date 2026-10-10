@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	InitDynace(&argc);
 
 	t = gNew(BTree);
-	gSetFunction(t, cmpfun);
+	gSetFunction(t, (ifun) cmpfun);
 
 	ADD(10);
 	ADD(20);
