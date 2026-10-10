@@ -502,6 +502,41 @@ imeth	gRelease : Release (object self, int yld)
     a frame below the region being written, then the thread is resumed with
     longjmp.  Stacks are assumed to grow down.  */
 
+/*  Copying the raw stack deliberately reads and writes outside any one
+    variable, so AddressSanitizer must not instrument it.  ASan also checks
+    memcpy calls even in uninstrumented functions, so a plain loop is used
+    under ASan.  */
+#if defined(__has_attribute)
+#if __has_attribute(no_sanitize_address)
+#define	NO_SANITIZE_ADDRESS	__attribute__((no_sanitize_address))
+#endif
+#endif
+#ifndef	NO_SANITIZE_ADDRESS
+#define	NO_SANITIZE_ADDRESS
+#endif
+
+#if defined(__has_feature)
+#if __has_feature(address_sanitizer)
+#define	ASAN_BUILD
+#endif
+#endif
+#ifdef	__SANITIZE_ADDRESS__
+#define	ASAN_BUILD
+#endif
+
+#ifdef	ASAN_BUILD
+NO_SANITIZE_ADDRESS
+static	void	stack_copy(char *to, char *from, intptr_t n)
+{
+	volatile char	*d = to;	/*  volatile keeps the loop from becoming a memcpy call  */
+
+	while (n-- > 0)
+		*d++ = *from++;
+}
+#else
+#define	stack_copy(to, from, n)	memcpy((to), (from), (size_t)(n))
+#endif
+
 static	void	stack_mark(char **p)
 {
 	void	* volatile	c;  /*  pointer-typed so the saved region keeps pointer alignment for the GC  */
@@ -514,6 +549,7 @@ static	void	(* volatile stack_mark_fp)(char **) = stack_mark;
 
 #define	RESTORE_PAD	256
 
+NO_SANITIZE_ADDRESS
 static	void	restore_stack(ivType *t)
 {
 	volatile char	pad[RESTORE_PAD];
@@ -526,10 +562,11 @@ static	void	restore_stack(ivType *t)
 #ifdef sparc
 	asm("t 3");	/*  flush out registers */
 #endif
-	memcpy(t->iStack_location, t->iStack_buf, t->iStack_size);
+	stack_copy(t->iStack_location, t->iStack_buf, t->iStack_size);
 	longjmp(t->iRtn, 1);
 }
 
+NO_SANITIZE_ADDRESS
 static	void	_dynace_yield(void)
 {
 	char	*mark;
@@ -562,7 +599,7 @@ static	void	_dynace_yield(void)
 #ifdef sparc
 			asm("t 3");	/* flush out registers */
 #endif
-			memcpy(cCt->iStack_buf, cCt->iStack_location, cCt->iStack_size);
+			stack_copy(cCt->iStack_buf, cCt->iStack_location, cCt->iStack_size);
 		}
 
 		/*  save return address  */

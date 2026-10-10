@@ -511,7 +511,59 @@ PMETHOD objrtn Release(object self, int yld)
 	return self; 
 } 
 
-#line 505 "Thread.d"
+#line 509 "Thread.d"
+#if defined(__has_attribute) 
+#if __has_attribute(no_sanitize_address) 
+#define NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address)) 
+#endif 
+
+
+#line 513 "Thread.d"
+#endif 
+
+
+#line 514 "Thread.d"
+#ifndef NO_SANITIZE_ADDRESS 
+#define NO_SANITIZE_ADDRESS 
+#endif 
+
+
+#line 518 "Thread.d"
+#if defined(__has_feature) 
+#if __has_feature(address_sanitizer) 
+#define ASAN_BUILD 
+#endif 
+
+
+#line 522 "Thread.d"
+#endif 
+
+
+#line 523 "Thread.d"
+#ifdef __SANITIZE_ADDRESS__ 
+#define ASAN_BUILD 
+#endif 
+
+
+#line 527 "Thread.d"
+#ifdef ASAN_BUILD 
+NO_SANITIZE_ADDRESS 
+	static void stack_copy(char *to, char *from, intptr_t n) 
+{ 
+	volatile char *d = to; 
+
+	while (n-- > 0) 
+		*d++ = *from++; 
+} 
+#else 
+
+
+#line 537 "Thread.d"
+#define stack_copy(to, from, n) memcpy((to), (from), (size_t)(n)) 
+#endif 
+
+
+#line 540 "Thread.d"
 static void stack_mark(char **p) 
 { 
 	void * volatile c; 
@@ -524,7 +576,8 @@ static void (* volatile stack_mark_fp)(char **) = stack_mark;
 
 #define RESTORE_PAD 256 
 
-static void restore_stack(ivType *t) 
+NO_SANITIZE_ADDRESS 
+	static void restore_stack(ivType *t) 
 { 
 	volatile char pad[RESTORE_PAD]; 
 
@@ -538,12 +591,13 @@ static void restore_stack(ivType *t)
 #endif 
 
 
-#line 529 "Thread.d"
-	memcpy(t->iStack_location, t->iStack_buf, t->iStack_size); 
+#line 565 "Thread.d"
+	stack_copy(t->iStack_location, t->iStack_buf, t->iStack_size); 
 	longjmp(t->iRtn, 1); 
 } 
 
-static void _dynace_yield(void) 
+NO_SANITIZE_ADDRESS 
+	static void _dynace_yield(void) 
 { 
 	char *mark; 
 
@@ -558,7 +612,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 546 "Thread.d"
+#line 583 "Thread.d"
 		(*stack_mark_fp)(&mark); 
 #ifdef sparc 
 
@@ -566,7 +620,7 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 551 "Thread.d"
+#line 588 "Thread.d"
 		Thread_cv->cCt->iStack_location = mark; 
 		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
@@ -583,8 +637,8 @@ static void _dynace_yield(void)
 #endif 
 
 
-#line 565 "Thread.d"
-			memcpy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
+#line 602 "Thread.d"
+			stack_copy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
 
@@ -635,7 +689,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 614 "Thread.d"
+#line 651 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -867,7 +921,7 @@ int getch(void)
 #endif 
 
 
-#line 844 "Thread.d"
+#line 881 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -885,7 +939,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 889 "Thread.c"
+#line 943 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {
