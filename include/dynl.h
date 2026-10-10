@@ -536,15 +536,20 @@ void	(*gInvalidObject)(object self, int argn, object arg1);
 
 #if	DPP_FASTWIDE
 
+/*  The fill fields must match Object_iv_t (kernel/Object.iv); the field after
+    them is the first instance variable of Behavior (id) or GenericFunction (mc).  */
+
 typedef	struct  {
 	objrtn	fill1;
 	unsigned short fill2, fill3;
+	unsigned long fill4;
 	int	id;
 }	*CHead;
 
 typedef	struct  {
 	objrtn	fill1;
 	unsigned short fill2, fill3;
+	unsigned long fill4;
 	ofun	*mc;
 }	*GHead;
 
@@ -556,7 +561,7 @@ inline	void	gInvalidObject(object self, int argn, object arg1);
 #endif
 
 #if	DPP_STRATEGY <= 2
-void	(*gInvalidObject)(object self, int argn, object arg1);
+extern	void	(*gInvalidObject)(object self, int argn, object arg1);
 #endif
 
 #ifndef	SMALL_FW

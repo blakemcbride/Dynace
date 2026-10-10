@@ -398,6 +398,25 @@ static	MBT_t	*MBT_retired_prev = NULL;	/*  retired before the last GC	*/
 
 static	CRITICALSECTION   PTR_CS;
 
+/*  Cache of recently found blocks, indexed by address, so most checks skip the
+    binary search.  Entries point into the current table, so the cache is cleared
+    whenever the table is replaced and at each garbage collection (retired tables
+    outlive two collections, see above).  */
+
+#define	BLK_CACHE_SHIFT	10
+#define	BLK_CACHE_SIZE	1024
+#define	BLK_CACHE_IDX(p)	(((uintptr_t)(p) >> BLK_CACHE_SHIFT) & (BLK_CACHE_SIZE - 1))
+
+static	MBLK_t	* volatile BlkCache[BLK_CACHE_SIZE];
+
+LOCAL	void	clear_blk_cache(void)
+{
+	int	i;
+
+	for (i=0 ; i < BLK_CACHE_SIZE ; i++)
+		BlkCache[i] = NULL;
+}
+
 #ifdef	HEAP_HAS_HOLES
 LOCAL	void	*real_calloc(size_t n, size_t s);
 LOCAL	void	real_free(void *p);
@@ -466,6 +485,7 @@ LOCAL	void	add_ptr(char *p, unsigned len)
 LOCAL	void	replace_mbt(MBT_t *ot, MBT_t *nt)
 {
 	MBT = nt;
+	clear_blk_cache();
 	if (ot) {
 #ifdef	NATIVE_THREADS
 		ot->next = MBT_retired;
@@ -510,6 +530,7 @@ LOCAL	void	del_ptr(char *p)
 
 LOCAL	void	free_retired_mbt(void)
 {
+	clear_blk_cache();
 #ifdef	NATIVE_THREADS
 	MBT_t	*t;
 
@@ -526,15 +547,23 @@ LOCAL	void	free_retired_mbt(void)
 
 LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 {
-	MBT_t	*t = MBT;
+	MBT_t	*t;
+	MBLK_t	*b;
 	long	i;
 
 	if (MISALIGNED(p))
 		return 0;
-	if (!t)
+	b = BlkCache[BLK_CACHE_IDX(p)];
+	if (b  &&  p >= b->beg  &&  p + len <= b->end)
+		return 1;
+	if (!(t = MBT))
 		return 0;
 	i = find_blk(t, p);
-	return i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end;
+	if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
+		BlkCache[BLK_CACHE_IDX(p)] = &t->blk[i];
+		return 1;
+	}
+	return 0;
 }
 
 #ifdef	HEAP_HAS_HOLES
