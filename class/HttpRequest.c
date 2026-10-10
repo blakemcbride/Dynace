@@ -39,6 +39,7 @@
 #include <stdlib.h> 
 #include <ctype.h> 
 #include <string.h> 
+#include <unistd.h> 
 #include <curl/curl.h> 
 
 #define INTERNET_OPTION_CLIENT_CERT_CONTEXT 84 
@@ -51,7 +52,7 @@
 object	HttpRequest_c;
 
 
-#line 55 "HttpRequest.c"
+#line 56 "HttpRequest.c"
 typedef struct  _HttpRequest_iv_t  {
 	object iUrl;
 	char * iResponseStr;
@@ -70,7 +71,7 @@ typedef struct  _HttpRequest_iv_t  {
 }	HttpRequest_iv_t;
 
 
-#line 74 "HttpRequest.c"
+#line 75 "HttpRequest.c"
 typedef struct  _HttpRequest_cv_t  {
 	object cLogger;
 }	HttpRequest_cv_t;
@@ -79,7 +80,7 @@ static	HttpRequest_cv_t	*HttpRequest_cv;
 
 
 
-#line 32 "HttpRequest.d"
+#line 33 "HttpRequest.d"
 PMETHOD objrtn initInstance(object self, char *url, char *verb); 
 PMETHOD int restCall(object self); 
 
@@ -150,7 +151,7 @@ imeth objrtn HttpRequest_im_gSetSecure(object self, int secure)
 imeth objrtn HttpRequest_im_gSetOutputFileName(object self, char *name)
 { HttpRequest_iv_t *iv = GetIVs(HttpRequest, self);
 	if (iv->iOutputFileName) 
-		gDispose(iv->iOutputFileName); 
+		iv->iOutputFileName = gDispose(iv->iOutputFileName); 
 	if (!name) 
 		return self; 
 	iv->iOutputFileName = gNewWithStr(String, name); 
@@ -176,13 +177,14 @@ imeth void HttpRequest_im_gInternetSetOption(object self, int option, char *buff
 
 imeth void HttpRequest_im_gInternetSetOptionDirect(object self, int option, void *buffer, int buflen)
 { 
-	UNUSED(iv); 
-	UNUSED(option); 
-	UNUSED(buffer); 
-	UNUSED(buflen); 
+	(void) option; 
+	(void) buffer; 
+	(void) buflen; 
 	gTraceCall(StackTracer); 
 	return; 
 } 
+
+
 
 imeth void HttpRequest_im_gSetCertificate(object self, void *cert)
 { HttpRequest_iv_t *iv = GetIVs(HttpRequest, self);
@@ -212,14 +214,13 @@ imeth objrtn HttpRequest_im_gSetContentFromFile(object self, char *filename)
 	if (fbuf == NULL) 
 		return NULL; 
 	iv->iContent = gNewWithStr(String, ""); 
-	while (!feof(fbuf)) { 
-		readCnt = fread(buf, 1, sizeof(buf) - 1, fbuf); 
-		if (readCnt > 0) { 
-			buf[readCnt] = '\0'; 
-			gAppend(iv->iContent, (object)buf); 
-		} 
+	while ((readCnt = fread(buf, 1, sizeof(buf), fbuf)) > 0) 
+		gWrite(iv->iContent, buf, readCnt); 
+	if (ferror(fbuf)) { 
+		iv->iContent = gDispose(iv->iContent); 
+		fclose(fbuf); 
+		return NULL; 
 	} 
-
 	fclose(fbuf); 
 	return self; 
 } 
@@ -253,6 +254,13 @@ cmeth int HttpRequest_cm_gPostAndSaveResponseAsFile(object self, char *url, char
 	return res; 
 } 
 
+#line 210 "HttpRequest.d"
+imeth int HttpRequest_im_gSendRequest(object self, int connFlags)
+{ 
+	(void) connFlags; 
+	return restCall(self); 
+} 
+
 imeth char * HttpRequest_im_gGetErrorMessage(object self)
 { HttpRequest_iv_t *iv = GetIVs(HttpRequest, self);
 	if (!iv->iErrorMessage) 
@@ -282,6 +290,7 @@ imeth char * HttpRequest_im_gGetResponseHeader(object self, char *headerName)
 	if (!iv->iResponseHeaders) 
 		return NULL; 
 	strncpy(tmpbuf, headerName, sizeof(tmpbuf) - 1); 
+	tmpbuf[sizeof(tmpbuf) - 1] = '\0'; 
 	val = gFindValueStr(iv->iResponseHeaders, strlwr(tmpbuf)); 
 	return val ? gStringValue(val) : NULL; 
 } 
@@ -316,6 +325,8 @@ static size_t curl_callback (void *contents, size_t size, size_t nmemb, void *us
 		LOG_ERROR(HttpRequest_cv->cLogger, "ERROR: Failed to expand buffer in curl_callback"); 
 
 		free(p->payload); 
+		p->payload = NULL; 
+		p->size = 0; 
 
 		return 1; 
 	} 
@@ -337,7 +348,7 @@ static size_t curl_callback (void *contents, size_t size, size_t nmemb, void *us
 } 
 
 
-static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch, long timeoutSeconds) 
+static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch, FILE *outputFile, long timeoutSeconds) 
 { 
 	CURLcode rcode; 
 	struct data config; 
@@ -347,10 +358,6 @@ static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch
 	curl_easy_setopt(ch, CURLOPT_DEBUGDATA, &config); 
 	curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L); 
 
-	curl_easy_setopt(ch, CURLOPT_MAXREDIRS, -1L); 
-	curl_easy_setopt(ch, CURLOPT_FOLLOWLOCATION, 1L); 
-	curl_easy_setopt(ch, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL); 
-	curl_easy_setopt(ch, CURLOPT_UNRESTRICTED_AUTH, 1L); 
 
 
 	fetch->payload = (char *) calloc(1, sizeof(fetch->payload)); 
@@ -369,11 +376,17 @@ static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch
 
 	curl_easy_setopt(ch, CURLOPT_URL, url); 
 
+	if (outputFile) { 
 
-	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, curl_callback); 
+		curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, NULL); 
+		curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) outputFile); 
+	} else { 
+
+		curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, curl_callback); 
 
 
-	curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) fetch); 
+		curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) fetch); 
+	} 
 
 
 	curl_easy_setopt(ch, CURLOPT_USERAGENT, "libcurl-agent/1.0"); 
@@ -406,9 +419,22 @@ PMETHOD int restCall(object self)
 	struct curl_slist *headers = NULL; 
 	char *verb = gStringValue(iv->iVerb); 
 	object header, seq; 
+	FILE *outputFile = NULL; 
+	long httpCode = 0; 
+	int ret; 
 
 	curl_fetch.payload = NULL; 
 	curl_fetch.size = 0; 
+
+	if (iv->iOutputFileName) { 
+		outputFile = fopen(gStringValue(iv->iOutputFileName), "wb"); 
+		if (!outputFile) { 
+			if (iv->iErrorMessage) 
+				gDispose(iv->iErrorMessage); 
+			iv->iErrorMessage = vBuild(String, "Unable to open output file - ", gStringValue(iv->iOutputFileName), END); 
+			return -1; 
+		} 
+	} 
 
 
 	if ((ch = curl_easy_init()) == NULL) { 
@@ -417,6 +443,8 @@ PMETHOD int restCall(object self)
 		iv->iErrorMessage = gNewWithStr(String, "ERROR: Failed to create curl handle in fetch_session"); 
 
 		LOG_ERROR(HttpRequest_cv->cLogger, "Failed to create curl handle in fetch_session"); 
+		if (outputFile) 
+			fclose(outputFile); 
 
 		return CURLE_FAILED_INIT; 
 	} 
@@ -426,27 +454,60 @@ PMETHOD int restCall(object self)
 	headers = curl_slist_append(headers, "Expect:"); 
 
 
-	if (!strcmp(verb, "POST")) 
-		curl_easy_setopt(ch, CURLOPT_POST, 1L); 
-	else if (!strcmp(verb, "GET")) 
+	if (!strcmp(verb, "GET")) 
 		curl_easy_setopt(ch, CURLOPT_HTTPGET, 1L); 
-	else if (!strcmp(verb, "PUT")) 
-		curl_easy_setopt(ch, CURLOPT_PUT, 1L); 
+	else if (!strcmp(verb, "HEAD")) 
+		curl_easy_setopt(ch, CURLOPT_NOBODY, 1L); 
+	else { 
+
+		if (iv->iContent || !strcmp(verb, "POST") || !strcmp(verb, "PUT")) { 
+			curl_easy_setopt(ch, CURLOPT_POSTFIELDSIZE, (long) (iv->iContent ? gSize(iv->iContent) : 0)); 
+			curl_easy_setopt(ch, CURLOPT_POSTFIELDS, iv->iContent ? gStringValue(iv->iContent) : ""); 
+		} 
+		if (strcmp(verb, "POST")) 
+			curl_easy_setopt(ch, CURLOPT_CUSTOMREQUEST, verb); 
+	} 
 
 	curl_easy_setopt(ch, CURLOPT_HTTPHEADER, headers); 
-	if (!strcmp(verb, "POST") && iv->iContent) 
-		curl_easy_setopt(ch, CURLOPT_POSTFIELDS, gStringValue(iv->iContent)); 
+
+	if (iv->iUser) 
+		curl_easy_setopt(ch, CURLOPT_USERNAME, gStringValue(iv->iUser)); 
+	if (iv->iPass) 
+		curl_easy_setopt(ch, CURLOPT_PASSWORD, gStringValue(iv->iPass)); 
+	if (iv->iCertificate) 
+		curl_easy_setopt(ch, CURLOPT_SSLCERT, (char *) iv->iCertificate); 
 
 
-	rcode = fetch_url(ch, gStringValue(iv->iUrl), cf, (long) iv->iTimeoutSeconds); 
+	rcode = fetch_url(ch, gStringValue(iv->iUrl), cf, outputFile, (long) iv->iTimeoutSeconds); 
+	ret = rcode; 
 
 	if (rcode != CURLE_OK) { 
 		if (iv->iErrorMessage) 
 			gDispose(iv->iErrorMessage); 
 		iv->iErrorMessage = gNewWithStr(String, (char *) curl_easy_strerror(rcode)); 
 		LOG_DEBUG(HttpRequest_cv->cLogger, (char *) curl_easy_strerror(rcode)); 
-	} else 
-		LOG_DEBUG(HttpRequest_cv->cLogger, "HttpRequestLinux - succeeded"); 
+	} else { 
+		curl_easy_getinfo(ch, CURLINFO_RESPONSE_CODE, &httpCode); 
+		if (httpCode >= 300) { 
+			char codebuf[32]; 
+			sprintf(codebuf, "%ld", httpCode); 
+			if (iv->iErrorMessage) 
+				gDispose(iv->iErrorMessage); 
+			iv->iErrorMessage = vBuild(String, "HTTP Error Response - ", codebuf, END); 
+			ret = (int) httpCode; 
+		} else { 
+			if (iv->iErrorMessage) 
+				iv->iErrorMessage = gDispose(iv->iErrorMessage); 
+			LOG_DEBUG(HttpRequest_cv->cLogger, "HttpRequestLinux - succeeded"); 
+		} 
+	} 
+
+	if (outputFile && fclose(outputFile) && ret == CURLE_OK) { 
+		if (iv->iErrorMessage) 
+			gDispose(iv->iErrorMessage); 
+		iv->iErrorMessage = vBuild(String, "Error writing output file - ", gStringValue(iv->iOutputFileName), END); 
+		ret = CURLE_WRITE_ERROR; 
+	} 
 
 
 	curl_easy_cleanup(ch); 
@@ -454,10 +515,11 @@ PMETHOD int restCall(object self)
 
 	curl_slist_free_all(headers); 
 
-
+	if (iv->iResponseStr) 
+		free(iv->iResponseStr); 
 	iv->iResponseStr = cf->payload; 
 
-	return rcode; 
+	return ret; 
 } 
 
 static void class_init() 
@@ -478,18 +540,25 @@ static void dump(const char *text, FILE *stream, unsigned char *ptr, size_t size
 	size_t c; 
 
 	unsigned int width = 0x10; 
-	int logLevel = gGetLogLevel(HttpRequest_cv->cLogger); 
+	int logLevel; 
 	int fd; 
 
+	if (!HttpRequest_cv->cLogger) 
+		return; 
+	logLevel = gGetLogLevel(HttpRequest_cv->cLogger); 
 	if (logLevel < LOG_LEVEL_DEBUG) 
 		return; 
 	fd = gOpenLogFile(HttpRequest_cv->cLogger); 
+	if (fd == -1) 
+		return; 
 	if (fd == STDOUT_FILENO) 
 		stream = stdout; 
 	else if (fd == STDERR_FILENO) 
 		stream = stderr; 
-	else 
-		stream = fdopen(fd, "a"); 
+	else if (!(stream = fdopen(fd, "a"))) { 
+		gCloseLogFile(HttpRequest_cv->cLogger, fd); 
+		return; 
+	} 
 
 	if (nohex) 
 
@@ -543,7 +612,16 @@ static int my_trace(CURL *handle, curl_infotype type, char *data, size_t size, v
 
 	switch(type) { 
 		case CURLINFO_TEXT: 
-		LOG_DEBUG(HttpRequest_cv->cLogger, data); 
+
+		if (HttpRequest_cv->cLogger) { 
+			char *msg = malloc(size + 1); 
+			if (msg) { 
+				memcpy(msg, data, size); 
+				msg[size] = '\0'; 
+				LOG_DEBUG(HttpRequest_cv->cLogger, msg); 
+				free(msg); 
+			} 
+		} 
 
 		default: 
 		return 0; 
@@ -572,7 +650,7 @@ static int my_trace(CURL *handle, curl_infotype type, char *data, size_t size, v
 	return 0; 
 } 
 
-#line 576 "HttpRequest.c"
+#line 654 "HttpRequest.c"
 
 objrtn	HttpRequest_initialize(void)
 {
@@ -612,6 +690,7 @@ objrtn	HttpRequest_initialize(void)
 	iMethodFor(HttpRequest, gDeepDispose, HttpRequest_im_gDispose);
 	iMethodFor(HttpRequest, gGetResponse, HttpRequest_im_gGetResponse);
 	iMethodFor(HttpRequest, gSetAuth, HttpRequest_im_gSetAuth);
+	iMethodFor(HttpRequest, gSendRequest, HttpRequest_im_gSendRequest);
 	iMethodFor(HttpRequest, gAddHeader, HttpRequest_im_gAddHeader);
 
 	HttpRequest_cv = GetCVs(HttpRequest);

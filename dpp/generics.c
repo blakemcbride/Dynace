@@ -2170,9 +2170,9 @@ static	objrtn	_gPop(object self)
 	/* 6 */ return (*(gPop_mt)_FindMethod(self, Generic(gPop)))(self);
 }
 
-static	objrtn	_gPopulateStringFromNode(object self, char *to, char *node)
+static	objrtn	_gPopulateStringFromNode(object self, char *to, int size, char *node)
 {
-	/* 6 */ return (*(gPopulateStringFromNode_mt)_FindMethod(self, Generic(gPopulateStringFromNode)))(self, to, node);
+	/* 6 */ return (*(gPopulateStringFromNode_mt)_FindMethod(self, Generic(gPopulateStringFromNode)))(self, to, size, node);
 }
 
 static	long	_gPosition(object self)

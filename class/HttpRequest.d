@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <unistd.h>
 #include <curl/curl.h>
 
 #define INTERNET_OPTION_CLIENT_CERT_CONTEXT      84
@@ -99,7 +100,7 @@ imeth	gSetSecure(int secure)
 imeth	gSetOutputFileName(char *name) 
 {
 	if (iOutputFileName)
-		gDispose(iOutputFileName);
+		iOutputFileName = gDispose(iOutputFileName);
 	if (!name)
 		return self;
 	iOutputFileName = gNewWithStr(String, name);
@@ -125,14 +126,15 @@ imeth void gInternetSetOption(int option, char *buffer, int buflen)
 
 imeth void gInternetSetOptionDirect(int option, void* buffer, int buflen)
 {
-	UNUSED(iv);
-	UNUSED(option);
-	UNUSED(buffer);
-	UNUSED(buflen);
+	(void) option;
+	(void) buffer;
+	(void) buflen;
 	gTraceCall(StackTracer);
 	return;
 }
 
+/*  On this (libcurl) implementation cert is the name of a client certificate
+    file (char *), used as CURLOPT_SSLCERT.  It is not copied.  */
 imeth	void	gSetCertificate(void *cert)
 {
 	iCertificate = cert;
@@ -161,14 +163,13 @@ imeth	gSetContentFromFile(char *filename)
 	if (fbuf == NULL)
 		return NULL;
 	iContent = gNewWithStr(String, "");
-	while (!feof(fbuf)) {
-		readCnt = fread(buf, 1, sizeof(buf) - 1, fbuf);
-		if (readCnt > 0) {
-			buf[readCnt] = '\0';
-			gAppend(iContent, (object)buf);
-		}
+	while ((readCnt = fread(buf, 1, sizeof(buf), fbuf)) > 0)
+		gWrite(iContent, buf, readCnt);
+	if (ferror(fbuf)) {
+		iContent = gDispose(iContent);
+		fclose(fbuf);
+		return NULL;
 	}
-	
 	fclose(fbuf);
 	return self;
 }
@@ -200,6 +201,16 @@ cmeth	int	gPostAndSaveResponseAsFile(char *url, char *contentType, char *content
 	res = gSendRequest(req, flags);
 	gDispose(req);
 	return res;
+}
+
+/*  connFlags are WinINet INTERNET_FLAG_* values on Windows and are ignored here.
+    Returns 0 on success, a CURLcode on a transfer error, the HTTP status code
+    if the server responded with a status >= 300, or -1 if the output file
+    can't be opened.  The error text is available from gGetErrorMessage.  */
+imeth	int	gSendRequest(int connFlags)
+{
+	(void) connFlags;
+	return restCall(self);
 }
 
 imeth	char	*gGetErrorMessage()
@@ -289,7 +300,7 @@ static size_t curl_callback (void *contents, size_t size, size_t nmemb, void *us
 }
 
 /* fetch and return url body via curl */
-static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch, long timeoutSeconds)
+static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch, FILE *outputFile, long timeoutSeconds)
 {
 	CURLcode rcode;                   /* curl result code */
 	struct data config;
@@ -299,11 +310,7 @@ static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch
 	curl_easy_setopt(ch, CURLOPT_DEBUGDATA, &config);
  	curl_easy_setopt(ch, CURLOPT_VERBOSE, 1L);
 
-	curl_easy_setopt(ch, CURLOPT_MAXREDIRS, -1L);
-	curl_easy_setopt(ch, CURLOPT_FOLLOWLOCATION, 1L);
-	curl_easy_setopt(ch, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
-	curl_easy_setopt(ch, CURLOPT_UNRESTRICTED_AUTH, 1L);
- 
+
 	/* init payload */
 	fetch->payload = (char *) calloc(1, sizeof(fetch->payload));
 
@@ -321,11 +328,17 @@ static CURLcode fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch
 	/* set url to fetch */
 	curl_easy_setopt(ch, CURLOPT_URL, url);
 
-	/* set calback function */
-	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, curl_callback);
+	if (outputFile) {
+		/* default write function - fwrite to outputFile */
+		curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, NULL);
+		curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) outputFile);
+	} else {
+		/* set calback function */
+		curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, curl_callback);
 
-	/* pass fetch struct pointer */
-	curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) fetch);
+		/* pass fetch struct pointer */
+		curl_easy_setopt(ch, CURLOPT_WRITEDATA, (void *) fetch);
+	}
 
 	/* set default user agent */
 	curl_easy_setopt(ch, CURLOPT_USERAGENT, "libcurl-agent/1.0");
@@ -358,9 +371,22 @@ private imeth int restCall()
 	struct curl_slist *headers = NULL;                      /* http headers to send with request */
 	char *verb = gStringValue(iVerb);
 	object header, seq;
+	FILE *outputFile = NULL;
+	long httpCode = 0;
+	int ret;
 
 	curl_fetch.payload = NULL;
 	curl_fetch.size = 0;
+
+	if (iOutputFileName) {
+		outputFile = fopen(gStringValue(iOutputFileName), "wb");
+		if (!outputFile) {
+			if (iErrorMessage)
+				gDispose(iErrorMessage);
+			iErrorMessage = vBuild(String, "Unable to open output file - ", gStringValue(iOutputFileName), END);
+			return -1;
+		}
+	}
 
 	/* init curl handle */
 	if ((ch = curl_easy_init()) == NULL) {
@@ -369,6 +395,8 @@ private imeth int restCall()
 		iErrorMessage = gNewWithStr(String, "ERROR: Failed to create curl handle in fetch_session");
 		/* log error */
 		LOG_ERROR(cLogger, "Failed to create curl handle in fetch_session");
+		if (outputFile)
+			fclose(outputFile);
 		/* return error */
 		return CURLE_FAILED_INIT;
 	}
@@ -378,27 +406,60 @@ private imeth int restCall()
 	headers = curl_slist_append(headers, "Expect:");
 	
 	/* set curl options */
-	if (!strcmp(verb, "POST"))
-		curl_easy_setopt(ch, CURLOPT_POST, 1L);
-	else if (!strcmp(verb, "GET"))
+	if (!strcmp(verb, "GET"))
 		curl_easy_setopt(ch, CURLOPT_HTTPGET, 1L);
-	else if (!strcmp(verb, "PUT"))
-		curl_easy_setopt(ch, CURLOPT_PUT, 1L);
-    
+	else if (!strcmp(verb, "HEAD"))
+		curl_easy_setopt(ch, CURLOPT_NOBODY, 1L);
+	else {
+		/* body always comes from iContent, never from the default read callback (stdin) */
+		if (iContent || !strcmp(verb, "POST") || !strcmp(verb, "PUT")) {
+			curl_easy_setopt(ch, CURLOPT_POSTFIELDSIZE, (long) (iContent ? gSize(iContent) : 0));
+			curl_easy_setopt(ch, CURLOPT_POSTFIELDS, iContent ? gStringValue(iContent) : "");
+		}
+		if (strcmp(verb, "POST"))
+			curl_easy_setopt(ch, CURLOPT_CUSTOMREQUEST, verb);
+	}
+
 	curl_easy_setopt(ch, CURLOPT_HTTPHEADER, headers);
-	if (!strcmp(verb, "POST") && iContent)
-		curl_easy_setopt(ch, CURLOPT_POSTFIELDS, gStringValue(iContent));
+
+	if (iUser)
+		curl_easy_setopt(ch, CURLOPT_USERNAME, gStringValue(iUser));
+	if (iPass)
+		curl_easy_setopt(ch, CURLOPT_PASSWORD, gStringValue(iPass));
+	if (iCertificate)
+		curl_easy_setopt(ch, CURLOPT_SSLCERT, (char *) iCertificate);
 
 	/* fetch page and capture return code */
-	rcode = fetch_url(ch, gStringValue(iUrl), cf, (long) iTimeoutSeconds);
+	rcode = fetch_url(ch, gStringValue(iUrl), cf, outputFile, (long) iTimeoutSeconds);
+	ret = rcode;
 
 	if (rcode != CURLE_OK) {
 		if (iErrorMessage)
 			gDispose(iErrorMessage);
 		iErrorMessage = gNewWithStr(String, (char *) curl_easy_strerror(rcode));
 		LOG_DEBUG(cLogger, (char *) curl_easy_strerror(rcode));
-	} else
-		LOG_DEBUG(cLogger, "HttpRequestLinux - succeeded");
+	} else {
+		curl_easy_getinfo(ch, CURLINFO_RESPONSE_CODE, &httpCode);
+		if (httpCode >= 300) {
+			char codebuf[32];
+			sprintf(codebuf, "%ld", httpCode);
+			if (iErrorMessage)
+				gDispose(iErrorMessage);
+			iErrorMessage = vBuild(String, "HTTP Error Response - ", codebuf, END);
+			ret = (int) httpCode;
+		} else {
+			if (iErrorMessage)
+				iErrorMessage = gDispose(iErrorMessage);
+			LOG_DEBUG(cLogger, "HttpRequestLinux - succeeded");
+		}
+	}
+
+	if (outputFile && fclose(outputFile) && ret == CURLE_OK) {
+		if (iErrorMessage)
+			gDispose(iErrorMessage);
+		iErrorMessage = vBuild(String, "Error writing output file - ", gStringValue(iOutputFileName), END);
+		ret = CURLE_WRITE_ERROR;
+	}
 
 	/* cleanup curl handle */
 	curl_easy_cleanup(ch);
@@ -406,10 +467,11 @@ private imeth int restCall()
 	/* free headers */
 	curl_slist_free_all(headers);
 
-	/* check return code */
+	if (iResponseStr)
+		free(iResponseStr);
 	iResponseStr = cf->payload;
 
-	return rcode;
+	return ret;
 }
 
 static	void	class_init()
@@ -430,18 +492,25 @@ static void dump(const char *text, FILE *stream, unsigned char *ptr, size_t size
 	size_t c;
  
 	unsigned int width = 0x10;
-	int logLevel = gGetLogLevel(cLogger);
+	int logLevel;
 	int fd;
 	
+	if (!cLogger)
+		return;
+	logLevel = gGetLogLevel(cLogger);
 	if (logLevel < LOG_LEVEL_DEBUG)
 		return;
 	fd = gOpenLogFile(cLogger);
+	if (fd == -1)
+		return;
 	if (fd == STDOUT_FILENO)
 		stream = stdout;
 	else if (fd == STDERR_FILENO)
 		stream = stderr;
-	else
-		stream = fdopen(fd, "a");
+	else if (!(stream = fdopen(fd, "a"))) {
+		gCloseLogFile(cLogger, fd);
+		return;
+	}
  
 	if (nohex)
 		/* without the hex output, we can fit more on screen */
@@ -495,7 +564,16 @@ static int my_trace(CURL *handle, curl_infotype type, char *data, size_t size, v
  
   switch(type) {
   case CURLINFO_TEXT:
-    LOG_DEBUG(cLogger, data);
+    /* data is not null terminated */
+    if (cLogger) {
+      char *msg = malloc(size + 1);
+      if (msg) {
+        memcpy(msg, data, size);
+        msg[size] = '\0';
+        LOG_DEBUG(cLogger, msg);
+        free(msg);
+      }
+    }
     /* FALLTHROUGH */
   default: /* in case a new one is introduced to shock us */
     return 0;

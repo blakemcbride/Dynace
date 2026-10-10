@@ -58,11 +58,23 @@ private	imeth	initParseInstance(object self, char *content, char *boundary)
 		if (!endPos)
 			return NULL;
 
-		while (*curPos == '\r' || *curPos == '\n' || *curPos == ' ')
+		/*  skip transport padding and the line break ending the boundary line  */
+		while (*curPos == ' ' || *curPos == '\t')
+			curPos++;
+		if (*curPos == '\r' && curPos[1] == '\n')
+			curPos += 2;
+		else if (*curPos == '\n')
 			curPos++;
 
+		/*  the line break before the next boundary belongs to the boundary  */
 		contentLen = endPos - curPos;
+		if (contentLen >= 2 && endPos[-2] == '\r' && endPos[-1] == '\n')
+			contentLen -= 2;
+		else if (contentLen >= 1 && endPos[-1] == '\n')
+			contentLen--;
 		buf = malloc(contentLen + 1);
+		if (!buf)
+			return NULL;
 		memcpy(buf, curPos, contentLen);
 		buf[contentLen] = '\0';
 
@@ -121,7 +133,7 @@ private	imeth	initParseInstance(object self, char *content, char *boundary)
 			break;
 	}
 	
-	return self;
+	return headerErr ? NULL : self;
 }
 
 private	imeth	initNewInstance(object self, char *subType, char *boundaryString)
@@ -129,8 +141,7 @@ private	imeth	initNewInstance(object self, char *subType, char *boundaryString)
 	iBodyParts = gNew(LinkObject);
 	strncpy(iBoundaryString, boundaryString, sizeof(iBoundaryString) - 1);
 	strncpy(iSubType, subType, sizeof(iSubType)-1);
-	strcpy(iContentType, "multipart/");
-	strcat(iContentType, subType);
+	snprintf(iContentType, sizeof(iContentType), "multipart/%s", subType);
 	return self;
 }
 
@@ -173,7 +184,7 @@ imeth	char	*gStringValue()
 		gAppend(iStr, (object)iBoundaryString);
 		gAppend(iStr, (object)"\r\n");
 		gAppend(iStr, (object)gStringValue(bodyPart));
-		gAppend(iStr, (object)"\r\n\r\n");
+		gAppend(iStr, (object)"\r\n");
 	}
 	gAppend(iStr, (object)"--");
 	gAppend(iStr, (object)iBoundaryString);

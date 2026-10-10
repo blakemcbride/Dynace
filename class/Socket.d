@@ -52,6 +52,7 @@
 #endif
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -62,6 +63,11 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <arpa/inet.h>
+#include <poll.h>
+#endif
+
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL	0	//  no SIGPIPE on Windows; SO_NOSIGPIPE used where available
 #endif
 
 #ifdef USE_FCNTL
@@ -163,6 +169,8 @@ static int verify_error=X509_V_OK;
 static int    initSockets(void);
 static int    is_ip_address(char *s);
 static int    what_error(void);
+static int    waitSocket(SOCKET sfd, int forWrite, int sec, long usec);
+static void   noSigPipe(SOCKET sockfd);
 static void   sleepInMilliSeconds(unsigned time);
 
 static int    updateErrorStr(char * strBuf);
@@ -172,7 +180,7 @@ static int    sufSSLConnect(ivType *iv, SOCKET sockfd, short int flag);
 
 #ifdef MY_SSL
 static int    init_Client_SSL_CTX(ivType *iv);
-static int    init_SSL(ivType *iv, SSL** pssl, SOCKET sockfd);
+static int    init_SSL(ivType *iv, SSL** pssl, SOCKET sockfd, int server);
 static int    SSL_Client_Handshake(ivType* iv, SSL* ssl);
 static int    set_cert_stuff(SSL_CTX* ctx, char* cert_file, char* key_file);
 static int    verify_Server(ivType* iv, SSL* ssl);
@@ -245,7 +253,8 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 {
 	struct  hostent *he = NULL;
 	struct  sockaddr_in their_addr;   // server's address information
-	int     isip, isproxy = !!proxy_addr;
+	int     isip, hostip, isproxy = !!proxy_addr;
+	char	*host = isproxy ? proxy_addr : addr;   //  the host actually connected to
 	SOCKET	sockfd;
 	char    strBuf[SMALLBUFLEN];
 	object  obj;
@@ -257,9 +266,11 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 	cNumbInstances++;
 
 	isip = is_ip_address(addr);
+	hostip = is_ip_address(host);
 
-	if (!isip)
-		if ((he=gethostbyname(addr)) == NULL) {  // get the host info 
+	//  when using a proxy the target name is resolved by the proxy
+	if (!hostip)
+		if ((he=gethostbyname(host)) == NULL) {  // get the host info 
 			cError = 2;
 			sprintf(strBuf, "Invalid IP address (cError) in gSocketConnect.");
 			updateErrorStr(strBuf);
@@ -273,12 +284,13 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 		updateErrorStr(strBuf);
 		return decrementUsage();
 	}
+	noSigPipe(sockfd);
 
 	memset(&their_addr, 0, sizeof their_addr);
 	their_addr.sin_family = AF_INET;                       // host byte order 
 	their_addr.sin_port = htons((unsigned short) (isproxy ? proxy_port : port));    // short, network byte order 
-	if (isip  ||  isproxy)
-		their_addr.sin_addr.s_addr = inet_addr(isproxy ? proxy_addr : addr);
+	if (hostip)
+		their_addr.sin_addr.s_addr = inet_addr(host);
 	else
 		their_addr.sin_addr = *((struct in_addr *)he->h_addr);
 
@@ -444,7 +456,7 @@ static int sufSSLConnect(ivType *iv, SOCKET sockfd, short int flag)
 		if (!init_Client_SSL_CTX(iv)) 
 			return 0;
 		
-		if (!init_SSL(iv, &iFP.SSL_union.ssfd, sockfd))   // ssl get a new value back
+		if (!init_SSL(iv, &iFP.SSL_union.ssfd, sockfd, 0))   // ssl get a new value back
 			return 0;
 			
 		if (!SSL_Client_Handshake(iv, iFP.SSL_union.ssfd)) 
@@ -464,17 +476,16 @@ imeth	gDispose, gDeepDispose, gGCDispose ()
 #ifdef MY_SSL
 	if (iFP.flag != 1)
 		sockfd = iFP.SSL_union.sfd;
-	else {
-		if (iFP.SSL_union.ssfd != NULL) {
-			sockfd = SSL_get_fd(iFP.SSL_union.ssfd);
-			SSL_free(iFP.SSL_union.ssfd);
-			iFP.SSL_union.ssfd = NULL;
-		}
+	else if (iFP.SSL_union.ssfd != NULL) {
+		sockfd = SSL_get_fd(iFP.SSL_union.ssfd);
+		SSL_free(iFP.SSL_union.ssfd);
+		iFP.SSL_union.ssfd = NULL;
+	}
 
-		if (iCtx) {
-			SSL_CTX_free(iCtx);
-			iCtx = NULL;
-		}
+	//  accepted server sockets (iAddress set) share the listening socket's iCtx
+	if (iCtx  &&  !(iServerSSL  &&  iAddress.sin_family)) {
+		SSL_CTX_free(iCtx);
+		iCtx = NULL;
 	}
 	if (sockfd)
 		closesocket(sockfd);
@@ -530,24 +541,12 @@ imeth	int	gTimedReadMS(char *buf, unsigned n, int max_wait, long microsec_wait)
 			if ((e=what_error()) == WSAEINTR)
 				t = 0;
 			else if (e == WSAEWOULDBLOCK) {
-				fd_set	setRead;
-				struct timeval timeout;
-				FD_ZERO(&setRead);    // initializes the socket set 
-				                      // variable setRead to be ready
-				FD_SET(sfd, &setRead);       // adds a socket sfd to the set for read
-				timeout.tv_sec = max_wait;   // seconds
-				timeout.tv_usec = microsec_wait;         // and microseconds
-				t = select(sfd+1, &setRead, NULL, NULL, &timeout);
-				// the first parameter of function select is not used 
-				// for WSA but it is included here just for 
-				// compatibility with the BSD sockets select() command.
-
-				// Note: t will be the number of sockets in read set which are ready.
+				t = waitSocket(sfd, 0, max_wait, microsec_wait);
 				if (t <= 0)
-					return -1;
+					return tot ? (int) tot : -1;  //  don't lose data already read
 				t = 0;
 			} else
-				return t;
+				return tot ? (int) tot : t;
 		else if (!t)
 			break;  //  EOF  
 		tot += t;
@@ -608,27 +607,21 @@ imeth	int	gTimedWrite(char *buf, unsigned n, int max_wait)
 		if (iFP.flag)
 			t = SSL_write(ssl, buf, n);  // secure socket writing
 		else
-			t = send(sfd, buf, n, 0);
+			t = send(sfd, buf, n, MSG_NOSIGNAL);
 #else
-		t = send(sfd, buf, n, 0);
+		t = send(sfd, buf, n, MSG_NOSIGNAL);
 #endif
 
 		if (t <= 0)
 			if ((e=what_error()) == WSAEINTR)
 				t = 0;
 			else if (e == WSAEWOULDBLOCK) {
-				fd_set	setWrite;
-				struct timeval timeout;
-				FD_ZERO(&setWrite);
-				FD_SET(sfd, &setWrite);
-				timeout.tv_sec = max_wait;
-				timeout.tv_usec = 0;
-				t = select(sfd+1, NULL, &setWrite, NULL, &timeout);
+				t = waitSocket(sfd, 1, max_wait, 0L);
 				if (t <= 0)
-					return -1;
+					return tot ? (int) tot : -1;  //  report what was sent
 				t = 0;
 			} else
-				return t;
+				return tot ? (int) tot : t;
 		tot += t;
 		buf += t;
 		n -= t;
@@ -704,26 +697,37 @@ imeth	int	gSendFile(char *fromFile, char *toFile)
 {
 	FILE	*fp = fopen(fromFile, "r" MODE);
 	uint32_t size, crc, crc2;
+	uint64_t fsize;
 	struct stat sb;
 	int	len;
-	uint16_t	nlen, code = htons(1);	//  send file code  
+	uint16_t	nlen, code;
 	char	buf[BUFLEN];
 	
 	if (!fp)
 		return 1;
-	if (fstat(fileno(fp), &sb))
+	if (fstat(fileno(fp), &sb)  ||  sb.st_size < 0)
 		goto er1;
-	size = htonl(sb.st_size);
+	fsize = (uint64_t) sb.st_size;
 	crc = InitCRC();
-
-	fseek(fp, 0L, SEEK_SET);
-	SEND(code);
-	SEND(size);
 
 	if (!toFile)
 		toFile = fromFile;
+	if (strlen(toFile) + 1 > 0xFFFF)	//  name length is sent as 16 bits
+		goto er1;
 	len = strlen(toFile) + 1;
-	nlen = htons((short)len);
+
+	//  code 1 = 32 bit size, code 2 = 64 bit size (high word sent first)
+	code = htons(fsize > 0xFFFFFFFFUL ? 2 : 1);
+	fseek(fp, 0L, SEEK_SET);
+	SEND(code);
+	if (fsize > 0xFFFFFFFFUL) {
+		size = htonl((uint32_t) (fsize >> 32));
+		SEND(size);
+	}
+	size = htonl((uint32_t) fsize);
+	SEND(size);
+
+	nlen = htons((uint16_t) len);
 	SEND(nlen);
 	if (len != gWrite(self, toFile, len))
 		goto er1;
@@ -772,22 +776,33 @@ imeth int gGetStr(char *str)
 ///////////////////////////////////////////
 imeth	int	gRecvFile(char *toFile)
 {
-	FILE	*fp = fopen(toFile, "w" MODE);
-	uint32_t size, crc, crc2;
+	FILE	*fp;
+	uint32_t sz32, crc, crc2;
+	uint64_t size = 0;
 	int	len;
 	uint16_t	nlen, code;
 	char	buf[BUFLEN];
-	
-	if (!fp)
+	char	*tmpFile = malloc(strlen(toFile) + 8);
+
+	//  receive into a temporary file so an existing toFile survives a failure
+	if (!tmpFile)
 		return 1;
+	sprintf(tmpFile, "%s.rcvtmp", toFile);
+	if (!(fp = fopen(tmpFile, "w" MODE))) {
+		free(tmpFile);
+		return 1;
+	}
 	crc = InitCRC();
 
 	RECV(code);
-	if (code != htons(1))
+	if (code == htons(2)) {		//  64 bit size
+		RECV(sz32);
+		size = (uint64_t) ntohl(sz32) << 32;
+	} else if (code != htons(1))
 		goto er1;
 
-	RECV(size);
-	size = ntohl(size);
+	RECV(sz32);
+	size |= ntohl(sz32);
 
 	RECV(nlen);
 	len = ntohs(nlen);
@@ -801,9 +816,9 @@ imeth	int	gRecvFile(char *toFile)
 	while (size) {
 		unsigned	rlen;
 
-		rlen = size > BUFLEN ? BUFLEN : size;
+		rlen = size > BUFLEN ? BUFLEN : (unsigned) size;
 		len = gRead(self, buf, rlen);
-		if (len < 0)
+		if (len <= 0)	//  error or peer closed early
 			goto er1;
 		crc = BufCRC(crc, buf, len);
 		if (len != fwrite(buf, 1, len, fp))
@@ -816,11 +831,25 @@ imeth	int	gRecvFile(char *toFile)
 	SEND(crc);
 	if (crc != crc2)  /*  both in network byte order */
 		goto er1;
-	fclose(fp);
+	if (fclose(fp)) {
+		fp = NULL;
+		goto er1;
+	}
+#if	defined(_MSC_VER)
+	remove(toFile);		//  rename won't replace an existing file
+#endif
+	if (rename(tmpFile, toFile)) {
+		unlink(tmpFile);
+		free(tmpFile);
+		return -1;
+	}
+	free(tmpFile);
 	return 0;
 er1:
-	fclose(fp);
-	unlink(toFile);
+	if (fp)
+		fclose(fp);
+	unlink(tmpFile);
+	free(tmpFile);
 	return -1;
 }
 
@@ -847,6 +876,46 @@ static	int	what_error()
 	return errno;
 #else
 	return WSAGetLastError();
+#endif
+}
+
+
+//////////////////////////////////////////////////////////////////
+// waits until sfd is readable (forWrite == 0) or writable
+// return: >0 ready, 0 timeout, <0 error
+//////////////////////////////////////////////////////////////////
+static	int	waitSocket(SOCKET sfd, int forWrite, int sec, long usec)
+{
+#if	!defined(_MSC_VER)
+	//  poll() has no FD_SETSIZE limit on the descriptor value
+	struct pollfd	pfd;
+	long	ms = sec * 1000L + (usec + 999) / 1000;
+
+	pfd.fd = sfd;
+	pfd.events = forWrite ? POLLOUT : POLLIN;
+	pfd.revents = 0;
+	return poll(&pfd, 1, ms > INT_MAX ? INT_MAX : (int) ms);
+#else
+	//  a Winsock fd_set is a counted array of sockets, not a bitmap
+	//  indexed by descriptor, so a single FD_SET can't overflow it
+	fd_set	set;
+	struct timeval timeout;
+
+	FD_ZERO(&set);
+	FD_SET(sfd, &set);
+	timeout.tv_sec = sec;
+	timeout.tv_usec = usec;
+	return select(0, forWrite ? NULL : &set, forWrite ? &set : NULL, NULL, &timeout);
+#endif
+}
+
+
+//  keep a write to a closed peer from raising SIGPIPE (BSD / macOS)
+static	void	noSigPipe(SOCKET sockfd)
+{
+#ifdef	SO_NOSIGPIPE
+	int	on = 1;
+	setsockopt(sockfd, SOL_SOCKET, SO_NOSIGPIPE, (char *) &on, sizeof on);
 #endif
 }
 
@@ -1148,23 +1217,29 @@ static	SOCKET	makeServer(int port)
 
 
 	if (!cNumbInstances  &&  !initSockets())
-		return -1;
+		return INVALID_SOCKET;
 
 	cNumbInstances++;
 
 	if ((listen_sd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
-		return -1;
+		return INVALID_SOCKET;
+#if	!defined(_MSC_VER)
+	{	//  allow a restart while old connections are in TIME_WAIT
+		int	on = 1;
+		setsockopt(listen_sd, SOL_SOCKET, SO_REUSEADDR, (char *) &on, sizeof on);
+	}
+#endif
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;         // host byte order 
 	serv_addr.sin_port = htons((unsigned short) port);   // short, network byte order 
 	serv_addr.sin_addr.s_addr = INADDR_ANY; // automatically fill with server IP 
 	if (bind(listen_sd, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr)) == SOCKET_ERROR) {
 		closesocket(listen_sd);
-		return -1;
+		return INVALID_SOCKET;
 	}
 	if (listen(listen_sd, BACKLOG) == SOCKET_ERROR) {
 		closesocket(listen_sd);
-		return -1;
+		return INVALID_SOCKET;
 	}
 	return listen_sd;
 }
@@ -1177,16 +1252,21 @@ cmeth	gMakeServer(int port, int ssl)
 {
 	object	obj = gNew(super);
 	ivType	*iv = ivPtr(obj);
+	SOCKET	sd = makeServer(port);
 
+	//  on failure gDispose balances the usage count makeServer took
+	if (sd == INVALID_SOCKET)
+		return gDispose(obj);
 #ifdef MY_SSL
-	if (iFP.flag = ssl) {
-		iServerSSL = ssl;
-		if (-1 == init_Server_SSL_CTX(iv))
-			return NULL;
-	}
-	iFP.SSL_union.sfd = makeServer(port);
+	//  iFP.flag stays 0 until gServerSocketConnect sets up SSL
+	iFP.SSL_union.sfd = sd;
+	if (iServerSSL = ssl)
+		if (-1 == init_Server_SSL_CTX(iv)) {
+			iServerSSL = 0;		//  so gDispose frees iCtx
+			return gDispose(obj);
+		}
 #else
-	iFP = makeServer(port);
+	iFP = sd;
 #endif
 	return obj;
 }
@@ -1250,6 +1330,7 @@ imeth	gAccept()
 #endif
 		return NULL;
 	}
+	noSigPipe(newsock);
 #ifdef USE_FCNTL
 	{	// get socket descriptor status flags
 		int	flags = fcntl(newsock, F_GETFL, 0); 
@@ -1278,27 +1359,31 @@ imeth	gAccept()
 	// printf ("Connection from %lx, port %x\n\n",
 	//   client_addr.sin_addr.s_addr, client_addr.sin_port);
 
+#ifdef	MY_SSL
+	{
+		object	obj = newSock(gNew(super CLASS), newsock, flag, iServerSSL, &client_addr);
+		ivPtr(obj)->iCtx = iCtx;	//  shared, owned by the listening socket
+		return obj;
+	}
+#else
 	return newSock(gNew(super CLASS), newsock, flag, iServerSSL, &client_addr);
+#endif
 }
 
 imeth	gServerSocketConnect()
 {
 #ifdef MY_SSL
-	int         tmp;
-	SOCKET      sockfd;
-	G_SOCKET    gs;
 	SSL* ssl = NULL;
 
-	if (iServerSSL) {
-		gs.flag = iServerSSL;
-		tmp = init_SSL(iv, &ssl, iFP.SSL_union.sfd);  // ssl get a new value back
-		if (tmp == -1)
+	if (iServerSSL  &&  iFP.flag != 1) {
+		if (!init_SSL(iv, &ssl, iFP.SSL_union.sfd, 1))  // ssl get a new value back
 			return NULL;
-		tmp = SSL_Server_Handshake(iv, ssl);     
-		if (tmp == -1)
+		if (-1 == SSL_Server_Handshake(iv, ssl)) {
+			SSL_free(ssl);
 			return NULL;
-		gs.SSL_union.ssfd = ssl;
-		iFP = gs;
+		}
+		iFP.flag = 1;
+		iFP.SSL_union.ssfd = ssl;
 	}
 #endif
 	return self;
@@ -1308,7 +1393,7 @@ imeth	gServerSocketConnect()
 
 #ifdef MY_SSL
 
-static int  init_SSL(ivType *iv, SSL** pssl, SOCKET sockfd)
+static int  init_SSL(ivType *iv, SSL** pssl, SOCKET sockfd, int server)
 {
 	char strBuf[SMALLBUFLEN];
 	*pssl = (SSL *)SSL_new(iCtx);
@@ -1322,7 +1407,10 @@ static int  init_SSL(ivType *iv, SSL** pssl, SOCKET sockfd)
 	}
 		
 	SSL_set_fd(*pssl, sockfd);
-	SSL_set_connect_state(*pssl);
+	if (server)
+		SSL_set_accept_state(*pssl);
+	else
+		SSL_set_connect_state(*pssl);
 	return 1;
 }
 
@@ -1500,9 +1588,7 @@ static int init_Client_SSL_CTX(ivType *iv)
 	SSL_METHOD* meth = NULL; 
 	char        strBuf[SMALLBUFLEN];
 
-	meth = SSLv2_client_method();
-	// meth = SSLv3_client_method();
-	// meth = TLSv1_method();
+	meth = SSLv23_client_method();	//  negotiates the best version; SSLv2/v3 disabled below
 	SSLeay_add_ssl_algorithms();
 	SSL_load_error_strings();
 	
@@ -1514,9 +1600,8 @@ static int init_Client_SSL_CTX(ivType *iv)
 	  return 0;
 	}
 
-	// off|=SSL_OP_NO_TLSv1;
-	// off|=SSL_OP_NO_SSLv2;
-	// off|=SSL_OP_NO_SSLv3;
+	off|=SSL_OP_NO_SSLv2;
+	off|=SSL_OP_NO_SSLv3;
 
 	SSL_CTX_set_options(iCtx, SSL_OP_ALL|off);
 
@@ -1635,14 +1720,11 @@ static	int init_Server_SSL_CTX(ivType *iv)
 	SSL_load_error_strings();
 	SSLeay_add_ssl_algorithms();
 
-	meth = SSLv2_method();
-	// meth = SSLv2_server_method();
-	// other methods available
-	// SSLv3_method(), TLSv1_method(), SSLv23_method()
+	meth = SSLv23_server_method();	//  negotiates the best version
 	// Note the chosen method should be compatible to following "off" parameter
 
 	off|=SSL_OP_NO_SSLv2;
-	off|=SSL_OP_NO_TLSv1;
+	off|=SSL_OP_NO_SSLv3;
 	
 	iCtx = SSL_CTX_new (meth);  
 	if (iCtx == NULL)

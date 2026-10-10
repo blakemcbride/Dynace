@@ -36,6 +36,8 @@
 #define	_GENERICS_H
 
 
+/*  dpp options: S2 F0 M0  */
+
 #ifdef	DPP_STRATEGY
 #if	DPP_STRATEGY != 2
 #error Incompatible DPP Strategies
@@ -1431,8 +1433,8 @@ typedef	void *	(*gPointerValue_t)(object self);
 typedef	void *	(*gPointerValue_mt)(object self);
 typedef	objrtn	(*gPop_t)(object self);
 typedef	objrtn	(*gPop_mt)(object self);
-typedef	objrtn	(*gPopulateStringFromNode_t)(object self, char *to, char *node);
-typedef	objrtn	(*gPopulateStringFromNode_mt)(object self, char *to, char *node);
+typedef	objrtn	(*gPopulateStringFromNode_t)(object self, char *to, int size, char *node);
+typedef	objrtn	(*gPopulateStringFromNode_mt)(object self, char *to, int size, char *node);
 typedef	long	(*gPosition_t)(object self);
 typedef	long	(*gPosition_mt)(object self);
 typedef	objrtn	(*gPrevious_t)(object self);

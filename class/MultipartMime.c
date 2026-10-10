@@ -106,11 +106,23 @@ PMETHOD objrtn initParseInstance(object self, char *content, char *boundary)
 		if (!endPos) 
 			return NULL; 
 
-		while (*curPos == '\r' || *curPos == '\n' || *curPos == ' ') 
+
+		while (*curPos == ' ' || *curPos == '\t') 
+			curPos++; 
+		if (*curPos == '\r' && curPos[1] == '\n') 
+			curPos += 2; 
+		else if (*curPos == '\n') 
 			curPos++; 
 
+
 		contentLen = endPos - curPos; 
+		if (contentLen >= 2 && endPos[-2] == '\r' && endPos[-1] == '\n') 
+			contentLen -= 2; 
+		else if (contentLen >= 1 && endPos[-1] == '\n') 
+			contentLen--; 
 		buf = malloc(contentLen + 1); 
+		if (!buf) 
+			return NULL; 
 		memcpy(buf, curPos, contentLen); 
 		buf[contentLen] = '\0'; 
 
@@ -169,7 +181,7 @@ PMETHOD objrtn initParseInstance(object self, char *content, char *boundary)
 			break; 
 	} 
 
-	return self; 
+	return headerErr ? NULL : self; 
 } 
 
 PMETHOD objrtn initNewInstance(object self, char *subType, char *boundaryString)
@@ -177,8 +189,7 @@ PMETHOD objrtn initNewInstance(object self, char *subType, char *boundaryString)
 	iv->iBodyParts = gNew(LinkObject); 
 	strncpy(iv->iBoundaryString, boundaryString, sizeof(iv->iBoundaryString) - 1); 
 	strncpy(iv->iSubType, subType, sizeof(iv->iSubType)-1); 
-	strcpy(iv->iContentType, "multipart/"); 
-	strcat(iv->iContentType, subType); 
+	snprintf(iv->iContentType, sizeof(iv->iContentType), "multipart/%s", subType); 
 	return self; 
 } 
 
@@ -221,7 +232,7 @@ imeth char * MultipartMime_im_gStringValue(object self)
 		gAppend(iv->iStr, (object)iv->iBoundaryString); 
 		gAppend(iv->iStr, (object)"\r\n"); 
 		gAppend(iv->iStr, (object)gStringValue(bodyPart)); 
-		gAppend(iv->iStr, (object)"\r\n\r\n"); 
+		gAppend(iv->iStr, (object)"\r\n"); 
 	} 
 	gAppend(iv->iStr, (object)"--"); 
 	gAppend(iv->iStr, (object)iv->iBoundaryString); 
@@ -236,7 +247,7 @@ PMETHOD void resetString(object self, object *pobj, char *initValue)
 	*pobj = gNewWithStr(String, initValue ? initValue : ""); 
 } 
 
-#line 240 "MultipartMime.c"
+#line 251 "MultipartMime.c"
 
 objrtn	MultipartMime_initialize(void)
 {

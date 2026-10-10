@@ -48,7 +48,7 @@ typedef	struct {
 }	InputStream;
 
 
-#define	GETC(is)	(is->fp ? (getc(is->fp)) : (*is->ptr ? *is->ptr++ : EOF))
+#define	GETC(is)	(is->fp ? (getc(is->fp)) : (*is->ptr ? (unsigned char) *is->ptr++ : EOF))
 #define	UNGETC(c, is)	(is->fp ? ungetc(c, is->fp) : *--is->ptr)
 #define	REWIND(is)	if (is->fp) rewind(is->fp); else is->ptr = is->buf
 #define	FTELL(is)	(is->fp ? ftell(is->fp) : is->ptr - is->buf)
@@ -83,7 +83,7 @@ typedef	struct {
 private	cmeth	object	parse(InputStream *is);
 static	char	*strsave(char *x);
 private	cmeth	object	new_tag(InputStream *is, string *pstr);
-private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner, string *pstr);
+private	cmeth	object	parse_attributes(int c, InputStream *is, object owner, string *pstr);
 private	imeth	void	dump_xml(int lvl, object fp, int next);
 private	cmeth	object	parse_comment(InputStream *is, string *pstr);
 private	cmeth	object	parse_cdata(InputStream *is, string *pstr);
@@ -115,7 +115,10 @@ cmeth	gParseFile(char *file, long *line, long *col, long *pos)
 		object	n = gNew(super);
 		ivType	*iv = ivPtr(n);
 		iType = DOCUMENT_NODE;
-		iFirstChild = iLastChild = r;
+		for (iFirstChild = r ; r ; r = ivPtr(r)->iNextNode) {
+			ivPtr(r)->iParent = n;
+			iLastChild = r;
+		}
 		r = n;
 	}
 	return r;
@@ -141,14 +144,17 @@ cmeth	gParseString(char *str, long *line, long *col, long *pos)
 		object	n = gNew(super);
 		ivType	*iv = ivPtr(n);
 		iType = DOCUMENT_NODE;
-		iFirstChild = iLastChild = r;
+		for (iFirstChild = r ; r ; r = ivPtr(r)->iNextNode) {
+			ivPtr(r)->iParent = n;
+			iLastChild = r;
+		}
 		r = n;
 	}
 	return r;
 }
 
 #define	CHECK_SIZE							\
-	if (p - pstr->buf == pstr->sz - 3) {			       	\
+	if (p - pstr->buf >= pstr->sz - 3) {			       	\
 		char	*tp = pstr->buf;				\
 		pstr->sz *= 2;						\
 		pstr->buf = (char *) realloc(pstr->buf, pstr->sz);	\
@@ -163,7 +169,8 @@ cmeth	gParseString(char *str, long *line, long *col, long *pos)
 private	cmeth	object	parse(InputStream *is)
 {
 	object	n = NULL, head = NULL, t;
-	char	c, *p;
+	int	c;
+	char	*p;
 	string	str, *pstr = &str;
 	ivType	*tiv, *niv;
 
@@ -181,8 +188,8 @@ private	cmeth	object	parse(InputStream *is)
 				char	*bb = str.buf;
 				*p = '\0';
 				while (*(p=bb))
-					if (isspace(*p)) {
-						for (; *p  &&  isspace(*p) ; p++);
+					if (isspace((unsigned char) *p)) {
+						for (; *p  &&  isspace((unsigned char) *p) ; p++);
 						c = *p;
 						*p = '\0';
 						t = gNew(self);
@@ -207,7 +214,7 @@ private	cmeth	object	parse(InputStream *is)
 					} else {
 						char *s = p;
 						for (; *p ; p++);
-						for (p-- ; p >= s && isspace(*p) ; --p);
+						for (p-- ; p >= s && isspace((unsigned char) *p) ; --p);
 						p++;
 						c = *p;
 						*p = '\0';
@@ -311,13 +318,15 @@ private	cmeth	object	parse(InputStream *is)
 	while (n)  {
 		if (niv->iType != ELEMENT_NODE  ||  !niv->iClosed)
 			goto er1;
-		n = niv->iParent;
+		if (n = niv->iParent)
+			niv = ivPtr(n);
 	}
 	free(str.buf);
 	return head;
 er1:
 	set_error(is);
-	gDeepDispose(head);
+	if (head)
+		gDeepDispose(head);
 	free(str.buf);
 	return NULL;
 }
@@ -325,7 +334,7 @@ er1:
 static	void	set_error(InputStream *is)
 {
 	long	i=0;
-	char	c;
+	int	c;
 	
 	is->pos = FTELL(is);
 	is->line = 1;
@@ -344,7 +353,8 @@ static	void	set_error(InputStream *is)
 
 private	cmeth	object	parse_cdata(InputStream *is, string *pstr)
 {
-	char	c, *p = pstr->buf;
+	int	c;
+	char	*p = pstr->buf;
 	
 	NEXTC('C');
 	NEXTC('D');
@@ -383,7 +393,8 @@ private	cmeth	object	parse_cdata(InputStream *is, string *pstr)
 
 private	cmeth	object	parse_comment(InputStream *is, string *pstr)
 {
-	char	c, *p = pstr->buf;
+	int	c;
+	char	*p = pstr->buf;
 	
 	NEXTC('-');
 	while (1) {
@@ -415,7 +426,7 @@ private	cmeth	object	parse_comment(InputStream *is, string *pstr)
 	}
 }
 
-private	cmeth	object	parse_doctype(InputStream *is, string *pstr, char c)
+private	cmeth	object	parse_doctype(InputStream *is, string *pstr, int c)
 {
 	char	*p, target[128];
 
@@ -448,7 +459,8 @@ private	cmeth	object	parse_doctype(InputStream *is, string *pstr, char c)
 
 private	cmeth	object	parse_instruction(InputStream *is, string *pstr)
 {
-	char	c, *p, target[128];
+	int	c;
+	char	*p, target[128];
 	
 	while (EOF != (c=GETC(is))  &&  isspace(c));
 	if (c == EOF)
@@ -498,7 +510,8 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 {
 	object	n;
 	ivType	*niv;
-	char	c, *p = pstr->buf;
+	int	c;
+	char	*p = pstr->buf;
 
 	if (EOF == (c = GETC(is)))
 		return NULL;
@@ -535,7 +548,7 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	if (c ==  EOF)
 		return gDispose(n);
 	if (isname(c)) {
-		if (!(niv->iAttributes = parse_attributes(self, c, is, pstr->buf, n, pstr)))
+		if (!(niv->iAttributes = parse_attributes(self, c, is, n, pstr)))
 			return gDispose(n);
 		c = GETC(is);
 		if (c ==  EOF)
@@ -550,11 +563,11 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 	return n;
 }
 
-private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object owner, string* pstr)
+private	cmeth	object	parse_attributes(int c, InputStream *is, object owner, string* pstr)
 {
 	object	s = NULL, a, pn = NULL;
 	ivType	*aiv, *piv=NULL;
-	char	*p = buf, q;
+	char	*p = pstr->buf, q;
 	char	abuf[20];
 	char	*ap;
 	
@@ -571,7 +584,7 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 		}
 		pn = a;
 		piv = aiv;
-		for (p=buf ; isname(c) ; ) {
+		for (p=pstr->buf ; isname(c) ; ) {
 			ADDCHR(c);
 //			*p++ = c;
 			c = GETC(is);
@@ -579,7 +592,7 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 				return gDeepDispose(s);
 		}
 		*p = '\0';
-		aiv->iName = strsave(buf);
+		aiv->iName = strsave(pstr->buf);
 		while (isspace(c)) {
 			c = GETC(is);
 			if (c == EOF)
@@ -598,7 +611,7 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 			return gDeepDispose(s);
 		aiv->iQuote = q = c;
 		c = GETC(is);
-		for (p = buf ; c != q ; ) {
+		for (p = pstr->buf ; c != q ; ) {
 			if (c == EOF)
 				return gDeepDispose(s);
 			if (c == '&') {
@@ -611,6 +624,7 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 					c = GETC(is);
 				}
 				*ap = '\0';
+				CHECK_SIZE;
 				if (!strcmp(abuf, "amp"))
 					*p++ = '&';
 				else if (!strcmp(abuf, "lt"))
@@ -629,7 +643,7 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 			c = GETC(is);
 		}
 		*p = '\0';
-		aiv->iValue = strsave(buf);
+		aiv->iValue = strsave(pstr->buf);
 		if (EOF == (c = GETC(is)))
 			return gDeepDispose(s);
 		while (isspace(c)) {
@@ -643,6 +657,21 @@ private	cmeth	object	parse_attributes(char c, InputStream *is, char *buf, object
 		}
 	}
 	return s;
+}
+
+/*  Iterative so that deeply nested trees cannot overflow the stack.
+    Attribute and child lists are spliced in front of the remaining
+    siblings and disposed by the same loop.  */
+
+static	object	splice_list(object list, object rest)
+{
+	object	t = list;
+	ivType	*tiv;
+
+	while ((tiv = ivPtr(t))->iNextNode)
+		t = tiv->iNextNode;
+	tiv->iNextNode = rest;
+	return list;
 }
 
 imeth	gDispose, gDeepDispose()
@@ -659,9 +688,9 @@ imeth	gDispose, gDeepDispose()
 		case DOCUMENT_NODE:
 		case ELEMENT_NODE:
 			if (iAttributes)
-				gDeepDispose(iAttributes);
+				nxt = splice_list(iAttributes, nxt);
 			if (iFirstChild)
-				gDeepDispose(iFirstChild);
+				nxt = splice_list(iFirstChild, nxt);
 			break;
 		case ATTRIBUTE_NODE:
 		case TEXT_NODE:
@@ -778,7 +807,7 @@ imeth	gAppendChild(node)
 	return self;
 }
 
-imeth	gRemoveNode()
+private	imeth	void	unlink_node()
 {
 	ivType	*tiv;
 
@@ -799,19 +828,31 @@ imeth	gRemoveNode()
 		if (tiv->iAttributes == self)
 			tiv->iAttributes = iNextNode;
 	}
+	iParent = iPrevNode = iNextNode = NULL;
+}
+
+imeth	gRemoveNode()
+{
+	object	prev = iPrevNode, next = iNextNode;
+	ivType	*tiv;
+
+	unlink_node(self);
 
 	//  Now delete any white space nodes
-	if (iPrevNode) {
-		tiv = ivPtr(iPrevNode);
-		if (tiv->iType == TEXT_NODE  &&  tiv->iAllSpace)
-			gDispose(gRemoveNode(iPrevNode));
+	if (prev) {
+		tiv = ivPtr(prev);
+		if (tiv->iType == TEXT_NODE  &&  tiv->iAllSpace) {
+			unlink_node(prev);
+			gDispose(prev);
+		}
 	}
-	if (iNextNode) {
-		tiv = ivPtr(iNextNode);
-		if (tiv->iType == TEXT_NODE  &&  tiv->iAllSpace)
-			gDispose(gRemoveNode(iNextNode));
+	if (next) {
+		tiv = ivPtr(next);
+		if (tiv->iType == TEXT_NODE  &&  tiv->iAllSpace) {
+			unlink_node(next);
+			gDispose(next);
+		}
 	}
-	iParent = iPrevNode = iNextNode = NULL;
 	return self;
 }
 
@@ -1003,38 +1044,55 @@ private	imeth	dump_attribute_value(object self, object fp)
 	return self;
 }
 					 
+/*  Iterative so that deeply nested trees cannot overflow the stack.
+    stk holds the ancestors whose children are being dumped.  */
+
 private	imeth	void	dump_xml(int lvl, object fp, int next)
 {
-#if 0
-	int	t;
-	char	tabs[256];
-	
-	for (t=0 ; t < lvl ; )
-		tabs[t++] = '\t';
-	tabs[t] = '\0';
-	tabs[0] = '\0';
-#endif
-	for (; self ; self=next?iNextNode:NULL) {
+	object	*stk = NULL;
+	int	sp = 0, ssz = 0;
+
+	while (1) {
+		if (!self) {
+			if (!sp)
+				break;
+			self = stk[--sp];
+			iv = ivPtr(self);
+			if (iType == ELEMENT_NODE  &&  iClosed  &&  !iSelfClosing)
+				vPrintf(fp, "</%s>", iName);
+			self = next ? iNextNode : NULL;
+			continue;
+		}
 		iv = ivPtr(self);
-		if (iType == DOCUMENT_NODE) {
-			if (iFirstChild)
-				dump_xml(iFirstChild, lvl+1, fp, next);
-		} else if (iType == ELEMENT_NODE) {
-			object	a;
-			ivType *aiv;
-			
-			vPrintf(fp, "<%s", iName);
-			for (a=iAttributes ; a ; a=aiv->iNextNode) {
-				aiv = ivPtr(a);
-				dump_attribute_value(a, fp);
-//				vPrintf(fp, " %s=%c%s%c", aiv->iName, aiv->iQuote, aiv->iValue, aiv->iQuote);
+		if (iType == DOCUMENT_NODE  ||  iType == ELEMENT_NODE) {
+			if (iType == ELEMENT_NODE) {
+				object	a;
+				ivType *aiv;
+				
+				vPrintf(fp, "<%s", iName);
+				for (a=iAttributes ; a ; a=aiv->iNextNode) {
+					aiv = ivPtr(a);
+					dump_attribute_value(a, fp);
+//					vPrintf(fp, " %s=%c%s%c", aiv->iName, aiv->iQuote, aiv->iValue, aiv->iQuote);
+				}
+				if (iSelfClosing)
+					gPutc(fp, '/');
+				gPutc(fp, '>');
 			}
-			if (iSelfClosing)
-				gPutc(fp, '/');
-			gPutc(fp, '>');
-			if (iFirstChild)
-				dump_xml(iFirstChild, lvl+1, fp, next);
-			if (iClosed  &&  !iSelfClosing)
+			if (iFirstChild) {
+				if (sp == ssz) {
+					int	nsz = ssz ? 2 * ssz : 64;
+					object	*t = (object *) realloc(stk, nsz * sizeof(object));
+					if (!t)
+						break;
+					stk = t;
+					ssz = nsz;
+				}
+				stk[sp++] = self;
+				self = iFirstChild;
+				continue;
+			}
+			if (iType == ELEMENT_NODE  &&  iClosed  &&  !iSelfClosing)
 				vPrintf(fp, "</%s>", iName);
 		} else if (iType == TEXT_NODE)
 			dump_value(fp, iValue);
@@ -1052,7 +1110,10 @@ private	imeth	void	dump_xml(int lvl, object fp, int next)
 			vPrintf(fp, "<?%s %s?>", iName, iValue);
 		else if (iType == ATTRIBUTE_NODE)
 			vPrintf(fp, "%s='%s'", iName, iValue);
+		self = next ? iNextNode : NULL;
 	}
+	if (stk)
+		free(stk);
 }
 
 #if 0
@@ -1288,9 +1349,17 @@ static	char	*elim_space(char *v)
 #define	DIR_TEXT		3
 #define	DIR_ATTR		4
 
+/*  True if self is an element named name (or name is *).  Positions
+    such as [2] count these nodes, whatever the predicate.  */
+
+private	imeth	int	pNameMatch(char *name)
+{
+	return iType == ELEMENT_NODE  &&  name  &&  (*name == '*'  ||  !strcmp(iName, name));
+}
+
 private	imeth	int	pValidNode(char *name, int sub_type, char *sub_val, int index, int sub_index, int sub_op, char *sub_attr)
 {
-	if (iType != ELEMENT_NODE || (!name  ||  *name != '*'  &&  strcmp(iName, name)))
+	if (!pNameMatch(self, name))
 		return 0;
 	switch (sub_type) {
 	case SUB_NONE:
@@ -1397,29 +1466,58 @@ static	int	parse_sub(char *name, int *sub_index, char *sub_attr, int *sub_op, ch
 	return sub_type;
 }
 
+/*  Iterative so that deeply nested trees cannot overflow the stack.
+    stk saves the next sibling and index of each enclosing level.  */
+
 private	imeth	void	xpath_recurse(object *res2, char *name, int sub_type, char *sub_val, int sub_index, int sub_op, char *sub_attr)
 {
-	int	index;
+	int	index = 1, sp = 0, ssz = 0;
+	struct	{
+		object	node;
+		int	index;
+	}	*stk = NULL;
 	
-	while (self  &&  iType != ELEMENT_NODE)
-		if (self = iNextNode)
-			iv = ivsPtr;
-	for (index=1 ; self ; ) {
+	while (1) {
+		while (self  &&  iType != ELEMENT_NODE)
+			if (self = iNextNode)
+				iv = ivsPtr;
+		if (!self) {
+			if (!sp)
+				break;
+			sp--;
+			self = stk[sp].node;
+			index = stk[sp].index;
+			if (self)
+				iv = ivsPtr;
+			continue;
+		}
 		if (pValidNode(self, name, sub_type, sub_val, index, sub_index, sub_op, sub_attr)) {
-			index++;
 			if (!*res2)
 				*res2 = gNew(LinkObject);
 			gAddLast(*res2, self);
 		}
-		if (iFirstChild)
-			xpath_recurse(iFirstChild, res2, name, sub_type, sub_val, sub_index, sub_op, sub_attr);
-		if (self = iNextNode) {
+		if (pNameMatch(self, name))
+			index++;
+		if (iFirstChild) {
+			if (sp == ssz) {
+				int	nsz = ssz ? 2 * ssz : 64;
+				void	*t = realloc(stk, nsz * sizeof(*stk));
+				if (!t)
+					break;
+				stk = t;
+				ssz = nsz;
+			}
+			stk[sp].node = iNextNode;
+			stk[sp++].index = index;
+			self = iFirstChild;
+			index = 1;
+		} else
+			self = iNextNode;
+		if (self)
 			iv = ivsPtr;
-			while (self  &&  iType != ELEMENT_NODE)
-				if (self = iNextNode)
-					iv = ivsPtr;
-		}
 	}
+	if (stk)
+		free(stk);
 }
 
 
@@ -1524,11 +1622,11 @@ private	imeth	pXPath(char *path)
 							res2 = gNew(LinkObject);
 						if (sub_type == SUB_LAST)
 							last = self;
-						else {
-							index++;
+						else
 							gAddLast(res2, self);
-						}
 					}
+					if (pNameMatch(self, name))
+						index++;
 					if (recurse  &&  iFirstChild)
 						xpath_recurse(iFirstChild, &res2, name, sub_type, sub_val, sub_index, sub_op, sub_attr);
 					if (self = iNextNode) {
@@ -1548,11 +1646,11 @@ private	imeth	pXPath(char *path)
 							res2 = gNew(LinkObject);
 						if (sub_type == SUB_LAST)
 							last = self;
-						else {
-							index++;
+						else
 							gAddLast(res2, self);
-						}
 					}
+					if (pNameMatch(self, name))
+						index++;
 					if (recurse  &&  iFirstChild)
 						xpath_recurse(iFirstChild, &res2, name, sub_type, sub_val, sub_index, sub_op, sub_attr);
 					self = NULL;
@@ -1588,6 +1686,8 @@ private	imeth	pXPath(char *path)
 			case DIR_UP: {
 				object	seq, obj;
 
+				if (!self)
+					break;
 				if (res2) {
 					//  Don't put the same parent on the result list twice
 					for (seq=gSequence(res2) ; obj=gNext(seq) ; )
@@ -1636,6 +1736,13 @@ imeth	gXPath(char *path)
 			ep = bp + strlen(bp);
 		else
 			*ep++ = '\0';
+		{	//  allow spaces around |
+			char	*e = bp + strlen(bp);
+			while (e > bp  &&  isspace((unsigned char) e[-1]))
+				*--e = '\0';
+			while (isspace((unsigned char) *bp))
+				bp++;
+		}
 		r = pXPath(self, bp);
 		if (r)
 			if (!res)
@@ -1660,7 +1767,7 @@ imeth	gXPath(char *path)
 	
 }
 
-imeth gPopulateStringFromNode(char *to, char *node)
+imeth gPopulateStringFromNode(char *to, int size, char *node)
 {
 	object n = gFindChildNode(self, node);
 	char *val = NULL;
@@ -1671,9 +1778,12 @@ imeth gPopulateStringFromNode(char *to, char *node)
 	if (n)
 		val = gStringValue(n);
 
-	if (val)
-		strcpy (to,val);
-	else
+	if (size <= 0)
+		return self;
+	if (val) {
+		strncpy(to, val, size - 1);
+		to[size - 1] = 0;
+	} else
 		*to = 0;
 		
 	return self;
@@ -1686,7 +1796,7 @@ imeth char gGetCharFromNode(char *node)
 	if (n)
 		n = gChild(n);
 		
-	return gCharValue(n);
+	return n ? gCharValue(n) : 0;
 }
 
 imeth int gGetIntFromNode(char *node)
@@ -1695,7 +1805,7 @@ imeth int gGetIntFromNode(char *node)
 	
 	if (n)
 		n = gChild(n);
-	return gIntValue(n);
+	return n ? gIntValue(n) : 0;
 }
 
 imeth float gGetFloatFromNode(char *node)
@@ -1705,7 +1815,7 @@ imeth float gGetFloatFromNode(char *node)
 	if (n)
 		n = gChild(n);
 		
-	return gDoubleValue(n);
+	return n ? gDoubleValue(n) : 0;
 }  
 
 
