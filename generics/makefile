@@ -16,8 +16,7 @@ curlib : $(INCDIR)/generics.h
 	touch $@
 
 clean:
-	-rm -f generics.* *~ *.pdb
+	-rm -f generics.* curlib *~ *.pdb
 
 realclean: clean
-	-rm -f curlib
 

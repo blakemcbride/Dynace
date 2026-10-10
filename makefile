@@ -21,6 +21,13 @@ ifeq ($(CC),$(HCC))  # no need to make on cross-compile
 	cd dpp      ; $(MAKE) -f makefile DEBUG=1 install
 endif
 	cd generics ; $(MAKE) -f makefile DEBUG=1
+# AddressSanitizer/UBSan build, then run all examples under it.
+# Replaces lib/dynace.a and bin/dpp; run "make clean all" afterwards to restore a normal build.
+asan :
+	$(MAKE) clean
+	$(MAKE) ASAN=1
+	examples/asan-run.sh
+
 clean :
 	cd kernel   ; $(MAKE) $@ -f makefile
 	cd class    ; $(MAKE) $@ -f makefile

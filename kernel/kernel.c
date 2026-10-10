@@ -2531,6 +2531,35 @@ LOCAL	void	init_critical_sections(void)
 #endif
 }
 
+#if defined(__APPLE__)
+#include <pthread.h>
+#elif defined(__linux__)  &&  defined(__GLIBC__)
+extern	void	*__libc_stack_end;
+#endif
+
+/*  The stack beginning passed to InitDynace (normally &argc) only covers the
+    part of main's frame below that variable.  The compiler is free to keep
+    object pointers in main's frame above it, where the GC would never see them
+    and would free live objects.  So, when the OS tells us where the stack
+    really begins, use that instead.  */
+
+LOCAL	char	*stack_beginning(void *sb)
+{
+	char	*top = NULL;
+
+#if	defined(_M_IX86) || defined(_M_X64)
+	top = (char *) ((NT_TIB *) NtCurrentTeb())->StackBase;
+#elif defined(__APPLE__)
+	top = (char *) pthread_get_stackaddr_np(pthread_self());
+#elif defined(__linux__)  &&  defined(__GLIBC__)
+	top = (char *) __libc_stack_end;
+#endif
+	/*  back off one pointer so the mark loop never reads past the end  */
+	if (top)
+		top -= sizeof(char *);
+	return top > (char *) sb ? top : (char *) sb;
+}
+
 void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 {
 	Behavior_iv_t	*cv;
@@ -2545,7 +2574,7 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 
 	init_critical_sections();
 
-	StackBeg = (char *) sb;
+	StackBeg = stack_beginning(sb);
 
 	NUM_CLASSES = nc;
 

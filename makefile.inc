@@ -5,6 +5,11 @@ else
 OPT = -O3
 endif
 
+# AddressSanitizer + UndefinedBehaviorSanitizer build (see "make asan")
+ifdef ASAN
+OPT = -g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined
+endif
+
 .SUFFIXES: .d .iv
 .PRECIOUS : %.c %.iv
 BINDIR = ../bin
