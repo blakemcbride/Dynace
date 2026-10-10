@@ -336,13 +336,13 @@ cmeth	gNewWithStr(char *tmStr)
 	//for now, any other input is bad!
 	long	tm = 0;
 
-	if (tmStr)  {
+	if (tmStr  &&  strlen(tmStr) >= 8)  {
 		int hour=(tmStr[0]-'0')*10+(tmStr[1]-'0');
 		int minute=(tmStr[3]-'0')*10+(tmStr[4]-'0');
 		int second=(tmStr[6]-'0')*10+(tmStr[7]-'0');
 		int milli=0;
 
-		if (strlen(tmStr) > 10)
+		if (strlen(tmStr) >= 12)
 			milli = (tmStr[9]-'0')*100+(tmStr[10]-'0')*10+(tmStr[11]-'0');
 
 		tm = BUILD_TIME(hour, minute, second, milli);

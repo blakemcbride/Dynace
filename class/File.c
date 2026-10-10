@@ -96,7 +96,7 @@ typedef struct  _File_iv_t  {
 typedef struct  _File_cv_t  {
 	unsigned int cNumTempFiles;
 	char cTempSubDir [ 32 ];
-	char cTempFileDir [ 256 ];
+	char cTempFileDir [ 256 + 16 ];
 	long cProcessID;
 }	File_cv_t;
 
@@ -161,7 +161,7 @@ PMETHOD objrtn set_temp(object self)
 
 cmeth objrtn File_cm_gOpenTempFile(object self)
 { 
-	char file[300]; 
+	char file[256+48]; 
 	static unsigned tfn = 0; 
 	object obj; 
 
@@ -177,6 +177,8 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 			if (!pp) 
 				pp = "."; 
 		} 
+		if (strlen(pp) + strlen(File_cv->cTempSubDir) + 3 > sizeof(tp)) 
+			gError(Object, "gOpenTempFile: temporary directory path too long"); 
 		strcpy(tp, pp); 
 		len = strlen(tp); 
 		if (len >= 1 && tp[len-1] != '\\' && tp[len-1] != '/') { 
@@ -185,12 +187,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 142 "File.d"
+#line 144 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 144 "File.d"
+#line 146 "File.d"
 		} 
 
 
@@ -205,12 +207,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 156 "File.d"
+#line 158 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 158 "File.d"
+#line 160 "File.d"
 		} 
 
 
@@ -220,12 +222,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 165 "File.d"
+#line 167 "File.d"
 		File_cv->cProcessID = time(NULL); 
 #endif 
 
 
-#line 176 "File.d"
+#line 178 "File.d"
 		sprintf(File_cv->cTempFileDir, "%s%u", tp, (unsigned) File_cv->cProcessID); 
 		while (MKDIR(File_cv->cTempFileDir)) 
 			sprintf(File_cv->cTempFileDir, "%s%u", tp, (unsigned) ++File_cv->cProcessID); 
@@ -236,13 +238,13 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 184 "File.d"
+#line 186 "File.d"
 	sprintf(file, "%s\\%u-%u.tmp", File_cv->cTempFileDir, (unsigned) File_cv->cProcessID, ++tfn); 
 	obj = gOpenFile(self, file, "w+b"); 
 #endif 
 
 
-#line 187 "File.d"
+#line 189 "File.d"
 	if (obj) { 
 		File_cv->cNumTempFiles++; 
 		return set_temp(obj); 
@@ -335,7 +337,7 @@ imeth long File_im_gLength(object self)
 	return r ? -1L : sb.st_size; 
 #else 
 
-#line 278 "File.d"
+#line 280 "File.d"
 		long sav = ftell(iv->iFP); 
 	long len; 
 
@@ -345,7 +347,7 @@ imeth long File_im_gLength(object self)
 	return len; 
 #endif 
 
-#line 286 "File.d"
+#line 288 "File.d"
 	} 
 
 imeth char * File_im_gName(object self)
@@ -365,6 +367,8 @@ imeth void * File_im_gPointerValue(object self)
 
 cmeth objrtn File_cm_gSetTempSubDir(object self, char *dir)
 { 
+	if (strlen(dir) >= sizeof(File_cv->cTempSubDir)) 
+		gError(Object, "gSetTempSubDir: directory name too long"); 
 	strcpy(File_cv->cTempSubDir, dir); 
 	return self; 
 } 
@@ -389,7 +393,7 @@ static void class_init(void)
 	File_cv->cProcessID = 0L; 
 } 
 
-#line 393 "File.c"
+#line 397 "File.c"
 
 objrtn	File_initialize(void)
 {

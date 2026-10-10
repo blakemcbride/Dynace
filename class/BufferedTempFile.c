@@ -96,7 +96,12 @@ imeth objrtn BufferedTempFile_im_gDispose(object self)
 
 imeth int BufferedTempFile_im_gRead(object self, char *buf, unsigned n)
 { BufferedTempFile_iv_t *iv = GetIVs(BufferedTempFile, self);
-	int bytesRead = min(n, iv->iBufSize - iv->iCurrentOffset); 
+	int bytesRead = iv->iSize - iv->iCurrentOffset; 
+
+	if (bytesRead < 0) 
+		bytesRead = 0; 
+	if (n < (unsigned) bytesRead) 
+		bytesRead = n; 
 
 	if (iv->iTmpFile) 
 		return gRead(iv->iTmpFile, buf, n); 
@@ -150,20 +155,15 @@ imeth char * BufferedTempFile_im_gGets(object self, char *buf, int sz)
 		tmpBuffer = strstr(iv->iBuffer + iv->iCurrentOffset, "\n"); 
 
 		if (tmpBuffer == NULL) 
+			buf[gRead(self, buf, sz - 1)] = 0x00; 
+		else if (tmpBuffer - (iv->iBuffer + iv->iCurrentOffset) <= sz - 1) 
 		{ 
-			gRead(self, buf, sz - 1); 
-			buf[sz - 1] = 0x00; 
-		} 
-		else if (tmpBuffer - iv->iBuffer + iv->iCurrentOffset <= sz - 1) 
-		{ 
-			gRead(self, buf, tmpBuffer - iv->iBuffer + iv->iCurrentOffset + 1); 
-			buf[tmpBuffer - iv->iBuffer + iv->iCurrentOffset] = 0x00; 
+			int len = tmpBuffer - (iv->iBuffer + iv->iCurrentOffset); 
+			gRead(self, buf, len + 1); 
+			buf[len] = 0x00; 
 		} 
 		else 
-		{ 
-			gRead(self, buf, sz - 1); 
-			buf[sz - 1] = 0x00; 
-		} 
+			buf[gRead(self, buf, sz - 1)] = 0x00; 
 
 		return buf; 
 	} 

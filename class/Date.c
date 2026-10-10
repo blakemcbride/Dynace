@@ -348,7 +348,8 @@ static char *Time2(char *buf)
 	if (v[3] >= 12) { 
 		t = 1; 
 		if (v[3] > 12) v[3] -= 12; 
-	} 
+	} else if (v[3] == 0) 
+		v[3] = 12; 
 	sprintf(buf, "%2d:%2d %s", 
 		(int) v[3], (int) v[4], t ? "PM" : "AM"); 
 	if (buf[3] == ' ') 
@@ -633,7 +634,7 @@ cmeth int Date_cm_gFixInvalidDate(object self, int mode)
 	return pm; 
 } 
 
-#line 637 "Date.c"
+#line 638 "Date.c"
 
 objrtn	Date_initialize(void)
 {

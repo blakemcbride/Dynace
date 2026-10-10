@@ -231,6 +231,7 @@ imeth	char	*gGetResponseHeader(char *headerName)
 	if (!iResponseHeaders)
 		return NULL;
 	strncpy(tmpbuf, headerName, sizeof(tmpbuf) - 1);
+	tmpbuf[sizeof(tmpbuf) - 1] = '\0';
 	val = gFindValueStr(iResponseHeaders, strlwr(tmpbuf));
 	return val ? gStringValue(val) : NULL;
 }
@@ -265,6 +266,8 @@ static size_t curl_callback (void *contents, size_t size, size_t nmemb, void *us
 		LOG_ERROR(cLogger, "ERROR: Failed to expand buffer in curl_callback");
 		/* free buffer */
 		free(p->payload);
+		p->payload = NULL;
+		p->size = 0;
 		/* return */
 		return 1;
 	}

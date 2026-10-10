@@ -110,6 +110,8 @@ cmeth objrtn Logger_cm_gNewWithStr(object self, char *lfname)
 	object obj = oSuper(Logger_c, gNew, self)(self); 
 	ivType *iv = ivPtr(obj); 
 	if (lfname && *lfname) { 
+		if (strlen(lfname) >= sizeof(iv->iLogFileName)) 
+			gError(Object, "Logger: log file name too long"); 
 		strcpy(iv->iLogFileName, lfname); 
 		iv->iMode = LOG_MODE_NONE; 
 	} else { 
@@ -134,8 +136,11 @@ imeth int Logger_im_gGetLogMode(object self)
 
 imeth objrtn Logger_im_gSetLogFileName(object self, char *fname)
 { Logger_iv_t *iv = GetIVs(Logger, self);
-	if (fname) 
+	if (fname) { 
+		if (strlen(fname) >= sizeof(iv->iLogFileName)) 
+			gError(Object, "Logger: log file name too long"); 
 		strcpy(iv->iLogFileName, fname); 
+	} 
 	else 
 		*iv->iLogFileName = '\0'; 
 	return self; 
@@ -209,9 +214,9 @@ PMETHOD void out(object self, char *type, char *sfname, int line, char *msg)
 	if (iv->iMode == LOG_MODE_BOTH) { 
 		IGNORE_RETURN write(STDOUT_FILENO, buf, strlen(buf)); 
 		if (msg) 
-			IGNORE_RETURN write(fd, msg, strlen(msg)); 
+			IGNORE_RETURN write(STDOUT_FILENO, msg, strlen(msg)); 
 		if (!hasNewline(msg)) 
-			IGNORE_RETURN write(fd, "\n", 1); 
+			IGNORE_RETURN write(STDOUT_FILENO, "\n", 1); 
 	} 
 	gCloseLogFile(self, fd); 
 } 
@@ -252,7 +257,7 @@ imeth int Logger_im_gOpenLogFile(object self)
 	return fd; 
 #else 
 
-#line 221 "Logger.d"
+#line 226 "Logger.d"
 		int fd; 
 	struct flock lock; 
 
@@ -273,7 +278,7 @@ imeth int Logger_im_gOpenLogFile(object self)
 	return fd; 
 #endif 
 
-#line 240 "Logger.d"
+#line 245 "Logger.d"
 	} 
 
 PMETHOD void unlock(object self, int fd)
@@ -294,7 +299,7 @@ PMETHOD void unlock(object self, int fd)
 	UnlockFileEx(hFile, 0, MAXDWORD, MAXDWORD, &overlapped); 
 #else 
 
-#line 259 "Logger.d"
+#line 264 "Logger.d"
 		struct flock lock; 
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO || fd == -1) 
@@ -307,7 +312,7 @@ PMETHOD void unlock(object self, int fd)
 	fcntl(fd, F_SETLKW, &lock); 
 #endif 
 
-#line 270 "Logger.d"
+#line 275 "Logger.d"
 	} 
 
 imeth void Logger_im_gCloseLogFile(object self, int fd)
@@ -326,7 +331,7 @@ static int hasNewline(char *s)
 	return *s == '\n'; 
 } 
 
-#line 330 "Logger.c"
+#line 335 "Logger.c"
 
 objrtn	Logger_initialize(void)
 {

@@ -456,9 +456,11 @@ void	_start_thread(void)
 	cCt->iState = RUNNING_THREAD;
 	_tick_count = NTICKS;
 	cCt->iRtnVal = (*cCt->iFun)(cCt->iArg);
-	Kill(cCt->iObj, cCt->iRtnVal);
-	if (cCt->iAutoDispose)  
+	//  Both Kill and Dispose yield away and never return when the thread is current
+	if (cCt->iAutoDispose)
 		Dispose(cCt->iObj);
+	else
+		Kill(cCt->iObj, cCt->iRtnVal);
 }
 
 imeth	gHold : Hold (object self)

@@ -369,7 +369,7 @@ cmeth objrtn Socket_cm_gProxyConnect(object self, char *addr, int port, short in
 	Socket_cv->cError = 0; 
 
 	if (isproxy) { 
-		unsigned char c, buf[81]; 
+		unsigned char c, buf[260]; 
 		int i = 0, r; 
 		unsigned short dport = htons((unsigned short) port); 
 
@@ -409,6 +409,8 @@ cmeth objrtn Socket_cm_gProxyConnect(object self, char *addr, int port, short in
 
 #line 359 "Socket.d"
 			if (buf[1]) { 
+				if (strlen(proxy_user) > 255 || proxy_pw && strlen(proxy_pw) > 255) 
+					return errorReturn(obj, 8, "Proxy username or password too long"); 
 				buf[0] = 1; 
 				buf[1] = strlen(proxy_user); 
 				strcpy((char *)buf+2, proxy_user); 
@@ -443,6 +445,8 @@ cmeth objrtn Socket_cm_gProxyConnect(object self, char *addr, int port, short in
 			if (4 != gWrite(obj, (char *) &ad, 4)) 
 				return errorReturn(obj, 8, "write error 4"); 
 		} else { 
+			if (strlen(addr) > 255) 
+				return errorReturn(obj, 8, "host name too long"); 
 			buf[0] = '\x03'; 
 			strcpy((char *)buf+2, addr); 
 			buf[1] = strlen((char *)buf+2); 
@@ -501,12 +505,12 @@ static int sufSSLConnect(ivType *iv, SOCKET sockfd, short int flag)
 #else 
 
 
-#line 450 "Socket.d"
+#line 454 "Socket.d"
 	iv->iFP = sockfd; 
 #endif 
 
 
-#line 452 "Socket.d"
+#line 456 "Socket.d"
 	return 1; 
 } 
 
@@ -534,12 +538,12 @@ imeth objrtn Socket_im_gDispose(object self)
 		closesocket(sockfd); 
 #else 
 
-#line 478 "Socket.d"
+#line 482 "Socket.d"
 		if (iv->iFP) 
 		closesocket(iv->iFP); 
 #endif 
 
-#line 481 "Socket.d"
+#line 485 "Socket.d"
 		decrementUsage(); 
 	return oSuper(Socket_c, gDispose, self)(self); 
 } 
@@ -572,12 +576,12 @@ imeth int Socket_im_gTimedReadMS(object self, char *buf, unsigned n, int max_wai
 	} 
 #else 
 
-#line 512 "Socket.d"
+#line 516 "Socket.d"
 		sfd=iv->iFP; 
 #endif 
 
 
-#line 515 "Socket.d"
+#line 519 "Socket.d"
 		while (n) { 
 #ifdef MY_SSL 
 			if (iv->iFP.flag) 
@@ -586,12 +590,12 @@ imeth int Socket_im_gTimedReadMS(object self, char *buf, unsigned n, int max_wai
 			t = recv(sfd, buf, n, 0); 
 #else 
 
-#line 522 "Socket.d"
+#line 526 "Socket.d"
 			t = recv(sfd, buf, n, 0); 
 #endif 
 
 
-#line 525 "Socket.d"
+#line 529 "Socket.d"
 			if (t < 0) 
 			if ((e=what_error()) == WSAEINTR) 
 			t = 0; 
@@ -604,7 +608,7 @@ imeth int Socket_im_gTimedReadMS(object self, char *buf, unsigned n, int max_wai
 			timeout.tv_sec = max_wait; 
 			timeout.tv_usec = microsec_wait; 
 			t = select(sfd+1, &setRead, NULL, NULL, &timeout); 
-#line 542 "Socket.d"
+#line 546 "Socket.d"
 			if (t <= 0) 
 				return -1; 
 			t = 0; 
@@ -663,12 +667,12 @@ imeth int Socket_im_gTimedWrite(object self, char *buf, unsigned n, int max_wait
 	} 
 #else 
 
-#line 599 "Socket.d"
+#line 603 "Socket.d"
 		sfd = iv->iFP; 
 #endif 
 
 
-#line 602 "Socket.d"
+#line 606 "Socket.d"
 		while (n) { 
 #ifdef MY_SSL 
 			if (iv->iFP.flag) 
@@ -677,12 +681,12 @@ imeth int Socket_im_gTimedWrite(object self, char *buf, unsigned n, int max_wait
 			t = send(sfd, buf, n, 0); 
 #else 
 
-#line 609 "Socket.d"
+#line 613 "Socket.d"
 			t = send(sfd, buf, n, 0); 
 #endif 
 
 
-#line 612 "Socket.d"
+#line 616 "Socket.d"
 			if (t <= 0) 
 			if ((e=what_error()) == WSAEINTR) 
 			t = 0; 
@@ -718,7 +722,7 @@ cmeth char * Socket_cm_gGetErrorStr(object self)
 	return Socket_cv->cErrorStr; 
 } 
 
-#line 652 "Socket.d"
+#line 656 "Socket.d"
 static int is_ip_address(char *s) 
 { 
 	int dots = 0; 
@@ -738,28 +742,31 @@ static int is_ip_address(char *s)
 #else 
 
 
-#line 669 "Socket.d"
+#line 673 "Socket.d"
 #define MODE "b" 
 #endif 
 
 
-#line 672 "Socket.d"
+#line 676 "Socket.d"
 extern unsigned long BufCRC(unsigned long crc, char *buf, int size); 
 extern unsigned long InitCRC(void); 
 
 #define SEND(x) if (sizeof(x) != gWrite(self, (char *) &x, sizeof(x))) goto er1 
 #define RECV(x) if (sizeof(x) != gRead(self, (char *) &x, sizeof(x))) goto er1 
 
-#line 683 "Socket.d"
+#line 687 "Socket.d"
 imeth int Socket_im_gSendStr(object self, char *str)
 { 
 	char buf[80]; 
+	if (strlen(str) >= sizeof(buf)) 
+		return -1; 
+	memset(buf, 0, sizeof(buf)); 
 	strcpy(buf, str); 
 	return 80!=gWrite(self, buf, sizeof(buf)); 
 } 
 
 
-#line 696 "Socket.d"
+#line 703 "Socket.d"
 imeth int Socket_im_gSendFile(object self, char *fromFile, char *toFile)
 { 
 	FILE *fp = fopen(fromFile, "r" MODE); 
@@ -808,7 +815,7 @@ imeth int Socket_im_gSendFile(object self, char *fromFile, char *toFile)
 } 
 
 
-#line 748 "Socket.d"
+#line 755 "Socket.d"
 imeth int Socket_im_gGetStr(object self, char *str)
 { 
 	char buf[80]; 
@@ -821,7 +828,7 @@ imeth int Socket_im_gGetStr(object self, char *str)
 } 
 
 
-#line 766 "Socket.d"
+#line 773 "Socket.d"
 imeth int Socket_im_gRecvFile(object self, char *toFile)
 { 
 	FILE *fp = fopen(toFile, "w" MODE); 
@@ -843,8 +850,12 @@ imeth int Socket_im_gRecvFile(object self, char *toFile)
 
 	RECV(nlen); 
 	len = ntohs(nlen); 
-	if (len && len != gRead(self, buf, len)) 
-		goto er1; 
+	while (len > 0) { 
+		int n = len > BUFLEN ? BUFLEN : len; 
+		if (n != gRead(self, buf, n)) 
+			goto er1; 
+		len -= n; 
+	} 
 
 	while (size) { 
 		unsigned rlen; 
@@ -886,7 +897,7 @@ static object decrementUsage()
 #endif 
 
 
-#line 828 "Socket.d"
+#line 839 "Socket.d"
 	; 
 	return NULL; 
 } 
@@ -899,12 +910,12 @@ static int what_error()
 #else 
 
 
-#line 838 "Socket.d"
+#line 849 "Socket.d"
 	return WSAGetLastError(); 
 #endif 
 
 
-#line 840 "Socket.d"
+#line 851 "Socket.d"
 } 
 
 
@@ -926,24 +937,24 @@ static int updateErrorStr(char * strBuf)
 	} 
 } 
 
-#line 867 "Socket.d"
+#line 878 "Socket.d"
 static void sleepInMilliSeconds(unsigned time) 
 { 
 #if !defined(_MSC_VER) 
 	struct timeval tval; 
 	tval.tv_sec = time/1000; 
-	tval.tv_usec = time%1000; 
+	tval.tv_usec = (time%1000)*1000; 
 	select(0, NULL, NULL, NULL, &tval); 
 
 #else 
 
 
-#line 876 "Socket.d"
+#line 887 "Socket.d"
 	Sleep(time); 
 #endif 
 
 
-#line 878 "Socket.d"
+#line 889 "Socket.d"
 } 
 
 
@@ -977,13 +988,13 @@ imeth char * Socket_im_gGetPeerCertificateIssuerName(object self)
 	} 
 #else 
 
-#line 910 "Socket.d"
+#line 921 "Socket.d"
 		strcpy(buf, "MY_SSL not defined"); 
 	retStr = (char *)malloc(strlen(buf)+1); 
 	strcpy(retStr, buf); 
 #endif 
 
-#line 914 "Socket.d"
+#line 925 "Socket.d"
 		return retStr; 
 } 
 
@@ -1018,13 +1029,13 @@ imeth char * Socket_im_gGetPeerCertificateSubjectName(object self)
 	} 
 #else 
 
-#line 947 "Socket.d"
+#line 958 "Socket.d"
 		strcpy(buf, "MY_SSL not defined"); 
 	retStr = (char *)malloc(strlen(buf)+1); 
 	strcpy(retStr, buf); 
 #endif 
 
-#line 951 "Socket.d"
+#line 962 "Socket.d"
 		return retStr; 
 } 
 
@@ -1051,11 +1062,11 @@ imeth int Socket_im_gHowManyBitsOfPeerPublicKey(object self)
 	} 
 #else 
 
-#line 976 "Socket.d"
+#line 987 "Socket.d"
 		return -1; 
 #endif 
 
-#line 978 "Socket.d"
+#line 989 "Socket.d"
 	} 
 
 
@@ -1088,13 +1099,13 @@ imeth char * Socket_im_gGetCipher(object self)
 	} 
 #else 
 
-#line 1009 "Socket.d"
+#line 1020 "Socket.d"
 		strcpy(buf, "MY_SSL not defined"); 
 	retStr = (char *)malloc(strlen(buf)+1); 
 	strcpy(retStr, buf); 
 #endif 
 
-#line 1013 "Socket.d"
+#line 1024 "Socket.d"
 		return retStr; 
 } 
 
@@ -1203,7 +1214,7 @@ imeth objrtn Socket_im_gGetSessionInfo(object self, char **session1, char **sess
 	} 
 #else 
 
-#line 1120 "Socket.d"
+#line 1131 "Socket.d"
 		strcpy(buf, "MY_SSL not defined"); 
 	*session1 = (char *)malloc(strlen(buf)+1); 
 	strcpy(*session1, buf); 
@@ -1211,11 +1222,11 @@ imeth objrtn Socket_im_gGetSessionInfo(object self, char **session1, char **sess
 	*session3 = NULL; 
 #endif 
 
-#line 1126 "Socket.d"
+#line 1137 "Socket.d"
 		return self; 
 } 
 
-#line 1133 "Socket.d"
+#line 1144 "Socket.d"
 static SOCKET makeServer(int port) 
 { 
 	struct sockaddr_in serv_addr; 
@@ -1244,7 +1255,7 @@ static SOCKET makeServer(int port)
 	return listen_sd; 
 } 
 
-#line 1165 "Socket.d"
+#line 1176 "Socket.d"
 cmeth objrtn Socket_cm_gMakeServer(object self, int port, int ssl)
 { 
 	object obj = oSuper(Socket_c, gNew, self)(self); 
@@ -1260,12 +1271,12 @@ cmeth objrtn Socket_cm_gMakeServer(object self, int port, int ssl)
 #else 
 
 
-#line 1178 "Socket.d"
+#line 1189 "Socket.d"
 	iv->iFP = makeServer(port); 
 #endif 
 
 
-#line 1180 "Socket.d"
+#line 1191 "Socket.d"
 	return obj; 
 } 
 
@@ -1278,11 +1289,11 @@ PMETHOD objrtn newSock(object self, SOCKET newsock, int flag, int ssl, struct so
 	iv->iServerSSL = ssl; 
 #else 
 
-#line 1191 "Socket.d"
+#line 1202 "Socket.d"
 		iv->iFP = newsock; 
 #endif 
 
-#line 1193 "Socket.d"
+#line 1204 "Socket.d"
 		iv->iAddress = *addr; 
 	++Socket_cv->cNumbInstances; 
 	return self; 
@@ -1300,7 +1311,7 @@ imeth char * Socket_im_gIPAddressStr(object self, char *buf)
 	strcpy(buf, addr); 
 #else 
 
-#line 1209 "Socket.d"
+#line 1220 "Socket.d"
 		sprintf(buf, "%d.%d.%d.%d", 
 		(int) iv->iAddress.sin_addr.S_un.S_un_b.s_b1, 
 		(int) iv->iAddress.sin_addr.S_un.S_un_b.s_b2, 
@@ -1308,7 +1319,7 @@ imeth char * Socket_im_gIPAddressStr(object self, char *buf)
 		(int) iv->iAddress.sin_addr.S_un.S_un_b.s_b4); 
 #endif 
 
-#line 1215 "Socket.d"
+#line 1226 "Socket.d"
 		return buf; 
 } 
 
@@ -1326,20 +1337,20 @@ imeth objrtn Socket_im_gAccept(object self)
 	int flag = iv->iFP.flag; 
 #else 
 
-#line 1231 "Socket.d"
+#line 1242 "Socket.d"
 		SOCKET sockfd = iv->iFP; 
 	int flag = 0; 
 #endif 
 
 
-#line 1235 "Socket.d"
+#line 1246 "Socket.d"
 		newsock = accept(sockfd, (struct sockaddr *)&client_addr, (unsigned int *)&sin_size); 
 	if (newsock == INVALID_SOCKET) { 
 #if defined(_MSC_VER) 
 			int e = WSAGetLastError(); 
 #endif 
 
-#line 1240 "Socket.d"
+#line 1251 "Socket.d"
 			return NULL; 
 	} 
 #ifdef USE_FCNTL 
@@ -1360,7 +1371,7 @@ imeth objrtn Socket_im_gAccept(object self)
 	} 
 #else 
 
-#line 1259 "Socket.d"
+#line 1270 "Socket.d"
 	{ 
 		ULONG flg = TRUE; 
 		if (ioctlsocket(newsock, FIONBIO, &flg) == SOCKET_ERROR) { 
@@ -1373,7 +1384,7 @@ imeth objrtn Socket_im_gAccept(object self)
 
 
 
-#line 1270 "Socket.d"
+#line 1281 "Socket.d"
 		return newSock(oSuper(Socket_c, gNew, CLASS)(CLASS), newsock, flag, iv->iServerSSL, &client_addr); 
 } 
 
@@ -1398,7 +1409,7 @@ imeth objrtn Socket_im_gServerSocketConnect(object self)
 	} 
 #endif 
 
-#line 1293 "Socket.d"
+#line 1304 "Socket.d"
 		return self; 
 } 
 
@@ -1506,7 +1517,7 @@ static int verify_Server(ivType* iv, SSL* ssl)
 	return 0; 
 } 
 
-#line 1467 "Socket.d"
+#line 1478 "Socket.d"
 static void print_stats(SSL_CTX* ssl_ctx) 
 { 
 	printf("%4ld items in the session cache\n", SSL_CTX_sess_number(ssl_ctx)); 
@@ -1546,7 +1557,7 @@ static int init_Client_SSL_CTX(ivType *iv)
 		return 0; 
 	} 
 
-#line 1510 "Socket.d"
+#line 1521 "Socket.d"
 	SSL_CTX_set_options(iv->iCtx, SSL_OP_ALL|off); 
 
 
@@ -1618,7 +1629,7 @@ static int SSL_Client_Handshake(ivType* iv, SSL* ssl)
 	return 1; 
 } 
 
-#line 1588 "Socket.d"
+#line 1599 "Socket.d"
 static void print_Server_Certificate(SSL* ssl) 
 { 
 	char buf[BUFLEN]; 
@@ -1660,7 +1671,7 @@ static int init_Server_SSL_CTX(ivType *iv)
 
 	meth = SSLv2_method(); 
 
-#line 1633 "Socket.d"
+#line 1644 "Socket.d"
 	off|=SSL_OP_NO_SSLv2; 
 	off|=SSL_OP_NO_TLSv1; 
 
@@ -1693,7 +1704,7 @@ static int init_Server_SSL_CTX(ivType *iv)
 		} 
 	} 
 
-#line 1670 "Socket.d"
+#line 1681 "Socket.d"
 	if(iv->iServerAuthClient) { 
 		SSL_CTX_set_verify(iv->iCtx,s_server_verify,verify_callback); 
 		SSL_CTX_set_client_CA_list(iv->iCtx, SSL_load_client_CA_file(CAfile)); 
@@ -1706,7 +1717,7 @@ static int SSL_Server_Handshake(ivType *iv, SSL* ssl)
 { 
 	unsigned int tmp; 
 
-#line 1687 "Socket.d"
+#line 1698 "Socket.d"
 	tmp=0; 
 
 	while(SSL_in_init(ssl)) 
@@ -1741,7 +1752,7 @@ static int SSL_Server_Handshake(ivType *iv, SSL* ssl)
 	return 0; 
 } 
 
-#line 1727 "Socket.d"
+#line 1738 "Socket.d"
 #if 0 
 static void print_Client_Certificate(SSL* ssl) 
 { 
@@ -1772,7 +1783,7 @@ static void print_Client_Certificate(SSL* ssl)
 #endif 
 
 
-#line 1756 "Socket.d"
+#line 1767 "Socket.d"
 static int verify_callback(int ok, X509_STORE_CTX *ctx) 
 { 
 	char buf[256]; 
@@ -1826,7 +1837,7 @@ static int verify_callback(int ok, X509_STORE_CTX *ctx)
 #endif 
 
 
-#line 1830 "Socket.c"
+#line 1841 "Socket.c"
 
 objrtn	Socket_initialize(void)
 {

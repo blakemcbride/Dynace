@@ -77,7 +77,12 @@ imeth	gDispose, gDeepDispose()
 
 imeth	int	gRead(char *buf, unsigned n)
 {
-	int bytesRead = min(n, iBufSize - iCurrentOffset);
+	int bytesRead = iSize - iCurrentOffset;	//  valid data remaining
+
+	if (bytesRead < 0)
+		bytesRead = 0;
+	if (n < (unsigned) bytesRead)
+		bytesRead = n;
 
 	if (iTmpFile)
 		return gRead(iTmpFile, buf, n);
@@ -131,20 +136,15 @@ imeth	char	*gGets(char *buf, int sz)
 		tmpBuffer = strstr(iBuffer + iCurrentOffset, "\n");
 		/* we never found a newline */
 		if (tmpBuffer == NULL)
+			buf[gRead(self, buf, sz - 1)] = 0x00;
+		else if (tmpBuffer - (iBuffer + iCurrentOffset) <= sz - 1)
 		{
-			gRead(self, buf, sz - 1);
-			buf[sz - 1] = 0x00;
-		}
-		else if (tmpBuffer - iBuffer + iCurrentOffset <= sz - 1)
-		{
-			gRead(self, buf, tmpBuffer - iBuffer + iCurrentOffset + 1);
-			buf[tmpBuffer - iBuffer + iCurrentOffset] = 0x00;
+			int	len = tmpBuffer - (iBuffer + iCurrentOffset);
+			gRead(self, buf, len + 1);
+			buf[len] = 0x00;
 		}
 		else
-		{
-			gRead(self, buf, sz - 1);
-			buf[sz - 1] = 0x00;
-		}
+			buf[gRead(self, buf, sz - 1)] = 0x00;
 
 		return buf;
 	}

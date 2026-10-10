@@ -65,7 +65,8 @@ imeth	char	*gGetHeader(char *name)
 		char *valpos, *startPos;
 		
 		startPos = gStringValue(header);
-		strncpy(tmpBuf, startPos, sizeof(tmpBuf));
+		strncpy(tmpBuf, startPos, sizeof(tmpBuf) - 1);
+		tmpBuf[sizeof(tmpBuf) - 1] = '\0';
 		valpos = strchr(tmpBuf, ':');
 		if (!valpos)
 			continue;

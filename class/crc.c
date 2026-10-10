@@ -215,9 +215,10 @@ tcrc FileFindCRC(char *file, int *ret)
 	FILE *fp = fopen(file, MODE); 
 	if (!fp) 
 		*ret = 1; 
-	else 
+	else { 
 		crc = FindCRC(fp, ret); 
-	fclose(fp); 
+		fclose(fp); 
+	} 
 	return crc; 
 } 
 

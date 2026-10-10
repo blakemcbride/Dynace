@@ -333,8 +333,10 @@ PMETHOD objrtn delete(object self, ifun cfun, object key, int deep, object prev)
 		if (!found) 
 			return NULL; 
 		if (iv->iUsed == 1 && prev) { 
+			object bt = iv->iBTree; 
 			iv->iPrevious = prev; 
 			collapse(iv, self, deep, NULL); 
+			return bt; 
 		} else { 
 			int n = iv->iUsed - idx - 1; 
 			if (deep) { 
@@ -425,7 +427,7 @@ static object split(object lo, ivType *left, ifun cfun)
 	return ret; 
 } 
 
-#line 418 "BTreeNode.d"
+#line 420 "BTreeNode.d"
 #define DATA data ? data : BTreeNode_cv->cData 
 
 PMETHOD objrtn add(object self, ifun cfun, object key, object data, int replace, int *replaced, object prev, object *old)
@@ -526,7 +528,7 @@ imeth objrtn BTreeNode_im_gPrintValue(object self, object stream)
 } 
 
 
-#line 530 "BTreeNode.c"
+#line 532 "BTreeNode.c"
 
 objrtn	BTreeNode_initialize(void)
 {

@@ -225,7 +225,10 @@ static void print_trace(object logger)
 	char pid_buf[30];
 	sprintf(pid_buf, "%d", getpid());
 	char name_buf[512];
-	name_buf[readlink("/proc/self/exe", name_buf, 511)]=0;
+	ssize_t name_len = readlink("/proc/self/exe", name_buf, sizeof(name_buf)-1);
+	if (name_len < 0)
+		name_len = 0;
+	name_buf[name_len] = 0;
 #ifdef __linux__
 	prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0);
 #endif

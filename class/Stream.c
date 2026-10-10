@@ -69,22 +69,25 @@ imeth int Stream_im_gPutc(object self, int i)
 
 imeth int Stream_im_vPrintf(object self, char *fmt, va_list _rest_)
 { 
-	char buf[1024]; 
+	char buf[1024], *big; 
+	int n; 
+	va_list _rest2_; 
 
-	buf[1020] = 'E'; 
-	buf[1021] = 'O'; 
-	buf[1022] = 'S'; 
-	buf[1023] = '\0'; 
-	vsprintf(buf, fmt, _rest_); 
-	if (buf[1020] != 'E' || 
-		buf[1021] != 'O' || 
-		buf[1022] != 'S' || 
-		buf[1023]) 
-		gError(Object, "vPrintf buffer overflow"); 
-	return gWrite(self, buf, strlen(buf)); 
+	va_copy(_rest2_, _rest_); 
+	n = vsnprintf(buf, sizeof buf, fmt, _rest2_); 
+	va_end(_rest2_); 
+	if (n < 0) 
+		return 0; 
+	if (n < (int) sizeof buf) 
+		return gWrite(self, buf, n); 
+	big = Tnalloc(char, n + 1); 
+	vsnprintf(big, n + 1, fmt, _rest_); 
+	n = gWrite(self, big, n); 
+	free(big); 
+	return n; 
 } 
 
-#line 88 "Stream.c"
+#line 91 "Stream.c"
 
 static	int	Stream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -98,7 +101,7 @@ static	int	Stream_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 76 "Stream.d"
+#line 79 "Stream.d"
 imeth objrtn Stream_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -113,7 +116,7 @@ static void class_init(void)
 	RegisterVariable(traceStream_o); 
 } 
 
-#line 117 "Stream.c"
+#line 120 "Stream.c"
 
 objrtn	Stream_initialize(void)
 {

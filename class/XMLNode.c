@@ -426,20 +426,22 @@ PMETHOD objrtn parse_comment(object self, InputStream *is, string *pstr)
 	} 
 } 
 
-PMETHOD objrtn parse_doctype(object self, InputStream *is, char *buf, char c)
+PMETHOD objrtn parse_doctype(object self, InputStream *is, string *pstr, char c)
 { 
 	char *p, target[128]; 
 
 	for (p=target ; isname(c) ;) { 
+		if (p - target == sizeof(target) - 1) 
+			return NULL; 
 		*p++ = c; 
 		if (EOF == (c=GETC(is))) 
 			return NULL; 
 	} 
-	if (p == buf) 
+	if (p == target) 
 		return NULL; 
 	*p = '\0'; 
 	UNGETC(c, is); 
-	for (p=buf ; 1 ;) { 
+	for (p=pstr->buf ; 1 ;) { 
 		if (EOF == (c=GETC(is))) 
 			return NULL; 
 		if (c == '>') { 
@@ -447,31 +449,33 @@ PMETHOD objrtn parse_doctype(object self, InputStream *is, char *buf, char c)
 			ivType *niv = ivPtr(n); 
 			niv->iType = DOCUMENT_TYPE_NODE; 
 			*p = '\0'; 
-			niv->iValue = strsave(*buf==' '?buf+1:buf); 
+			niv->iValue = strsave(*pstr->buf==' '?pstr->buf+1:pstr->buf); 
 			niv->iName = strsave(target); 
 			return n; 
 		} else 
-			*p++ = c; 
+			ADDCHR(c); 
 	} 
 } 
 
-PMETHOD objrtn parse_instruction(object self, InputStream *is, char *buf)
+PMETHOD objrtn parse_instruction(object self, InputStream *is, string *pstr)
 { 
 	char c, *p, target[128]; 
 
-	while (EOF == (c=GETC(is)) && isspace(c)); 
+	while (EOF != (c=GETC(is)) && isspace(c)); 
 	if (c == EOF) 
 		return NULL; 
 	for (p=target ; isname(c) ;) { 
+		if (p - target == sizeof(target) - 1) 
+			return NULL; 
 		*p++ = c; 
 		if (EOF == (c=GETC(is))) 
 			return NULL; 
 	} 
-	if (p == buf) 
+	if (p == target) 
 		return NULL; 
 	*p = '\0'; 
 	UNGETC(c, is); 
-	for (p=buf ; 1 ;) { 
+	for (p=pstr->buf ; 1 ;) { 
 		if (EOF == (c=GETC(is))) 
 			return NULL; 
 		if (c == '?') { 
@@ -482,22 +486,22 @@ PMETHOD objrtn parse_instruction(object self, InputStream *is, char *buf)
 					return NULL; 
 			} 
 			for (; i > 1 ; i--) 
-				*p++ = '?'; 
+				ADDCHR('?'); 
 			if (i == 1 && c == '>') { 
 				object n = gNew(self); 
 				ivType *niv = ivPtr(n); 
 				niv->iType = PROCESSING_INSTRUCTION_NODE; 
 				*p = '\0'; 
-				niv->iValue = strsave(*buf==' '?buf+1:buf); 
+				niv->iValue = strsave(*pstr->buf==' '?pstr->buf+1:pstr->buf); 
 				niv->iName = strsave(target); 
 				return n; 
 			} else { 
 				while (i--) 
-					*p++ = '?'; 
-				*p++ = c; 
+					ADDCHR('?'); 
+				ADDCHR(c); 
 			} 
 		} else 
-			*p++ = c; 
+			ADDCHR(c); 
 	} 
 } 
 
@@ -517,11 +521,11 @@ PMETHOD objrtn new_tag(object self, InputStream *is, string *pstr)
 		else if (c == '-') 
 			return parse_comment(self, is, pstr); 
 		else if (isalpha(c)) 
-			return parse_doctype(self, is, pstr->buf, c); 
+			return parse_doctype(self, is, pstr, c); 
 		else 
 			return NULL; 
 	} else if (c == '?') 
-		return parse_instruction(self, is, pstr->buf); 
+		return parse_instruction(self, is, pstr); 
 	while (EOF != c && isspace(c)) 
 		c = GETC(is); 
 	if (c == EOF) 
@@ -1022,7 +1026,7 @@ PMETHOD void dump_xml(object self, int lvl, object fp, int next)
 	tabs[0] = '\0'; 
 #endif 
 
-#line 1013 "XMLNode.d"
+#line 1017 "XMLNode.d"
 		for (; self ; self=next?iv->iNextNode:NULL) { 
 		iv = ivPtr(self); 
 		if (iv->iType == DOCUMENT_NODE) { 
@@ -1075,7 +1079,7 @@ static int isAllSpace(char *s)
 #endif 
 
 
-#line 1064 "XMLNode.d"
+#line 1068 "XMLNode.d"
 imeth char * XMLNode_im_gName(object self)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	return iv->iName; 
@@ -1434,7 +1438,7 @@ PMETHOD void xpath_recurse(object self, object *res2, char *name, int sub_type, 
 } 
 
 
-#line 1447 "XMLNode.d"
+#line 1451 "XMLNode.d"
 PMETHOD objrtn pXPath(object self, char *path)
 { XMLNode_iv_t *iv = GetIVs(XMLNode, self);
 	char name[128], *p, sub_attr[128], sub_val[128]; 
@@ -1455,8 +1459,14 @@ PMETHOD objrtn pXPath(object self, char *path)
 				path++; 
 			} 
 		} 
-		for (p=name ; *path && *path != '/' ;) 
+		for (p=name ; *path && *path != '/' ;) { 
+			if (p - name == sizeof(name) - 1) { 
+				if (res) 
+					gDispose(res); 
+				return NULL; 
+			} 
 			*p++ = *path++; 
+		} 
 		if (p == name) 
 			return res; 
 		*p = '\0'; 
@@ -1597,9 +1607,12 @@ PMETHOD objrtn pXPath(object self, char *path)
 
 imeth objrtn XMLNode_im_gXPath(object self, char *path)
 { 
-	char buf[1024], *bp, *ep; 
+	char *buf, *bp, *ep; 
 	object res=NULL, r; 
 
+	buf = (char *) malloc(3 * strlen(path) + 1); 
+	if (!buf) 
+		return NULL; 
 	for (bp=buf ; *path ; ) 
 		if (*path == ']' && path[1] == '[') { 
 		*bp++ = *path++; 
@@ -1633,6 +1646,7 @@ imeth objrtn XMLNode_im_gXPath(object self, char *path)
 			gDispose(r); 
 		} 
 	} 
+	free(buf); 
 	return res; 
 
 } 
@@ -1720,7 +1734,7 @@ main(int argc, char *argv[])
 #else 
 
 
-#line 1730 "XMLNode.d"
+#line 1744 "XMLNode.d"
 	dom = gNewDocument(XMLNode); 
 	gAppendChild(dom, res=gCreateElement(XMLNode, "FatCat")); 
 	gSetAttribute(res, "COLOR", "Red"); 
@@ -1729,14 +1743,14 @@ main(int argc, char *argv[])
 #endif 
 
 
-#line 1736 "XMLNode.d"
+#line 1750 "XMLNode.d"
 	return 0; 
 } 
 
 #endif 
 
 
-#line 1740 "XMLNode.c"
+#line 1754 "XMLNode.c"
 
 objrtn	XMLNode_initialize(void)
 {

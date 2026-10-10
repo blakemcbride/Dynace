@@ -1152,6 +1152,8 @@ cmeth char * String_cm_gLoadMask(object self, char *inmask)
 
 	if (!inmask || !*inmask) 
 		return NULL; 
+	if (strlen(inmask) > MASK_MAX - 2) 
+		gError(Object, "gLoadMask: mask too long"); 
 
 	if (*p1 != MASK_LEFT && *p1 != MASK_RIGHT) 
 		*p2++ = MASK_LEFT; 
@@ -1159,8 +1161,8 @@ cmeth char * String_cm_gLoadMask(object self, char *inmask)
 	while (*p1) { 
 		if (*p1 == MASK_LITERAL) 
 			*p2++ = *(++p1); 
-		else if (String_cv->cMaskVal[(int)*p1]) 
-			*p2++ = String_cv->cMaskVal[(int)*p1]; 
+		else if ((unsigned char) *p1 < MASK_MAX && String_cv->cMaskVal[(unsigned char) *p1]) 
+			*p2++ = String_cv->cMaskVal[(unsigned char) *p1]; 
 		else if ((unsigned char) *p1 >= MASK_BASE) 
 			*p2++ = ' '; 
 		else 
@@ -1180,13 +1182,16 @@ imeth objrtn String_im_gApplyMask(object self, char *inmask, char *intext)
 	char *p1; 
 	char *p2; 
 	char *p3; 
-	int right = *inmask == MASK_RIGHT; 
-	int inc = right ? -1 : 1; 
+	int right, inc; 
 	char buf[MASK_MAX]; 
 	int loadMask = 1; 
 
 	if (!inmask || !*inmask) 
 		return text == iv->iStr ? self : gChangeStrValue(self, text); 
+	if (strlen(inmask) >= MASK_MAX) 
+		gError(Object, "gApplyMask: mask too long"); 
+	right = *inmask == MASK_RIGHT; 
+	inc = right ? -1 : 1; 
 
 	for (p1 = inmask; *p1 && loadMask; p1++) 
 		if ((unsigned char) *p1 >= MASK_BASE) 
@@ -1248,6 +1253,8 @@ imeth objrtn String_im_gRemoveMask(object self, char *inmask, char *text)
 
 	if (!inmask || !*inmask) 
 		return p2 == iv->iStr ? self : gChangeStrValue(self, text); 
+	if (strlen(inmask) >= MASK_MAX) 
+		gError(Object, "gRemoveMask: mask too long"); 
 
 	for (p1 = inmask; *p1 && loadMask; p1++) 
 		if ((unsigned char) *p1 >= MASK_BASE) 
@@ -1295,7 +1302,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1299 "String.c"
+#line 1306 "String.c"
 
 objrtn	String_initialize(void)
 {

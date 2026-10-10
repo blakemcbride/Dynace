@@ -472,9 +472,11 @@ void _start_thread(void)
 	Thread_cv->cCt->iState = RUNNING_THREAD; 
 	_tick_count = NTICKS; 
 	Thread_cv->cCt->iRtnVal = (*Thread_cv->cCt->iFun)(Thread_cv->cCt->iArg); 
-	Kill(Thread_cv->cCt->iObj, Thread_cv->cCt->iRtnVal); 
+
 	if (Thread_cv->cCt->iAutoDispose) 
 		Dispose(Thread_cv->cCt->iObj); 
+	else 
+		Kill(Thread_cv->cCt->iObj, Thread_cv->cCt->iRtnVal); 
 } 
 
 PMETHOD objrtn Hold(object self)
@@ -511,41 +513,41 @@ PMETHOD objrtn Release(object self, int yld)
 	return self; 
 } 
 
-#line 509 "Thread.d"
+#line 511 "Thread.d"
 #if defined(__has_attribute) 
 #if __has_attribute(no_sanitize_address) 
 #define NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address)) 
 #endif 
 
 
-#line 513 "Thread.d"
+#line 515 "Thread.d"
 #endif 
 
 
-#line 514 "Thread.d"
+#line 516 "Thread.d"
 #ifndef NO_SANITIZE_ADDRESS 
 #define NO_SANITIZE_ADDRESS 
 #endif 
 
 
-#line 518 "Thread.d"
+#line 520 "Thread.d"
 #if defined(__has_feature) 
 #if __has_feature(address_sanitizer) 
 #define ASAN_BUILD 
 #endif 
 
 
-#line 522 "Thread.d"
+#line 524 "Thread.d"
 #endif 
 
 
-#line 523 "Thread.d"
+#line 525 "Thread.d"
 #ifdef __SANITIZE_ADDRESS__ 
 #define ASAN_BUILD 
 #endif 
 
 
-#line 527 "Thread.d"
+#line 529 "Thread.d"
 #ifdef ASAN_BUILD 
 NO_SANITIZE_ADDRESS 
 	static void stack_copy(char *to, char *from, intptr_t n) 
@@ -558,12 +560,12 @@ NO_SANITIZE_ADDRESS
 #else 
 
 
-#line 537 "Thread.d"
+#line 539 "Thread.d"
 #define stack_copy(to, from, n) memcpy((to), (from), (size_t)(n)) 
 #endif 
 
 
-#line 540 "Thread.d"
+#line 542 "Thread.d"
 static void stack_mark(char **p) 
 { 
 	void * volatile c; 
@@ -591,7 +593,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 565 "Thread.d"
+#line 567 "Thread.d"
 	stack_copy(t->iStack_location, t->iStack_buf, t->iStack_size); 
 	longjmp(t->iRtn, 1); 
 } 
@@ -612,7 +614,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 583 "Thread.d"
+#line 585 "Thread.d"
 		(*stack_mark_fp)(&mark); 
 #ifdef sparc 
 
@@ -620,7 +622,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 588 "Thread.d"
+#line 590 "Thread.d"
 		Thread_cv->cCt->iStack_location = mark; 
 		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
 			Thread_cv->cCt->iStack_size = 0; 
@@ -637,7 +639,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 602 "Thread.d"
+#line 604 "Thread.d"
 			stack_copy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
@@ -689,7 +691,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 651 "Thread.d"
+#line 653 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -921,7 +923,7 @@ int getch(void)
 #endif 
 
 
-#line 881 "Thread.d"
+#line 883 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -939,7 +941,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 943 "Thread.c"
+#line 945 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {

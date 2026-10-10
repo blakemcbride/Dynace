@@ -148,7 +148,7 @@ imeth	gFindNext(object *foundKey)
 	ENTERCRITICALSECTION(iCS);
 	if (*foundKey) {
 		object	key = *foundKey;
-		r = gFindBTNGT(iNodes, iCmpFun, key, foundKey);
+		r = iNodes && iNum ? gFindBTNGT(iNodes, iCmpFun, key, foundKey) : NULLOBJ;
 	} else
 		r = gFindFirst(self, foundKey);
 	LEAVECRITICALSECTION(iCS);
@@ -179,7 +179,7 @@ imeth	gFindPrev(object *foundKey)
 	ENTERCRITICALSECTION(iCS);
 	if (*foundKey) {
 		object	key = *foundKey;
-		r = gFindBTNLT(iNodes, iCmpFun, key, foundKey);
+		r = iNodes && iNum ? gFindBTNLT(iNodes, iCmpFun, key, foundKey) : NULLOBJ;
 	} else
 		r = gFindLast(self, foundKey);
 	LEAVECRITICALSECTION(iCS);

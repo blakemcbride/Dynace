@@ -58,19 +58,22 @@ imeth	int	gPutc(int i)
 
 imeth	int	vPrintf(char *fmt, ...)
 {
-	char	buf[1024];
+	char	buf[1024], *big;
+	int	n;
+	va_list	_rest2_;
 
-	buf[1020] = 'E';
-	buf[1021] = 'O';
-	buf[1022] = 'S';
-	buf[1023] = '\0';
-	vsprintf(buf, fmt, _rest_);
-	if (buf[1020] != 'E'  ||
-	    buf[1021] != 'O'  ||
-	    buf[1022] != 'S'  ||
-	    buf[1023])
-		gError(Object, "vPrintf buffer overflow");
-	return gWrite(self, buf, strlen(buf));
+	va_copy(_rest2_, _rest_);
+	n = vsnprintf(buf, sizeof buf, fmt, _rest2_);
+	va_end(_rest2_);
+	if (n < 0)
+		return 0;
+	if (n < (int) sizeof buf)
+		return gWrite(self, buf, n);
+	big = Tnalloc(char, n + 1);
+	vsnprintf(big, n + 1, fmt, _rest_);
+	n = gWrite(self, big, n);
+	free(big);
+	return n;
 }
 
 imeth	gCopy, gDeepCopy ()

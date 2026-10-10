@@ -328,7 +328,7 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 	cError = 0;
 
 	if (isproxy) {
-		unsigned char	c, buf[81];
+		unsigned char	c, buf[260];	//  SOCKS5 fields are at most 255 bytes
 		int	i = 0, r;
 		unsigned short dport = htons((unsigned short) port);
 
@@ -357,6 +357,8 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 				return errorReturn(obj, 8, "Proxy authentication GSSAPI required");
 #endif
 			if (buf[1]) {
+				if (strlen(proxy_user) > 255  ||  proxy_pw && strlen(proxy_pw) > 255)
+					return errorReturn(obj, 8, "Proxy username or password too long");
 				buf[0] = 1;
 				buf[1] = strlen(proxy_user);
 				strcpy((char *)buf+2, proxy_user);
@@ -391,6 +393,8 @@ cmeth gProxyConnect(char *addr, int port, short int flag, char *proxy_addr, int 
 			if (4 != gWrite(obj, (char *) &ad, 4))
 				return errorReturn(obj, 8, "write error 4");
 		} else {
+			if (strlen(addr) > 255)
+				return errorReturn(obj, 8, "host name too long");
 			buf[0] = '\x03';
 			strcpy((char *)buf+2, addr);
 			buf[1] = strlen((char *)buf+2);
@@ -683,6 +687,9 @@ extern	unsigned long InitCRC(void);
 imeth int	gSendStr(char *str)
 {
 	char	buf[80];
+	if (strlen(str) >= sizeof(buf))
+		return -1;
+	memset(buf, 0, sizeof(buf));
 	strcpy(buf, str);
 	return 80!=gWrite(self, buf, sizeof(buf));
 }
@@ -784,8 +791,12 @@ imeth	int	gRecvFile(char *toFile)
 
 	RECV(nlen);
 	len = ntohs(nlen);
-	if (len  &&  len != gRead(self, buf, len))
-		goto er1;
+	while (len > 0) {	//  skip the file name
+		int	n = len > BUFLEN ? BUFLEN : len;
+		if (n != gRead(self, buf, n))
+			goto er1;
+		len -= n;
+	}
 	
 	while (size) {
 		unsigned	rlen;
@@ -869,7 +880,7 @@ static void sleepInMilliSeconds(unsigned time)
 #if	!defined(_MSC_VER)
 	struct timeval  tval;
 	tval.tv_sec = time/1000;
-	tval.tv_usec = time%1000;
+	tval.tv_usec = (time%1000)*1000;
 	select(0, NULL, NULL, NULL, &tval);
 	// sleep(time); in seconds
 #else

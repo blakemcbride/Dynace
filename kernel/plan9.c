@@ -145,14 +145,12 @@ static	int	copy1(int fdf, int fdt, char *from, char *to)
 
 	for(;;) {
 		n = read(fdf, buf, sizeof buf);
-		if(n >= 0) {
-			if(n == 0)
-				break;
-			n1 = write(fdt, buf, n);
-			if(n1 != n) {
-				fprint(2, "mv: error writing %s: %r\n", to);
-				return -1;
-			}
+		if(n <= 0)
+			break;
+		n1 = write(fdt, buf, n);
+		if(n1 != n) {
+			fprint(2, "mv: error writing %s: %r\n", to);
+			return -1;
 		}
 	}
 	if(n < 0) {

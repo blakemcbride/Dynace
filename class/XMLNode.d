@@ -415,20 +415,22 @@ private	cmeth	object	parse_comment(InputStream *is, string *pstr)
 	}
 }
 
-private	cmeth	object	parse_doctype(InputStream *is, char *buf, char c)
+private	cmeth	object	parse_doctype(InputStream *is, string *pstr, char c)
 {
 	char	*p, target[128];
 
 	for (p=target ; isname(c) ;) {
+		if (p - target == sizeof(target) - 1)
+			return NULL;
 		*p++ = c;
 		if (EOF == (c=GETC(is)))
 			return NULL;
 	}
-	if (p == buf)
+	if (p == target)
 		return NULL;
 	*p = '\0';
 	UNGETC(c, is);
-	for (p=buf ; 1 ;) {
+	for (p=pstr->buf ; 1 ;) {
 		if (EOF == (c=GETC(is)))
 			return NULL;
 		if (c == '>') {
@@ -436,31 +438,33 @@ private	cmeth	object	parse_doctype(InputStream *is, char *buf, char c)
 			ivType *niv = ivPtr(n);
 			niv->iType = DOCUMENT_TYPE_NODE;
 			*p = '\0';
-			niv->iValue = strsave(*buf==' '?buf+1:buf);
+			niv->iValue = strsave(*pstr->buf==' '?pstr->buf+1:pstr->buf);
 			niv->iName = strsave(target);
 			return n;
 		} else
-			*p++ = c;
+			ADDCHR(c);
 	}
 }
 
-private	cmeth	object	parse_instruction(InputStream *is, char *buf)
+private	cmeth	object	parse_instruction(InputStream *is, string *pstr)
 {
 	char	c, *p, target[128];
 	
-	while (EOF == (c=GETC(is))  &&  isspace(c));
+	while (EOF != (c=GETC(is))  &&  isspace(c));
 	if (c == EOF)
 		return NULL;
 	for (p=target ; isname(c) ;) {
+		if (p - target == sizeof(target) - 1)
+			return NULL;
 		*p++ = c;
 		if (EOF == (c=GETC(is)))
 			return NULL;
 	}
-	if (p == buf)
+	if (p == target)
 		return NULL;
 	*p = '\0';
 	UNGETC(c, is);
-	for (p=buf ; 1 ;) {
+	for (p=pstr->buf ; 1 ;) {
 		if (EOF == (c=GETC(is)))
 			return NULL;
 		if (c == '?') {
@@ -471,22 +475,22 @@ private	cmeth	object	parse_instruction(InputStream *is, char *buf)
 					return NULL;
 			}
 			for (; i > 1 ; i--)
-				*p++ = '?';
+				ADDCHR('?');
 			if (i == 1  &&  c == '>') {
 				object	n = gNew(self);
 				ivType *niv = ivPtr(n);
 				niv->iType = PROCESSING_INSTRUCTION_NODE;
 				*p = '\0';
-				niv->iValue = strsave(*buf==' '?buf+1:buf);
+				niv->iValue = strsave(*pstr->buf==' '?pstr->buf+1:pstr->buf);
 				niv->iName = strsave(target);
 				return n;
 			} else  {
 				while (i--)
-					*p++ = '?';
-				*p++ = c;
+					ADDCHR('?');
+				ADDCHR(c);
 			}
 		} else
-			*p++ = c;
+			ADDCHR(c);
 	}
 }
 
@@ -506,11 +510,11 @@ private	cmeth	object	new_tag(InputStream *is, string *pstr)
 		else if (c == '-')
 			return parse_comment(self, is, pstr);
 		else if (isalpha(c))
-			return parse_doctype(self, is, pstr->buf, c);
+			return parse_doctype(self, is, pstr, c);
 		else
 			return NULL;
 	} else if (c == '?')
-		return parse_instruction(self, is, pstr->buf);
+		return parse_instruction(self, is, pstr);
 	while (EOF != c  &&  isspace(c))
 		c = GETC(is);
 	if (c == EOF)
@@ -1464,8 +1468,14 @@ private	imeth	pXPath(char *path)
 				path++;
 			}
 		}
-		for (p=name ; *path  &&  *path != '/' ;)
+		for (p=name ; *path  &&  *path != '/' ;) {
+			if (p - name == sizeof(name) - 1) {	//  segment too long; sub_attr & sub_val come from it
+				if (res)
+					gDispose(res);
+				return NULL;
+			}
 			*p++ = *path++;
+		}
 		if (p == name)
 			return res;
 		*p = '\0';
@@ -1606,9 +1616,12 @@ private	imeth	pXPath(char *path)
 
 imeth	gXPath(char *path)
 {
-	char	buf[1024], *bp, *ep;
+	char	*buf, *bp, *ep;
 	object	res=NULL, r;
 
+	buf = (char *) malloc(3 * strlen(path) + 1);
+	if (!buf)
+		return NULL;
 	for (bp=buf ; *path ; )
 		if (*path == ']'  &&  path[1] == '[') {
 			*bp++ = *path++;
@@ -1642,6 +1655,7 @@ imeth	gXPath(char *path)
 				gDispose(r);
 			}
 	}
+	free(buf);
 	return res;
 	
 }

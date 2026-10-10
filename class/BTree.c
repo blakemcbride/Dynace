@@ -165,7 +165,7 @@ imeth objrtn BTree_im_gFindNext(object self, object *foundKey)
 	ENTERCRITICALSECTION(iv->iCS); 
 	if (*foundKey) { 
 		object key = *foundKey; 
-		r = gFindBTNGT(iv->iNodes, iv->iCmpFun, key, foundKey); 
+		r = iv->iNodes && iv->iNum ? gFindBTNGT(iv->iNodes, iv->iCmpFun, key, foundKey) : NULLOBJ; 
 	} else 
 		r = gFindFirst(self, foundKey); 
 	LEAVECRITICALSECTION(iv->iCS); 
@@ -196,7 +196,7 @@ imeth objrtn BTree_im_gFindPrev(object self, object *foundKey)
 	ENTERCRITICALSECTION(iv->iCS); 
 	if (*foundKey) { 
 		object key = *foundKey; 
-		r = gFindBTNLT(iv->iNodes, iv->iCmpFun, key, foundKey); 
+		r = iv->iNodes && iv->iNum ? gFindBTNLT(iv->iNodes, iv->iCmpFun, key, foundKey) : NULLOBJ; 
 	} else 
 		r = gFindLast(self, foundKey); 
 	LEAVECRITICALSECTION(iv->iCS); 

@@ -59,7 +59,7 @@ defclass  File : Stream  {
  class:
 	unsigned int cNumTempFiles;
 	char cTempSubDir[32];
-	char cTempFileDir[256];
+	char cTempFileDir[256+16];
 	long cProcessID;
 
  init:	class_init;
@@ -117,7 +117,7 @@ private	imeth	set_temp()
 
 cmeth	gOpenTempFile()
 {
-	char	file[300];
+	char	file[256+48];
 	static	unsigned	tfn = 0;
 	object	obj;
 
@@ -133,6 +133,8 @@ cmeth	gOpenTempFile()
 			if (!pp)
 				pp = ".";
 		}
+		if (strlen(pp) + strlen(cTempSubDir) + 3 > sizeof(tp))
+			gError(Object, "gOpenTempFile: temporary directory path too long");
 		strcpy(tp, pp);
 		len = strlen(tp);
 		if (len >= 1  &&  tp[len-1] != '\\'  &&  tp[len-1] != '/') {
@@ -302,6 +304,8 @@ imeth	void	*gPointerValue()
 
 cmeth	gSetTempSubDir(char *dir)
 {
+	if (strlen(dir) >= sizeof(cTempSubDir))
+		gError(Object, "gSetTempSubDir: directory name too long");
 	strcpy(cTempSubDir, dir);
 	return self;
 }

@@ -77,6 +77,8 @@ cmeth	gNewWithStr(char *lfname)
 	object	obj = gNew(super);
 	ivType	*iv = ivPtr(obj);
 	if (lfname && *lfname) {
+		if (strlen(lfname) >= sizeof(iLogFileName))
+			gError(Object, "Logger: log file name too long");
 		strcpy(iLogFileName, lfname);
 		iMode = LOG_MODE_NONE;
 	} else {
@@ -101,8 +103,11 @@ imeth	int	gGetLogMode()
 
 imeth	gSetLogFileName(char *fname)
 {
-	if (fname)
+	if (fname) {
+		if (strlen(fname) >= sizeof(iLogFileName))
+			gError(Object, "Logger: log file name too long");
 		strcpy(iLogFileName, fname);
+	}
 	else
 		*iLogFileName = '\0';
 	return self;
@@ -176,9 +181,9 @@ private imeth	void	out(char *type, char *sfname, int line, char *msg)
 	if (iMode == LOG_MODE_BOTH) {
 		IGNORE_RETURN write(STDOUT_FILENO, buf, strlen(buf));
 		if (msg)
-			IGNORE_RETURN write(fd, msg, strlen(msg));
+			IGNORE_RETURN write(STDOUT_FILENO, msg, strlen(msg));
 		if (!hasNewline(msg))
-			IGNORE_RETURN write(fd, "\n", 1);
+			IGNORE_RETURN write(STDOUT_FILENO, "\n", 1);
 	}
 	gCloseLogFile(self, fd);
 }

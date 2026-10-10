@@ -313,8 +313,10 @@ imeth	gDeleteBTNode : delete (ifun cfun, key, int deep, prev)
 		if (!found)
 			return NULL;
 		if (iUsed == 1  &&  prev) {
+			object	bt = iBTree;
 			iPrevious = prev;
-			collapse(iv, self, deep, NULL);
+			collapse(iv, self, deep, NULL);	//  disposes self
+			return bt;
 		} else {
 			int	n = iUsed - idx - 1;
 			if (deep) {
