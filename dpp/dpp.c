@@ -4788,7 +4788,8 @@ static	int	get_line(object fobj, char *line)
 
 	tbuf = buf;
 	while (1)  {
-		if (!gGets(fobj, tbuf, sizeof buf))
+		/*  continuation lines are appended, so only the remaining space is available  */
+		if (!gGets(fobj, tbuf, (int)(sizeof buf - (tbuf - buf))))
 			break;
 		CurrentLine++;
 		something = 1;
@@ -4812,7 +4813,7 @@ static	char	*gettoken(object fobj)
 {
 	register int	i;
 	char	*w;
-	static	char	buf[10000], token[BUFSIZE], *s;
+	static	char	buf[10000], token[sizeof buf], *s;	/*  a token can be as long as the line (e.g. a string literal)  */
 
 	if (!fobj)  {		/*  reset state  */
 		s = buf;

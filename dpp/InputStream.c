@@ -195,7 +195,7 @@ imeth int InputStream_im_gLineHasColon(object self)
 
 imeth objrtn InputStream_im_gNextToken(object self)
 { InputStream_iv_t *iv = GetIVs(InputStream, self);
-	char *w, token[MAXWORDSZ]; 
+	char *w, token[MAXBUF]; 
 	int i; 
 
 	if (!next_token(iv)) 

@@ -608,7 +608,7 @@ static objrtn print_nest(object s, ivType *iv)
 
 	for (i=0 ; i++ != iv->iNelm ; ) { 
 		if (t = *val++) { 
-			t = gStringRepValue(*val++); 
+			t = gStringRepValue(t); 
 			vBuild(s, NULL, "\n", t, "\n", NULL); 
 			gDispose(t); 
 		} else 

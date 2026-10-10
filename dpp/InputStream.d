@@ -173,7 +173,7 @@ imeth	int	gLineHasColon()
 
 imeth	gNextToken()
 {
-	char	*w, token[MAXWORDSZ];
+	char	*w, token[MAXBUF];	/*  a token can be as long as the line (e.g. a string literal)  */
 	int	i;
 
 	if (!next_token(iv))

@@ -111,7 +111,9 @@ Fragile under other compilers/optimizations.
 
 # `dpp` preprocessor (`dpp/`)
 
-### D1 — Unbounded string-literal copy overflows `token[256]` — High
+### D1 — Unbounded string-literal copy overflows `token[256]` — High — **FIXED**
+**Status: FIXED** — `token` is now `MAXBUF` (the line-buffer size), so no token can outgrow it. Also removes the D7 overflow in this tokenizer. Verified under ASan with a 1000-char string literal (old dpp: stack-buffer-overflow; new: clean, literal intact).
+
 `dpp/InputStream.d:218-228` (`gNextToken`), buffer declared line 176
 (`token[MAXWORDSZ]`, `MAXWORDSZ` = 256). The string/char-literal branch copies
 the whole literal into `token` with no bound; the source line buffer is
@@ -119,10 +121,20 @@ the whole literal into `token` with no bound; the source line buffer is
 characters** (a long format/SQL/help string) overflows this stack buffer during
 normal `.d`→`.c` conversion.
 
-### D2 — Same unbounded string-literal copy in `gettoken` — High
+### D2 — Same unbounded string-literal copy in `gettoken` — High — **FIXED**
+**Status: FIXED** — `token` is now sized to the 10000-byte line buffer. Verified under ASan with `dpp -s` on a 1000-char literal (old: global-buffer-overflow; new: clean). `make newgens` output unchanged.
+
 `dpp/dpp.c:4865-4875`, `token[BUFSIZE]` (256), fed from `buf[10000]`. Reached in
 the `-s`/`-g`/`-e` scan paths when a scanned source contains a string literal
 > 255 chars. Overwrites adjacent static storage.
+
+### D8 — `get_line` continuation lines overflow `buf[10000]` — High — **FIXED**
+**Status: FIXED** — `gGets` is now passed only the space remaining in `buf`. Verified under ASan with 15 KB of `\`-continued lines (old: global-buffer-overflow; new: clean).
+
+`dpp/dpp.c` (`get_line`): a line ending in `\` is joined with the next by reading
+it at `tbuf += i`, but `gGets` was still passed `sizeof buf`, so a long run of
+continuation lines (e.g. a large multi-line `#define`) wrote past the static
+10000-byte buffer.
 
 ### D3 — Method-name construction overflows 81/90-byte buffers — Medium
 `dpp/dpp.c:3420-3543` (`pp_method`). `mname/gname/fmname/ename` are
@@ -161,7 +173,9 @@ Requires a ≥257-character identifier.
 
 # String / array / collection classes (`class/`)
 
-### S1 — `print_nest` double pointer-increment → OOB read — High
+### S1 — `print_nest` double pointer-increment → OOB read — High — **FIXED**
+**Status: FIXED** — `t = gStringRepValue(t);`. Verified `gStringRep` on an `ObjectArray` of {"alpha", NULL, 42, "omega"} prints each element once, in order.
+
 `class/Array.d:547-549`
 ```c
 for (i=0 ; i++ != iNelm ; )
@@ -173,7 +187,9 @@ Each iteration advances `val` twice for a non-NULL element and string-reps the
 reads `iNelm` elements past `iArray` and calls `gStringRepValue` on a garbage
 pointer. Triggered by `gStringRep` on any `ObjectArray`. Fix: `t = gStringRepValue(t);`
 
-### S2 — `gJustifyCenter` shift-left: unbounded backward write — High
+### S2 — `gJustifyCenter` shift-left: unbounded backward write — High — **FIXED**
+**Status: FIXED** — fill loop is now `for (i=n-p ; i < n ; ) s[i++] = ' ';`. Verified under ASan: `"   ab "` → `"  ab  "`, `"      x"` → `"   x   "`, shift-right / unchanged / all-spaces cases correct.
+
 `class/String.d:995-999`
 ```c
 if (left2 < left) {          /* shift left */
@@ -188,13 +204,17 @@ buffer (crash / heap corruption). Triggered whenever leading spaces > trailing
 spaces (e.g. `gJustifyCenter` on `"   ab "`). Fix: mirror the shift-right branch:
 `for (i=n-p ; i < n ; ) s[i++] = ' ';`
 
-### S3 — `gGets` ignores the buffer-size argument — High
+### S3 — `gGets` ignores the buffer-size argument — High — **FIXED**
+**Status: FIXED** — copy loop now also stops at `len < n`. Verified under ASan with an 8-byte buffer: `"hello world\nnext"` reads as `"hello w"`, `"orld\n"`, `"next"`.
+
 `class/String.d:597-602`. `gGets(char *buf, int n)` mimics `fgets` but computes
 `len` from the string contents (up to `'\n'` or `iLen`) and never clamps to `n`:
 `memcpy(buf, iStr, len); buf[len] = '\0';`. A line longer than the caller's
 buffer overflows it. Fix: `if (len > n) len = n;` before the copy.
 
-### S4 — `vSprintf` overflows a 1024-byte stack buffer — High
+### S4 — `vSprintf` overflows a 1024-byte stack buffer — High — **FIXED**
+**Status: FIXED** — `vsnprintf` into the 1024-byte buffer; longer results are formatted again into a heap buffer of the exact size. Verified under ASan: 3000-char `vSprintf` and `gStringRepValue` return full-length results.
+
 `class/String.d:639-644`: `char buf[1024]; vsprintf(buf, fmt, _rest_);`.
 Reachable through `gStringRepValue` → `vSprintf(String, "\"%s\"", iStr)`:
 inspecting/printing any String longer than ~1022 chars smashes the stack. Fix:
@@ -432,14 +452,14 @@ when `rename`/`mv` falls back to copying and a read error occurs.
 | Subsystem | High | Medium | Low |
 |---|---|---|---|
 | Kernel/runtime | 1 | 3 | 3 |
-| dpp preprocessor | 2 | 3 | 2 |
+| dpp preprocessor | 3 | 3 | 2 |
 | Strings/collections | 5 | 1 | – |
 | Linked/trees | 2 | – | 2 |
 | I/O & networking | 5 | 6 | 3 |
 | Numbers/dates/errors | 1 | 1 | 2 |
 | Threads | 1 | 2 | 1 |
 
-**Fixed so far:** K6, S5, L1, L2, T1, H1, H2.
+**Fixed so far:** K6, D1, D2, D8, S1, S2, S3, S4, S5, L1, L2, T1, H1, H2.
 
 The **highest-priority fixes**, because they are reachable from untrusted or
 network input: N1, N2, N4, N5 (Socket/XML overflows), S1–S5 (String/Array

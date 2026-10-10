@@ -594,7 +594,7 @@ imeth	char	*gGets(char *buf, int n)
 		*buf = '\0';
 		return buf;
 	}
-	for (len=0 ; len < iLen  &&  iStr[len++] != '\n' ; );
+	for (len=0 ; len < iLen  &&  len < n  &&  iStr[len++] != '\n' ; );
 	memcpy(buf, iStr, len);
 	memmove(iStr, iStr+len, iLen-len+1);
 	iLen -= len;
@@ -638,10 +638,21 @@ imeth	int	gEndOfStream()
 
 cmeth	vSprintf(char *fmt, ...)
 {
-	char	buf[1024];
+	char	buf[1024], *big;
+	int	n;
+	va_list	_rest2_;
+	object	obj;
 
-	vsprintf(buf, fmt, _rest_);
-	return gNewWithStr(self, buf);
+	va_copy(_rest2_, _rest_);
+	n = vsnprintf(buf, sizeof buf, fmt, _rest2_);
+	va_end(_rest2_);
+	if (n < (int) sizeof buf)
+		return gNewWithStr(self, n < 0 ? "" : buf);
+	big = Tnalloc(char, n + 1);
+	vsnprintf(big, n + 1, fmt, _rest_);
+	obj = gNewWithStr(self, big);
+	free(big);
+	return obj;
 }
 
 imeth	vBuild(char *f, ...)
@@ -995,8 +1006,8 @@ imeth	gJustifyCenter()
 	if (left2 < left)  {	/*  shift left  */
 		p = left - left2;
 		memmove(s, s + p, n - p);
-		for (i=n-(p+1) ; i < n ; )
-			s[i--] = ' ';
+		for (i=n-p ; i < n ; )
+			s[i++] = ' ';
 	} else {		/*  shift right  */
 		p = left2 - left;
 		memmove(s + p, s, n - p);

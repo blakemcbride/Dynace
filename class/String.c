@@ -612,7 +612,7 @@ imeth char * String_im_gGets(object self, char *buf, int n)
 		*buf = '\0'; 
 		return buf; 
 	} 
-	for (len=0 ; len < iv->iLen && iv->iStr[len++] != '\n' ; ); 
+	for (len=0 ; len < iv->iLen && len < n && iv->iStr[len++] != '\n' ; ); 
 	memcpy(buf, iv->iStr, len); 
 	memmove(iv->iStr, iv->iStr+len, iv->iLen-len+1); 
 	iv->iLen -= len; 
@@ -656,13 +656,24 @@ imeth int String_im_gEndOfStream(object self)
 
 cmeth objrtn String_cm_vSprintf(object self, char *fmt, va_list _rest_)
 { 
-	char buf[1024]; 
+	char buf[1024], *big; 
+	int n; 
+	va_list _rest2_; 
+	object obj; 
 
-	vsprintf(buf, fmt, _rest_); 
-	return gNewWithStr(self, buf); 
+	va_copy(_rest2_, _rest_); 
+	n = vsnprintf(buf, sizeof buf, fmt, _rest2_); 
+	va_end(_rest2_); 
+	if (n < (int) sizeof buf) 
+		return gNewWithStr(self, n < 0 ? "" : buf); 
+	big = Tnalloc(char, n + 1); 
+	vsnprintf(big, n + 1, fmt, _rest_); 
+	obj = gNewWithStr(self, big); 
+	free(big); 
+	return obj; 
 } 
 
-#line 666 "String.c"
+#line 677 "String.c"
 
 static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 {
@@ -676,7 +687,7 @@ static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 
 
 
-#line 647 "String.d"
+#line 658 "String.d"
 imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 { String_iv_t *iv = GetIVs(String, self);
 	object obj; 
@@ -685,7 +696,7 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 	static char fun[] = "Build"; 
 	va_list _rest2_; 
 	va_copy(_rest2_, _rest_); 
-#line 659 "String.d"
+#line 670 "String.d"
 	UPDATE_LEN; 
 	if (f) 
 		tlen = get_string((object) f, &str, fun, 2); 
@@ -704,7 +715,7 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 		SETSIZE(tlen + 1); 
 		iv->iStr = (char *) MA_realloc(iv->iStr, iv->iSize); 
 	} 
-#line 681 "String.d"
+#line 692 "String.d"
 	pbuf = iv->iStr; 
 	if (f) { 
 		len = get_string((object)f, &str, fun, 2); 
@@ -726,7 +737,7 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 	return self; 
 } 
 
-#line 730 "String.c"
+#line 741 "String.c"
 
 static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 {
@@ -740,7 +751,7 @@ static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 
 
 
-#line 702 "String.d"
+#line 713 "String.d"
 cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 { 
 	object obj; 
@@ -790,7 +801,7 @@ cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 	return newObj; 
 } 
 
-#line 794 "String.c"
+#line 805 "String.c"
 
 static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 {
@@ -803,7 +814,7 @@ static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 }
 
 
-#line 751 "String.d"
+#line 762 "String.d"
 static int get_string(object obj, char **str, char *fun, int argn) 
 { 
 	ivType *iv2; 
@@ -1051,8 +1062,8 @@ imeth objrtn String_im_gJustifyCenter(object self)
 	if (left2 < left) { 
 		p = left - left2; 
 		memmove(s, s + p, n - p); 
-		for (i=n-(p+1) ; i < n ; ) 
-			s[i--] = ' '; 
+		for (i=n-p ; i < n ; ) 
+			s[i++] = ' '; 
 	} else { 
 		p = left2 - left; 
 		memmove(s + p, s, n - p); 
@@ -1284,7 +1295,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1288 "String.c"
+#line 1299 "String.c"
 
 objrtn	String_initialize(void)
 {
