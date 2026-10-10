@@ -337,111 +337,215 @@ LOCAL	_INLINE_	int	chk_ptr(char *p, unsigned len)
 
 #else  /*  not SEGMENTED_MEMORY   */
 
-#ifndef	HEAP_HAS_HOLES
+#if	defined(BOEHM_GC)
 
-static	char	*lowPtr = NULL;
-static	char	*highPtr = NULL;
-
-static	CRITICALSECTION   PTR_CS;
+/*  Boehm knows its own heap.  GC_base returns the start of the object containing
+    p, or NULL if p is not in the collected heap, without touching memory at p.  */
 
 LOCAL	void	add_ptr(char *p, unsigned len)
 {
-	ENTERCRITICALSECTION(PTR_CS);
-	if (!lowPtr  ||  p < lowPtr)
-		lowPtr = p;
-	p += len;
-	if (p > highPtr)
-		highPtr = p;
-	LEAVECRITICALSECTION(PTR_CS);
 }
-
-#ifdef	ALIGN4
-#define chk_ptr(p, len)	(!((intptr_t)(p) & (3)) &&		\
-			 (char *)(p) >= lowPtr  &&		\
-			 (char *)(p) <= highPtr - (len))
-#else
-#define	chk_ptr(p, len)	(!((intptr_t)(p) & 1)  &&  (char *)(p) >= lowPtr  &&  (char *)(p) <= highPtr - (len))
-#endif
-
-#else  /*  not SEGMENTED_MEMORY and not HEAP_HAS_HOLES  */
-
-
-typedef	struct  _mmb  {		/*  keep list of memory blocks allocated */
-	char	*memBlock;
-	long	size;
-	struct _mmb *next;
-}	MMB_t;
-
-static	MMB_t	*MMB = NULL;		/*  Master memory block list		*/
-
-static	CRITICALSECTION   MMB_CS;
-
-LOCAL	void	*real_calloc(size_t n, size_t s);
-
-LOCAL	void	add_ptr(char *p, unsigned len)
-{
-	MMB_t	*mb;
-
-	mb = (MMB_t *) real_calloc(1, sizeof(MMB_t));
-	ENTERCRITICALSECTION(MMB_CS);
-	mb->memBlock = p;
-	mb->size = len;
-	mb->next = MMB;
-	MMB = mb;
-	LEAVECRITICALSECTION(MMB_CS);
-}
-
-#ifdef	BOEHM_GC
-extern	void (*GC_is_valid_displacement_print_proc)();
-static	int	GC_bad_ptr;
-static	void	GC_set_bad_ptr(void *p)
-{
-	GC_bad_ptr = 1;
-}
-#endif
 
 LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 {
-#ifdef	BOEHM_GC
-	static	int	once = 1;
-	if (once) {
-		GC_is_valid_displacement_print_proc = GC_set_bad_ptr;
-		once = 0;
-	}
-	(void) GC_is_valid_displacement(p);
-	return GC_bad_ptr;
-#else
-	MMB_t	*mb;
-	int	r=0;
+	char	*b;
 
-	/*  chk_ptr is called so much that even a critical section call becomes prohibitively expensive.
-	    As an alternative I am making sure that the writes/updates are atomic but that they are done
-	    such that a critical section in the reads should not be necessary.
-	    A volatile read of the list head provides acquire semantics on most architectures.  */
-/*	ENTERCRITICALSECTION(MMB_CS);    */
-	for (mb = (MMB_t *)*(volatile MMB_t **)&MMB ; mb  ; mb = mb->next)
-		if (p >= mb->memBlock  &&  p < mb->memBlock + mb->size) {
-			r = 1;
-			break;
-		}
-/*	LEAVECRITICALSECTION(MMB_CS);  */
-	return r;
+#ifdef	ALIGN4
+	if ((intptr_t)p & 3)
+#else
+	if ((intptr_t)p & 1)
+#endif
+		return 0;
+	b = (char *) GC_base(p);
+	return b  &&  p + len <= b + GC_size(b);
+}
+
+#else  /*  not SEGMENTED_MEMORY and not BOEHM_GC  */
+
+/*  Every block the kernel allocates objects from is kept in a table sorted by
+    address so a pointer can be validated with a binary search.  The blocks are
+    not assumed to be contiguous; the memory between them may not be mapped.
+
+    chk_ptr is called so much that even a critical section call becomes prohibitively
+    expensive, so readers take no lock.  Writers never modify a published table.
+    They build a new one, publish it with a single pointer store and retire the old
+    one.  Green threads only switch at YIELD so a retired table may be freed at once.
+    With native threads another thread may still be searching it, so it is freed
+    after two more garbage collections.  */
+
+typedef	struct	{
+	char	*beg;
+	char	*end;
+}	MBLK_t;
+
+typedef	struct  _mbt  {
+	long	n;
+	struct	_mbt	*next;		/*  retired list link  */
+	MBLK_t	blk[1];
+}	MBT_t;
+
+static	MBT_t	* volatile MBT = NULL;	/*  Master memory block table		*/
+#ifdef	NATIVE_THREADS
+static	MBT_t	*MBT_retired = NULL;	/*  retired since the last GC		*/
+static	MBT_t	*MBT_retired_prev = NULL;	/*  retired before the last GC	*/
+#endif
+
+static	CRITICALSECTION   PTR_CS;
+
+#ifdef	HEAP_HAS_HOLES
+LOCAL	void	*real_calloc(size_t n, size_t s);
+LOCAL	void	real_free(void *p);
+#else
+#define	real_calloc	calloc
+#define	real_free	free
+#endif
+
+LOCAL	void	replace_mbt(MBT_t *ot, MBT_t *nt);
+
+/*  index of the first block whose end is above p, or t->n if none  */
+
+LOCAL	_INLINE_  long	find_blk(MBT_t *t, char *p)
+{
+	long	lo = 0, hi = t->n, mid;
+
+	while (lo < hi) {
+		mid = lo + (hi - lo) / 2;
+		if (t->blk[mid].end <= p)
+			lo = mid + 1;
+		else
+			hi = mid;
+	}
+	return lo;
+}
+
+#ifdef	NATIVE_THREADS
+LOCAL	void	free_mbt_list(MBT_t *t)
+{
+	MBT_t	*n;
+
+	for ( ; t ; t = n) {
+		n = t->next;
+		real_free(t);
+	}
+}
+#endif
+
+LOCAL	void	add_ptr(char *p, unsigned len)
+{
+	MBT_t	*ot, *nt;
+	long	i, n;
+
+	ENTERCRITICALSECTION(PTR_CS);
+	ot = MBT;
+	n = ot ? ot->n : 0L;
+	nt = (MBT_t *) real_calloc(1, sizeof(MBT_t) + n * sizeof(MBLK_t));
+	if (!nt) {
+		LEAVECRITICALSECTION(PTR_CS);
+		gError(Dynace_c, "\nDynace: Out of memory in add_ptr.\n");
+	}
+	i = ot ? find_blk(ot, p) : 0L;
+	if (i)
+		memcpy(nt->blk, ot->blk, i * sizeof(MBLK_t));
+	nt->blk[i].beg = p;
+	nt->blk[i].end = p + len;
+	if (n > i)
+		memcpy(nt->blk + i + 1, ot->blk + i, (n - i) * sizeof(MBLK_t));
+	nt->n = n + 1;
+	replace_mbt(ot, nt);
+	LEAVECRITICALSECTION(PTR_CS);
+}
+
+/*  publish a new table and retire the old one; PTR_CS must be held  */
+
+LOCAL	void	replace_mbt(MBT_t *ot, MBT_t *nt)
+{
+	MBT = nt;
+	if (ot) {
+#ifdef	NATIVE_THREADS
+		ot->next = MBT_retired;
+		MBT_retired = ot;
+#else
+		real_free(ot);
+#endif
+	}
+}
+
+#ifndef	HEAP_HAS_HOLES
+
+/*  remove the block starting at p before it is freed  */
+
+LOCAL	void	del_ptr(char *p)
+{
+	MBT_t	*ot, *nt;
+	long	i, n;
+
+	ENTERCRITICALSECTION(PTR_CS);
+	ot = MBT;
+	if (!ot  ||  (i = find_blk(ot, p)) >= ot->n  ||  ot->blk[i].beg != p) {
+		LEAVECRITICALSECTION(PTR_CS);
+		return;
+	}
+	n = ot->n;
+	nt = (MBT_t *) real_calloc(1, sizeof(MBT_t) + n * sizeof(MBLK_t));
+	if (!nt) {
+		LEAVECRITICALSECTION(PTR_CS);
+		gError(Dynace_c, "\nDynace: Out of memory in del_ptr.\n");
+	}
+	memcpy(nt->blk, ot->blk, i * sizeof(MBLK_t));
+	memcpy(nt->blk + i, ot->blk + i + 1, (n - i - 1) * sizeof(MBLK_t));
+	nt->n = n - 1;
+	replace_mbt(ot, nt);
+	LEAVECRITICALSECTION(PTR_CS);
+}
+
+#endif
+
+/*  called at the end of each garbage collection  */
+
+LOCAL	void	free_retired_mbt(void)
+{
+#ifdef	NATIVE_THREADS
+	MBT_t	*t;
+
+	ENTERCRITICALSECTION(PTR_CS);
+	t = MBT_retired_prev;
+	MBT_retired_prev = MBT_retired;
+	MBT_retired = NULL;
+	LEAVECRITICALSECTION(PTR_CS);
+	free_mbt_list(t);
 #endif
 }
 
+/*  true if p..p+len lies entirely within one allocated block  */
+
+LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
+{
+	MBT_t	*t = MBT;
+	long	i;
+
+#ifdef	ALIGN4
+	if ((intptr_t)p & 3)
+#else
+	if ((intptr_t)p & 1)
+#endif
+		return 0;
+	if (!t)
+		return 0;
+	i = find_blk(t, p);
+	return i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end;
+}
+
+#ifdef	HEAP_HAS_HOLES
+
 int	_gc_chk_ptr(char *p, unsigned len)  /*  used by the GC to determine if a RANGE of memory OVERLAPS an allocated region  */
 {
-	MMB_t	*mb;
-	int	r=0;
-	char	*e = p + len;
+	MBT_t	*t = MBT;
+	long	i;
 
-	for (mb = MMB ; mb  ; mb = mb->next)
-		if (!(p < mb->memBlock  &&  e < mb->memBlock  ||
-		      p > mb->memBlock + mb->size  &&  e > mb->memBlock + mb->size)) {
-			r = 1;
-			break;
-		}
-	return r;
+	if (!t)
+		return 0;
+	i = find_blk(t, p);
+	return i < t->n  &&  t->blk[i].beg < p + len;
 }
 
 void	*_Dynace_getpage(long len)
@@ -451,8 +555,9 @@ void	*_Dynace_getpage(long len)
 	return (void *) p;
 }
 
+#endif  /*  HEAP_HAS_HOLES  */
 
-#endif
+#endif  /*  BOEHM_GC  */
 
 #endif  /*  SEGMENTED_MEMORY  */
 
@@ -2068,6 +2173,9 @@ LOCAL	void	gc_sweep(void)
 					pib->next = nib = ib->next;
 				else
 					cv->ib = nib = ib->next;
+#if	!defined(SEGMENTED_MEMORY)  &&  !defined(HEAP_HAS_HOLES)
+				del_ptr((char *) ib);
+#endif
 				free(ib);
 				ib = nib;
 				cv->nib--;
@@ -2349,6 +2457,9 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			(*(void(*)(object))cv->markfun)(c);
 	}
 	gc_sweep();
+#ifndef	SEGMENTED_MEMORY
+	free_retired_mbt();
+#endif
 #endif  /*  !BOEHM_GC  */
 	get_mem_stats();
 	NGC++;
@@ -2584,12 +2695,8 @@ LOCAL	void	init_critical_sections(void)
 	INITIALIZECRITICALSECTION(CMU_CS);
 #ifdef	SEGMENTED_MEMORY
 	INITIALIZECRITICALSECTION(MSL_CS);
-#else
-#ifndef	HEAP_HAS_HOLES
+#elif	!defined(BOEHM_GC)
 	INITIALIZECRITICALSECTION(PTR_CS);
-#else
-	INITIALIZECRITICALSECTION(MMB_CS);
-#endif
 #endif
 #if	!DPP_FASTWIDE  &&  !defined(NO_CACHE)
 	INITIALIZECRITICALSECTION(MC_CS);
@@ -2773,8 +2880,10 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 	cMethodFor(Dynace, gDumpObjects, Dynace_cm_gDumpObjects);
 	cMethodFor(Dynace, gDumpObjectsString, Dynace_cm_gDumpObjectsString);
 	cMethodFor(Dynace, gDumpObjectsDiff, Dynace_cm_gDumpObjectsDiff);
+#ifndef	BOEHM_GC
 	cMethodFor(Dynace, gMarkMemoryBeginning, Dynace_cm_gMarkMemoryBeginning);
 	cMethodFor(Dynace, gDumpMemoryDiff, Dynace_cm_gDumpMemoryDiff);
+#endif
 
 	cMethodFor(GenericFunction, gGetAll, GenericFunction_cm_gGetAll);
 	cMethodFor(GenericFunction, gFindGeneric, GenericFunction_cm_gFindGeneric);
@@ -2796,6 +2905,15 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 LOCAL	void	*real_calloc(size_t n, size_t s)
 {
 	return calloc(n, s);
+}
+
+#ifdef free
+#undef free
+#endif
+
+LOCAL	void	real_free(void *p)
+{
+	free(p);
 }
 
 #endif

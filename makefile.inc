@@ -46,6 +46,10 @@ CFLAGS = -I$(INCDIR) $(OPT) -Wno-parentheses -fPIC
 
 LDFLAGS = -lm
 
+ifdef	BOEHM_GC
+LDFLAGS += -lgc
+endif
+
 ifdef NATIVE_THREADS
 CFLAGS += -DNATIVE_THREADS
 LDFLAGS += -lpthread
