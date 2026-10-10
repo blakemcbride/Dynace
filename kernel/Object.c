@@ -79,7 +79,7 @@ imeth objrtn Object_im_gError(object self, char *msg)
 } 
 
 ivmeth objrtn Object_ivm_vError(object self, va_list _rest_)
-{ char * fmt = va_arg(_rest_, char *);
+{ char *fmt = va_arg(_rest_, char *) ;
 	char buf[4096]; 
 	vsnprintf(buf, sizeof buf, fmt, _rest_); 
 	return gError(self, buf); 
@@ -175,11 +175,11 @@ imeth unsigned long Object_im_gObjectSerialNumber(object self)
 
 imeth int Object_im_gHash(object self)
 { 
-	double t; 
 
-	t = .6125423371 * (double)(intptr_t) self; 
-	t = t < 0.0 ? -t : t; 
-	return (int) (BIG_INT * (t - floor(t))); 
+
+	uint64_t h = ((uint64_t)(uintptr_t) self >> 3) * (uint64_t) 0x9E3779B97F4A7C15; 
+
+	return (int) ((h >> 32) % (unsigned long) BIG_INT); 
 } 
 
 imeth int Object_im_gCompare(object self, object obj2)

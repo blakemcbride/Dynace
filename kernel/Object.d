@@ -144,11 +144,11 @@ imeth	unsigned long	gObjectSerialNumber()
 
 imeth	int	gHash()
 {
-	double	t;
+	/*  Fibonacci hashing on the pointer (low bits are alignment) - a double
+	    multiply loses the low bits of large (PIE) heap addresses  */
+	uint64_t	h = ((uint64_t)(uintptr_t) self >> 3) * (uint64_t) 0x9E3779B97F4A7C15;
 
-	t = .6125423371	* (double)(intptr_t) self;
-	t = t < 0.0 ? -t : t;
-	return (int) (BIG_INT * (t - floor(t)));
+	return (int) ((h >> 32) % (unsigned long) BIG_INT);
 }
 
 imeth	int	gCompare(object obj2)

@@ -3,6 +3,11 @@ include ../makefile.inc
 
 #DPPOPTS += -g $(INCDIR)/generics.h -ni
 
+#  Kernel classes are created by kernel.c, so dpp must not generate their
+#  class initialization (-ni).
+%.c: %.d
+	$(DPP) $(DPPOPTS) -g $(INCDIR)/generics.h -ni -p $<
+
 CLASSES = Object.d Behavior.d MetaClass.d Class.d Method.d GenericFunction.d Dynace.d
 
 
