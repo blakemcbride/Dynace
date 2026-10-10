@@ -190,7 +190,7 @@ imeth	gShape()
 	iv2 = ivPtr(r);
 
 	for (i=0 ; i < iRank ; ++i)
-		((INDEX_TYPE *) iv2->iArray)[i] = iShape[i];
+		((short *) iv2->iArray)[i] = iShape[i];
 
 	return r;
 }

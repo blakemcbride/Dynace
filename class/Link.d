@@ -174,23 +174,24 @@ imeth	gAddAfter : AddAfter (lnk)
 imeth	gMoveBeginning()
 {
 	ivType	*iv2;
+	object	lst = iList;	/*  Remove() clears iList  */
 
-	if (!iList  ||  self == iList)
+	if (!lst  ||  self == lst)
 		return NULLOBJ;
 #ifdef	NATIVE_THREADS
-	gEnterCriticalSection(iList);
+	gEnterCriticalSection(lst);
 #endif
-	iv2 = ivPtr(iList);
+	iv2 = ivPtr(lst);
 	if (iv2->iNext == self) {
 #ifdef	NATIVE_THREADS
-		gLeaveCriticalSection(iList);
+		gLeaveCriticalSection(lst);
 #endif
 		return self;	/*  already at head  */
 	}
 	Remove(self);
-	AddAfter(iList, self);
+	AddAfter(lst, self);
 #ifdef	NATIVE_THREADS
-	gLeaveCriticalSection(iList);
+	gLeaveCriticalSection(lst);
 #endif
 	return self;
 }
@@ -200,23 +201,24 @@ imeth	gMoveBeginning()
 imeth	gMoveEnd()
 {
 	ivType	*iv2;
+	object	lst = iList;	/*  Remove() clears iList  */
 
-	if (!iList  ||  self == iList)
+	if (!lst  ||  self == lst)
 		return NULLOBJ;
 #ifdef	NATIVE_THREADS
-	gEnterCriticalSection(iList);
+	gEnterCriticalSection(lst);
 #endif
-	iv2 = ivPtr(iList);
+	iv2 = ivPtr(lst);
 	if (iv2->iPrev == self) {
 #ifdef	NATIVE_THREADS
-		gLeaveCriticalSection(iList);
+		gLeaveCriticalSection(lst);
 #endif
 		return self;	/*  already at end  */
 	}
 	Remove(self);
-	AddBefore(iList, self);
+	AddBefore(lst, self);
 #ifdef	NATIVE_THREADS
-	gLeaveCriticalSection(iList);
+	gLeaveCriticalSection(lst);
 #endif
 	return self;
 }

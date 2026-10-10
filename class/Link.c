@@ -202,30 +202,31 @@ PMETHOD objrtn AddAfter(object self, object lnk)
 imeth objrtn Link_im_gMoveBeginning(object self)
 { Link_iv_t *iv = GetIVs(Link, self);
 	ivType *iv2; 
+	object lst = iv->iList; 
 
-	if (!iv->iList || self == iv->iList) 
+	if (!lst || self == lst) 
 		return NULLOBJ; 
 #ifdef NATIVE_THREADS 
-		gEnterCriticalSection(iv->iList); 
+		gEnterCriticalSection(lst); 
 #endif 
 
-#line 183 "Link.d"
-		iv2 = ivPtr(iv->iList); 
+#line 184 "Link.d"
+		iv2 = ivPtr(lst); 
 	if (iv2->iNext == self) { 
 #ifdef NATIVE_THREADS 
-			gLeaveCriticalSection(iv->iList); 
+			gLeaveCriticalSection(lst); 
 #endif 
 
-#line 188 "Link.d"
+#line 189 "Link.d"
 			return self; 
 	} 
 	Remove(self); 
-	AddAfter(iv->iList, self); 
+	AddAfter(lst, self); 
 #ifdef NATIVE_THREADS 
-		gLeaveCriticalSection(iv->iList); 
+		gLeaveCriticalSection(lst); 
 #endif 
 
-#line 195 "Link.d"
+#line 196 "Link.d"
 		return self; 
 } 
 
@@ -234,30 +235,31 @@ imeth objrtn Link_im_gMoveBeginning(object self)
 imeth objrtn Link_im_gMoveEnd(object self)
 { Link_iv_t *iv = GetIVs(Link, self);
 	ivType *iv2; 
+	object lst = iv->iList; 
 
-	if (!iv->iList || self == iv->iList) 
+	if (!lst || self == lst) 
 		return NULLOBJ; 
 #ifdef NATIVE_THREADS 
-		gEnterCriticalSection(iv->iList); 
+		gEnterCriticalSection(lst); 
 #endif 
 
-#line 209 "Link.d"
-		iv2 = ivPtr(iv->iList); 
+#line 211 "Link.d"
+		iv2 = ivPtr(lst); 
 	if (iv2->iPrev == self) { 
 #ifdef NATIVE_THREADS 
-			gLeaveCriticalSection(iv->iList); 
+			gLeaveCriticalSection(lst); 
 #endif 
 
-#line 214 "Link.d"
+#line 216 "Link.d"
 			return self; 
 	} 
 	Remove(self); 
-	AddBefore(iv->iList, self); 
+	AddBefore(lst, self); 
 #ifdef NATIVE_THREADS 
-		gLeaveCriticalSection(iv->iList); 
+		gLeaveCriticalSection(lst); 
 #endif 
 
-#line 221 "Link.d"
+#line 223 "Link.d"
 		return self; 
 } 
 
@@ -325,7 +327,7 @@ imeth objrtn Link_im_gNth(object self, int idx)
 } 
 
 
-#line 329 "Link.c"
+#line 331 "Link.c"
 
 objrtn	Link_initialize(void)
 {

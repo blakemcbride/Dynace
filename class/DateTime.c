@@ -177,13 +177,13 @@ imeth objrtn DateTime_im_gAddHours(object self, long h)
 
 imeth objrtn DateTime_im_gAddMinutes(object self, long m)
 { 
-	long nt, dif; 
-	long ot = gTimeValue(self); 
+	long nt, dif, ot; 
 	long h = m / 60L; 
 
 	m %= 60; 
 	if (h) 
 		gAddHours(self, h); 
+	ot = gTimeValue(self); 
 	if (m) 
 		oSuper(DateTime_c, gAddMinutes, self)(self, m); 
 	nt = gTimeValue(self); 
@@ -199,13 +199,13 @@ imeth objrtn DateTime_im_gAddMinutes(object self, long m)
 
 imeth objrtn DateTime_im_gAddSeconds(object self, long s)
 { 
-	long nt, dif; 
-	long ot = gTimeValue(self); 
+	long nt, dif, ot; 
 	long m = s / 60L; 
 
 	s %= 60; 
 	if (m) 
 		gAddMinutes(self, m); 
+	ot = gTimeValue(self); 
 	if (s) 
 		oSuper(DateTime_c, gAddSeconds, self)(self, s); 
 	nt = gTimeValue(self); 
@@ -221,13 +221,13 @@ imeth objrtn DateTime_im_gAddSeconds(object self, long s)
 
 imeth objrtn DateTime_im_gAddMilliseconds(object self, long l)
 { 
-	long nt, dif; 
-	long ot = gTimeValue(self); 
+	long nt, dif, ot; 
 	long s = l / 1000L; 
 
 	l %= 1000; 
 	if (s) 
 		gAddSeconds(self, s); 
+	ot = gTimeValue(self); 
 	if (l) 
 		oSuper(DateTime_c, gAddMilliseconds, self)(self, l); 
 	nt = gTimeValue(self); 

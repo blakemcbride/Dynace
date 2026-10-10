@@ -144,13 +144,13 @@ imeth	gAddHours(long h)
 
 imeth	gAddMinutes(long m)
 {
-	long	nt, dif;
-	long	ot = gTimeValue(self);
+	long	nt, dif, ot;
 	long	h = m / 60L;
 
 	m %= 60;
 	if (h)
 		gAddHours(self, h);
+	ot = gTimeValue(self);	/*  gAddHours already handled its own day wrap  */
 	if (m)
 		gAddMinutes(super, m);
 	nt = gTimeValue(self);
@@ -166,13 +166,13 @@ imeth	gAddMinutes(long m)
 
 imeth	gAddSeconds(long s)
 {
-	long	nt, dif;
-	long	ot = gTimeValue(self);
+	long	nt, dif, ot;
 	long	m = s / 60L;
 
 	s %= 60;
 	if (m)
 		gAddMinutes(self, m);
+	ot = gTimeValue(self);	/*  gAddMinutes already handled its own day wrap  */
 	if (s)
 		gAddSeconds(super, s);
 	nt = gTimeValue(self);
@@ -188,13 +188,13 @@ imeth	gAddSeconds(long s)
 
 imeth	gAddMilliseconds(long l)
 {
-	long	nt, dif;
-	long	ot = gTimeValue(self);
+	long	nt, dif, ot;
 	long	s = l / 1000L;
 
 	l %= 1000;
 	if (s)
 		gAddSeconds(self, s);
+	ot = gTimeValue(self);	/*  gAddSeconds already handled its own day wrap  */
 	if (l)
 		gAddMilliseconds(super, l);
 	nt = gTimeValue(self);

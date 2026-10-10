@@ -210,7 +210,7 @@ imeth objrtn Array_im_gShape(object self)
 	iv2 = ivPtr(r); 
 
 	for (i=0 ; i < iv->iRank ; ++i) 
-		((INDEX_TYPE *) iv2->iArray)[i] = iv->iShape[i]; 
+		((short *) iv2->iArray)[i] = iv->iShape[i]; 
 
 	return r; 
 } 

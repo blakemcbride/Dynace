@@ -181,6 +181,7 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 	int ba; 
 	int bg; 
 	int tr=0; 
+	char *start = buf; 
 
 	if (!(iv->iWptr - iv->iRptr) && !iv->iRblock || iv->iRblk || sz <= 0) 
 		return NULL; 
@@ -191,7 +192,7 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 	while (sz) { 
 		ba = (int)(iv->iWptr - iv->iRptr); 
 		for (bg=0 ; bg < ba && bg < sz && iv->iRptr[bg++] != '\n' ; ); 
-		if (iv->iRptr[bg-1] == '\n') 
+		if (bg && iv->iRptr[bg-1] == '\n') 
 			sz = bg; 
 		if (bg) { 
 			memcpy(buf, iv->iRptr, bg); 
@@ -212,8 +213,8 @@ imeth char * Pipe_im_gGets(object self, char *buf, int sz)
 		if (!iv->iRblock) 
 			break; 
 	} 
-	buf[tr] = '\0'; 
-	return buf; 
+	*buf = '\0'; 
+	return start; 
 } 
 
 imeth objrtn Pipe_im_gDispose(object self)
@@ -264,7 +265,7 @@ imeth long Pipe_im_gLength(object self)
 	} 
 #endif 
 
-#line 244 "Pipe.d"
+#line 245 "Pipe.d"
 		return (long)(iv->iWptr - iv->iRptr); 
 } 
 
@@ -278,7 +279,7 @@ imeth int Pipe_im_gRoom(object self)
 	} 
 #endif 
 
-#line 256 "Pipe.d"
+#line 257 "Pipe.d"
 		return (int)(iv->iBufsiz - (iv->iWptr - iv->iRptr)); 
 } 
 
@@ -342,7 +343,7 @@ imeth int Pipe_im_gEndOfStream(object self)
 } 
 
 
-#line 346 "Pipe.c"
+#line 347 "Pipe.c"
 
 objrtn	Pipe_initialize(void)
 {

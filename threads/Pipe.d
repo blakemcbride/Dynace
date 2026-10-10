@@ -159,6 +159,7 @@ imeth	char	*gGets(object self, char *buf, int sz)
 	int	ba;	/*  bytes available	*/
 	int	bg;	/*  bytes to get	*/
 	int	tr=0;	/*  total bytes read	*/
+	char	*start = buf;
 	
 	if (!(iWptr - iRptr) && !iRblock  ||  iRblk  ||  sz <= 0)
 		return NULL;
@@ -169,7 +170,7 @@ imeth	char	*gGets(object self, char *buf, int sz)
 	while (sz)  {
 		ba = (int)(iWptr - iRptr);
 		for (bg=0 ; bg < ba  &&  bg < sz  &&  iRptr[bg++] != '\n' ; );
-		if (iRptr[bg-1] == '\n')
+		if (bg  &&  iRptr[bg-1] == '\n')
 			sz = bg;
 		if (bg)  {
 			memcpy(buf, iRptr, bg);
@@ -190,8 +191,8 @@ imeth	char	*gGets(object self, char *buf, int sz)
 		if (!iRblock)
 			break;
 	}
-	buf[tr] = '\0';
-	return buf;
+	*buf = '\0';
+	return start;
 }
 
 imeth	object	gDispose, gGCDispose, gDeepDispose (object self)
