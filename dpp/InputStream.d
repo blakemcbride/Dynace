@@ -181,7 +181,7 @@ imeth	gNextToken()
 	w = token;
 	if (istart2(*iPtr)) {		/*  is identifier  */
 		*w++ = *iPtr++;
-		for (i=0 ; ++i <= MAXWORDSZ  &&  irest(*iPtr) ;)
+		while (irest(*iPtr))	/*  token is as big as the line, so no cap is needed  */
 			*w++ = *iPtr++;
 	} else			/*  something other than an identifier  */
 		if (IS3('<', '<', '=')  ||

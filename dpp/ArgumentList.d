@@ -76,7 +76,7 @@ static	void	process_word(char *word, object list, int noexpand)
 
 static	char	*process_token(char *p, object list)
 {
-	char	word[128], *w;
+	char	word[4096], *w;
 	int	inquote, noexpand;
 
 	while (*p  &&  space(*p))
@@ -86,8 +86,12 @@ static	char	*process_token(char *p, object list)
 	for (w=word ; *p  &&  (!space(*p) || inquote) ; p++)
 		if (inquote  &&  *p == '"')
 			inquote = 0;
-		else
+		else if (w < word + sizeof(word) - 1)
 			*w++ = *p;
+		else  {
+			vPrintf(stdoutStream, "dpp: argument too long: %.60s...\n", word);
+			exit(1);
+		}
 	*w = '\0';
 	if (*word == '@')
 		process_file(list, word+1);

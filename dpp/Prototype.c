@@ -148,7 +148,7 @@ static void remove_variable(char *buf, char *var)
 static void make_proto(ivType *iv, object ar) 
 { 
 	object seq, nxt, prv=NULL; 
-	char buf[100], var[50]; 
+	char buf[1024], var[sizeof buf]; 
 
 	iv->iProto = gNew(LinkObject); 
 	iv->iParams = gNew(LinkObject); 

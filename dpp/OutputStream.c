@@ -142,9 +142,9 @@ static int do_var_sub(ivType *iv)
 	object tkn, sym; 
 	char *p, *pstr = NULL; 
 	int res = 0; 
-	char cvar[80]; 
+	char cvar[300]; 
 
-	sprintf(cvar, "%s_cv", gStringValue(iv->iCName)); 
+	snprintf(cvar, sizeof cvar, "%s_cv", gStringValue(iv->iCName)); 
 	for (tkn = gFirst(iv->iOutputList) ; tkn ; tkn = gNext(tkn), pstr=p) { 
 		p = gStringValue(tkn); 
 		if (!istart(*p)) 
@@ -201,7 +201,7 @@ static int convert_super(ivType *iv)
 	object t; 
 	long line; 
 	int simple; 
-	char cname[80]; 
+	char cname[300]; 
 
 	for (tkn = gFirst(iv->iOutputList) ; tkn ; tkn=gNext(tkn), ppstr=pstr, pstr=p) { 
 		p = gStringValue(tkn); 
@@ -276,7 +276,7 @@ static int convert_super(ivType *iv)
 			t = gNewToken(Token, "(", line, 0); 
 			OUTT(t); 
 
-			sprintf(cname, "%s_c", gStringValue(iv->iCName)); 
+			snprintf(cname, sizeof cname, "%s_c", gStringValue(iv->iCName)); 
 			t = gNewToken(Token, cname, line, 0); 
 			OUTT(t); 
 
@@ -335,7 +335,7 @@ static int convert_super(ivType *iv)
 			t = gNewToken(Token, "(", line, 0); 
 			OUTT(t); 
 
-			sprintf(cname, "%s_c", gStringValue(iv->iCName)); 
+			snprintf(cname, sizeof cname, "%s_c", gStringValue(iv->iCName)); 
 			t = gNewToken(Token, cname, line, 0); 
 			OUTT(t); 
 
@@ -455,7 +455,7 @@ imeth objrtn OutputStream_im_gFlushm(object self)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	int i, endif=0; 
 	object tkn; 
-	char *p, c=0, *cname, ctype[80]; 
+	char *p, c=0, *cname, ctype[300]; 
 
 	if (!iv->iStream) 
 		return self; 
@@ -464,7 +464,7 @@ imeth objrtn OutputStream_im_gFlushm(object self)
 
 		if ((iv->iIVars || iv->iCVars) && do_var_sub(iv)) { 
 		tkn = gFirst(iv->iOutputList); 
-		sprintf(ctype, "%s_iv_t", cname = gStringValue(iv->iCName)); 
+		snprintf(ctype, sizeof ctype, "%s_iv_t", cname = gStringValue(iv->iCName)); 
 		ADD(0, ";"); 
 		ADD(0, ")"); 
 		ADD(0, "self"); 
@@ -616,16 +616,29 @@ imeth int OutputStream_im_gPuts(object self, char *str)
 
 imeth int OutputStream_im_vPrintf(object self, char *fmt, va_list _rest_)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
-	char buf[256]; 
+	char sbuf[1024], *buf = sbuf; 
+	int n, r; 
+	va_list _rest2_; 
 
-	vsprintf(buf, fmt, _rest_); 
+	va_copy(_rest2_, _rest_); 
+	n = vsnprintf(sbuf, sizeof sbuf, fmt, _rest2_); 
+	va_end(_rest2_); 
+	if (n < 0) 
+		n = 0, *sbuf = '\0'; 
+	else if (n >= (int) sizeof sbuf) { 
+		buf = Tnalloc(char, n + 1); 
+		vsnprintf(buf, n + 1, fmt, _rest_); 
+	} 
 	iv->iOLine = -20L; 
 	iv->iRLine += count_nl(buf); 
 	iv->iILine = 0L; 
-	return iv->iStream ? gPuts(iv->iStream, buf) : (int)strlen(buf); 
+	r = iv->iStream ? gPuts(iv->iStream, buf) : (int)strlen(buf); 
+	if (buf != sbuf) 
+		free(buf); 
+	return r; 
 } 
 
-#line 629 "OutputStream.c"
+#line 642 "OutputStream.c"
 
 static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -639,7 +652,7 @@ static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 607 "OutputStream.d"
+#line 620 "OutputStream.d"
 imeth objrtn OutputStream_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	DISPOSE(iv->iCName); 
@@ -682,7 +695,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 686 "OutputStream.c"
+#line 699 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {

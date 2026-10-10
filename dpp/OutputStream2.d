@@ -137,14 +137,25 @@ imeth	int	gPuts(char *str)
 
 imeth	int	vPrintf(char *fmt, ...)
 {
-	char	buf[256];
-	int	r=0;
+	char	sbuf[1024], *buf = sbuf;
+	int	r=0, n;
+	va_list	_rest2_;
 
-	vsprintf(buf, fmt, _rest_);
+	va_copy(_rest2_, _rest_);
+	n = vsnprintf(sbuf, sizeof sbuf, fmt, _rest2_);
+	va_end(_rest2_);
+	if (n < 0)
+		*sbuf = '\0';
+	else if (n >= (int) sizeof sbuf)  {	/*  too big for the stack buffer  */
+		buf = Tnalloc(char, n + 1);
+		vsnprintf(buf, n + 1, fmt, _rest_);
+	}
 	if (iS1  &&  (!iUse  ||  iUse == 1))
 		r = vPrintf(iS1, "%s", buf);
 	if (iS2  &&  (!iUse  ||  iUse == 2))
 		r = vPrintf(iS2, "%s", buf);
+	if (buf != sbuf)
+		free(buf);
 	return r;
 }
 

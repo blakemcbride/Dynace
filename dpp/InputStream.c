@@ -203,7 +203,7 @@ imeth objrtn InputStream_im_gNextToken(object self)
 	w = token; 
 	if (istart2(*iv->iPtr)) { 
 		*w++ = *iv->iPtr++; 
-		for (i=0 ; ++i <= MAXWORDSZ && irest(*iv->iPtr) ;) 
+		while (irest(*iv->iPtr)) 
 			*w++ = *iv->iPtr++; 
 	} else 
 		if (IS3('<', '<', '=') || 

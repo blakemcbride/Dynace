@@ -155,18 +155,29 @@ imeth int OutputStream2_im_gPuts(object self, char *str)
 
 imeth int OutputStream2_im_vPrintf(object self, char *fmt, va_list _rest_)
 { OutputStream2_iv_t *iv = GetIVs(OutputStream2, self);
-	char buf[256]; 
-	int r=0; 
+	char sbuf[1024], *buf = sbuf; 
+	int r=0, n; 
+	va_list _rest2_; 
 
-	vsprintf(buf, fmt, _rest_); 
+	va_copy(_rest2_, _rest_); 
+	n = vsnprintf(sbuf, sizeof sbuf, fmt, _rest2_); 
+	va_end(_rest2_); 
+	if (n < 0) 
+		*sbuf = '\0'; 
+	else if (n >= (int) sizeof sbuf) { 
+		buf = Tnalloc(char, n + 1); 
+		vsnprintf(buf, n + 1, fmt, _rest_); 
+	} 
 	if (iv->iS1 && (!iv->iUse || iv->iUse == 1)) 
 		r = vPrintf(iv->iS1, "%s", buf); 
 	if (iv->iS2 && (!iv->iUse || iv->iUse == 2)) 
 		r = vPrintf(iv->iS2, "%s", buf); 
+	if (buf != sbuf) 
+		free(buf); 
 	return r; 
 } 
 
-#line 170 "OutputStream2.c"
+#line 181 "OutputStream2.c"
 
 static	int	OutputStream2_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -180,7 +191,7 @@ static	int	OutputStream2_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 151 "OutputStream2.d"
+#line 162 "OutputStream2.d"
 imeth objrtn OutputStream2_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream2_iv_t *iv = GetIVs(OutputStream2, self);
 	if (iv->iS1 && (!iv->iUse || iv->iUse == 1)) 
@@ -218,7 +229,7 @@ imeth objrtn OutputStream2_im_gForceLineDirective(object self)
 } 
 
 
-#line 222 "OutputStream2.c"
+#line 233 "OutputStream2.c"
 
 objrtn	OutputStream2_initialize(void)
 {
