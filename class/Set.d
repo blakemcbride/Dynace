@@ -89,6 +89,8 @@ cmeth	gNewWithInt, <vNew> : Set_New (int size)
 {
 	object	set = gNew(super);
 	ivType	*iv = ivPtr(set);
+	if (size < 1)
+		size = 1;
 	iSize = size;
 	iTab = Tncalloc(NODE, size);
 	INITIALIZECRITICALSECTION(iCS);
@@ -392,6 +394,8 @@ imeth	gResize(int size)
 	NODE	*v;
 	int	i, sz;
 
+	if (size < 1)
+		size = 1;
 	ENTERCRITICALSECTION(iCS);
 	v = iTab;
 	sz = iSize;
@@ -441,14 +445,8 @@ imeth	gLookup : Set_Lookup (luk, int mode, int deep, int type, value)
 {
 	NODE	e, laste=NULL, newe;
 	unsigned	 idx;
-	int	i=0;
+	int	i=0, added=0;
 	struct _Object_iv_t * volatile ret;
-
-	// Auto resize
-	if ((double)iSize * .9 < (double)iNelm) {
-		int	size = (int)((double)iSize * 1.6);
-		gResize(self, size);
-	}
 
 	ENTERCRITICALSECTION(iCS);
 	
@@ -492,6 +490,7 @@ imeth	gLookup : Set_Lookup (luk, int mode, int deep, int type, value)
 			else
 				iTab[idx] = e;
 			++iNelm;
+			added = 1;
 			break;
 		}
 		switch (type)  {
@@ -579,6 +578,7 @@ imeth	gLookup : Set_Lookup (luk, int mode, int deep, int type, value)
 				iTab[idx] = newe;
 			e = newe;
 			++iNelm;
+			added = 1;
 			break;
 		}  else	 {
 			laste =	e;
@@ -587,6 +587,13 @@ imeth	gLookup : Set_Lookup (luk, int mode, int deep, int type, value)
 	}
 	ret = e->luk;
 	LEAVECRITICALSECTION(iCS);
+	/*  Auto resize only after an insert.  Lookups must not move the table,
+	    since a SetSequence or gForAll may be walking it.  The new size
+	    always holds the current entries, so gResize's re-adds never resize.  */
+	if (added  &&  (double)iSize * .9 < (double)iNelm) {
+		int	size = (int)((double)iSize * 1.6);
+		gResize(self, size > iSize ? size : iSize + 1);
+	}
 	return (object) ret;
 }
 

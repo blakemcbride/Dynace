@@ -292,8 +292,10 @@ static	void	collapse(ivType *liv, object lo, int deep, object save_pointer)
 				object save = iObjects[0] == lo ? iObjects[1] : iObjects[0];
 				iObjects[0] = iObjects[1] = NULL;  //  Don't delete these objects when self is disposed
 				collapse(iv, self, deep, save);
-			} else
+			} else {
 				delete_intermediate_pointer(iv, lo);
+				iPrevious = NULL;	//  self survives; its caller won't touch it (see delete)
+			}
 	} else {                                            //  Intermediate (or Top) & another intermediate node
 		int	idx;
 
@@ -330,13 +332,26 @@ imeth	gDeleteBTNode : delete (ifun cfun, key, int deep, prev)
 		}
 		return self;
 	}
-	iPrevious = prev;
-	res = delete(iObjects[found+idx], cfun, key, deep, self);
-	iPrevious = NULL;
+	{
+		object	bt = iBTree, child = iObjects[found+idx];
+		int	leafchild = ivPtr(child)->iType == 2;
+
+		iPrevious = prev;
+		res = delete(child, cfun, key, deep, self);
+		/*  A leaf child that collapsed returns the BTree, and its collapse
+		    may have disposed self, so self must not be touched then
+		    (collapse clears iPrevious of a parent that survives).  */
+		if (!leafchild  ||  res != bt)
+			iPrevious = NULL;
+	}
 	return res;
 }
 
-static	object	split(object lo, ivType *left, ifun cfun)
+/*  Split node lo (whose ivars are left) in two, adding the new right half to
+    lo's parent.  Returns the topmost node changed (to descend from), and the
+    new right half in *newright if not NULL.  */
+
+static	object	split(object lo, ivType *left, ifun cfun, object *newright)
 {
 	object	to, ro, ret;
  	ivType	*right, *top;
@@ -344,6 +359,8 @@ static	object	split(object lo, ivType *left, ifun cfun)
 
 	ro = gNewNode(CLASS, left->iBTree, left->iType);
  	right = ivPtr(ro);
+	if (newright)
+		*newright = ro;
 	if (left->iType == 2) {
 		lhalf = left->iUsed / 2;
 		rhalf = left->iUsed - lhalf;
@@ -381,11 +398,16 @@ static	object	split(object lo, ivType *left, ifun cfun)
 
 		top = ivPtr(to);
 		if (top->iUsed == OBJECTS_PER_NODE) {
-			ret = to = split(to, top, cfun);
-			top = ivPtr(to);
-			found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx);
-			to = top->iObjects[found+idx];
-			top = ivPtr(to);
+			object	pr;	/*  new right half of the parent  */
+			int	i;
+
+			ret = split(to, top, cfun, &pr);
+			/*  ro goes beside lo, in whichever half of the parent now
+			    holds lo (the split may have cascaded further up, so
+			    ret need not be the parent's parent)  */
+			for (i=0 ; i <= top->iUsed  &&  top->iObjects[i] != lo ; i++);
+			if (i > top->iUsed)
+				top = ivPtr(to = pr);
 		}
 		found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx);
 		if (found)
@@ -447,7 +469,7 @@ imeth	gAddBTreeNode : add (ifun cfun, key, data, int replace, int *replaced, pre
 
 	if (iUsed == OBJECTS_PER_NODE) {	//  node full
 		iPrevious = prev;
-		tmp = split(self, iv, cfun);
+		tmp = split(self, iv, cfun, NULL);
 		iPrevious = NULL;
 		return add(tmp, cfun, key, DATA, replace, replaced, NULL, old);
 	}

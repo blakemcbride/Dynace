@@ -42,7 +42,7 @@ imeth	gPropertyPut(char *prop, int autoDispose, val)
 		iPropertyList = gNew(StringDictionary);
 	if (!gAddStr(iPropertyList, prop, intAssoc=gNewWithIntObj(IntegerAssociation, autoDispose, val))) {
 		object	old = gChangeValueWithStr(iPropertyList, prop, intAssoc);
-		if (gIntKey(old))
+		if (gIntKey(old)  &&  gValue(old) != val)	/*  don't dispose the value just put  */
 			gDeepDispose(old);
 		else
 			gDispose(old);

@@ -312,8 +312,10 @@ static void collapse(ivType *liv, object lo, int deep, object save_pointer)
 			object save = iv->iObjects[0] == lo ? iv->iObjects[1] : iv->iObjects[0]; 
 			iv->iObjects[0] = iv->iObjects[1] = NULL; 
 			collapse(iv, self, deep, save); 
-		} else 
+		} else { 
 			delete_intermediate_pointer(iv, lo); 
+			iv->iPrevious = NULL; 
+		} 
 	} else { 
 		int idx; 
 
@@ -350,13 +352,23 @@ PMETHOD objrtn delete(object self, ifun cfun, object key, int deep, object prev)
 		} 
 		return self; 
 	} 
-	iv->iPrevious = prev; 
-	res = delete(iv->iObjects[found+idx], cfun, key, deep, self); 
-	iv->iPrevious = NULL; 
+	{ 
+		object bt = iv->iBTree, child = iv->iObjects[found+idx]; 
+		int leafchild = ivPtr(child)->iType == 2; 
+
+		iv->iPrevious = prev; 
+		res = delete(child, cfun, key, deep, self); 
+
+
+
+		if (!leafchild || res != bt) 
+			iv->iPrevious = NULL; 
+	} 
 	return res; 
 } 
 
-static object split(object lo, ivType *left, ifun cfun) 
+#line 354 "BTreeNode.d"
+static object split(object lo, ivType *left, ifun cfun, object *newright) 
 { 
 	object to, ro, ret; 
 	ivType *right, *top; 
@@ -364,6 +376,8 @@ static object split(object lo, ivType *left, ifun cfun)
 
 	ro = gNewNode(CLASS, left->iBTree, left->iType); 
 	right = ivPtr(ro); 
+	if (newright) 
+		*newright = ro; 
 	if (left->iType == 2) { 
 		lhalf = left->iUsed / 2; 
 		rhalf = left->iUsed - lhalf; 
@@ -401,11 +415,16 @@ static object split(object lo, ivType *left, ifun cfun)
 
 		top = ivPtr(to); 
 		if (top->iUsed == OBJECTS_PER_NODE) { 
-			ret = to = split(to, top, cfun); 
-			top = ivPtr(to); 
-			found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx); 
-			to = top->iObjects[found+idx]; 
-			top = ivPtr(to); 
+			object pr; 
+			int i; 
+
+			ret = split(to, top, cfun, &pr); 
+
+
+
+			for (i=0 ; i <= top->iUsed && top->iObjects[i] != lo ; i++); 
+			if (i > top->iUsed) 
+				top = ivPtr(to = pr); 
 		} 
 		found = bsearch2(top, (ccfun)cfun, right->iKeys[0], &idx); 
 		if (found) 
@@ -427,7 +446,7 @@ static object split(object lo, ivType *left, ifun cfun)
 	return ret; 
 } 
 
-#line 420 "BTreeNode.d"
+#line 442 "BTreeNode.d"
 #define DATA data ? data : BTreeNode_cv->cData 
 
 PMETHOD objrtn add(object self, ifun cfun, object key, object data, int replace, int *replaced, object prev, object *old)
@@ -458,7 +477,7 @@ PMETHOD objrtn add(object self, ifun cfun, object key, object data, int replace,
 
 	if (iv->iUsed == OBJECTS_PER_NODE) { 
 		iv->iPrevious = prev; 
-		tmp = split(self, iv, cfun); 
+		tmp = split(self, iv, cfun, NULL); 
 		iv->iPrevious = NULL; 
 		return add(tmp, cfun, key, DATA, replace, replaced, NULL, old); 
 	} 
@@ -528,7 +547,7 @@ imeth objrtn BTreeNode_im_gPrintValue(object self, object stream)
 } 
 
 
-#line 532 "BTreeNode.c"
+#line 551 "BTreeNode.c"
 
 objrtn	BTreeNode_initialize(void)
 {

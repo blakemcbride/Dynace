@@ -112,6 +112,8 @@ PMETHOD objrtn Set_New(object self, int size)
 { 
 	object set = oSuper(Set_c, gNew, self)(self); 
 	ivType *iv = ivPtr(set); 
+	if (size < 1) 
+		size = 1; 
 	iv->iSize = size; 
 	iv->iTab = Tncalloc(NODE, size); 
 	INITIALIZECRITICALSECTION(iv->iCS); 
@@ -415,6 +417,8 @@ imeth objrtn Set_im_gResize(object self, int size)
 	NODE *v; 
 	int i, sz; 
 
+	if (size < 1) 
+		size = 1; 
 	ENTERCRITICALSECTION(iv->iCS); 
 	v = iv->iTab; 
 	sz = iv->iSize; 
@@ -464,14 +468,8 @@ PMETHOD objrtn Set_Lookup(object self, object luk, int mode, int deep, int type,
 { Set_iv_t *iv = GetIVs(Set, self);
 	NODE e, laste=NULL, newe; 
 	unsigned idx; 
-	int i=0; 
+	int i=0, added=0; 
 	struct _Object_iv_t * volatile ret; 
-
-
-	if ((double)iv->iSize * .9 < (double)iv->iNelm) { 
-		int size = (int)((double)iv->iSize * 1.6); 
-		gResize(self, size); 
-	} 
 
 	ENTERCRITICALSECTION(iv->iCS); 
 
@@ -515,6 +513,7 @@ PMETHOD objrtn Set_Lookup(object self, object luk, int mode, int deep, int type,
 			else 
 				iv->iTab[idx] = e; 
 			++iv->iNelm; 
+			added = 1; 
 			break; 
 		} 
 		switch (type) { 
@@ -542,7 +541,7 @@ PMETHOD objrtn Set_Lookup(object self, object luk, int mode, int deep, int type,
 			} 
 #endif 
 
-#line 521 "Set.d"
+#line 520 "Set.d"
 				case 4: { 
 				int c = gIntKey(e->luk); 
 				if (c == *((int *) luk)) 
@@ -604,6 +603,7 @@ PMETHOD objrtn Set_Lookup(object self, object luk, int mode, int deep, int type,
 				iv->iTab[idx] = newe; 
 			e = newe; 
 			++iv->iNelm; 
+			added = 1; 
 			break; 
 		} else { 
 			laste = e; 
@@ -612,6 +612,13 @@ PMETHOD objrtn Set_Lookup(object self, object luk, int mode, int deep, int type,
 	} 
 	ret = e->luk; 
 	LEAVECRITICALSECTION(iv->iCS); 
+
+
+
+	if (added && (double)iv->iSize * .9 < (double)iv->iNelm) { 
+		int size = (int)((double)iv->iSize * 1.6); 
+		gResize(self, size > iv->iSize ? size : iv->iSize + 1); 
+	} 
 	return (object) ret; 
 } 
 
@@ -625,7 +632,7 @@ static void class_init(void)
 	INITIALIZECRITICALSECTION(Set_cv->cCS); 
 } 
 
-#line 629 "Set.c"
+#line 636 "Set.c"
 
 objrtn	Set_initialize(void)
 {

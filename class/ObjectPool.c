@@ -74,6 +74,22 @@ cmeth objrtn ObjectPool_cm_gNew(object self)
 	return init(oSuper(ObjectPool_c, gNew, self)(self), DFLT_SIZE); 
 } 
 
+#line 56 "ObjectPool.d"
+PMETHOD objrtn remove_entry(object self, object pobj)
+{ ObjectPool_iv_t *iv = GetIVs(ObjectPool, self);
+	object ass = gFind(iv->iObjects, pobj), key, val; 
+
+	if (ass) { 
+		key = gKey(ass); 
+		val = gValue(ass); 
+		gRemoveObj(iv->iObjects, pobj); 
+		gDispose(key); 
+		if (val) 
+			gDeepDispose(val); 
+	} 
+	return self; 
+} 
+
 cmeth objrtn ObjectPool_cm_gNewWithInt(object self, int siz)
 { 
 	return init(oSuper(ObjectPool_c, gNew, self)(self), siz); 
@@ -119,7 +135,7 @@ imeth objrtn ObjectPool_im_gAddToPool(object self, int deepFlag, object obj)
 	object val = gNewWithObjObj(ObjectAssociation, gNewWithInt(ShortInteger, deepFlag), gNewWithLong(LongInteger, gObjectSerialNumber(obj))); 
 	object pobj = gNewWithPtr(Pointer, obj); 
 	if (!gAddValue(iv->iObjects, pobj, val)) { 
-		gDeepDisposeObj(iv->iObjects, pobj); 
+		remove_entry(self, pobj); 
 		gAddValue(iv->iObjects, pobj, val); 
 	} 
 	return obj; 
@@ -141,7 +157,7 @@ imeth objrtn ObjectPool_im_gDisposeObject(object self, object obj)
 			if (v1 == v2) 
 				gShortValue(gKey(val)) ? gDeepDispose(obj) : gDispose(obj); 
 		} 
-		gDeepDisposeObj(iv->iObjects, pobj); 
+		remove_entry(self, pobj); 
 	} 
 	gDispose(pobj); 
 	return NULL; 
@@ -153,9 +169,9 @@ cmeth objrtn ObjectPool_cm_gDisposeObject(object self, object obj)
 } 
 
 imeth objrtn ObjectPool_im_gRemoveFromPool(object self, object obj)
-{ ObjectPool_iv_t *iv = GetIVs(ObjectPool, self);
+{ 
 	object pobj = gNewWithPtr(Pointer, obj); 
-	gDeepDisposeObj(iv->iObjects, pobj); 
+	remove_entry(self, pobj); 
 	gDispose(pobj); 
 	return obj; 
 } 
@@ -165,7 +181,7 @@ cmeth objrtn ObjectPool_cm_gRemoveFromPool(object self, object obj)
 	return gRemoveFromPool(ObjectPool_cv->cCurrentPool, obj); 
 } 
 
-#line 169 "ObjectPool.c"
+#line 185 "ObjectPool.c"
 
 objrtn	ObjectPool_initialize(void)
 {

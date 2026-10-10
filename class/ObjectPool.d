@@ -49,6 +49,25 @@ cmeth	gNew()
 	return init(gNew(super), DFLT_SIZE);
 }
 
+/*  Drop the entry for the object pobj points to.  The key is a Pointer, whose
+    deep dispose would also dispose the pooled object, so the entry is taken
+    apart by hand and only the bookkeeping objects are disposed.  */
+
+private imeth	remove_entry(object pobj)
+{
+	object	ass = gFind(iObjects, pobj), key, val;
+
+	if (ass)  {
+		key = gKey(ass);
+		val = gValue(ass);
+		gRemoveObj(iObjects, pobj);
+		gDispose(key);
+		if (val)
+			gDeepDispose(val);
+	}
+	return self;
+}
+
 cmeth	gNewWithInt(int siz)
 {
 	return init(gNew(super), siz);
@@ -93,8 +112,8 @@ imeth	gAddToPool(int deepFlag, obj)
 {
 	object	val = gNewWithObjObj(ObjectAssociation, gNewWithInt(ShortInteger, deepFlag), gNewWithLong(LongInteger, gObjectSerialNumber(obj)));
 	object	pobj = gNewWithPtr(Pointer, obj);
-	if (!gAddValue(iObjects, pobj, val)) {
-		gDeepDisposeObj(iObjects, pobj);
+	if (!gAddValue(iObjects, pobj, val)) {	/*  already pooled - replace the entry  */
+		remove_entry(self, pobj);
 		gAddValue(iObjects, pobj, val);
 	}
 	return obj;
@@ -116,7 +135,7 @@ imeth	gDisposeObject(obj)
 			if (v1 == v2)
 				gShortValue(gKey(val)) ? gDeepDispose(obj) : gDispose(obj);
 		}
-		gDeepDisposeObj(iObjects, pobj);
+		remove_entry(self, pobj);
 	}
 	gDispose(pobj);
 	return NULL;
@@ -130,7 +149,7 @@ cmeth	gDisposeObject(obj)
 imeth	gRemoveFromPool(obj)
 {
 	object	pobj = gNewWithPtr(Pointer, obj);
-	gDeepDisposeObj(iObjects, pobj);
+	remove_entry(self, pobj);
 	gDispose(pobj);
 	return obj;
 }

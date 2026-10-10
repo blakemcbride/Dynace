@@ -75,21 +75,20 @@ static	objrtn	LinkObject_cfm_vMakeList(object self, ...)
 #line 48 "LinkObject.d"
 ivmeth objrtn LinkObject_ivm_vGetValues(object self, va_list _rest_)
 { 
-	object *var, seq, obj; 
+	object *var, lnk; 
 
-	seq = gSequence(self); 
-	obj = gNext(seq); 
+
+
+	lnk = FIRST(self); 
 	while (var = GetArg(object *)) { 
-		*var = obj; 
-		if (obj) 
-			obj = gNext(seq); 
+		*var = lnk ? gValue(lnk) : NULLOBJ; 
+		if (lnk) 
+			lnk = gNext(lnk); 
 	} 
-	if (obj) 
-		gDispose(seq); 
 	return self; 
 } 
 
-#line 93 "LinkObject.c"
+#line 92 "LinkObject.c"
 
 static	objrtn	LinkObject_ifm_vGetValues(object self, ...)
 {
@@ -103,7 +102,7 @@ static	objrtn	LinkObject_ifm_vGetValues(object self, ...)
 
 
 
-#line 64 "LinkObject.d"
+#line 63 "LinkObject.d"
 imeth objrtn LinkObject_im_gAddFirst(object self, object obj)
 { 
 	object lnk; 
@@ -151,6 +150,9 @@ imeth objrtn LinkObject_im_gLast(object self)
 	return lnk ? gValue(lnk) : NULLOBJ; 
 } 
 
+
+
+
 imeth objrtn LinkObject_im_gSequence(object self)
 { 
 	return gNewWithObj(LinkObjectSequence, FIRST(self)); 
@@ -164,11 +166,11 @@ imeth objrtn LinkObject_im_gSequenceLinks(object self)
 imeth objrtn LinkObject_im_gNth(object self, int idx)
 { 
 	object r = oSuper(LinkObject_c, gNth, self)(self, idx); 
-	return r ? gValue(r) : NULLOBJ; 
+	return r && r != self ? gValue(r) : NULLOBJ; 
 } 
 
 
-#line 172 "LinkObject.c"
+#line 174 "LinkObject.c"
 
 objrtn	LinkObject_initialize(void)
 {

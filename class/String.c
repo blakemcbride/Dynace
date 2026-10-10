@@ -83,10 +83,17 @@ static	String_cv_t	*String_cv;
 #include "memalloc.h" 
 #include <ctype.h> 
 #include <string.h> 
+#include <stdlib.h> 
 #include <math.h> 
 
-#line 77 "String.d"
+#line 78 "String.d"
 #define SETSIZE(x) iv->iSize = ((x) ? (((x)-1)/iv->iBlksz + 1) * iv->iBlksz : 0) 
+
+
+
+
+#define SRC_OFFSET(p) ((p) >= iv->iStr && (p) < iv->iStr + iv->iSize ? (long)((p) - iv->iStr) : -1L) 
+#define SRC_REBASE(p, off) if ((off) >= 0) (p) = iv->iStr + (off) 
 
 #define ABS 40 
 
@@ -98,7 +105,7 @@ static	String_cv_t	*String_cv;
 #endif 
 
 
-#line 89 "String.d"
+#line 96 "String.d"
 #ifdef ADJUST 
 
 
@@ -108,12 +115,12 @@ static	String_cv_t	*String_cv;
 #else 
 
 
-#line 96 "String.d"
+#line 103 "String.d"
 #define FREE_UNUSED 
 #endif 
 
 
-#line 99 "String.d"
+#line 106 "String.d"
 static char getNextCharacter(ivType *iv, char **p, char *text, int right, int (*fun)(char)); 
 static int get_string(object, char **, char *, int); 
 
@@ -206,14 +213,18 @@ PMETHOD objrtn ChangeValue(object self, object obj)
 	char *str; 
 	int len; 
 
+	long off; 
+
 	len = get_string(obj, &str, "ChangeValue", 2); 
+	off = SRC_OFFSET(str); 
 	iv->iLen = len; 
 	if (len >= iv->iSize) { 
 		SETSIZE(iv->iLen + 1); 
 		iv->iStr = (char *) MA_realloc(iv->iStr, iv->iSize); 
+		SRC_REBASE(str, off); 
 	} 
 	if (len) 
-		memcpy(iv->iStr, str, len); 
+		memmove(iv->iStr, str, len); 
 	iv->iStr[len] = '\0'; 
 	FREE_UNUSED; 
 	return self; 
@@ -546,11 +557,13 @@ imeth objrtn String_im_gAppend(object self, object obj)
 { String_iv_t *iv = GetIVs(String, self);
 	char *str; 
 	int len, need; 
+	long off; 
 
 	if (!obj) 
 		return self; 
 	UPDATE_LEN; 
 	len = get_string(obj, &str, "Append", 2); 
+	off = SRC_OFFSET(str); 
 	need = iv->iLen + 1 + len; 
 	if (need > iv->iSize) { 
 		if (iv->iBlksz == 1) 
@@ -559,8 +572,9 @@ imeth objrtn String_im_gAppend(object self, object obj)
 			iv->iBlksz = (len / ABS + 1) * ABS; 
 		SETSIZE(need); 
 		iv->iStr = (char *) MA_realloc(iv->iStr, iv->iSize); 
+		SRC_REBASE(str, off); 
 	} 
-	memcpy(iv->iStr + iv->iLen, str, len); 
+	memmove(iv->iStr + iv->iLen, str, len); 
 	iv->iLen += len; 
 	iv->iStr[iv->iLen] = '\0'; 
 	return self; 
@@ -569,8 +583,10 @@ imeth objrtn String_im_gAppend(object self, object obj)
 imeth int String_im_gWrite(object self, char *buf, unsigned len)
 { String_iv_t *iv = GetIVs(String, self);
 	int need; 
+	long off; 
 
 	UPDATE_LEN; 
+	off = SRC_OFFSET(buf); 
 	need = iv->iLen + 1 + len; 
 	if (need > iv->iSize) { 
 		if (iv->iBlksz == 1) 
@@ -579,8 +595,9 @@ imeth int String_im_gWrite(object self, char *buf, unsigned len)
 			iv->iBlksz = (len / ABS + 1) * ABS; 
 		SETSIZE(need); 
 		iv->iStr = (char *) MA_realloc(iv->iStr, iv->iSize); 
+		SRC_REBASE(buf, off); 
 	} 
-	memcpy(iv->iStr + iv->iLen, buf, len); 
+	memmove(iv->iStr + iv->iLen, buf, len); 
 	iv->iLen += len; 
 	iv->iStr[iv->iLen] = '\0'; 
 	return len; 
@@ -673,7 +690,7 @@ cmeth objrtn String_cm_vSprintf(object self, char *fmt, va_list _rest_)
 	return obj; 
 } 
 
-#line 677 "String.c"
+#line 694 "String.c"
 
 static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 {
@@ -687,23 +704,42 @@ static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 
 
 
-#line 658 "String.d"
+#line 675 "String.d"
 imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 { String_iv_t *iv = GetIVs(String, self);
 	object obj; 
 	char *str, *pbuf; 
 	int len, argn, tlen; 
 	static char fun[] = "Build"; 
+	char *oldStr, *save = NULL; 
+	int oldSize = iv->iSize, oldLen, alias = 0; 
 	va_list _rest2_; 
 	va_copy(_rest2_, _rest_); 
-#line 670 "String.d"
-	UPDATE_LEN; 
-	if (f) 
+#line 689 "String.d"
+#define IN_OLD(p) ((p) >= oldStr && (p) < oldStr + oldSize) 
+
+
+
+		UPDATE_LEN; 
+	oldStr = iv->iStr; 
+	oldLen = iv->iLen; 
+	if (f) { 
 		tlen = get_string((object) f, &str, fun, 2); 
-	else 
+		alias = (object) f == self || IN_OLD(str); 
+	} else 
 		tlen = iv->iLen; 
-	for (argn=3 ; obj = va_arg(_rest_, object) ; ) 
+	for (argn=3 ; obj = va_arg(_rest_, object) ; ) { 
 		tlen += get_string(obj, &str, fun, argn++); 
+		if (obj == self || IN_OLD(str)) 
+			alias = 1; 
+	} 
+	if (alias) { 
+		save = (char *) malloc(oldSize + 1); 
+		if (!save) 
+			gError(Dynace, "Build::String:  Out of memory.\n"); 
+		memcpy(save, oldStr, oldSize); 
+		save[oldSize] = '\0'; 
+	} 
 
 
 
@@ -715,17 +751,18 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 		SETSIZE(tlen + 1); 
 		iv->iStr = (char *) MA_realloc(iv->iStr, iv->iSize); 
 	} 
-#line 692 "String.d"
+#line 735 "String.d"
+#define GET_ARG(o, n) if (save && (o) == self) { str = save; len = oldLen; } else { len = get_string((o), &str, fun, (n)); if (save && IN_OLD(str)) str = save + (str - oldStr); } 
 	pbuf = iv->iStr; 
 	if (f) { 
-		len = get_string((object)f, &str, fun, 2); 
+		GET_ARG((object) f, 2); 
 		if (len) 
 			memcpy(pbuf, str, len); 
 		pbuf += len; 
 	} else 
-		pbuf += iv->iLen; 
-	for (argn=3 ; obj = va_arg(_rest2_, object) ; ) { 
-		len = get_string(obj, &str, fun, argn++); 
+		pbuf += oldLen; 
+	for (argn=3 ; obj = va_arg(_rest2_, object) ; argn++) { 
+		GET_ARG(obj, argn); 
 		if (len) { 
 			memcpy(pbuf, str, len); 
 			pbuf += len; 
@@ -734,10 +771,14 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 	va_end(_rest2_); 
 	*pbuf = '\0'; 
 	iv->iLen = tlen; 
-	return self; 
+	if (save) 
+		free(save); 
+#undef GET_ARG 
+#undef IN_OLD 
+		return self; 
 } 
 
-#line 741 "String.c"
+#line 782 "String.c"
 
 static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 {
@@ -751,7 +792,7 @@ static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 
 
 
-#line 713 "String.d"
+#line 761 "String.d"
 cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 { 
 	object obj; 
@@ -801,7 +842,7 @@ cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 	return newObj; 
 } 
 
-#line 805 "String.c"
+#line 846 "String.c"
 
 static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 {
@@ -814,7 +855,7 @@ static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 }
 
 
-#line 762 "String.d"
+#line 810 "String.d"
 static int get_string(object obj, char **str, char *fun, int argn) 
 { 
 	ivType *iv2; 
@@ -905,7 +946,8 @@ imeth objrtn String_im_gSubString(object self, int beg, int num)
 		num = num < n ? num : n; 
 	} 
 	iv2->iBlksz = 1; 
-	SETSIZE(num+1); 
+	iv2->iSize = num + 1; 
+	iv2->iFiller = MASK_FILLER; 
 	iv2->iLen = num; 
 	iv2->iStr = (char *) MA_malloc(iv2->iSize, &iv2->iStr); 
 	if (num) 
@@ -1302,7 +1344,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1306 "String.c"
+#line 1348 "String.c"
 
 objrtn	String_initialize(void)
 {

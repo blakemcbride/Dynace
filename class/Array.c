@@ -48,6 +48,7 @@
 
 #line 40 "Array.d"
 #include <string.h> 
+#include <limits.h> 
 #include "memalloc.h" 
 
 
@@ -62,7 +63,7 @@
 object	Array_c;
 
 
-#line 66 "Array.c"
+#line 67 "Array.c"
 typedef struct  _Array_iv_t  {
 	char iType;
 	unsigned iRank;
@@ -73,14 +74,14 @@ typedef struct  _Array_iv_t  {
 }	Array_iv_t;
 
 
-#line 58 "Array.d"
+#line 59 "Array.d"
 #ifdef PROFILE 
 #undef PMETHOD 
 #define PMETHOD 
 #endif 
 
 
-#line 64 "Array.d"
+#line 65 "Array.d"
 static int Index_origin = 0; 
 
 static int _A_esize(int type); 
@@ -99,6 +100,18 @@ static unsigned char pow2[] = { ~1, ~2, ~4, ~8, ~16, ~32, ~64,
 static char OOB[] = "Error: Out of bounds array index.\n"; 
 
 
+
+
+static INDEX_TYPE shape_mul(int type, INDEX_TYPE n, INDEX_TYPE d) 
+{ 
+	INDEX_TYPE es = type == AT_BIT ? 1 : (INDEX_TYPE) _A_esize(type); 
+
+	if (d && (n > UINT_MAX / d || n * d > (UINT_MAX - (BITS_PER_BYTE-1)) / es)) 
+		gError(Dynace, "Error: Array shape too large.\n"); 
+	return n * d; 
+} 
+
+
 cmeth objrtn Array_cm_gNew(object self)
 { 
 	return gShouldNotImplement(self, "gNew"); 
@@ -115,7 +128,7 @@ cmeth objrtn Array_cm_gNewArray(object self, int type, int rank, va_list _rest_)
 	iv->iRank = rank; 
 	iv->iShape = rank ? MTnalloc(INDEX_TYPE, rank, iv->iShape) : (INDEX_TYPE *) NULL; 
 	for (i=0, n=1 ; i < rank ; ++i) 
-		n *= iv->iShape[i] = GetArg(unsigned); 
+		n = shape_mul(type, n, iv->iShape[i] = GetArg(unsigned)); 
 	iv->iNelm = n; 
 	if (type == AT_OBJ) { 
 		iv->iArray = n ? Tncalloc(char, (unsigned) SIZE(type, n)) : NULL; 
@@ -138,7 +151,7 @@ PMETHOD objrtn Array_NewArray(object self, int type, int rank, unsigned *idx)
 	iv->iRank = rank; 
 	iv->iShape = rank ? MTnalloc(INDEX_TYPE, rank, iv->iShape) : (INDEX_TYPE *) NULL; 
 	for (i=0, n=1 ; i < rank ; ++i) 
-		n *= iv->iShape[i] = idx[i]; 
+		n = shape_mul(type, n, iv->iShape[i] = idx[i]); 
 	iv->iNelm = n; 
 	if (type == AT_OBJ) { 
 		iv->iArray = n ? Tncalloc(char, (unsigned) SIZE(type, n)) : NULL; 
@@ -264,7 +277,7 @@ ivmeth int Array_ivm_vBitValue(object self, va_list _rest_)
 	return !!BIT_VAL(iv->iArray, offset); 
 } 
 
-#line 268 "Array.c"
+#line 281 "Array.c"
 
 static	int	Array_ifm_vBitValue(object self, ...)
 {
@@ -278,9 +291,9 @@ static	int	Array_ifm_vBitValue(object self, ...)
 
 
 
-#line 247 "Array.d"
+#line 260 "Array.d"
 ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
-{ Array_iv_t *iv = GetIVs(Array, self);int v = va_arg(_rest_, int);
+{ Array_iv_t *iv = GetIVs(Array, self);int v = va_arg(_rest_, int) ;
 	int i, r; 
 	INDEX_TYPE offset; 
 
@@ -305,7 +318,7 @@ ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 309 "Array.c"
+#line 322 "Array.c"
 
 static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 {
@@ -319,7 +332,7 @@ static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 
 
 
-#line 273 "Array.d"
+#line 286 "Array.d"
 cmeth objrtn Array_cm_gIota(object self, int n)
 { 
 	INDEX_TYPE c; 
@@ -336,13 +349,13 @@ cmeth objrtn Array_cm_gIota(object self, int n)
 } 
 
 ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
-{ Array_iv_t *iv = GetIVs(Array, self);unsigned rank = va_arg(_rest_, unsigned);
+{ Array_iv_t *iv = GetIVs(Array, self);unsigned rank = va_arg(_rest_, unsigned) ;
 	INDEX_TYPE n, *shape, d, i; 
 
 	shape = rank ? MTnalloc(INDEX_TYPE, rank, iv->iShape) : (INDEX_TYPE *) NULL; 
 	for (i=0, n=1 ; i < rank ; ++i) { 
 		d = GetArg(INDEX_TYPE); 
-		n *= d; 
+		n = shape_mul(iv->iType, n, d); 
 		shape[i] = d; 
 	} 
 
@@ -358,21 +371,31 @@ ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 		else 
 			array = n ? MTncalloc(char, s2, iv->iArray) : NULL; 
 
-		fp = (char *) iv->iArray; 
-		tp = (char *) array; 
-		while (s2) { 
-			unsigned m; 
 
-			m = s2 < s1 ? s2 : s1; 
-			memcpy(tp, fp, m); 
-			s2 -= m; 
-			s1 -= m; 
-			if (!s1) { 
-				fp = (char *) iv->iArray; 
-				s1 = s1org; 
-			} else 
-				fp += m; 
-			tp += m; 
+
+		if (!s1org) 
+			; 
+		else if (iv->iType == AT_BIT) 
+			for (i=0 ; i < n ; ++i) { 
+			SET_BIT(array, i, BIT_VAL(iv->iArray, i % iv->iNelm)); 
+		} 
+		else { 
+			fp = (char *) iv->iArray; 
+			tp = (char *) array; 
+			while (s2) { 
+				unsigned m; 
+
+				m = s2 < s1 ? s2 : s1; 
+				memcpy(tp, fp, m); 
+				s2 -= m; 
+				s1 -= m; 
+				if (!s1) { 
+					fp = (char *) iv->iArray; 
+					s1 = s1org; 
+				} else 
+					fp += m; 
+				tp += m; 
+			} 
 		} 
 		if (iv->iArray) 
 			if (iv->iType == AT_OBJ) 
@@ -395,7 +418,7 @@ ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 399 "Array.c"
+#line 422 "Array.c"
 
 static	objrtn	Array_ifm_vReshape(object self, ...)
 {
@@ -408,7 +431,7 @@ static	objrtn	Array_ifm_vReshape(object self, ...)
 }
 
 
-#line 350 "Array.d"
+#line 373 "Array.d"
 static int _A_esize(int type) 
 { 
 	switch (type) { 
@@ -678,13 +701,13 @@ PMETHOD objrtn Array_Dup(object self, int ntype, int dval, int deep)
 #else 
 
 
-#line 622 "Array.d"
+#line 645 "Array.d"
 #define CONV(tt, ft) while (n--) { *((tt *) nval) = (tt) *((ft *) val); nval = (void *) (1 + (tt *) nval); val = (void *) (1 + (ft *) val); } 
 
-#line 628 "Array.d"
+#line 651 "Array.d"
 #define CONVFI(tt, ft) while (n--) { *((tt *) nval) = (tt) Dtol((double)*(ft *) val); nval = (void *) (1 + (tt *) nval); val = (void *) (1 + (ft *) val); } 
 
-#line 634 "Array.d"
+#line 657 "Array.d"
 #define CONVFD() while (n--) { *((double *) nval) = Ftod(*((float *) val)); nval = (void *) (1 + (double *) nval); val = (void *) (1 + (float *) val); } 
 
 
@@ -699,7 +722,7 @@ PMETHOD objrtn Array_Dup(object self, int ntype, int dval, int deep)
 #endif 
 
 
-#line 647 "Array.d"
+#line 670 "Array.d"
 static int convert(ivType *iv, ivType *iv2) 
 { 
 	INDEX_TYPE m; 
@@ -825,7 +848,7 @@ cmeth objrtn Array_cm_gIndexOrigin(object self, int n)
 	return self; 
 } 
 
-#line 829 "Array.c"
+#line 852 "Array.c"
 
 objrtn	Array_initialize(void)
 {

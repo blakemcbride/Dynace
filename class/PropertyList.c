@@ -60,7 +60,7 @@ imeth objrtn PropertyList_im_gPropertyPut(object self, char *prop, int autoDispo
 		iv->iPropertyList = gNew(StringDictionary); 
 	if (!gAddStr(iv->iPropertyList, prop, intAssoc=gNewWithIntObj(IntegerAssociation, autoDispose, val))) { 
 		object old = gChangeValueWithStr(iv->iPropertyList, prop, intAssoc); 
-		if (gIntKey(old)) 
+		if (gIntKey(old) && gValue(old) != val) 
 			gDeepDispose(old); 
 		else 
 			gDispose(old); 

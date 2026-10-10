@@ -68,6 +68,7 @@ init:	class_init;
 #include "memalloc.h"
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 #include <math.h>
 
 
@@ -75,6 +76,12 @@ init:	class_init;
 /*  calculates correct size based on blksz  */
 
 #define SETSIZE(x)	iSize = ((x) ? (((x)-1)/iBlksz + 1) * iBlksz : 0)
+
+/*  A source pointer may point into this string's own buffer (gAppend(s, s),
+    or a char * taken from it), which MA_realloc may move.  Remember its
+    offset before reallocating and rebase it afterwards.  */
+#define	SRC_OFFSET(p)	((p) >= iStr  &&  (p) < iStr + iSize ? (long)((p) - iStr) : -1L)
+#define	SRC_REBASE(p, off)	if ((off) >= 0) (p) = iStr + (off)
 
 #define ABS	40	/*  Default append block size	*/
 
@@ -188,14 +195,18 @@ imeth	gChangeValue : ChangeValue (obj)
 	char	*str;
 	int	len;
 
+	long	off;
+
 	len = get_string(obj, &str, "ChangeValue", 2);
+	off = SRC_OFFSET(str);
 	iLen = len;
 	if (len >= iSize)  {
 		SETSIZE(iLen + 1);
 		iStr = (char *) MA_realloc(iStr, iSize);
+		SRC_REBASE(str, off);
 	}
 	if (len)
-		memcpy(iStr, str, len);
+		memmove(iStr, str, len);
 	iStr[len] = '\0';
 	FREE_UNUSED;
 	return self;
@@ -528,11 +539,13 @@ imeth	gAppend(obj)
 {
 	char	*str;
 	int	len, need;
+	long	off;
 
 	if (!obj)
 		return self;
 	UPDATE_LEN;
 	len = get_string(obj, &str, "Append", 2);
+	off = SRC_OFFSET(str);
 	need = iLen + 1 + len;
 	if (need > iSize)  {
 		if (iBlksz == 1)
@@ -541,8 +554,9 @@ imeth	gAppend(obj)
 			iBlksz = (len / ABS + 1) * ABS;
 		SETSIZE(need);
 		iStr = (char *) MA_realloc(iStr, iSize);
+		SRC_REBASE(str, off);
 	}
-	memcpy(iStr + iLen, str, len);
+	memmove(iStr + iLen, str, len);
 	iLen += len;
 	iStr[iLen] = '\0';
 	return self;
@@ -551,8 +565,10 @@ imeth	gAppend(obj)
 imeth	int	gWrite(char *buf, unsigned len)
 {
 	int	need;
+	long	off;
 
 	UPDATE_LEN;
+	off = SRC_OFFSET(buf);
 	need = iLen + 1 + len;
 	if (need > iSize)  {
 		if (iBlksz == 1)
@@ -561,8 +577,9 @@ imeth	int	gWrite(char *buf, unsigned len)
 			iBlksz = (len / ABS + 1) * ABS;
 		SETSIZE(need);
 		iStr = (char *) MA_realloc(iStr, iSize);
+		SRC_REBASE(buf, off);
 	}
-	memcpy(iStr + iLen, buf, len);
+	memmove(iStr + iLen, buf, len);
 	iLen += len;
 	iStr[iLen] = '\0';
 	return len;
@@ -661,19 +678,38 @@ imeth	vBuild(char *f, ...)
 	char	*str, *pbuf;
 	int	len, argn, tlen;
 	static	char	fun[] = "Build";
+	char	*oldStr, *save = NULL;
+	int	oldSize = iSize, oldLen, alias = 0;
 	va_list _rest2_;
 	va_copy(_rest2_, _rest_);
 
+	/*  An argument may be this string itself or point into its buffer.  The
+	    buffer is overwritten (and maybe moved) while building, so such
+	    arguments are read from a copy of the original contents.  */
+#define	IN_OLD(p)	((p) >= oldStr  &&  (p) < oldStr + oldSize)
 	
 	/*  Calculate total length  */
 
 	UPDATE_LEN;
-	if (f)
+	oldStr = iStr;
+	oldLen = iLen;
+	if (f)  {
 		tlen = get_string((object) f, &str, fun, 2);
-	else
+		alias = (object) f == self  ||  IN_OLD(str);
+	}  else
 		tlen = iLen;
-	for (argn=3 ; obj = va_arg(_rest_, object) ; )
+	for (argn=3 ; obj = va_arg(_rest_, object) ; )  {
 		tlen += get_string(obj, &str, fun, argn++);
+		if (obj == self  ||  IN_OLD(str))
+			alias = 1;
+	}
+	if (alias)  {
+		save = (char *) malloc(oldSize + 1);
+		if (!save)
+			gError(Dynace, "Build::String:  Out of memory.\n");
+		memcpy(save, oldStr, oldSize);
+		save[oldSize] = '\0';
+	}
 
 	/*  Make sure buffer is big enough  */
 
@@ -689,16 +725,24 @@ imeth	vBuild(char *f, ...)
 	
 	/*  Build string  */
 
+#define	GET_ARG(o, n)	if (save  &&  (o) == self)  {		\
+				str = save;			\
+				len = oldLen;			\
+			}  else  {				\
+				len = get_string((o), &str, fun, (n));	\
+				if (save  &&  IN_OLD(str))	\
+					str = save + (str - oldStr);	\
+			}
 	pbuf = iStr;
 	if (f)  {
-		len = get_string((object)f, &str, fun, 2);
+		GET_ARG((object) f, 2);
 		if (len)
 			memcpy(pbuf, str, len);
 		pbuf += len;
 	}  else 
-		pbuf += iLen;
-	for (argn=3 ; obj = va_arg(_rest2_, object) ; )  {
-		len = get_string(obj, &str, fun, argn++);
+		pbuf += oldLen;
+	for (argn=3 ; obj = va_arg(_rest2_, object) ; argn++)  {
+		GET_ARG(obj, argn);
 		if (len)  {
 			memcpy(pbuf, str, len);
 			pbuf += len;
@@ -707,6 +751,10 @@ imeth	vBuild(char *f, ...)
 	va_end(_rest2_);
 	*pbuf = '\0';
 	iLen = tlen;
+	if (save)
+		free(save);
+#undef	GET_ARG
+#undef	IN_OLD
 	return self;
 }
 
@@ -849,7 +897,8 @@ imeth	gSubString(int beg, int num)
 		num = num < n ? num : n;
 	}
 	iv2->iBlksz = 1;
-	SETSIZE(num+1);
+	iv2->iSize = num + 1;	/*  SETSIZE would set self's size  */
+	iv2->iFiller = MASK_FILLER;
 	iv2->iLen  = num;
 	iv2->iStr  = (char *) MA_malloc(iv2->iSize, &iv2->iStr);
 	if (num)

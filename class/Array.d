@@ -38,6 +38,7 @@
 
 
 #include <string.h>
+#include <limits.h>
 #include "memalloc.h"
 
 
@@ -78,6 +79,18 @@ static	unsigned char	pow2[] = { ~1, ~2, ~4, ~8, ~16, ~32, ~64,
 
 static	char	OOB[] = "Error: Out of bounds array index.\n";
 
+/*  n * d, the element count after adding a dimension of size d, checked so
+    neither the count nor the byte size of the data can overflow  */
+
+static	INDEX_TYPE	shape_mul(int type, INDEX_TYPE n, INDEX_TYPE d)
+{
+	INDEX_TYPE	es = type == AT_BIT ? 1 : (INDEX_TYPE) _A_esize(type);
+
+	if (d  &&  (n > UINT_MAX / d  ||  n * d > (UINT_MAX - (BITS_PER_BYTE-1)) / es))
+		gError(Dynace, "Error: Array shape too large.\n");
+	return n * d;
+}
+
 
 cmeth	gNew()
 {
@@ -95,7 +108,7 @@ cmeth	gNewArray(int type, int rank, va_list _rest_)  /*  same as the following m
 	iRank = rank;
 	iShape = rank ? MTnalloc(INDEX_TYPE, rank, iShape) : (INDEX_TYPE *) NULL;
 	for (i=0, n=1 ; i < rank ; ++i)
-		n *= iShape[i] = GetArg(unsigned);
+		n = shape_mul(type, n, iShape[i] = GetArg(unsigned));
 	iNelm = n;
 	if (type == AT_OBJ)  {
 		iArray = n ? Tncalloc(char, (unsigned) SIZE(type, n)) : NULL;
@@ -118,7 +131,7 @@ private	cmeth	Array_NewArray(int type, int rank, unsigned *idx)
 	iRank = rank;
 	iShape = rank ? MTnalloc(INDEX_TYPE, rank, iShape) : (INDEX_TYPE *) NULL;
 	for (i=0, n=1 ; i < rank ; ++i)
-		n *= iShape[i] = idx[i];
+		n = shape_mul(type, n, iShape[i] = idx[i]);
 	iNelm = n;
 	if (type == AT_OBJ)  {
 		iArray = n ? Tncalloc(char, (unsigned) SIZE(type, n)) : NULL;
@@ -292,7 +305,7 @@ ivmeth	object	vReshape(unsigned rank, ...)
 	shape = rank ? MTnalloc(INDEX_TYPE, rank, iShape) : (INDEX_TYPE *) NULL;
 	for (i=0, n=1 ; i < rank ; ++i)  {
 		d = GetArg(INDEX_TYPE);
-		n *= d;
+		n = shape_mul(iType, n, d);
 		shape[i] = d;
 	}
 
@@ -308,21 +321,31 @@ ivmeth	object	vReshape(unsigned rank, ...)
 		else
 			array = n ? MTncalloc(char, s2, iArray) : NULL;
 
-		fp = (char *) iArray;
-		tp = (char *) array;
-		while (s2)  {
-			unsigned	m;
+		/*  fill the new array by repeating the old elements; an empty
+		    array leaves it zero filled  */
+		if (!s1org)
+			;
+		else if (iType == AT_BIT)	/*  elements are bits, not bytes  */
+			for (i=0 ; i < n ; ++i)  {
+				SET_BIT(array, i, BIT_VAL(iArray, i % iNelm));
+			}
+		else  {
+			fp = (char *) iArray;
+			tp = (char *) array;
+			while (s2)  {
+				unsigned	m;
 
-			m = s2 < s1 ? s2 : s1;
-			memcpy(tp, fp, m);
-			s2 -= m;
-			s1 -= m;
-			if (!s1)  {
-				fp = (char *) iArray;
-				s1 = s1org;
-			} else
-				fp += m;
-			tp += m;
+				m = s2 < s1 ? s2 : s1;
+				memcpy(tp, fp, m);
+				s2 -= m;
+				s1 -= m;
+				if (!s1)  {
+					fp = (char *) iArray;
+					s1 = s1org;
+				} else
+					fp += m;
+				tp += m;
+			}
 		}
 		if (iArray)
 			if (iType == AT_OBJ)

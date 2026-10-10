@@ -47,17 +47,16 @@ cvmeth	vMakeList(...)
 
 ivmeth	vGetValues(...)
 {
-	object	*var, seq, obj;
+	object	*var, lnk;
 
-	seq = gSequence(self);
-	obj = gNext(seq);
+	/*  walk the links, not a value sequence, so a NULL value isn't taken
+	    as the end of the list  */
+	lnk = FIRST(self);
 	while (var = GetArg(object *)) {
-		*var = obj;
-		if (obj)
-			obj = gNext(seq);
+		*var = lnk ? gValue(lnk) : NULLOBJ;
+		if (lnk)
+			lnk = gNext(lnk);
 	}
-	if (obj)
-		gDispose(seq);
 	return self;
 }
 
@@ -108,6 +107,9 @@ imeth	gLast()
 	return lnk ? gValue(lnk) : NULLOBJ;
 }
 
+/*  The sequence returns the values, so iteration stops at a NULL value.
+    Use gSequenceLinks for lists that may hold NULL values.  */
+
 imeth	gSequence()
 {
 	return gNewWithObj(LinkObjectSequence, FIRST(self));
@@ -121,7 +123,7 @@ imeth	gSequenceLinks()
 imeth	gNth(int idx)
 {
 	object	r = gNth(super, idx);
-	return r ? gValue(r) : NULLOBJ;
+	return r  &&  r != self ? gValue(r) : NULLOBJ;	/*  index 0 is the list head  */
 }
 
 
