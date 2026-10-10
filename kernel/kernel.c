@@ -56,6 +56,10 @@ pthread_mutexattr_t _mutex_attr;
 #endif
 
 #define ALIGN2
+
+/*  The GC stores a byte offset into an object's instance variables, halved
+    (offsets are always even), in the unsigned short Object_iv_t.siz.  */
+#define MAX_IV_SIZE	(2L * 65535L)
 #define ALIGNMENT (2)
 
 #ifdef	BC32
@@ -103,8 +107,25 @@ typedef	struct	memory_range  {
 
 #ifdef	ALIGN4	/* align 4 bytes */
 #define EVEN(x)		((((intptr_t)(x) + 3) >> 2) << 2)
-#else		/*  align 2 bytes  */
-#define EVEN(x)		((x) + ((x) % 2))
+#else		/*  align to pointer size so objects and their pointer IVs are naturally aligned  */
+#define EVEN(x)		((((x) + sizeof(void *) - 1) / sizeof(void *)) * sizeof(void *))
+#endif
+
+/*  The GC scans conservatively at 2-byte steps, so a probed slot may be
+    misaligned.  memcpy keeps those accesses defined (it is a plain move on x86).  */
+#define	SLOT_GET(a)	(memcpy(&slot_tmp_, (a), sizeof(object)), slot_tmp_)
+#define	SLOT_PUT(a, v)	(slot_tmp_ = (v), memcpy((a), &slot_tmp_, sizeof(object)))
+
+/*  Conservative scans (GC stack marking, exception-handler lookup, _IsObj)
+    deliberately read memory that may not belong to an object, so they are
+    not instrumented by AddressSanitizer.  */
+#if defined(__has_attribute)
+#if __has_attribute(no_sanitize_address)
+#define	NO_SANITIZE_ADDRESS	__attribute__((no_sanitize_address))
+#endif
+#endif
+#ifndef	NO_SANITIZE_ADDRESS
+#define	NO_SANITIZE_ADDRESS
 #endif
 
 //#define     ENABLE_CHECK_FREE_LIST   // for debugging
@@ -492,6 +513,8 @@ LOCAL	void	handle_sigsegv(int sig)
 #define	chk_sptr(p, len)  ((char _HUGE_ *)(p) > (char _HUGE_ *) &obj  &&  (char _HUGE_ *)(p) <= (char _HUGE_ *)StackBeg - (len))
 
 
+/*  Validates arbitrary pointers, so it must be able to probe memory that isn't an object.  */
+NO_SANITIZE_ADDRESS
 LOCAL	_INLINE_	int	_IsObj(object obj)
 {
 	object	cls;
@@ -984,6 +1007,17 @@ static	cache	*method_cache;
 
 static	CRITICALSECTION	MC_CS;
 
+/*  _FindMethod reads the method cache without MC_CS.  New entries are fully
+    built and then published with a release store; readers load the bucket
+    head with acquire so they never see a node before its fields.  */
+#if defined(__GNUC__)  ||  defined(__clang__)
+#define	CACHE_LOAD(p)		__atomic_load_n(&(p), __ATOMIC_ACQUIRE)
+#define	CACHE_STORE(p, v)	__atomic_store_n(&(p), (v), __ATOMIC_RELEASE)
+#else
+#define	CACHE_LOAD(p)		(p)
+#define	CACHE_STORE(p, v)	((p) = (v))
+#endif
+
 LOCAL	void	create_cache(int rows, int cols)
 {
 	method_cache = Tcalloc(cache);
@@ -1070,7 +1104,7 @@ LOCAL	void	cache_add(int row, int col, object generic, object cls, int level, ob
 	e->miv = (Method_iv_t *) direct_ivs(meth);
 	if (e->next = method_cache->table[pos])
 		method_cache->chains++;
-	method_cache->table[pos] = e;
+	CACHE_STORE(method_cache->table[pos], e);
 	method_cache->used++;
 }
 
@@ -1206,7 +1240,7 @@ ofun	_FindMethod(object i, object generic)
 	    As an alternative I am making sure that the writes/updates are atomic but that they are done
 	    such that a critical section in the reads should not be necessary.  */
 /*	ENTERCRITICALSECTION(MC_CS);    */
-	for (e=method_cache->table[cache_entry(giv->cache_idx, civ->cache_idx)] ; e ; e=e->next)
+	for (e=CACHE_LOAD(method_cache->table[cache_entry(giv->cache_idx, civ->cache_idx)]) ; e ; e=e->next)
 		if (e->cls == cls  &&  e->generic == generic  &&  e->level == 1)  {
 			volatile  ofun	meth;
 
@@ -1525,6 +1559,13 @@ NewClass3(object	self,
 	cv->direct_iv_offset  = calc_offsets(cv->all_superclasses);
 
 	cv->effective_iv_size  = cv->direct_iv_size + cv->direct_iv_offset;
+	if (cv->effective_iv_size > MAX_IV_SIZE)  {
+		char	buf[200];
+
+		snprintf(buf, sizeof buf, "\nDynace: class %s instance variables exceed %ld bytes.\n",
+			name ? name : "?", (long) MAX_IV_SIZE);
+		gError(Dynace_c, buf);
+	}
 
 	cv->nipib = nipib ? nipib : calc_nipib(cv->effective_iv_size);
 
@@ -1689,8 +1730,8 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 	USE(obj);
 #else
 	char	**p = NULL;
-	short	sz;
-	object	rtn = NULL, nxt;
+	int	sz;	/*  byte offset of the slot being scanned  */
+	object	rtn = NULL, nxt, slot_tmp_;
 
 	USE(self);
  recurse:
@@ -1700,17 +1741,17 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 		goto pop_recursion;
 	}
 	p =  (char **) (obj + 1);
-	sz = (short) (SCIV(ClassOf(obj))->effective_iv_size - (EVEN(sizeof(Object_iv_t)) + sizeof(char *)));
+	sz = (int) (SCIV(ClassOf(obj))->effective_iv_size - (EVEN(sizeof(Object_iv_t)) + sizeof(char *)));
 	while (sz >= 0)  {
-		nxt = *((object *) ((char *) p + sz));
+		nxt = SLOT_GET((char *) p + sz);
 		if (IsObj(nxt))  {
 			if (nxt->tag & OBJ_USED)  {
 				/*  mark & save sz  */
 				obj->tag = OBJ_MARKED | (ALLOC_MASK & obj->tag);
-				obj->siz = sz;
+				obj->siz = (unsigned short) (sz / 2);	/*  sz is always even; see MAX_IV_SIZE  */
 
 				/*  reverse link  */
-				*((object *) ((char *) p + sz)) = rtn;
+				SLOT_PUT((char *) p + sz, rtn);
 				rtn = obj;
 
 				/*  create new environment  */
@@ -1720,7 +1761,7 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 				goto recurse;
 			}
  pop_recursion:
-			sz -= (short)sizeof(char *);
+			sz -= (int)sizeof(char *);
 		} else
 			sz -= 2;
 	}
@@ -1729,13 +1770,13 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 		return;    /*  all done  */
 
 	/*  get old sz  */
-	sz = (short) rtn->siz;
+	sz = 2 * (int) rtn->siz;
 	rtn->siz = 0;
 
 	p = (char **) (rtn + 1);
 	nxt = rtn;
-	rtn = *((object *) ((char *) p + sz));
-	*((object *) ((char *) p + sz)) = obj;
+	rtn = SLOT_GET((char *) p + sz);
+	SLOT_PUT((char *) p + sz, obj);
 
 	/*  pop recursion  */
 	obj = nxt;
@@ -1743,6 +1784,7 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 #endif	/*  !BOEHM_GC  */
 }
 
+NO_SANITIZE_ADDRESS
 cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **to)
 {
 #ifdef	BOEHM_GC
@@ -1750,7 +1792,7 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 	USE(from);
 	USE(to);
 #else
-	object	obj;
+	object	obj, slot_tmp_;
 	
 	USE(self);
 #ifdef	ALIGN4
@@ -1763,8 +1805,8 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 		to = (char _HUGE_ **) ((char _HUGE_ *) to + 1);
 #endif
 	while (from < to)  {
-		if (IsObj((object)*from))  {
-			obj = (object) *from;
+		obj = SLOT_GET(from);
+		if (IsObj(obj))  {
 			if (obj->tag & OBJ_USED)
 				Dynace_cm_gMarkObject(Dynace_c, obj);
 			from = (char _HUGE_ **)((char _HUGE_ *) from + (int)sizeof(char *));
@@ -1949,7 +1991,7 @@ cmeth	object	Dynace_cm_gDumpMemoryDiff(object self, object d1, char *fname)
 	while (sa = gNext(seq)) {
 		object k = gKey(sa);
 		object v = gValue(sa);
-		sprintf(buf, "%s %ld\n", gStringValue(k), gLongValue(v));
+		snprintf(buf, sizeof buf, "%s %ld\n", gStringValue(k), gLongValue(v));
 		gWrite(f, buf, (int) strlen(buf));
 		n++;
 	}
@@ -2421,6 +2463,26 @@ object	_catchKind(object *condp, object cls)
 	return result;
 }
 
+/*  Handlers (withHandling etc.) live in HandlerCtx structures on the stack,
+    tagged with _SIG1/_SIG2.  Find the nearest one by scanning up the stack
+    from this frame.  HandlerCtx starts with longs, so stepping by sizeof(long)
+    keeps every probe aligned.  */
+
+NO_SANITIZE_ADDRESS
+LOCAL	HandlerCtx	*find_handler(char *cp)
+{
+#ifdef	NATIVE_THREADS
+	char	*top = NULL;	/*  other threads' stacks aren't bounded by StackBeg  */
+#else
+	char	*top = StackBeg;
+#endif
+
+	for (cp += sizeof(long) ; !top  ||  cp + 2 * sizeof(long) <= top ; cp += sizeof(long))
+		if (((long *) cp)[0] == _SIG1  &&  ((long *) cp)[1] == _SIG2)
+			return (HandlerCtx *) cp;
+	return NULL;
+}
+
 object	_dynace_signal(object cond)
 {
 	char	*cp = (char *)&cond;
@@ -2428,10 +2490,16 @@ object	_dynace_signal(object cond)
 	object	result;
 
 keep_looking:
-	cp += ALIGNMENT;
-	while (((long *) cp)[0] != _SIG1  ||  ((long *) cp)[1] != _SIG2)
-		cp += ALIGNMENT;
-	ctxp = (HandlerCtx *)cp;
+	ctxp = find_handler(cp);
+	if (!ctxp)  {	/*  no handler  */
+		char	buf[256];
+
+		if (!gIsKindOf(cond, Error))
+			return gDefaultRestart(cond);
+		snprintf(buf, sizeof buf, "\nDynace: unhandled %s condition.\n", gName(ClassOf(cond)));
+		return gError(Dynace_c, buf);
+	}
+	cp = (char *) ctxp;
 	if (ctxp->value != Condition)
 		goto keep_looking;
     

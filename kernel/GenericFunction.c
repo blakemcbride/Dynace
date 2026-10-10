@@ -53,29 +53,29 @@ object	GenericFunction_c;
 #line 48 "GenericFunction.d"
 imeth void GenericFunction_im_gInvalidObject(object self, int argn, object arg1)
 { 
-	char buf[256]; 
+	char buf[1024]; 
 
-	sprintf(buf, "\nDynace: Generic %s passed an invalid object on arg %d.\n", gName(self), argn); 
+	snprintf(buf, sizeof buf, "\nDynace: Generic %s passed an invalid object on arg %d.\n", gName(self), argn); 
 	if (argn != 1 && arg1) 
 		if (IsaClass(arg1)) 
-		sprintf(buf+strlen(buf), "First argument to generic %s was the class %s\n", gName(self), gName(arg1)); 
+		snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "First argument to generic %s was the class %s\n", gName(self), gName(arg1)); 
 	else 
-		sprintf(buf+strlen(buf), "First argument to generic %s was an instance of the %s class\n", gName(self), gName(ClassOf(arg1))); 
+		snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "First argument to generic %s was an instance of the %s class\n", gName(self), gName(ClassOf(arg1))); 
 	gError(self, buf); 
 } 
 
 imeth void GenericFunction_im_gInvalidType(object self, int argn, object arg1, object cls, object arg)
 { 
-	char buf[320]; 
+	char buf[1024]; 
 
-	sprintf(buf, "\nDynace: Generic %s passed an invalid object type on arg %d.\n", gName(self), argn); 
-	sprintf(buf+strlen(buf), "Expected an instance of %s\n", gName(cls)); 
-	sprintf(buf+strlen(buf), "Received an instance of %s\n", gName(ClassOf(arg))); 
+	snprintf(buf, sizeof buf, "\nDynace: Generic %s passed an invalid object type on arg %d.\n", gName(self), argn); 
+	snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "Expected an instance of %s\n", gName(cls)); 
+	snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "Received an instance of %s\n", gName(ClassOf(arg))); 
 	if (argn != 1 && arg1) 
 		if (IsaClass(arg1)) 
-		sprintf(buf+strlen(buf), "First argument to generic %s was the class %s\n", gName(self), gName(arg1)); 
+		snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "First argument to generic %s was the class %s\n", gName(self), gName(arg1)); 
 	else 
-		sprintf(buf+strlen(buf), "First argument to generic %s was an instance of the %s class\n", gName(self), gName(ClassOf(arg1))); 
+		snprintf(buf+strlen(buf), sizeof buf - strlen(buf), "First argument to generic %s was an instance of the %s class\n", gName(self), gName(ClassOf(arg1))); 
 	gError(self, buf); 
 } 
 

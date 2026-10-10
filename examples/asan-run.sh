@@ -3,7 +3,9 @@
 #  Invoked by "make asan" from the top-level directory.
 
 SAN="-g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined"
-ASAN_OPTIONS=${ASAN_OPTIONS:-detect_leaks=0:abort_on_error=0}
+#  Dynace scans the real stack (GC, exception handlers), so ASan must not move
+#  address-taken locals to its heap "fake stack".
+ASAN_OPTIONS=${ASAN_OPTIONS:-detect_leaks=0:abort_on_error=0:detect_stack_use_after_return=0}
 UBSAN_OPTIONS=${UBSAN_OPTIONS:-print_stacktrace=1}
 export ASAN_OPTIONS UBSAN_OPTIONS
 

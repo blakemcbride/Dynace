@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #define us_char  unsigned char
 #define us_short unsigned short
 #define us_int   unsigned int
@@ -225,7 +226,12 @@ void  *_Dynace_malloc( long nbytes )
 
 void  *_Dynace_calloc( long size, long nelem )
 {
-  char  *rv = ( char  * )_Dynace_malloc(size*nelem);
+  char  *rv;
+
+  /*  like calloc, reject a request whose total size overflows  */
+  if (size < 0  ||  nelem < 0  ||  nelem  &&  size > LONG_MAX / nelem)
+	return NULL;
+  rv = ( char  * )_Dynace_malloc(size*nelem);
 
   if (rv)
 	memset( rv, 0, (size_t)(size * nelem));

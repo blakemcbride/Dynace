@@ -106,14 +106,14 @@ imeth	gMarkingMethod(ofun mf)
 
 imeth	void	gDoesNotImplement(object gen)
 {
-	char	buf[100];
+	char	buf[512];
 
 	ChkArgTyp(gen, 2, GenericFunction);
 	if (IsaClass(self))
-		sprintf(buf, "\nInstance of class %s doesn't respond to generic %s\n", 
+		snprintf(buf, sizeof buf, "\nInstance of class %s doesn't respond to generic %s\n", 
 			name, gName(gen));
 	else  /*  MetaClass  */
-		sprintf(buf, "\nClass %s doesn't respond to generic %s\n", 
+		snprintf(buf, sizeof buf, "\nClass %s doesn't respond to generic %s\n", 
 			name, gName(gen));
 	gError(Dynace, buf);
 }

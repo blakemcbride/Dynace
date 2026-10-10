@@ -67,30 +67,30 @@ imeth	gError(char *msg)
 ivmeth	vError(char *fmt, ...)
 {
 	char	buf[4096];
-	vsprintf(buf, fmt, _rest_);
+	vsnprintf(buf, sizeof buf, fmt, _rest_);
 	return gError(self, buf);
 }
 
 imeth	gSubclassResponsibility(char *meth)
 {
-	char	buf[100];
+	char	buf[512];
 	object	aCls;
 
 	aCls = IsaClass(self) ? self : ClassOf(self);
-	sprintf(buf, "Method %s should be implemented by a subclass of %s\n", 
+	snprintf(buf, sizeof buf, "Method %s should be implemented by a subclass of %s\n", 
 		meth, gName(aCls));
 	return gError(self, buf);
 }
 
 imeth	gShouldNotImplement(char *meth)
 {
-	char	buf[100];
+	char	buf[512];
 
 	if (IsaClass(self))
-		sprintf(buf, "Method %s is not appropriate for the %s class\n", 
+		snprintf(buf, sizeof buf, "Method %s is not appropriate for the %s class\n", 
 			meth, gName(self));
 	else
-		sprintf(buf, "Method %s is not appropriate for instances of %s\n", 
+		snprintf(buf, sizeof buf, "Method %s is not appropriate for instances of %s\n", 
 			meth, gName(ClassOf(self)));
 	return gError(self, buf);
 }

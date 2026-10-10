@@ -76,14 +76,14 @@ imeth objrtn Behavior_im_gMarkingMethod(object self, ofun mf)
 
 imeth void Behavior_im_gDoesNotImplement(object self, object gen)
 { Behavior_iv_t *iv = GetIVs(Behavior, self);
-	char buf[100]; 
+	char buf[512]; 
 
 	ChkArgTyp(gen, 2, GenericFunction); 
 	if (IsaClass(self)) 
-		sprintf(buf, "\nInstance of class %s doesn't respond to generic %s\n", 
+		snprintf(buf, sizeof buf, "\nInstance of class %s doesn't respond to generic %s\n", 
 		iv->name, gName(gen)); 
 	else 
-		sprintf(buf, "\nClass %s doesn't respond to generic %s\n", 
+		snprintf(buf, sizeof buf, "\nClass %s doesn't respond to generic %s\n", 
 		iv->name, gName(gen)); 
 	gError(Dynace, buf); 
 } 
