@@ -115,9 +115,17 @@ imeth int BufferedTempFile_im_gRead(object self, char *buf, unsigned n)
 
 PMETHOD void createTempFile(object self)
 { BufferedTempFile_iv_t *iv = GetIVs(BufferedTempFile, self);
-	iv->iTmpFile = gOpenTempFile(File); 
-	gWrite(self, iv->iBuffer, iv->iSize); 
-	gFlush(self); 
+	object tf = gOpenTempFile(File); 
+
+	if (!tf) 
+		gError(Object, "BufferedTempFile: unable to create temporary file"); 
+	if (iv->iSize > 0 && gWrite(tf, iv->iBuffer, iv->iSize) != iv->iSize) { 
+		gDispose(tf); 
+		gError(Object, "BufferedTempFile: unable to write temporary file"); 
+	} 
+	gFlush(tf); 
+	gSeek(tf, iv->iCurrentOffset); 
+	iv->iTmpFile = tf; 
 } 
 
 imeth int BufferedTempFile_im_gWrite(object self, char *buf, unsigned n)
@@ -149,10 +157,9 @@ imeth char * BufferedTempFile_im_gGets(object self, char *buf, int sz)
 		return gGets(iv->iTmpFile, buf, sz); 
 	else 
 	{ 
-
-
-
-		tmpBuffer = strstr(iv->iBuffer + iv->iCurrentOffset, "\n"); 
+		if (iv->iCurrentOffset >= iv->iSize || sz < 1) 
+			return NULL; 
+		tmpBuffer = memchr(iv->iBuffer + iv->iCurrentOffset, '\n', iv->iSize - iv->iCurrentOffset); 
 
 		if (tmpBuffer == NULL) 
 			buf[gRead(self, buf, sz - 1)] = 0x00; 
@@ -236,7 +243,7 @@ imeth char * BufferedTempFile_im_gName(object self)
 
 imeth int BufferedTempFile_im_gEndOfStream(object self)
 { BufferedTempFile_iv_t *iv = GetIVs(BufferedTempFile, self);
-	return iv->iTmpFile ? gEndOfStream(iv->iTmpFile) : iv->iCurrentOffset != iv->iSize; 
+	return iv->iTmpFile ? gEndOfStream(iv->iTmpFile) : iv->iCurrentOffset >= iv->iSize; 
 } 
 
 imeth void * BufferedTempFile_im_gPointerValue(object self)
@@ -259,7 +266,7 @@ imeth int BufferedTempFile_im_gFlush(object self)
 } 
 
 
-#line 263 "BufferedTempFile.c"
+#line 270 "BufferedTempFile.c"
 
 objrtn	BufferedTempFile_initialize(void)
 {

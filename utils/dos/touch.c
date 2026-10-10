@@ -59,7 +59,8 @@ char	*f;
 				fprintf(stderr, "touch:  can't create %s", f);
 				err = 1;
 			}
-			fclose(fp);
+			if (fp)
+				fclose(fp);
 		}  else  {
 			fseek(fp, 0L, 0);
 			c = fgetc(fp);
@@ -72,7 +73,8 @@ char	*f;
 			fprintf(stderr, "touch:  can't create %s", f);
 			err = 1;
 		}
-		fclose(fp);
+		if (fp)
+			fclose(fp);
 	}
 	return err;
 }

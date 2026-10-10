@@ -83,9 +83,9 @@ defclass StackTracer
 
 class:
 	object cTracer;
-	char cImageName[255];
-	char cPDBPath[255];
-	char cAppName[255];
+	char cImageName[MAX_PATH];
+	char cPDBPath[MAX_PATH];
+	char cAppName[MAX_PATH];
 	char cImageHlpVersion[32];
 
 	SYMINITIALIZEPROC _SymInitialize;
@@ -105,9 +105,10 @@ static	int	command_line_error_handler(char *msg);
 static	int	lock_file(char *file)
 {
 	int	h;
-	char	buf[256];
+	char	buf[MAX_PATH+16];
 	
-	sprintf(buf, "%s.lck", file);
+	_snprintf(buf, sizeof(buf), "%s.lck", file);
+	buf[sizeof(buf)-1] = '\0';
 	h = open(buf, _O_CREAT | _O_TRUNC |_O_WRONLY, _S_IREAD | _S_IWRITE);
 	if (h == -1)
 		return h;
@@ -137,14 +138,15 @@ private imeth void pLogMessage(LPCTSTR pszMessage)
 	lf = lock_file(iLogFileName);
 	if (!_stat(iLogFileName, &sb)  &&  sb.st_size > MAX_SIZE) {
 		int	h2;
-		char	*buf, tmpfile[256], *p;
+		char	*buf, tmpfile[MAX_PATH+16], *p;
 
-		if (!(h = open(iLogFileName, _O_BINARY | _O_RDONLY))) {
+		if ((h = open(iLogFileName, _O_BINARY | _O_RDONLY)) == -1) {
 			unlock_file(lf);
 			return;
 		}
-		sprintf(tmpfile, "%s.tmp", iLogFileName);
-		if (!(h2 = open(tmpfile, _O_TRUNC | _O_CREAT | _O_BINARY | _O_WRONLY, _S_IREAD | _S_IWRITE))) {
+		_snprintf(tmpfile, sizeof(tmpfile), "%s.tmp", iLogFileName);
+		tmpfile[sizeof(tmpfile)-1] = '\0';
+		if ((h2 = open(tmpfile, _O_TRUNC | _O_CREAT | _O_BINARY | _O_WRONLY, _S_IREAD | _S_IWRITE)) == -1) {
 			close(h);
 			unlock_file(lf);
 			return;
@@ -291,7 +293,8 @@ imeth    gGetLogFileName()
 
 imeth	gSetLogFileName(char *logFileName)
 {
-	strcpy(iLogFileName, logFileName);
+	strncpy(iLogFileName, logFileName, MAX_PATH - 1);
+	iLogFileName[MAX_PATH - 1] = '\0';
 	return self;
 }
 
@@ -575,7 +578,7 @@ private imeth void pGenerateExceptionReport(LPTSTR szText, PEXCEPTION_POINTERS p
 
 	if (_SymSetOptions == 0)
 	{
-		strcpy(szText, "Unable to load imagehlp.dll\n");
+		_tcscat(szText, "Unable to load imagehlp.dll\n");
 		return;
 	}
 
@@ -680,6 +683,7 @@ private imeth void pGetStackDumpText(LPTSTR szText)
 imeth    gGetStackDumpText()
 {
 	TCHAR szText[64000];
+	szText[0] = '\0';
 	pGetStackDumpText(self, szText);
 	return gNewWithStr(String, szText);
 }
@@ -694,8 +698,9 @@ imeth void gStackDump(char *pszMessage)
 
 	if (pszMessage)
 	{
-		_tcscat(szText, pszMessage);
-		_tcscat(szText, "\n\n");
+		size_t	len = _tcslen(szText);
+		_snprintf(szText + len, sizeof(szText) - len - 1, "%s\n\n", pszMessage);
+		szText[sizeof(szText) - 1] = '\0';
 	}
 
 	pGetStackDumpText(self, szText);

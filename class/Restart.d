@@ -41,7 +41,7 @@ private	imeth	init(cond)
 
 cvmeth	vNew(object cond)
 {
-	if (ClassOf(self) == CLASS)
+	if (self == CLASS)
 		gShouldNotImplement(self, "New");
 	ChkArgTypNul(cond, 2, Condition);
 	return init(gNew(super), cond);

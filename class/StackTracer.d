@@ -138,7 +138,18 @@ imeth    gDispose, gDeepDispose()
 
 static	int	command_line_error_handler(char *msg)
 {
+	static	int	busy = 0;
+
+	if (busy) {	//  error while dumping - don't recurse
+		if (msg) {
+			IGNORE_RETURN write(STDERR_FILENO, msg, strlen(msg));
+			IGNORE_RETURN write(STDERR_FILENO, "\n", 1);
+		}
+		return 0;
+	}
+	busy = 1;
 	gStackDump(gGetTracer(StackTracer), msg);
+	busy = 0;
 	return 0;
 }
 
@@ -177,15 +188,20 @@ imeth void gStackDump(char *pszMessage)
 	time(&tb);
 	ts = localtime(&tb);
 
+	if (IsObj(iErrorMessage))
+		gDispose(iErrorMessage);
 	iErrorMessage = gNewWithStr(String, pszMessage);
 	
-	sprintf(szText, "// =====================================================\nDateTime: %d-%02d-%02d %2d:%02d\nAppName: %s\n\n", 1900 + ts->tm_year, 1 + ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, cAppName);
+	snprintf(szText, sizeof(szText), "// =====================================================\nDateTime: %d-%02d-%02d %2d:%02d\nAppName: %s\n\n", 1900 + ts->tm_year, 1 + ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, cAppName);
 
 	if (pszMessage) {
-		strcat(szText, pszMessage);
-		strcat(szText, "\n\n");
+		size_t	len = strlen(szText);
+		snprintf(szText + len, sizeof(szText) - len, "%s\n\n", pszMessage);
 	}
-	LOG_INFO(iLogger, szText);
+	if (iLogger) {
+		LOG_INFO(iLogger, szText);
+	} else
+		IGNORE_RETURN write(STDERR_FILENO, szText, strlen(szText));
 	print_trace(iLogger);
 }
 
@@ -221,7 +237,9 @@ cmeth void gTraceCall()
 
 static void print_trace(object logger)
 {
-	int fh = gOpenLogFile(logger);
+	int fh = logger ? gOpenLogFile(logger) : -1;
+	if (fh < 0)
+		fh = STDERR_FILENO;
 	char pid_buf[30];
 	sprintf(pid_buf, "%d", getpid());
 	char name_buf[512];
@@ -237,9 +255,10 @@ static void print_trace(object logger)
 		dup2(fh, 1);
 		dup2(fh, 2);
 		execl("/usr/bin/gdb", "gdb", "--batch", "-n", "-ex", "thread", "-ex", "bt", name_buf, pid_buf, NULL);
-		abort(); /* If gdb failed to start */
-	} else {
-		waitpid(child_pid, NULL, 0);
-		gCloseLogFile(logger, fh);
+		_exit(127); /* If gdb failed to start */
 	}
+	if (child_pid > 0)
+		waitpid(child_pid, NULL, 0);
+	if (logger  &&  fh != STDERR_FILENO)
+		gCloseLogFile(logger, fh);
 }

@@ -50,6 +50,7 @@
 #endif
 
 #include <string.h>
+#include <errno.h>
 
 defclass  File : Stream  {
 	iName;
@@ -176,8 +177,13 @@ cmeth	gOpenTempFile()
 		//doesn't already exist in the file system.
 
 		sprintf(cTempFileDir, "%s%u", tp, (unsigned) cProcessID);
-		while (MKDIR(cTempFileDir))
+		while (MKDIR(cTempFileDir)) {
+			if (errno != EEXIST) {
+				cProcessID = 0L;
+				return NULL;
+			}
 			sprintf(cTempFileDir, "%s%u", tp, (unsigned) ++cProcessID);
+		}
 	}
 #ifdef unix
 	sprintf(file, "%s/%u-%u.tmp", cTempFileDir, (unsigned) cProcessID, ++tfn);
@@ -212,7 +218,8 @@ private cmeth	unlinkTempFile(object self, char *name)
 
 imeth	gGCDispose()
 {
-	fclose(iFP);
+	if (!iFileAlreadyOpened)
+		fclose(iFP);
 	if (iTempFile  &&  IsObj(iName))
 		unlinkTempFile(CLASS, gStringValue(iName));
 	return gDispose(super);

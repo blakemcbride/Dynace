@@ -96,9 +96,17 @@ imeth	int	gRead(char *buf, unsigned n)
 
 private imeth void createTempFile()
 {
-	iTmpFile = gOpenTempFile(File);
-	gWrite(self, iBuffer, iSize);
-	gFlush(self);
+	object	tf = gOpenTempFile(File);
+
+	if (!tf)
+		gError(Object, "BufferedTempFile: unable to create temporary file");
+	if (iSize > 0  &&  gWrite(tf, iBuffer, iSize) != iSize) {
+		gDispose(tf);
+		gError(Object, "BufferedTempFile: unable to write temporary file");
+	}
+	gFlush(tf);
+	gSeek(tf, iCurrentOffset);
+	iTmpFile = tf;
 }
 
 imeth	int	gWrite(char *buf, unsigned n)
@@ -130,10 +138,9 @@ imeth	char	*gGets(char *buf, int sz)
 		return gGets(iTmpFile, buf, sz);
 	else
 	{
-		/* This is one reason for allocating iBuffer to be */
-		/* one byte larger than stated. Since the last char */
-		/* is NULL we known that strstr will not bypass the end of the iBuffer */
-		tmpBuffer = strstr(iBuffer + iCurrentOffset, "\n");
+		if (iCurrentOffset >= iSize  ||  sz < 1)
+			return NULL;
+		tmpBuffer = memchr(iBuffer + iCurrentOffset, '\n', iSize - iCurrentOffset);
 		/* we never found a newline */
 		if (tmpBuffer == NULL)
 			buf[gRead(self, buf, sz - 1)] = 0x00;
@@ -217,7 +224,7 @@ imeth	char	*gName()
 
 imeth	int	gEndOfStream()
 {
-	return iTmpFile ? gEndOfStream(iTmpFile) :  iCurrentOffset != iSize;
+	return iTmpFile ? gEndOfStream(iTmpFile) :  iCurrentOffset >= iSize;
 }
 
 imeth	void	*gPointerValue()

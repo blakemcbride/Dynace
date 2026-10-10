@@ -187,7 +187,18 @@ imeth objrtn StackTracer_im_gDispose(object self)
 
 static int command_line_error_handler(char *msg) 
 { 
+	static int busy = 0; 
+
+	if (busy) { 
+		if (msg) { 
+			IGNORE_RETURN write(STDERR_FILENO, msg, strlen(msg)); 
+			IGNORE_RETURN write(STDERR_FILENO, "\n", 1); 
+		} 
+		return 0; 
+	} 
+	busy = 1; 
 	gStackDump(gGetTracer(StackTracer), msg); 
+	busy = 0; 
 	return 0; 
 } 
 
@@ -226,15 +237,20 @@ imeth void StackTracer_im_gStackDump(object self, char *pszMessage)
 	time(&tb); 
 	ts = localtime(&tb); 
 
+	if (IsObj(iv->iErrorMessage)) 
+		gDispose(iv->iErrorMessage); 
 	iv->iErrorMessage = gNewWithStr(String, pszMessage); 
 
-	sprintf(szText, "// =====================================================\nDateTime: %d-%02d-%02d %2d:%02d\nAppName: %s\n\n", 1900 + ts->tm_year, 1 + ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, StackTracer_cv->cAppName); 
+	snprintf(szText, sizeof(szText), "// =====================================================\nDateTime: %d-%02d-%02d %2d:%02d\nAppName: %s\n\n", 1900 + ts->tm_year, 1 + ts->tm_mon, ts->tm_mday, ts->tm_hour, ts->tm_min, StackTracer_cv->cAppName); 
 
 	if (pszMessage) { 
-		strcat(szText, pszMessage); 
-		strcat(szText, "\n\n"); 
+		size_t len = strlen(szText); 
+		snprintf(szText + len, sizeof(szText) - len, "%s\n\n", pszMessage); 
 	} 
-	LOG_INFO(iv->iLogger, szText); 
+	if (iv->iLogger) { 
+		LOG_INFO(iv->iLogger, szText); 
+	} else 
+		IGNORE_RETURN write(STDERR_FILENO, szText, strlen(szText)); 
 	print_trace(iv->iLogger); 
 } 
 
@@ -270,7 +286,9 @@ cmeth void StackTracer_cm_gTraceCall(object self)
 
 static void print_trace(object logger) 
 { 
-	int fh = gOpenLogFile(logger); 
+	int fh = logger ? gOpenLogFile(logger) : -1; 
+	if (fh < 0) 
+		fh = STDERR_FILENO; 
 	char pid_buf[30]; 
 	sprintf(pid_buf, "%d", getpid()); 
 	char name_buf[512]; 
@@ -283,20 +301,21 @@ static void print_trace(object logger)
 #endif 
 
 
-#line 235 "StackTracer.d"
+#line 253 "StackTracer.d"
 	int child_pid = fork(); 
 	if (!child_pid) { 
 		dup2(fh, 1); 
 		dup2(fh, 2); 
 		execl("/usr/bin/gdb", "gdb", "--batch", "-n", "-ex", "thread", "-ex", "bt", name_buf, pid_buf, NULL); 
-		abort(); 
-	} else { 
-		waitpid(child_pid, NULL, 0); 
-		gCloseLogFile(logger, fh); 
+		_exit(127); 
 	} 
+	if (child_pid > 0) 
+		waitpid(child_pid, NULL, 0); 
+	if (logger && fh != STDERR_FILENO) 
+		gCloseLogFile(logger, fh); 
 } 
 
-#line 300 "StackTracer.c"
+#line 319 "StackTracer.c"
 
 objrtn	StackTracer_initialize(void)
 {

@@ -63,10 +63,10 @@ PMETHOD objrtn init(object self, object cond)
 
 cvmeth objrtn Restart_cvm_vNew(object self, va_list _rest_)
 { 
-	object cond = va_arg(_rest_, object);
+	object cond = va_arg(_rest_, object) ;
 
 #line 44 "Restart.d"
-	if (ClassOf(self) == CLASS) 
+	if (self == CLASS) 
 		gShouldNotImplement(self, "New"); 
 	ChkArgTypNul(cond, 2, Condition); 
 	return init(oSuper(Restart_c, gNew, self)(self), cond); 

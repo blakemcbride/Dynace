@@ -305,14 +305,15 @@ static	Header	*compact(MemBlk *mb)
 {
 	char	*end = (char *) (mb+1) + mb->size;
 	Header	*h = (Header *) (mb+1);
-	Header	*to, *pto=NULL;
+	Header	*to, *pto=NULL, *nh;
 
-	for (to=h ; (char *) h < end ; h = NEXTH(h))  {
+	for (to=h ; (char *) h < end ; h = nh)  {
+		nh = NEXTH(h);	/*  before the move can clobber h  */
 		if (h->status == 'F')
 			continue;
 		if (to != h)  {
-			memcpy(to, h, h->rsize+sizeof(Header));
-			if (h->next)
+			memmove(to, h, h->rsize+sizeof(Header));
+			if (to->next)
 				*((Header **) to->next) = to + 1;
 		}
 		to->size = RND(to->rsize);
