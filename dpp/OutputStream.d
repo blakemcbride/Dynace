@@ -619,7 +619,8 @@ imeth	int	vPrintf(char *fmt, ...)
 
 imeth	gSetOSVars(cname, cvs, ivs)
 {
-	DISPOSE(iCName);
+	if (iCName != cname)	/*  a second defclass passes the same object again  */
+		DISPOSE(iCName);
 	iCName = cname;
 	iCVars = gSize(cvs) ? cvs : (object) NULL;
 	iIVars = gSize(ivs) ? ivs : (object) NULL;

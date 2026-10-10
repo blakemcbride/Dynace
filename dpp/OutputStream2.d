@@ -90,9 +90,10 @@ imeth	gFlushm()
 
 imeth	object	gDispose, gDeepDispose ()
 {
-	if (iS1  &&  (!iUse  ||  iUse == 1))
+	/*  both streams are owned whichever one is selected  */
+	if (iS1)
 		gDispose(iS1);
-	if (iS2  &&  (!iUse  ||  iUse == 2))
+	if (iS2)
 		gDispose(iS2);
 	return gDispose(super);
 }

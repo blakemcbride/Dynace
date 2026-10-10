@@ -28,6 +28,8 @@
 
 
 #include "dpp.h"
+#include <stdlib.h>
+#include <string.h>
 
 defclass  ArgumentList : LinkObject;
 
@@ -102,7 +104,8 @@ static	char	*process_token(char *p, object list)
 
 static	void	process_file(object list, char *file)
 {
-	char	buf[256], *p;
+	char	buf[256], *line = NULL, *p;
+	size_t	len = 0, n;
 	object	fobj;
 
 	fobj = gOpenFile(File, file, "r");
@@ -110,8 +113,24 @@ static	void	process_file(object list, char *file)
 		vPrintf(stdoutStream, "Can't open %s\n", file);
 		exit(1);
 	}
-	while (gGets(fobj, buf, sizeof buf))
-		for (p=buf ; *(p=process_token(p, list)) ; );
+	/*  gather each whole line, so a long one isn't split into two arguments  */
+	while (gGets(fobj, buf, sizeof buf))  {
+		n = strlen(buf);
+		if (!(p = realloc(line, len + n + 1)))  {
+			vPrintf(stdoutStream, "dpp: out of memory reading %s\n", file);
+			exit(1);
+		}
+		line = p;
+		memcpy(line + len, buf, n + 1);
+		len += n;
+		if (n  &&  buf[n-1] == '\n')  {
+			for (p=line ; *(p=process_token(p, list)) ; );
+			len = 0;
+		}
+	}
+	if (len)	/*  last line had no newline  */
+		for (p=line ; *(p=process_token(p, list)) ; );
+	free(line);
 	gDispose(fobj);
 }
 

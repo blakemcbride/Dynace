@@ -138,7 +138,7 @@ objrtn	open_file(char *file, char *mode, int real_quiet);
 char	*trunc_mname(char *mname);
 
 static	void	add_generic(object generics, object gn, object proto, int check);
-static	int need_to_make(object classes,object generics,char *file);
+static	int need_to_make(object classes,object generics,char *file, object inc_sh, object inc_ah);
 static	void make_h(object classes,object generics,char *file, object argList, object inc_sh, object inc_ah);
 static	void make_libscheme(object classes,object generics,char *file, object argList, object inc_sh, object inc_ah);
 static	void make_mzscheme(object classes,object generics,char *file, object argList, object inc_sh, object inc_ah);
@@ -159,7 +159,7 @@ static	void proc_doc_gen(object generics,char *buf,char *word,object fobj);
 static	void process_line(char *to,char *from);
 static	void read_exceptions(object exceptions,char *file);
 static	void read_src(object classes,object generics,char *file,object exceptions);
-static	void src_class(object fobj,object classes, char *initmeth);
+static	void src_class(object fobj,object classes, char *initmeth, size_t initsz);
 static	int make_arg(object fobj,object args,int *old, int *vararg);
 static	int pp_make_arg(object fobj,object args,int *old, object ivars, object cvars, int *convert);
 static	objrtn make_arg_list(object fobj,int *old, int *vararg);
@@ -336,26 +336,30 @@ int	main(int argc, char **argv)
 			}
 	}
 
-	for (arg=seq=gSequence(argList) ; arg  &&  (arg=gNext(seq)) ; )  {
+	/*  an option that ends a -p list or follows -64 is processed in turn, not skipped  */
+	seq = gSequence(argList);
+	arg = gNext(seq);
+	while (arg)  {
 		p = gStringValue(arg);
 		if (streq(p, "-p")) {
-			while (arg  &&  streq(p, "-p"))
-				for (arg=gNext(seq) ; arg ; arg=gNext(seq))  {
-					p = gStringValue(arg);
-					if (*p == '-')
-						break;
-					preprocess(classes, generics, p, exceptions, 1);
-					*Sfile2 = '\0';
-				}
-		} else if (streq(p, "-64")) {
-			arg = gNext(seq);
-			*Sfile2 = '\0';
-			if (arg) {	
+			for (arg=gNext(seq) ; arg ; arg=gNext(seq))  {
 				p = gStringValue(arg);
-				if (*p != '-')
-					SCPY(Sfile2, p);
+				if (*p == '-')
+					break;
+				preprocess(classes, generics, p, exceptions, 1);
+				*Sfile2 = '\0';
 			}
+			continue;
+		} else if (streq(p, "-64")) {
+			*Sfile2 = '\0';
+			if (!(arg = gNext(seq)))
+				break;
+			p = gStringValue(arg);
+			if (*p == '-')
+				continue;
+			SCPY(Sfile2, p);
 		}
+		arg = gNext(seq);
 	}
 
 	for (arg=seq=gSequence(argList) ; arg  &&  (arg=gNext(seq)) ; )  {
@@ -596,13 +600,57 @@ objrtn	open_file(char *file, char *mode, int real_quiet)
 	return fobj;
 }
 
+/*  A line recording the options that affect generics.h, so need_to_make
+    can tell when they change.  */
+
+static	void	options_sig(char *sig, size_t sz, object inc_sh, object inc_ah)
+{
+	object	seq, obj;
+
+	sfmt(sig, sz, "/*  dpp options: S%d F%d M%d", Strategy, FastWideCache, MacroGuard);
+	if (inc_sh)
+		for (seq = gSequence(inc_sh) ; obj = gNext(seq) ; )  {
+			scat(sig, sz, " sh:");
+			scat(sig, sz, gStringValue(obj));
+		}
+	if (inc_ah)
+		for (seq = gSequence(inc_ah) ; obj = gNext(seq) ; )  {
+			scat(sig, sz, " ah:");
+			scat(sig, sz, gStringValue(obj));
+		}
+	scat(sig, sz, "  */");
+}
+
+static	int	file_has_line(char *file, char *line)
+{
+	FILE	*fp = fopen(file, "r");
+	char	buf[2048];
+	size_t	len = strlen(line);
+	int	found = 0;
+
+	if (!fp)
+		return 0;
+	while (!found  &&  fgets(buf, sizeof buf, fp))
+		found = !strncmp(buf, line, len)  &&  (buf[len] == '\n'  ||  buf[len] == '\r'  ||  !buf[len]);
+	fclose(fp);
+	return found;
+}
+
 static	int
 need_to_make(object classes,
 	     object generics,
-	     char   *file)
+	     char   *file,
+	     object inc_sh,
+	     object inc_ah)
 {
 	object	cls, gens, gobj, key, val;
 	int	diff = 0;
+	char	sig[2048];
+
+	/*  a header made with different options must be regenerated  */
+	options_sig(sig, sizeof sig, inc_sh, inc_ah);
+	if (!file_has_line(file, sig))
+		return 1;
 
 	cls  = gNew(BTree);
 	gens = gNew(BTree);
@@ -739,8 +787,9 @@ static	void	gen_inline(object fobj, char *name, object proto)
 			vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 	if (FastWideCache)  {
 		vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
-		vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
-			streq(rtn, "void")?"":"return", name);
+		/*  call through the method type, and leave va_end to run before returning  */
+		vPrintf(fobj, "\t%s (*(%s_mt)_meth_)(",
+			streq(rtn, "void") ? "" : gIsVarArg(proto) ? "_ret_ =" : "return", name);
 	} else {
 		if (streq(rtn, "void"))
 			vPrintf(fobj, "\t/* 1 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
@@ -840,19 +889,19 @@ make_libscheme(object	classes,
 
 	gPuts(fobj, "static\tchar\t*wrong_number_of_args(char *fun)\n");
 	gPuts(fobj, "{\n");
-	gPuts(fobj, "\tsprintf(Errbuf, \"%s: wrong number of arguments\", fun);\n");
+	gPuts(fobj, "\tsnprintf(Errbuf, sizeof Errbuf, \"%s: wrong number of arguments\", fun);\n");
 	gPuts(fobj, "\treturn Errbuf;\n");
 	gPuts(fobj, "}\n\n");
 
 	gPuts(fobj, "static\tchar\t*wrong_arg1(char *fun)\n");
 	gPuts(fobj, "{\n");
-	gPuts(fobj, "\tsprintf(Errbuf, \"%s: argument 1 must be an object\", fun);\n");
+	gPuts(fobj, "\tsnprintf(Errbuf, sizeof Errbuf, \"%s: argument 1 must be an object\", fun);\n");
 	gPuts(fobj, "\treturn Errbuf;\n");
 	gPuts(fobj, "}\n\n");
 
 	gPuts(fobj, "static\tchar\t*wrong_argn(char *fun, int argn)\n");
 	gPuts(fobj, "{\n");
-	gPuts(fobj, "\tsprintf(Errbuf, \"%s: argument %d wrong type\", fun, argn);\n");
+	gPuts(fobj, "\tsnprintf(Errbuf, sizeof Errbuf, \"%s: argument %d wrong type\", fun, argn);\n");
 	gPuts(fobj, "\treturn Errbuf;\n");
 	gPuts(fobj, "}\n\n");
 
@@ -1074,8 +1123,8 @@ make_libscheme(object	classes,
 
 	gPuts(fobj, "Scheme_Object\t*Scheme_execute_file(char *file)\n");
 	gPuts(fobj, "{\n");
-	gPuts(fobj, "\tchar\tbuf[128];\n\n");
-	gPuts(fobj, "\tsprintf(buf, \"(load \\\"%s\\\")\", file);\n");
+	gPuts(fobj, "\tchar\tbuf[4096];\n\n");
+	gPuts(fobj, "\tsnprintf(buf, sizeof buf, \"(load \\\"%s\\\")\", file);\n");
 	gPuts(fobj, "\treturn Scheme_execute_string(buf);\n");
 	gPuts(fobj, "}\n\n");
 
@@ -2124,7 +2173,7 @@ make_h(object	classes,
 		return;
 	}
 
-	if (!ForceGenerate  &&  !need_to_make(classes, generics, file))  {
+	if (!ForceGenerate  &&  !need_to_make(classes, generics, file, inc_sh, inc_ah))  {
 		touch_all(argList);
 		return;
 	}
@@ -2143,6 +2192,13 @@ make_h(object	classes,
 
 	vPrintf(fobj, "#ifndef\t%s\n", macro);
 	vPrintf(fobj, "#define\t%s\n\n\n", macro);
+
+	{
+		char	sig[2048];
+
+		options_sig(sig, sizeof sig, inc_sh, inc_ah);
+		vPrintf(fobj, "%s\n\n", sig);
+	}
 
 	gPuts(fobj, "#ifdef\tDPP_STRATEGY\n");
 	vPrintf(fobj, "#if\tDPP_STRATEGY != %d\n", Strategy);
@@ -2361,8 +2417,9 @@ static	void	make_c(object	classes,
 						vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
-					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
-						streq(rtn, "void")?"":"return", name);
+					/*  call through the method type, and leave va_end to run before returning  */
+					vPrintf(fobj, "\t%s (*(%s_mt)_meth_)(",
+						streq(rtn, "void") ? "" : gIsVarArg(proto) ? "_ret_ =" : "return", name);
 				} else {
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 4 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
@@ -2418,8 +2475,9 @@ static	void	make_c(object	classes,
 					vPrintf(fobj, "\tva_list _rest_;\n\t%s\t_ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));	
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
-					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
-						streq(rtn, "void")?"":"return", name);
+					/*  call through the method type, and leave va_end to run before returning  */
+					vPrintf(fobj, "\t%s (*(%s_mt)_meth_)(",
+						streq(rtn, "void") ? "" : gIsVarArg(proto) ? "_ret_ =" : "return", name);
 				} else {
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 7 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
@@ -2565,8 +2623,9 @@ static	void	make_c2(object	generics,
 						vPrintf(fobj, "\tva_list _rest_;\n\t%s _ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
-					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
-						streq(rtn, "void")?"":"return", name);
+					/*  call through the method type, and leave va_end to run before returning  */
+					vPrintf(fobj, "\t%s (*(%s_mt)_meth_)(",
+						streq(rtn, "void") ? "" : gIsVarArg(proto) ? "_ret_ =" : "return", name);
 				} else {
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 9 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
@@ -2614,8 +2673,9 @@ static	void	make_c2(object	generics,
 					vPrintf(fobj, "\tva_list _rest_;\n\t%s\t_ret_;\n\tva_start(_rest_, %s);\n", rtn, gLastArg(proto));	
 				if (FastWideCache)  {
 					vPrintf(fobj, "\tFW_GENERIC(%s);\n", name);
-					vPrintf(fobj, "\t%s (*(%s_t)_meth_)(",
-						streq(rtn, "void")?"":"return", name);
+					/*  call through the method type, and leave va_end to run before returning  */
+					vPrintf(fobj, "\t%s (*(%s_mt)_meth_)(",
+						streq(rtn, "void") ? "" : gIsVarArg(proto) ? "_ret_ =" : "return", name);
 				} else {
 					if (streq(rtn, "void"))
 						vPrintf(fobj, "\t/* 12 */ (*(%s_mt)_FindMethod(self, Generic(%s)))(", name, name);
@@ -2974,7 +3034,7 @@ read_src(object classes,
 	csmethods  = gNewWithInt(StringDictionary, 301);
 	while (tkn=gettoken(fobj))  {
 		if (*tkn == '#')
-			src_class(fobj, classes, initmeth);
+			src_class(fobj, classes, initmeth, sizeof initmeth);
 		else if (streq(tkn, "imeth"))
 			src_method(fobj, ismethods, 0);
 		else if (streq(tkn, "ivmeth"))
@@ -3003,7 +3063,7 @@ read_src(object classes,
 	DEEPDISPOSE(csgenerics);
 }
 
-static	void	src_class(object fobj, object classes, char *initmeth)
+static	void	src_class(object fobj, object classes, char *initmeth, size_t initsz)
 {
 	object	cn, res;
 	char	*tkn;
@@ -3028,7 +3088,7 @@ static	void	src_class(object fobj, object classes, char *initmeth)
 	cn = gNewWithStr(String, tkn);
 	gDrop(cn, -2);  /*  get rid of trailing _c  */
 	tkn = gStringValue(cn);
-	sfmt(initmeth, sizeof initmeth, "%s_initialize", tkn);
+	sfmt(initmeth, initsz, "%s_initialize", tkn);
 	res = gAddValue(classes, cn, NoValue);
 	if (res)  {
 		ErrorCode = 1;
@@ -3050,7 +3110,8 @@ make_arg(object	fobj,
 	int	len;
 
 	*buf = '\0';
-	while ((tkn = gettoken(fobj))  &&  (len=(int)strlen(buf)) < 200)  {
+	while (tkn = gettoken(fobj))  {	/*  SCAT reports a declaration too long for buf  */
+		len = (int) strlen(buf);
 		if (!paren  &&  (*tkn == ')'  ||  *tkn == ','))
 			break;
 		if (*tkn == '(')  {
@@ -3108,8 +3169,9 @@ pp_make_arg(object	fobj,
 	while (1)  {
 		if (tkn = gNextToken(fobj))
 			p = gStringValue(tkn);
-		if (!tkn  ||  (len=(int)strlen(buf)) > 200)
+		if (!tkn)
 			break;
+		len = (int) strlen(buf);	/*  SCAT reports a declaration too long for buf  */
 		if (!paren  &&  (*p == ')'  ||  *p == ','))
 			break;
 		n++;
@@ -3167,7 +3229,7 @@ pp_make_arg(object	fobj,
 	if (tkn)
 		tkn = DISPOSE(tkn);
 
-	if (!*buf)
+	if (!*buf  ||  n == 1  &&  streq(buf, "void"))	/*  (void) means no arguments  */
 		return more;
 	if (n <= 1)
 		*old = 1;
@@ -3353,6 +3415,126 @@ generate_fixed_arg_vmeth(char 		*olmname,
 	gPuts(sobj, "}\n\n");
 }
 
+
+/*  Vararg methods read their fixed arguments with va_arg, but a parameter's
+    declaration can't always be used for that directly: array parameters
+    decay to pointers, va_arg can't name a function pointer type, and types
+    narrower than int (and float) are promoted when passed through "...".
+    vararg_decl works out how to read parameter var, declared as decl:
+
+	tdef - a typedef that must be declared first, or ""
+	dcl  - the declaration of the variable
+	rhs  - the expression that reads it from _rest_
+
+    Each buffer is VDSZ bytes.  */
+
+#define	VDSZ	1024
+
+static	int	is_promoted(const char *type, int *isfloat)
+{
+	static	const char	*small[] = {
+		"char", "signed char", "unsigned char",
+		"short", "short int", "signed short", "signed short int",
+		"unsigned short", "unsigned short int",
+		"_Bool", "bool", "float", NULL
+	};
+	char	norm[VDSZ], word[VDSZ];
+	const char	*p = type;
+	int	i;
+
+	/*  normalize: drop qualifiers, single spaces  */
+	*norm = '\0';
+	while (*p)  {
+		if (!irest(*p))  {
+			if (*p == '*')
+				return 0;
+			p++;
+			continue;
+		}
+		for (i=0 ; irest(*p)  &&  i < VDSZ-1 ; )
+			word[i++] = *p++;
+		word[i] = '\0';
+		if (streq(word, "const")  ||  streq(word, "volatile")  ||  streq(word, "register"))
+			continue;
+		if (*norm)
+			SCAT(norm, " ");
+		SCAT(norm, word);
+	}
+	for (i=0 ; small[i] ; i++)
+		if (streq(norm, small[i]))  {
+			*isfloat = streq(norm, "float");
+			return 1;
+		}
+	return 0;
+}
+
+static	void	vararg_decl(const char *decl, const char *var, char *tdef, char *dcl, char *rhs)
+{
+	const char	*p, *vp = NULL, *e;
+	char	type[VDSZ], tname[VDSZ];
+	size_t	vl = strlen(var);
+	int	depth, isfloat;
+
+	*tdef = '\0';
+	/*  find the parameter name in its declaration  */
+	for (p=decl ; *p ; )
+		if (istart(*p))  {
+			for (e=p ; irest(*e) ; e++);
+			if ((size_t)(e - p) == vl  &&  !strncmp(p, var, vl))  {
+				vp = p;
+				break;
+			}
+			p = e;
+		} else
+			p++;
+	if (!vp)  {
+		sfmt(dcl, VDSZ, "%s", decl);
+		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", decl);
+		return;
+	}
+
+	/*  an array parameter is really a pointer  */
+	for (e=vp+vl ; *e == ' ' ; e++);
+	if (*e == '[')  {
+		for (depth=0 ; *e ; e++)
+			if (*e == '[')
+				depth++;
+			else if (*e == ']'  &&  !--depth)  {
+				e++;
+				break;
+			}
+		for (p=e ; *p == ' ' ; p++);
+		if (*p == '[')
+			sfmt(dcl, VDSZ, "%.*s(*%s)%s", (int)(vp-decl), decl, var, e);
+		else
+			sfmt(dcl, VDSZ, "%.*s*%s%s", (int)(vp-decl), decl, var, e);
+	} else
+		sfmt(dcl, VDSZ, "%s", decl);
+
+	/*  locate the name again in the (possibly rewritten) declaration  */
+	vp = strstr(dcl, var);
+	while (vp  &&  ((vp > dcl  &&  irest(vp[-1]))  ||  irest(vp[vl])))
+		vp = strstr(vp + 1, var);
+	if (!vp)  {
+		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", dcl);
+		return;
+	}
+
+	if (strchr(dcl, '(')  ||  strchr(dcl, '['))  {	/*  needs a typedef  */
+		sfmt(tname, VDSZ, "_%s_t", var);
+		sfmt(tdef, VDSZ, "typedef %.*s%s%s;", (int)(vp-dcl), dcl, tname, vp+vl);
+		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", tname);
+		return;
+	}
+	sfmt(type, VDSZ, "%.*s%s", (int)(vp-dcl), dcl, vp+vl);
+	for (e=type+strlen(type) ; e > type  &&  e[-1] == ' ' ; e--);
+	type[e-type] = '\0';
+	if (is_promoted(type, &isfloat))
+		sfmt(rhs, VDSZ, "(%s) va_arg(_rest_, %s)", type, isfloat ? "double" : "int");
+	else
+		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", type);
+}
+
 static	void
 generate_fixed_arg_vmeth2(char 		*olmname,
 			 char 		*mname,
@@ -3361,12 +3543,15 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 			 object		sobj)
 {
 	char	*rtn, *t;
-	object	pvar, vvar, pseq, vseq, pnxt, vnxt;
+	char	tdef[VDSZ], dcl[VDSZ], rhs[VDSZ];
+	object	pvar, vvar, avar, pseq, vseq, aseq, pnxt, vnxt, anxt;
 	int	i=0;
 	
 	if (!prototype  ||  !(pvar = gPrototype(prototype)))
 		return;
 	if (!(vvar = gParameters(prototype)))
+		return;
+	if (!(avar = gArgs(prototype)))
 		return;
 	pseq = gSequence(pvar);
 	vseq = gSequence(vvar);
@@ -3380,18 +3565,25 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 	if (gSize(gParameters(prototype)) > 1)  {
 		gPuts(sobj, "\tva_list\t_rest_;\n");
 
-		while (pnxt = gNext(pseq), vnxt = gNext(vseq))
-			if (i++  &&  strne(t=gStringValue(pnxt), "..."))
-				vPrintf(sobj, "\t%s\t%s;\n",
-					t, gStringValue(vnxt));
+		aseq = gSequence(avar);
+		while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
+			if (i++  &&  strne(t=gStringValue(pnxt), "..."))  {
+				vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
+				if (*tdef)
+					vPrintf(sobj, "\t%s\n", tdef);
+				vPrintf(sobj, "\t%s;\n", dcl);
+			}
 		gPuts(sobj, "\tva_start(_rest_, self);\n");
 		pseq = gSequence(pvar);
 		vseq = gSequence(vvar);
+		aseq = gSequence(avar);
 		i = 0;
-		while (pnxt = gNext(pseq), vnxt = gNext(vseq))
-			if (i++  &&  strne(t=gStringValue(pnxt), "..."))
-				vPrintf(sobj, "\t%s = va_arg(_rest_, %s);\n",
-					gStringValue(vnxt), t);
+		while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
+			if (i++  &&  strne(t=gStringValue(pnxt), "..."))  {
+				vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
+				vPrintf(sobj, "\t%s = %s;\n",
+					gStringValue(vnxt), rhs);
+			}
 		gPuts(sobj, "\tva_end(_rest_);\n");
 	}  else  {
 		DISPOSE(pseq);
@@ -3415,14 +3607,18 @@ generate_overloaded_method(char		*olmname,
 {
 	int	i=0, rest_used = 0;
 	char	*t, *rtn;
-	object	pseq, vseq, pnxt, vnxt;
+	char	tdef[VDSZ], dcl[VDSZ], rhs[VDSZ];
+	object	pseq, vseq, aseq, pnxt, vnxt, anxt;
 	
 	if (!prototype  ||  !(pseq = gPrototype(prototype)))
 		return;
 	if (!(vseq = gParameters(prototype)))
 		return;
+	if (!(aseq = gArgs(prototype)))
+		return;
 	pseq = gSequence(pseq);
 	vseq = gSequence(vseq);
+	aseq = gSequence(aseq);
 	if (mclass != 1)
 		gFlush(sobj);
 	gTLineDirective(sobj);
@@ -3431,10 +3627,12 @@ generate_overloaded_method(char		*olmname,
 		rtn = gStringValue(gReturnType(olpt)),
 		olmname);
 	gPuts(sobj, "{\n");
-	while (pnxt = gNext(pseq), vnxt = gNext(vseq))
+	while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
 		if (i++  &&  strne(t=gStringValue(pnxt), "..."))  {
-			vPrintf(sobj, "\t%s\t%s = va_arg(_rest_, %s);\n",
-				t, gStringValue(vnxt), t);
+			vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
+			if (*tdef)
+				vPrintf(sobj, "\t%s\n", tdef);
+			vPrintf(sobj, "\t%s = %s;\n", dcl, rhs);
 			rest_used = 1;
 		}
 	if (!rest_used)
@@ -3556,11 +3754,11 @@ pp_method(object  tkn,
 		DISPOSE(tkn);
 		if (tkn = gNextToken(fobj))
 			p = gStringValue(tkn);
-		if (tkn  &&  *p != '(')  {
-			if (!istart(*p))  {
-				method_syntax(tkn, generics, olgens);
-				return;
-			}
+		if (!tkn  ||  !istart(*p))  {	/*  ':' must be followed by the method name  */
+			method_syntax(tkn, generics, olgens);
+			return;
+		}
+		{
 			SCPY(ename, p);
 			sfmt(fmname, sizeof fmname, "%s_%cfm_%s", gStringValue(className),
 				mclass==1?'i':'c', gname);
@@ -3790,29 +3988,31 @@ static	void	expand_get_args(object	prototype,
 				int	mclass,
 				object	sobj)
 {
-	object	tkn, pseq, vseq, pnxt, vnxt;
+	object	tkn, pseq, vseq, aseq, pnxt, vnxt, anxt;
 	int	i = 0;
 	char	*t;
+	char	tdef[VDSZ], dcl[VDSZ], rhs[VDSZ];
 
 	if (!(pseq = gPrototype(prototype)))
 		return;
 	if (!(vseq = gParameters(prototype)))
 		return;
+	if (!(aseq = gArgs(prototype)))
+		return;
 	pseq = gSequence(pseq);
 	vseq = gSequence(vseq);
+	aseq = gSequence(aseq);
 	if (mclass != 1)
 		gFlush(sobj);
-	while (pnxt = gNext(pseq), vnxt = gNext(vseq))
+	while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
 		if (i++  &&  strne(t=gStringValue(pnxt), "..."))  {
-			PUT(1, t);
-			PUT(1, gStringValue(vnxt));
+			vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
+			if (*tdef)  {
+				PUT(1, tdef);
+			}
+			PUT(1, dcl);
 			PUT(1, "=");
-			PUT(0, "va_arg");
-			PUT(0, "(");
-			PUT(0, "_rest_");
-			PUT(1, ",");
-			PUT(0, t);
-			PUT(0, ")");
+			PUT(1, rhs);
 			PUT_SEMI;
 		}
 /*
@@ -3852,6 +4052,8 @@ static	char	*s1_rest_arg(object prototype)
 	return NULL;
 }
 
+static	void	put_s1_va_end(object sobj, int mclass);
+
 static	void	put_text(object sobj, int mclass, char *x, int s)
 {
 	object	tkn = gNewToken(Token, x, 0L, s);
@@ -3860,6 +4062,56 @@ static	void	put_text(object sobj, int mclass, char *x, int s)
 		gPutm(sobj, tkn);
 	else
 		gPut(sobj, tkn);
+}
+
+/*  In a strategy 1 method that called va_start, rewrite "return expr;" as
+    "{ type _dpp_ret_ = expr; va_end(_rest_); return _dpp_ret_; }" so every
+    return path calls va_end.  rtkn is the return token.  */
+
+static	void	put_s1_return(object fobj, object sobj, int mclass, object rtkn, object prototype)
+{
+	char	*rtn = gStringValue(gReturnType(prototype)), *p;
+	int	isvoid = streq(rtn, "void"), depth = 0;
+	object	tkn;
+
+	DISPOSE(rtkn);
+	put_text(sobj, mclass, "{", 1);
+	if (!isvoid)  {
+		put_text(sobj, mclass, rtn, 1);
+		put_text(sobj, mclass, "_dpp_ret_", 1);
+		put_text(sobj, mclass, "=", 1);
+	}
+	while (tkn = gNextToken(fobj))  {
+		p = gStringValue(tkn);
+		if (!depth  &&  *p == ';')  {
+			DISPOSE(tkn);
+			break;
+		}
+		if (*p == '('  ||  *p == '['  ||  *p == '{')
+			depth++;
+		else if ((*p == ')'  ||  *p == ']'  ||  *p == '}')  &&  depth)
+			depth--;
+		if (mclass == 1)
+			gPutm(sobj, tkn);
+		else
+			gPut(sobj, tkn);
+	}
+	put_text(sobj, mclass, ";", 0);
+	put_s1_va_end(sobj, mclass);
+	put_text(sobj, mclass, "return", 1);
+	if (!isvoid)
+		put_text(sobj, mclass, "_dpp_ret_", 1);
+	put_text(sobj, mclass, ";", 0);
+	put_text(sobj, mclass, "}", 1);
+}
+
+static	void	put_s1_va_end(object sobj, int mclass)
+{
+	put_text(sobj, mclass, "va_end", 1);
+	put_text(sobj, mclass, "(", 0);
+	put_text(sobj, mclass, "_rest_", 0);
+	put_text(sobj, mclass, ")", 0);
+	put_text(sobj, mclass, ";", 0);
 }
 
 static	void
@@ -3911,10 +4163,16 @@ pp_body(char	*p,
 	while (bracelevel  &&  tkn  &&  (tkn = gNextToken(fobj)))  {
 		p = gStringValue(tkn);
 		if (*p == '}'  &&  bracelevel)  {
-			if (!--bracelevel  &&  rest_arg)
-				put_text(sobj, mclass, "}", 1);
+			if (!--bracelevel  &&  rest_arg)  {
+				put_text(sobj, mclass, "}", 1);	/*  end of inner block  */
+				put_s1_va_end(sobj, mclass);
+			}
 		} else if (*p == '{')
 			bracelevel++;
+		else if (rest_arg  &&  streq(p, "return"))  {
+			put_s1_return(fobj, sobj, mclass, tkn, prototype);
+			continue;
+		}
 #if 0
 		if (streq(p, "GET_ARGS"))  {
 			if (convert  &&  Strategy != 1  &&  prototype)
@@ -4019,7 +4277,15 @@ addto_generics(object smethods,		/*  source methods  		*/
 			continue;
 		}
 		gAdd(usedMethods, mnobj);
-		gproto = gFindEQ(generics, gn=gKey(obj), NULL);
+		gn = gKey(obj);
+		/*  Without strategy 1 an exception generic hands its arguments to
+		    the method as a va_list, which only a vararg method accepts.  */
+		if (Strategy != 1  &&  (NoProto  ||  gFind(exceptions, gn))  &&  !gIsVarArg(mproto))  {
+			ErrorCode = 1;
+			vPrintf(stdoutStream, "Method %s of exception generic %s must be ivmeth/cvmeth unless using strategy 1.\n",
+				trunc_mname(mname), gname);
+		}
+		gproto = gFindEQ(generics, gn, NULL);
 		if (!gproto)  {
 			gproto = gDeepCopy(mproto);
 			gChangeName(gproto, gname);

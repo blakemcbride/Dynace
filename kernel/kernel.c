@@ -27,6 +27,10 @@
 */
 
 
+#if defined(NATIVE_THREADS)  &&  defined(__linux__)  &&  !defined(_GNU_SOURCE)
+#define _GNU_SOURCE	/*  pthread_getattr_np  */
+#endif
+
 #include "generics.h"
 
 #if defined(_M_IX86) || defined(_M_X64)   //  32 or 64 bit Windows
@@ -35,6 +39,7 @@
 
 #include <string.h>
 #include <stdint.h>
+#include <limits.h>
 
 #if !defined(__COSMIC__)  &&  !defined(PLAN9)
 #include <time.h>
@@ -72,6 +77,7 @@ extern	void  *_Dynace_malloc( long nbytes );
 extern	void  *_Dynace_calloc( long size, long nelem );
 extern	void  _Dynace_free( void *cp );
 extern	void  *_Dynace_realloc(void  *cp, long nbytes );
+extern	void  _Dynace_malloc_init(void);
 
 #define	malloc(n)	_Dynace_malloc(n)
 #define	calloc(a, b)	_Dynace_calloc((a), (b))
@@ -185,6 +191,22 @@ static	CRITICALSECTION	 GC_CS;
 static	CRITICALSECTION	 CMU_CS;	/*  used for CMU & ObjectSN	*/
 static	int	In_GC;			/*  avoid use of slow GC_CS 	*/
 
+/*  The top (highest address) of the current thread's stack.  StackBeg only
+    bounds the main thread's stack; with native threads each thread finds its
+    own on first use.  NULL if it can't be determined.  */
+#ifdef	NATIVE_THREADS
+#if	defined(_MSC_VER)
+#define	THREAD_LOCAL	__declspec(thread)
+#else
+#define	THREAD_LOCAL	__thread
+#endif
+static	THREAD_LOCAL	char	*ThreadStackTop;
+static	char	*thread_stack_top(void);
+#define	STACK_TOP()	(ThreadStackTop ? ThreadStackTop : thread_stack_top())
+#else
+#define	STACK_TOP()	StackBeg
+#endif
+
 
 /*  storage statistic variables  */
 
@@ -232,7 +254,7 @@ static	object	metaMethod, metaGenericFunction;
 
 /*  Local function declarations   */
 
-LOCAL	void add_ptr(char *p,unsigned len);
+LOCAL	void add_ptr(char *p,size_t len);
 LOCAL	struct memory_range *new_gmr(void);
 LOCAL	void free_gmr(struct memory_range *gmr);
 LOCAL	void extend_storage(Behavior_iv_t *cv);
@@ -306,7 +328,7 @@ static	SL	*MSL = NULL;		/*  Master segment list		*/
 static	CRITICALSECTION   MSL_CS;
 
 
-LOCAL	void	add_ptr(char *p, unsigned len)
+LOCAL	void	add_ptr(char *p, size_t len)
 {
 	register unsigned	seg = FP_SEG(p);
 	unsigned	off = FP_OFF(p);
@@ -352,7 +374,7 @@ LOCAL	_INLINE_	int	chk_ptr(char *p, unsigned len)
 /*  Boehm knows its own heap.  GC_base returns the start of the object containing
     p, or NULL if p is not in the collected heap, without touching memory at p.  */
 
-LOCAL	void	add_ptr(char *p, unsigned len)
+LOCAL	void	add_ptr(char *p, size_t len)
 {
 }
 
@@ -409,6 +431,16 @@ static	CRITICALSECTION   PTR_CS;
 
 static	MBLK_t	* volatile BlkCache[BLK_CACHE_SIZE];
 
+#ifdef	NATIVE_THREADS
+#if defined(__GNUC__)  ||  defined(__clang__)
+#define	FULL_FENCE()	__atomic_thread_fence(__ATOMIC_SEQ_CST)
+#elif defined(_MSC_VER)
+#define	FULL_FENCE()	MemoryBarrier()
+#else
+#define	FULL_FENCE()
+#endif
+#endif
+
 LOCAL	void	clear_blk_cache(void)
 {
 	int	i;
@@ -455,7 +487,7 @@ LOCAL	void	free_mbt_list(MBT_t *t)
 }
 #endif
 
-LOCAL	void	add_ptr(char *p, unsigned len)
+LOCAL	void	add_ptr(char *p, size_t len)
 {
 	MBT_t	*ot, *nt;
 	long	i, n;
@@ -561,6 +593,14 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	i = find_blk(t, p);
 	if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
 		BlkCache[BLK_CACHE_IDX(p)] = &t->blk[i];
+#ifdef	NATIVE_THREADS
+		/*  If the table was replaced while we searched it, the writer may
+		    have cleared the cache before our store.  Don't leave an entry
+		    pointing into the retired table.  */
+		FULL_FENCE();
+		if (t != MBT)
+			BlkCache[BLK_CACHE_IDX(p)] = NULL;
+#endif
 		return 1;
 	}
 	return 0;
@@ -581,8 +621,13 @@ int	_gc_chk_ptr(char *p, unsigned len)  /*  used by the GC to determine if a RAN
 
 void	*_Dynace_getpage(long len)
 {
-	char	*p = real_calloc(1, (unsigned) len);
-	add_ptr(p, (unsigned) len);
+	char	*p;
+
+	if (len <= 0)
+		return NULL;
+	if (!(p = real_calloc(1, (size_t) len)))
+		return NULL;
+	add_ptr(p, (size_t) len);
 	return (void *) p;
 }
 
@@ -646,7 +691,7 @@ LOCAL	void	handle_sigsegv(int sig)
 
 #endif
 
-#define	chk_sptr(p, len)  ((char _HUGE_ *)(p) > (char _HUGE_ *) &obj  &&  (char _HUGE_ *)(p) <= (char _HUGE_ *)StackBeg - (len))
+#define	chk_sptr(p, len)  ((char _HUGE_ *)(p) > (char _HUGE_ *) &obj  &&  STACK_TOP()  &&  (char _HUGE_ *)(p) <= (char _HUGE_ *)STACK_TOP() - (len))
 
 
 /*  Validates arbitrary pointers, so it must be able to probe memory that isn't an object.  */
@@ -844,8 +889,13 @@ imeth	objrtn	Behavior_im_gNew(object self)
 	add_ptr((char *) instance, cv->effective_iv_size);
 #endif
 #else
-	if (!cv->fl  &&  GBA > 0L  &&  CMU > MBU + GBA)
+	if (!cv->fl  &&  GBA > 0L  &&  CMU > MBU + GBA)  {
+		/*  The GC takes GC_CS and its sweep takes other classes' locks,
+		    so holding ours across it could deadlock with another thread.  */
+		LEAVECRITICALSECTION(cv->cs);
 		gGC(Dynace_c);
+		ENTERCRITICALSECTION(cv->cs);
+	}
 	if (!cv->fl)
 		extend_storage(cv);
 	instance = (object) cv->fl;
@@ -928,6 +978,44 @@ LOCAL	char	*strsave(char *x)
 	return(p);
 }
 
+#if	DPP_FASTWIDE
+
+/*  Each generic has a method pointer table indexed by class id.  Classes
+    created at run time can push the id past the size given to InitDynace,
+    so grow every generic's table.  */
+
+LOCAL	void	grow_method_pointers(int id)
+{
+	object	g;
+	GenericFunction_iv_t	*giv;
+	ofun	*omc, *nmc;
+	int	n;
+
+	ENTERCRITICALSECTION(MGL_CS);
+	if (id >= NUM_CLASSES)  {
+		n = NUM_CLASSES > 8 ? NUM_CLASSES * 2 : 16;
+		if (n <= id)
+			n = id + 16;
+		for (g=MGL ; g ; g=giv->next)  {
+			giv = (GenericFunction_iv_t *) (g+1);
+			nmc = Tncalloc(ofun, n);
+			omc = giv->mc;
+			if (omc)
+				memcpy(nmc, omc, NUM_CLASSES * sizeof(ofun));
+			giv->mc = nmc;
+#ifndef	NATIVE_THREADS
+			free(omc);
+#endif
+			/*  with native threads another thread may still be reading
+			    the old table, so it is not freed  */
+		}
+		NUM_CLASSES = n;
+	}
+	LEAVECRITICALSECTION(MGL_CS);
+}
+
+#endif
+
 LOCAL	void	new_class(object c, Behavior_iv_t *cv, char *name)
 {
 	cv->name = strsave(name);
@@ -951,6 +1039,10 @@ LOCAL	void	new_class(object c, Behavior_iv_t *cv, char *name)
 	cv->sig2 = SIG2;
 	INITIALIZECRITICALSECTION(cv->cs);
 	LEAVECRITICALSECTION(MCL_CS);
+#if	DPP_FASTWIDE
+	if (cv->id >= NUM_CLASSES)
+		grow_method_pointers(cv->id);
+#endif
 }
 
  /*  defClass:  used to create kernel classes  */
@@ -1059,15 +1151,16 @@ cmeth objrtn	GenericFunction_cm_gNewGeneric(object self, char *name, void *fp)
 	iv = (GenericFunction_iv_t *) direct_ivs(generic);
 	iv->name = strsave(name);
 	ENTERCRITICALSECTION(MGL_CS);
+#if	DPP_FASTWIDE
+	/*  sized under MGL_CS so it can't miss a grow_method_pointers  */
+	iv->mc = Tncalloc(ofun, NUM_CLASSES);
+#endif
 	iv->id = GID++;
 	iv->cache_idx = Ccols * (iv->id % Crows);
 	iv->ptrGeneric = fp;
 	iv->next = MGL;
 	MGL = generic;
 	LEAVECRITICALSECTION(MGL_CS);
-#if	DPP_FASTWIDE
-	iv->mc = Tncalloc(ofun, NUM_CLASSES);
-#endif
 	return generic;
 }
 
@@ -1207,12 +1300,20 @@ LOCAL	void	rebuild_generic_indexes(void)
 
 cmeth	objrtn	Dynace_cm_gResizeMethodCache(object self, int classes, int generics)
 {
+	if (classes < 1  ||  generics < 1  ||  classes > INT_MAX / generics)
+		gError(self, "gResizeMethodCache: invalid cache size.\n");
+	/*  The indexes must change together with the table.  Lock order is
+	    MGL_CS, MCL_CS, MC_CS (the GC sweep holds MCL_CS while dispatching).  */
+	ENTERCRITICALSECTION(MGL_CS);
+	ENTERCRITICALSECTION(MCL_CS);
 	ENTERCRITICALSECTION(MC_CS);
 	free_cache();
 	create_cache(Crows = generics, Ccols = classes);
-	LEAVECRITICALSECTION(MC_CS);
 	rebuild_generic_indexes();
 	rebuild_class_indexes();
+	LEAVECRITICALSECTION(MC_CS);
+	LEAVECRITICALSECTION(MCL_CS);
+	LEAVECRITICALSECTION(MGL_CS);
 	return self;
 }
 
@@ -1746,7 +1847,7 @@ LOCAL	objrtn	Class_cm_gNewStdClass(object self, char *name, int ivsize, object m
 		n = 1;
 		scvp[0] = Object_c;
 	}
-	if (n == MIS)  {
+	if (superclasses  &&  n == MIS  &&  sc)  {	/*  sc is the argument after the MIS'th  */
 		snprintf(buf, sizeof(buf), "Attempt to create class %s with more than %d superclasses", name, MIS);
 		gError(self, buf);
 	}
@@ -1794,7 +1895,7 @@ LOCAL objrtn	Class_cm_gNewClass(object self, char *name, int ivsize, int cvsize,
 		scvp2[0] = metaObject;
 		n = 1;
 	}
-	if (n == MIS)  {
+	if (superclasses  &&  n == MIS  &&  sc)  {	/*  sc is the argument after the MIS'th  */
 		snprintf(meta, sizeof(meta), "Attempt to create class %s with more than %d superclasses", name, MIS);
 		gError(self, meta);
 	}
@@ -1945,14 +2046,15 @@ cmeth	void	Dynace_cm_gMarkRange(object self, char _HUGE_ **from, char _HUGE_ **t
 	USE(self);
 #ifdef	ALIGN4
 	from = (char _HUGE_ **) EVEN(from);
-	to   = (char _HUGE_ **) EVEN(to);
+	to   = (char _HUGE_ **) ((intptr_t) to & ~(intptr_t) 3);
 #else
 	if ((intptr_t) from & 1L)
 		from = (char _HUGE_ **) ((char _HUGE_ *) from + 1);
 	if ((intptr_t) to & 1L)
-		to = (char _HUGE_ **) ((char _HUGE_ *) to + 1);
+		to = (char _HUGE_ **) ((char _HUGE_ *) to - 1);
 #endif
-	while (from < to)  {
+	/*  each probe reads a whole pointer, which must lie within the range  */
+	while ((char _HUGE_ *) from + sizeof(char *) <= (char _HUGE_ *) to)  {
 		obj = SLOT_GET(from);
 		if (IsObj(obj))  {
 			if (obj->tag & OBJ_USED)
@@ -2202,7 +2304,9 @@ LOCAL	void	gc_sweep(void)
 				if (obj->tag & OBJ_USED)  {
 					if (!cv->ncg)  {
 						(*(object(*)(object))dfun)(obj);
-						++f;
+						/*  gGCDispose may decline (Constant, a busy Pipe)  */
+						if (obj->tag & OBJ_FREE)
+							++f;
 					}
 				}  else if (obj->tag & OBJ_MARKED) {
 					obj->tag = OBJ_USED | (ALLOC_MASK & obj->tag);
@@ -2298,6 +2402,10 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	object	c;
 	Behavior_iv_t	*cv;
 
+	char	*top = STACK_TOP();
+
+	if (!top)
+		gError(Dynace_c, "\nDynace: gGC can't locate this thread's stack.\n");
 	In_GC++;
 	ENTERCRITICALSECTION(GC_CS);
 	INHIBIT_THREADER;
@@ -2307,7 +2415,12 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 	_register_global_memory();
 #endif
 
-	Dynace_cm_gMarkRange(Dynace_c, (char _HUGE_ **) &self, (char _HUGE_ **) StackBeg);
+	/*  With native threads only the calling thread's stack is scanned and
+	    other threads keep running, so objects referenced only from another
+	    thread's stack or registers are not protected.  Collect only when
+	    other threads hold no such references (or run with GBA == -1 and
+	    call gGC explicitly at a safe point).  */
+	Dynace_cm_gMarkRange(Dynace_c, (char _HUGE_ **) &self, (char _HUGE_ **) top);
 	Dynace_cm_gMarkObject(Dynace_c, MCL);
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
@@ -2625,11 +2738,7 @@ object	_catchKind(object *condp, object cls)
 NO_SANITIZE_ADDRESS
 LOCAL	HandlerCtx	*find_handler(char *cp)
 {
-#ifdef	NATIVE_THREADS
-	char	*top = NULL;	/*  other threads' stacks aren't bounded by StackBeg  */
-#else
-	char	*top = StackBeg;
-#endif
+	char	*top = STACK_TOP();	/*  NULL if unknown: scan until found  */
 
 	for (cp += sizeof(long) ; !top  ||  cp + 2 * sizeof(long) <= top ; cp += sizeof(long))
 		if (((long *) cp)[0] == _SIG1  &&  ((long *) cp)[1] == _SIG2)
@@ -2729,6 +2838,9 @@ LOCAL	void	init_critical_sections(void)
 	pthread_mutexattr_init(&_mutex_attr);
 	pthread_mutexattr_settype(&_mutex_attr, PTHREAD_MUTEX_RECURSIVE);
 #endif
+#ifdef	HEAP_HAS_HOLES
+	_Dynace_malloc_init();
+#endif
 	INITIALIZECRITICALSECTION(_CI_CS_);
 	INITIALIZECRITICALSECTION(MCL_CS);
 	INITIALIZECRITICALSECTION(MGL_CS);
@@ -2778,6 +2890,37 @@ LOCAL	char	*stack_beginning(void *sb)
 	return top > (char *) sb ? top : (char *) sb;
 }
 
+#ifdef	NATIVE_THREADS
+
+/*  The stack top of a thread other than the one that called InitKernel  */
+
+LOCAL	char	*thread_stack_top(void)
+{
+	char	*top = NULL;
+
+#if	defined(_M_IX86) || defined(_M_X64)
+	top = (char *) ((NT_TIB *) NtCurrentTeb())->StackBase;
+#elif defined(__APPLE__)
+	top = (char *) pthread_get_stackaddr_np(pthread_self());
+#elif defined(__linux__)  &&  defined(__GLIBC__)
+	pthread_attr_t	attr;
+	void	*addr;
+	size_t	size;
+
+	if (!pthread_getattr_np(pthread_self(), &attr))  {
+		if (!pthread_attr_getstack(&attr, &addr, &size))
+			top = (char *) addr + size;
+		pthread_attr_destroy(&attr);
+	}
+#endif
+	/*  back off one pointer so the mark loop never reads past the end  */
+	if (top)
+		top -= sizeof(char *);
+	return ThreadStackTop = top;
+}
+
+#endif
+
 void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 {
 	Behavior_iv_t	*cv;
@@ -2793,6 +2936,9 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 	init_critical_sections();
 
 	StackBeg = stack_beginning(sb);
+#ifdef	NATIVE_THREADS
+	ThreadStackTop = StackBeg;
+#endif
 
 	NUM_CLASSES = nc;
 

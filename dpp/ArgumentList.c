@@ -37,6 +37,8 @@
 
 #line 30 "ArgumentList.d"
 #include "dpp.h" 
+#include <stdlib.h> 
+#include <string.h> 
 
 #define	CLASS	ArgumentList_c
 #define	ivType	ArgumentList_iv_t
@@ -46,7 +48,7 @@
 object	ArgumentList_c;
 
 
-#line 34 "ArgumentList.d"
+#line 36 "ArgumentList.d"
 static void process_file(object, char *); 
 
 cmeth objrtn ArgumentList_cm_gNew(object self)
@@ -118,7 +120,8 @@ static char *process_token(char *p, object list)
 
 static void process_file(object list, char *file) 
 { 
-	char buf[256], *p; 
+	char buf[256], *line = NULL, *p; 
+	size_t len = 0, n; 
 	object fobj; 
 
 	fobj = gOpenFile(File, file, "r"); 
@@ -126,12 +129,28 @@ static void process_file(object list, char *file)
 		vPrintf(stdoutStream, "Can't open %s\n", file); 
 		exit(1); 
 	} 
-	while (gGets(fobj, buf, sizeof buf)) 
-		for (p=buf ; *(p=process_token(p, list)) ; ); 
+
+	while (gGets(fobj, buf, sizeof buf)) { 
+		n = strlen(buf); 
+		if (!(p = realloc(line, len + n + 1))) { 
+			vPrintf(stdoutStream, "dpp: out of memory reading %s\n", file); 
+			exit(1); 
+		} 
+		line = p; 
+		memcpy(line + len, buf, n + 1); 
+		len += n; 
+		if (n && buf[n-1] == '\n') { 
+			for (p=line ; *(p=process_token(p, list)) ; ); 
+			len = 0; 
+		} 
+	} 
+	if (len) 
+		for (p=line ; *(p=process_token(p, list)) ; ); 
+	free(line); 
 	gDispose(fobj); 
 } 
 
-#line 135 "ArgumentList.c"
+#line 154 "ArgumentList.c"
 
 objrtn	ArgumentList_initialize(void)
 {

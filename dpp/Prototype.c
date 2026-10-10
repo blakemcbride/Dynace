@@ -126,7 +126,7 @@ static void remove_variable(char *buf, char *var)
 		if (buf[i]) 
 			vi = i; 
 	} else 
-		for (i=0 ; buf[i] ; ) 
+		for (i=0 ; buf[i] && buf[i] != '[' && buf[i] != '=' ; ) 
 		if (istart(buf[i])) { 
 		vi = i++; 
 		while (buf[i] && irest(buf[i])) 
@@ -190,7 +190,7 @@ imeth objrtn Prototype_im_gPrintMethArgsH(object self, object fobj)
 	object seq, nxt; 
 	int n=0; 
 
-	if (iv->iVararg) { 
+	if (iv->iVararg || iv->iException || !iv->iArgs) { 
 		gPuts(fobj, "object self, va_list _rest_"); 
 	} else { 
 		for (seq=gSequence(iv->iArgs) ; nxt = gNext(seq) ; ) { 
@@ -522,7 +522,9 @@ imeth objrtn Prototype_im_gVarArg(object self)
 
 imeth int Prototype_im_gIsVarArg(object self)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
-	return iv->iNeedRest || iv->iVararg; 
+
+
+	return iv->iNeedRest || iv->iVararg || iv->iException; 
 } 
 
 imeth char * Prototype_im_gLastArg(object self)
@@ -542,7 +544,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 546 "Prototype.c"
+#line 548 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {

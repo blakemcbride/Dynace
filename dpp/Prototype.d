@@ -109,8 +109,8 @@ static	void	remove_variable(char *buf, char *var)
 		for ( ; buf[i] && !istart(buf[i]) ; i++);
 		if (buf[i])
 			vi = i;
-	} else 
-		for (i=0 ; buf[i] ; )
+	} else 	/*  stop before an array dimension or default value (char buf[SIZE])  */
+		for (i=0 ; buf[i]  &&  buf[i] != '['  &&  buf[i] != '=' ; )
 			if (istart(buf[i]))  {
 				vi = i++;
 				while (buf[i]  &&  irest(buf[i]))
@@ -174,7 +174,7 @@ imeth	gPrintMethArgsH(object fobj)
 	object	seq, nxt;
 	int	n=0;
 
-	if (iVararg) {
+	if (iVararg  ||  iException  ||  !iArgs) {
 		gPuts(fobj, "object self, va_list _rest_");
 	} else {
 		for (seq=gSequence(iArgs) ; nxt = gNext(seq) ; )  {
@@ -501,7 +501,9 @@ imeth	gVarArg()
 
 imeth	int	gIsVarArg()
 {
-	return iNeedRest || iVararg;
+	/*  an exception generic is declared (object self, ...) and passes its
+	    arguments on as a va_list, like a vararg generic  */
+	return iNeedRest || iVararg || iException;
 }
 
 imeth	char	*gLastArg()

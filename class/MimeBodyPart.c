@@ -114,7 +114,8 @@ imeth char * MimeBodyPart_im_gGetHeader(object self, char *name)
 		char *valpos, *startPos; 
 
 		startPos = gStringValue(header); 
-		strncpy(tmpBuf, startPos, sizeof(tmpBuf)); 
+		strncpy(tmpBuf, startPos, sizeof(tmpBuf) - 1); 
+		tmpBuf[sizeof(tmpBuf) - 1] = '\0'; 
 		valpos = strchr(tmpBuf, ':'); 
 		if (!valpos) 
 			continue; 
@@ -162,7 +163,7 @@ PMETHOD void resetString(object self, object *pobj, char *initValue)
 	*pobj = gNewWithStr(String, initValue ? initValue : ""); 
 } 
 
-#line 166 "MimeBodyPart.c"
+#line 167 "MimeBodyPart.c"
 
 objrtn	MimeBodyPart_initialize(void)
 {

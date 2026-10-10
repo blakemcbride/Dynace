@@ -36,6 +36,8 @@
 #define	_GENERICS_H
 
 
+/*  dpp options: S2 F0 M0  */
+
 #ifdef	DPP_STRATEGY
 #if	DPP_STRATEGY != 2
 #error Incompatible DPP Strategies

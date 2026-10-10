@@ -98,8 +98,6 @@ static void  *getBlock( long blockSize );
 static  union overhead *nextf[NBUCKETS];
 //extern  char *sbrk();
 
-static  long pagesz = 0;         /* page size */
-static  int  pagebucket = 0;         /* page size bucket */
 
 #ifdef MSTATS
 /*
@@ -143,58 +141,73 @@ extern  long Dynace_GetPageSize(void);
 #define getinitialpagesize() 	Dynace_GetInitialPageSize()
 #endif
 
+/*
+ * The kernel calls the allocator while holding unrelated locks (or none), so
+ * with native threads it serializes itself.  Allocations made before
+ * _Dynace_malloc_init runs happen before any other thread exists.
+ */
+#ifdef	NATIVE_THREADS
+static	CRITICALSECTION	Malloc_CS;
+static	int	Malloc_CS_ready = 0;
+#define	MALLOC_LOCK	if (Malloc_CS_ready) ENTERCRITICALSECTION(Malloc_CS)
+#define	MALLOC_UNLOCK	if (Malloc_CS_ready) LEAVECRITICALSECTION(Malloc_CS)
+#else
+#define	MALLOC_LOCK
+#define	MALLOC_UNLOCK
+#endif
+
+void	_Dynace_malloc_init(void)  /*  called by InitKernel after the mutex attributes are set  */
+{
+#ifdef	NATIVE_THREADS
+	if (!Malloc_CS_ready) {
+		INITIALIZECRITICALSECTION(Malloc_CS);
+		Malloc_CS_ready = 1;
+	}
+#endif
+}
+
+static	void	*malloc_unlocked( long nbytes );
+static	void	free_unlocked( void *cp );
+
 void  *_Dynace_malloc( long nbytes )
+{
+	void	*p;
+
+	MALLOC_LOCK;
+	p = malloc_unlocked(nbytes);
+	MALLOC_UNLOCK;
+	return p;
+}
+
+static	void  *malloc_unlocked( long nbytes )
 {
 	union overhead *op;
 	int bucket;
 	long n, amt;
 
-	/*
-	 * First time malloc is called, setup page size and
-	 * align break pointer so all data will be page aligned.
-	 */
-	if (pagesz == 0) {
-		pagesz = n = getpagesize();
-//              op = (union overhead *)sbrk(0);
-//              n = n - sizeof (*op) - ((int)op & (n - 1));
-//              if (n < 0)
-//                      n += pagesz;
-//              if (n) {
-//                      if (sbrk(n) == (char *)-1)
-//                              return (NULL);
-//        }
-		bucket = 0;
-		amt = 8;
-		while (pagesz > amt) {
-			amt <<= 1;
-			bucket++;
-		}
-		pagebucket = bucket;
-	}
+	if (nbytes < 0)
+		return (NULL);
 	/*
 	 * Convert amount of memory requested into closest block size
 	 * stored in hash buckets which satisfies request.
 	 * Account for space used per block for accounting.
+	 *
+	 * Every bucket holds 2^(bucket+3) bytes including the overhead.
+	 * (The BSD original gave buckets of a page or more an extra page,
+	 * but morecore here allocates exactly the bucket size.)
 	 */
-	if (nbytes <= (n = pagesz - sizeof (*op) - RSLOP)) {
 #ifndef RCHECK
-		amt = 8;    /* size of first bucket */
-		bucket = 0;
+	amt = 8;    /* size of first bucket */
+	bucket = 0;
 #else
-		amt = 16;   /* size of first bucket */
-		bucket = 1;
+	amt = 16;   /* size of first bucket */
+	bucket = 1;
 #endif
-		n = -(long)(sizeof (*op) + RSLOP);
-	} else {
-		amt = pagesz;
-		bucket = pagebucket;
-	}
+	n = -(long)(sizeof (*op) + RSLOP);
 	while (nbytes > amt + n) {
-		amt <<= 1;
-		if (amt == 0)
+		if (amt > LONG_MAX / 2  ||  ++bucket >= NBUCKETS)
 			return (NULL);
-
-		bucket++;
+		amt <<= 1;
 	}
 	/*
 	 * If nothing in hash bucket right now,
@@ -240,6 +253,13 @@ void  *_Dynace_calloc( long size, long nelem )
 }
 
 void _Dynace_free( void *cp )
+{
+	MALLOC_LOCK;
+	free_unlocked(cp);
+	MALLOC_UNLOCK;
+}
+
+static	void free_unlocked( void *cp )
 {   
 	long size;
 	union overhead *op;
@@ -279,7 +299,19 @@ void _Dynace_free( void *cp )
  */
 static int realloc_srchlen = 4;    /* 4 should be plenty, -1 =>'s whole list */
 
+static	void  *realloc_unlocked(void  *cp, long nbytes );
+
 void  *_Dynace_realloc(void  *cp, long nbytes )
+{
+	void	*p;
+
+	MALLOC_LOCK;
+	p = realloc_unlocked(cp, nbytes);
+	MALLOC_UNLOCK;
+	return p;
+}
+
+static	void  *realloc_unlocked(void  *cp, long nbytes )
 {   
 	long onb;
 	long i;
@@ -288,7 +320,7 @@ void  *_Dynace_realloc(void  *cp, long nbytes )
 	long was_alloced = 0;
 
 	if (cp == NULL)
-		return _Dynace_malloc(nbytes);
+		return malloc_unlocked(nbytes);
 	op = (union overhead *)((char *)cp - sizeof (union overhead));
 	if (op->ov_magic == MAGIC) {
 		was_alloced++;
@@ -312,20 +344,16 @@ void  *_Dynace_realloc(void  *cp, long nbytes )
 			(i = findbucket(op, realloc_srchlen)) < 0)
 			i = NBUCKETS;
 	}
-	onb = 1L << (i + 3);
-	if (onb < pagesz)
-		onb -= sizeof (*op) + RSLOP;
+	/*  usable size of the old block (see malloc_unlocked)  */
+	if (i < NBUCKETS)
+		onb = (1L << (i + 3)) - (long)(sizeof (*op) + RSLOP);
 	else
-		onb += pagesz - sizeof (*op) - RSLOP;
+		onb = nbytes;
 	/* avoid the copy if same size block */
 	if (was_alloced) {
-		if (i) {
-			i = 1L << (i + 2);
-			if (i < pagesz)
-				i -= sizeof (*op) + RSLOP;
-			else
-				i += pagesz - sizeof (*op) - RSLOP;
-		}
+		/*  usable size of the next smaller bucket  */
+		if (i)
+			i = (1L << (i + 2)) - (long)(sizeof (*op) + RSLOP);
 		if (nbytes <= onb && nbytes > i) {
 #ifdef RCHECK
 			op->ov_size = (nbytes + RSLOP - 1) & ~(RSLOP - 1);
@@ -333,12 +361,12 @@ void  *_Dynace_realloc(void  *cp, long nbytes )
 #endif
 			return(cp);
 		} else
-			_Dynace_free(cp);
+			free_unlocked(cp);
 	}
-	if ((res = _Dynace_malloc(nbytes)) == NULL)
+	if ((res = malloc_unlocked(nbytes)) == NULL)
 		return (NULL);
 	if (cp != res)      /* common optimization if "compacting" */
-		memcpy(res, cp, (size_t)((nbytes < onb) ? nbytes : onb));
+		memmove(res, cp, (size_t)((nbytes < onb) ? nbytes : onb));
 	return (res);
 }
 
@@ -460,7 +488,9 @@ static	void  *getBlock( long blockSize )
 		/*
 		 * Allocate a page for sub-allocation.
 		 */
-		returnBlock = _Dynace_getpage( max( curr_pagesz, blockSize + 16 ) );
+		long	pageSize = max( curr_pagesz, blockSize + (long) sizeof( al ) );
+
+		returnBlock = _Dynace_getpage( pageSize );
 		if ( !returnBlock )
 			return( NULL );
 
@@ -474,7 +504,7 @@ static	void  *getBlock( long blockSize )
 		 * Our available memory region starts after our overhead.
 		 */
 		tempList->memBlock = returnBlock;
-		tempList->availAmt = max( curr_pagesz, blockSize + 16 ) - sizeof( al );
+		tempList->availAmt = pageSize - sizeof( al );
 
 		tempList->next = availList;
 		availList = tempList;

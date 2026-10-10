@@ -655,7 +655,8 @@ static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 #line 620 "OutputStream.d"
 imeth objrtn OutputStream_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
-	DISPOSE(iv->iCName); 
+	if (iv->iCName != cname) 
+		DISPOSE(iv->iCName); 
 	iv->iCName = cname; 
 	iv->iCVars = gSize(cvs) ? cvs : (object) NULL; 
 	iv->iIVars = gSize(ivs) ? ivs : (object) NULL; 
@@ -695,7 +696,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 699 "OutputStream.c"
+#line 700 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {
