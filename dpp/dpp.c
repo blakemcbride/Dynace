@@ -4054,6 +4054,16 @@ static	char	*s1_rest_arg(object prototype)
 
 static	void	put_s1_va_end(object sobj, int mclass);
 
+static	void	put_text_ln(object sobj, int mclass, char *x, int s, long ln)
+{
+	object	tkn = gNewToken(Token, x, ln, s);
+
+	if (mclass == 1)
+		gPutm(sobj, tkn);
+	else
+		gPut(sobj, tkn);
+}
+
 static	void	put_text(object sobj, int mclass, char *x, int s)
 {
 	object	tkn = gNewToken(Token, x, 0L, s);
@@ -4065,26 +4075,35 @@ static	void	put_text(object sobj, int mclass, char *x, int s)
 }
 
 /*  In a strategy 1 method that called va_start, rewrite "return expr;" as
-    "{ type _dpp_ret_ = expr; va_end(_rest_); return _dpp_ret_; }" so every
-    return path calls va_end.  rtkn is the return token.  */
+    "{ type _dpp_ret_ = (expr); va_end(_rest_); return _dpp_ret_; }" so every
+    return path calls va_end.  rtkn is the return token.  The opening brace
+    takes the return token's line number so it can never be appended to a
+    preceding preprocessor line.  The expression ends at a ';' at depth 0,
+    or just before an unmatched ')' or ']' (a return inside a macro
+    argument).  */
 
 static	void	put_s1_return(object fobj, object sobj, int mclass, object rtkn, object prototype)
 {
 	char	*rtn = gStringValue(gReturnType(prototype)), *p;
 	int	isvoid = streq(rtn, "void"), depth = 0;
-	object	tkn;
+	object	tkn, end = NULL;
 
+	put_text_ln(sobj, mclass, "{", 1, gLineNumber(rtkn));
 	DISPOSE(rtkn);
-	put_text(sobj, mclass, "{", 1);
 	if (!isvoid)  {
 		put_text(sobj, mclass, rtn, 1);
 		put_text(sobj, mclass, "_dpp_ret_", 1);
 		put_text(sobj, mclass, "=", 1);
+		put_text(sobj, mclass, "(", 0);
 	}
 	while (tkn = gNextToken(fobj))  {
 		p = gStringValue(tkn);
 		if (!depth  &&  *p == ';')  {
 			DISPOSE(tkn);
+			break;
+		}
+		if (!depth  &&  (*p == ')'  ||  *p == ']'))  {
+			end = tkn;
 			break;
 		}
 		if (*p == '('  ||  *p == '['  ||  *p == '{')
@@ -4096,6 +4115,8 @@ static	void	put_s1_return(object fobj, object sobj, int mclass, object rtkn, obj
 		else
 			gPut(sobj, tkn);
 	}
+	if (!isvoid)
+		put_text(sobj, mclass, ")", 0);
 	put_text(sobj, mclass, ";", 0);
 	put_s1_va_end(sobj, mclass);
 	put_text(sobj, mclass, "return", 1);
@@ -4103,6 +4124,11 @@ static	void	put_s1_return(object fobj, object sobj, int mclass, object rtkn, obj
 		put_text(sobj, mclass, "_dpp_ret_", 1);
 	put_text(sobj, mclass, ";", 0);
 	put_text(sobj, mclass, "}", 1);
+	if (end)
+		if (mclass == 1)
+			gPutm(sobj, end);
+		else
+			gPut(sobj, end);
 }
 
 static	void	put_s1_va_end(object sobj, int mclass)
@@ -4164,7 +4190,8 @@ pp_body(char	*p,
 		p = gStringValue(tkn);
 		if (*p == '}'  &&  bracelevel)  {
 			if (!--bracelevel  &&  rest_arg)  {
-				put_text(sobj, mclass, "}", 1);	/*  end of inner block  */
+				/*  end of inner block, on the closing brace's line  */
+				put_text_ln(sobj, mclass, "}", 1, gLineNumber(tkn));
 				put_s1_va_end(sobj, mclass);
 			}
 		} else if (*p == '{')
