@@ -43,8 +43,11 @@
 
 object	ObjectAssociation_c;
 
+object	ObjectAssociation_cp;
+#define	ObjectAssociation_c	ObjectAssociation_cp
 
-#line 48 "ObjectAssociation.c"
+
+#line 51 "ObjectAssociation.c"
 typedef struct  _ObjectAssociation_iv_t  {
 	object iValue;
 }	ObjectAssociation_iv_t;
@@ -109,7 +112,7 @@ imeth objrtn ObjectAssociation_im_gStringRepValue(object self)
 } 
 
 
-#line 113 "ObjectAssociation.c"
+#line 116 "ObjectAssociation.c"
 
 objrtn	ObjectAssociation_initialize(void)
 {
@@ -143,6 +146,10 @@ objrtn	ObjectAssociation_initialize(void)
 	iMethodFor(ObjectAssociation, gChangeValue, ObjectAssociation_im_gChangeValue);
 	iMethodFor(ObjectAssociation, gDeepDispose, ObjectAssociation_im_gDeepDispose);
 	iMethodFor(ObjectAssociation, gDeepCopy, ObjectAssociation_im_gDeepCopy);
+
+#undef	ObjectAssociation_c
+	PUBLISH_CLASS(ObjectAssociation_c, ObjectAssociation_cp);
+#define	ObjectAssociation_c	ObjectAssociation_cp
 
 	ENABLE_THREADER;
 

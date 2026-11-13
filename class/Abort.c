@@ -43,6 +43,9 @@
 
 object	Abort_c;
 
+object	Abort_cp;
+#define	Abort_c	Abort_cp
+
 
 
 #line 34 "Abort.d"
@@ -52,7 +55,7 @@ imeth objrtn Abort_im_gDefaultRestart(object self)
 } 
 
 
-#line 56 "Abort.c"
+#line 59 "Abort.c"
 
 objrtn	Abort_initialize(void)
 {
@@ -87,6 +90,10 @@ objrtn	Abort_initialize(void)
 	}
 	Abort_c = gNewClass(Class, "Abort", 0, 0, Restart, Error, END);
 	iMethodFor(Abort, gDefaultRestart, Abort_im_gDefaultRestart);
+
+#undef	Abort_c
+	PUBLISH_CLASS(Abort_c, Abort_cp);
+#define	Abort_c	Abort_cp
 
 	ENABLE_THREADER;
 

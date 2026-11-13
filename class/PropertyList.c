@@ -43,8 +43,11 @@
 
 object	PropertyList_c;
 
+object	PropertyList_cp;
+#define	PropertyList_c	PropertyList_cp
 
-#line 48 "PropertyList.c"
+
+#line 51 "PropertyList.c"
 typedef struct  _PropertyList_iv_t  {
 	object iPropertyList;
 }	PropertyList_iv_t;
@@ -152,7 +155,7 @@ imeth objrtn PropertyList_im_gCopy(object self)
 } 
 
 
-#line 156 "PropertyList.c"
+#line 159 "PropertyList.c"
 
 objrtn	PropertyList_initialize(void)
 {
@@ -184,6 +187,10 @@ objrtn	PropertyList_initialize(void)
 	iMethodFor(PropertyList, gDeepDispose, PropertyList_im_gDispose);
 	iMethodFor(PropertyList, gPropertySetAutoDispose, PropertyList_im_gPropertySetAutoDispose);
 	iMethodFor(PropertyList, gDeepCopy, PropertyList_im_gCopy);
+
+#undef	PropertyList_c
+	PUBLISH_CLASS(PropertyList_c, PropertyList_cp);
+#define	PropertyList_c	PropertyList_cp
 
 	ENABLE_THREADER;
 

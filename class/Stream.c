@@ -43,6 +43,9 @@
 
 object	Stream_c;
 
+object	Stream_cp;
+#define	Stream_c	Stream_cp
+
 
 #line 37 "Stream.d"
 #include <string.h> 
@@ -87,7 +90,7 @@ imeth int Stream_im_vPrintf(object self, char *fmt, va_list _rest_)
 	return n; 
 } 
 
-#line 91 "Stream.c"
+#line 94 "Stream.c"
 
 static	int	Stream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -116,7 +119,7 @@ static void class_init(void)
 	RegisterVariable(traceStream_o); 
 } 
 
-#line 120 "Stream.c"
+#line 123 "Stream.c"
 
 objrtn	Stream_initialize(void)
 {
@@ -145,6 +148,10 @@ objrtn	Stream_initialize(void)
 	iMethodFor(Stream, gDeepCopy, Stream_im_gCopy);
 
 	class_init();
+
+#undef	Stream_c
+	PUBLISH_CLASS(Stream_c, Stream_cp);
+#define	Stream_c	Stream_cp
 
 	ENABLE_THREADER;
 

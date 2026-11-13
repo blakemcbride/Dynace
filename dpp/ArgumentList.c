@@ -47,6 +47,9 @@
 
 object	ArgumentList_c;
 
+object	ArgumentList_cp;
+#define	ArgumentList_c	ArgumentList_cp
+
 
 #line 36 "ArgumentList.d"
 static void process_file(object, char *); 
@@ -150,7 +153,7 @@ static void process_file(object list, char *file)
 	gDispose(fobj); 
 } 
 
-#line 154 "ArgumentList.c"
+#line 157 "ArgumentList.c"
 
 objrtn	ArgumentList_initialize(void)
 {
@@ -180,6 +183,10 @@ objrtn	ArgumentList_initialize(void)
 	ArgumentList_c = gNewClass(Class, "ArgumentList", 0, 0, LinkObject, END);
 	cMethodFor(ArgumentList, gNew, ArgumentList_cm_gNew);
 	cMethodFor(ArgumentList, gNewArglist, ArgumentList_cm_gNewArglist);
+
+#undef	ArgumentList_c
+	PUBLISH_CLASS(ArgumentList_c, ArgumentList_cp);
+#define	ArgumentList_c	ArgumentList_cp
 
 	ENABLE_THREADER;
 

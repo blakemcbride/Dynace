@@ -45,8 +45,11 @@
 
 object	Token_c;
 
+object	Token_cp;
+#define	Token_c	Token_cp
 
-#line 50 "Token.c"
+
+#line 53 "Token.c"
 typedef struct  _Token_iv_t  {
 	object iToken;
 	long iLine;
@@ -132,7 +135,7 @@ imeth objrtn Token_im_gStringRep(object self)
 } 
 
 
-#line 136 "Token.c"
+#line 139 "Token.c"
 
 objrtn	Token_initialize(void)
 {
@@ -173,6 +176,10 @@ objrtn	Token_initialize(void)
 	iMethodFor(Token, gStringRep, Token_im_gStringRep);
 	iMethodFor(Token, gDeepCopy, Token_im_gCopy);
 	iMethodFor(Token, gStringValue, Token_im_gStringValue);
+
+#undef	Token_c
+	PUBLISH_CLASS(Token_c, Token_cp);
+#define	Token_c	Token_cp
 
 	ENABLE_THREADER;
 

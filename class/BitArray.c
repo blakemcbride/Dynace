@@ -45,12 +45,15 @@
 
 object	BitArray_c;
 
+object	BitArray_cp;
+#define	BitArray_c	BitArray_cp
+
 
 
 #line 39 "BitArray.d"
 cvmeth objrtn BitArray_cvm_vNew(object self, va_list _rest_)
 { 
-	unsigned rank = va_arg(_rest_, unsigned);
+	unsigned rank = va_arg(_rest_, unsigned) ;
 
 #line 41 "BitArray.d"
 	static gNewArray_t cnew = NULL; 
@@ -60,7 +63,7 @@ cvmeth objrtn BitArray_cvm_vNew(object self, va_list _rest_)
 	return cnew(self, AT_BIT, rank, _rest_); 
 } 
 
-#line 64 "BitArray.c"
+#line 67 "BitArray.c"
 
 static	objrtn	BitArray_cfm_vNew(object self, ...)
 {
@@ -74,7 +77,7 @@ static	objrtn	BitArray_cfm_vNew(object self, ...)
 
 
 
-#line 78 "BitArray.c"
+#line 81 "BitArray.c"
 
 objrtn	BitArray_initialize(void)
 {
@@ -103,6 +106,10 @@ objrtn	BitArray_initialize(void)
 	}
 	BitArray_c = gNewClass(Class, "BitArray", 0, 0, Array, END);
 	cvMethodFor(BitArray, vNew, BitArray_cvm_vNew, BitArray_cfm_vNew);
+
+#undef	BitArray_c
+	PUBLISH_CLASS(BitArray_c, BitArray_cp);
+#define	BitArray_c	BitArray_cp
 
 	ENABLE_THREADER;
 

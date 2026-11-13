@@ -45,8 +45,11 @@
 
 object	IntegerAssociation_c;
 
+object	IntegerAssociation_cp;
+#define	IntegerAssociation_c	IntegerAssociation_cp
 
-#line 50 "IntegerAssociation.c"
+
+#line 53 "IntegerAssociation.c"
 typedef struct  _IntegerAssociation_iv_t  {
 	int iKey;
 	object iValue;
@@ -143,7 +146,7 @@ imeth int IntegerAssociation_im_gCompare(object self, object arg)
 } 
 
 
-#line 147 "IntegerAssociation.c"
+#line 150 "IntegerAssociation.c"
 
 objrtn	IntegerAssociation_initialize(void)
 {
@@ -181,6 +184,10 @@ objrtn	IntegerAssociation_initialize(void)
 	iMethodFor(IntegerAssociation, gDeepDispose, IntegerAssociation_im_gDeepDispose);
 	iMethodFor(IntegerAssociation, gDeepCopy, IntegerAssociation_im_gDeepCopy);
 	iMethodFor(IntegerAssociation, gIntKey, IntegerAssociation_im_gIntKey);
+
+#undef	IntegerAssociation_c
+	PUBLISH_CLASS(IntegerAssociation_c, IntegerAssociation_cp);
+#define	IntegerAssociation_c	IntegerAssociation_cp
 
 	ENABLE_THREADER;
 

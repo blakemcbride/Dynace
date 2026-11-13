@@ -69,8 +69,11 @@ typedef struct {
 
 object	XMLNode_c;
 
+object	XMLNode_cp;
+#define	XMLNode_c	XMLNode_cp
 
-#line 74 "XMLNode.c"
+
+#line 77 "XMLNode.c"
 typedef struct  _XMLNode_iv_t  {
 	int iType;
 	char * iName;
@@ -1855,7 +1858,7 @@ main(int argc, char *argv[])
 #endif 
 
 
-#line 1859 "XMLNode.c"
+#line 1862 "XMLNode.c"
 
 objrtn	XMLNode_initialize(void)
 {
@@ -1927,6 +1930,10 @@ objrtn	XMLNode_initialize(void)
 	iMethodFor(XMLNode, gDumpXML, XMLNode_im_gDumpXML);
 	iMethodFor(XMLNode, gXPath, XMLNode_im_gXPath);
 	iMethodFor(XMLNode, gStringValue, XMLNode_im_gStringValue);
+
+#undef	XMLNode_c
+	PUBLISH_CLASS(XMLNode_c, XMLNode_cp);
+#define	XMLNode_c	XMLNode_cp
 
 	ENABLE_THREADER;
 

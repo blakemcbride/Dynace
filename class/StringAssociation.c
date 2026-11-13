@@ -47,8 +47,11 @@
 
 object	StringAssociation_c;
 
+object	StringAssociation_cp;
+#define	StringAssociation_c	StringAssociation_cp
 
-#line 52 "StringAssociation.c"
+
+#line 55 "StringAssociation.c"
 typedef struct  _StringAssociation_iv_t  {
 	object iKey;
 	char * iKeysp;
@@ -161,7 +164,7 @@ imeth int StringAssociation_im_gCompare(object self, object arg)
 } 
 
 
-#line 165 "StringAssociation.c"
+#line 168 "StringAssociation.c"
 
 objrtn	StringAssociation_initialize(void)
 {
@@ -202,6 +205,10 @@ objrtn	StringAssociation_initialize(void)
 	iMethodFor(StringAssociation, gCopy, StringAssociation_im_gCopy);
 	iMethodFor(StringAssociation, gDeepDispose, StringAssociation_im_gDeepDispose);
 	iMethodFor(StringAssociation, gDeepCopy, StringAssociation_im_gDeepCopy);
+
+#undef	StringAssociation_c
+	PUBLISH_CLASS(StringAssociation_c, StringAssociation_cp);
+#define	StringAssociation_c	StringAssociation_cp
 
 	ENABLE_THREADER;
 

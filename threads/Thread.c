@@ -55,8 +55,11 @@ typedef struct _priority_queue *PQ;
 
 object	Thread_c;
 
+object	Thread_cp;
+#define	Thread_c	Thread_cp
 
-#line 60 "Thread.c"
+
+#line 63 "Thread.c"
 typedef struct  _Thread_iv_t  {
 	object iObj;
 	char * iName;
@@ -82,7 +85,7 @@ typedef struct  _Thread_iv_t  {
 }	Thread_iv_t;
 
 
-#line 86 "Thread.c"
+#line 89 "Thread.c"
 typedef struct  _Thread_cv_t  {
 	char * cTs_stkpos;
 	PQ cMpq;
@@ -1007,7 +1010,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 1011 "Thread.c"
+#line 1014 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {
@@ -1052,6 +1055,10 @@ objrtn	Thread_initialize(void)
 	Thread_cv = GetCVs(Thread);
 
 	init_class();
+
+#undef	Thread_c
+	PUBLISH_CLASS(Thread_c, Thread_cp);
+#define	Thread_c	Thread_cp
 
 	ENABLE_THREADER;
 

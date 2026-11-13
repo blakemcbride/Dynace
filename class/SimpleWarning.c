@@ -43,8 +43,11 @@
 
 object	SimpleWarning_c;
 
+object	SimpleWarning_cp;
+#define	SimpleWarning_c	SimpleWarning_cp
 
-#line 48 "SimpleWarning.c"
+
+#line 51 "SimpleWarning.c"
 typedef struct  _SimpleWarning_iv_t  {
 	object iOrigin;
 	object iMsg;
@@ -62,14 +65,14 @@ PMETHOD objrtn init(object self, object origin, object msg)
 
 cvmeth objrtn SimpleWarning_cvm_vNew(object self, va_list _rest_)
 { 
-	object origin = va_arg(_rest_, object);
-	object msg = va_arg(_rest_, object);
+	object origin = va_arg(_rest_, object) ;
+	object msg = va_arg(_rest_, object) ;
 
 #line 43 "SimpleWarning.d"
 	return init(oSuper(SimpleWarning_c, gNew, self)(self), origin, msg); 
 } 
 
-#line 73 "SimpleWarning.c"
+#line 76 "SimpleWarning.c"
 
 static	objrtn	SimpleWarning_cfm_vNew(object self, ...)
 {
@@ -100,7 +103,7 @@ imeth objrtn SimpleWarning_im_gDefaultRestart(object self)
 } 
 
 
-#line 104 "SimpleWarning.c"
+#line 107 "SimpleWarning.c"
 
 objrtn	SimpleWarning_initialize(void)
 {
@@ -132,6 +135,10 @@ objrtn	SimpleWarning_initialize(void)
 	iMethodFor(SimpleWarning, gDispose, SimpleWarning_im_gDeepDispose);
 	iMethodFor(SimpleWarning, gDefaultRestart, SimpleWarning_im_gDefaultRestart);
 	iMethodFor(SimpleWarning, gDeepDispose, SimpleWarning_im_gDeepDispose);
+
+#undef	SimpleWarning_c
+	PUBLISH_CLASS(SimpleWarning_c, SimpleWarning_cp);
+#define	SimpleWarning_c	SimpleWarning_cp
 
 	ENABLE_THREADER;
 

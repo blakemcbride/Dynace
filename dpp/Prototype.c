@@ -45,8 +45,11 @@
 
 object	Prototype_c;
 
+object	Prototype_cp;
+#define	Prototype_c	Prototype_cp
 
-#line 50 "Prototype.c"
+
+#line 53 "Prototype.c"
 typedef struct  _Prototype_iv_t  {
 	object iName;
 	object iFixedName;
@@ -544,7 +547,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 548 "Prototype.c"
+#line 551 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {
@@ -595,6 +598,10 @@ objrtn	Prototype_initialize(void)
 	iMethodFor(Prototype, gVarArg, Prototype_im_gVarArg);
 	iMethodFor(Prototype, gException, Prototype_im_gException);
 	iMethodFor(Prototype, gDeepCopy, Prototype_im_gDeepCopy);
+
+#undef	Prototype_c
+	PUBLISH_CLASS(Prototype_c, Prototype_cp);
+#define	Prototype_c	Prototype_cp
 
 	ENABLE_THREADER;
 

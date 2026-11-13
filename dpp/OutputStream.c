@@ -68,8 +68,11 @@
 
 object	OutputStream_c;
 
+object	OutputStream_cp;
+#define	OutputStream_c	OutputStream_cp
 
-#line 73 "OutputStream.c"
+
+#line 76 "OutputStream.c"
 typedef struct  _OutputStream_iv_t  {
 	object iStream;
 	object iSFile;
@@ -638,7 +641,7 @@ imeth int OutputStream_im_vPrintf(object self, char *fmt, va_list _rest_)
 	return r; 
 } 
 
-#line 642 "OutputStream.c"
+#line 645 "OutputStream.c"
 
 static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -696,7 +699,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 700 "OutputStream.c"
+#line 703 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {
@@ -732,6 +735,10 @@ objrtn	OutputStream_initialize(void)
 	iMethodFor(OutputStream, gSetOSVars, OutputStream_im_gSetOSVars);
 	iMethodFor(OutputStream, gTLineDirective, OutputStream_im_gTLineDirective);
 	iMethodFor(OutputStream, gDeepDispose, OutputStream_im_gDispose);
+
+#undef	OutputStream_c
+	PUBLISH_CLASS(OutputStream_c, OutputStream_cp);
+#define	OutputStream_c	OutputStream_cp
 
 	ENABLE_THREADER;
 

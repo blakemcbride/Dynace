@@ -43,8 +43,11 @@
 
 object	Link_c;
 
+object	Link_cp;
+#define	Link_c	Link_cp
 
-#line 48 "Link.c"
+
+#line 51 "Link.c"
 typedef struct  _Link_iv_t  {
 	object iPrev;
 	object iNext;
@@ -327,7 +330,7 @@ imeth objrtn Link_im_gNth(object self, int idx)
 } 
 
 
-#line 331 "Link.c"
+#line 334 "Link.c"
 
 objrtn	Link_initialize(void)
 {
@@ -369,6 +372,10 @@ objrtn	Link_initialize(void)
 	iMethodFor(Link, gStringRep, Link_im_gStringRep);
 	iMethodFor(Link, gDeepCopy, Link_im_gCopy);
 	iMethodFor(Link, gNth, Link_im_gNth);
+
+#undef	Link_c
+	PUBLISH_CLASS(Link_c, Link_cp);
+#define	Link_c	Link_cp
 
 	ENABLE_THREADER;
 

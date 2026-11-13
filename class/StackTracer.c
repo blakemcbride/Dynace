@@ -43,8 +43,11 @@
 
 object	StackTracer_c;
 
+object	StackTracer_cp;
+#define	StackTracer_c	StackTracer_cp
 
-#line 48 "StackTracer.c"
+
+#line 51 "StackTracer.c"
 typedef struct  _StackTracer_iv_t  {
 	object iLogger;
 	int iDisplayOn;
@@ -58,7 +61,7 @@ typedef struct  _StackTracer_iv_t  {
 }	StackTracer_iv_t;
 
 
-#line 62 "StackTracer.c"
+#line 65 "StackTracer.c"
 typedef struct  _StackTracer_cv_t  {
 	object cTracer;
 	char cAppName [ 255 ];
@@ -315,7 +318,7 @@ static void print_trace(object logger)
 		gCloseLogFile(logger, fh); 
 } 
 
-#line 319 "StackTracer.c"
+#line 322 "StackTracer.c"
 
 objrtn	StackTracer_initialize(void)
 {
@@ -361,6 +364,10 @@ objrtn	StackTracer_initialize(void)
 	StackTracer_cv = GetCVs(StackTracer);
 
 	init_class();
+
+#undef	StackTracer_c
+	PUBLISH_CLASS(StackTracer_c, StackTracer_cp);
+#define	StackTracer_c	StackTracer_cp
 
 	ENABLE_THREADER;
 

@@ -45,8 +45,11 @@
 
 object	ShortInteger_c;
 
+object	ShortInteger_cp;
+#define	ShortInteger_c	ShortInteger_cp
 
-#line 50 "ShortInteger.c"
+
+#line 53 "ShortInteger.c"
 typedef struct  _ShortInteger_iv_t  {
 	short int iVal;
 }	ShortInteger_iv_t;
@@ -159,7 +162,7 @@ imeth objrtn ShortInteger_im_gChangeDoubleValue(object self, double val)
 } 
 
 
-#line 163 "ShortInteger.c"
+#line 166 "ShortInteger.c"
 
 objrtn	ShortInteger_initialize(void)
 {
@@ -203,6 +206,10 @@ objrtn	ShortInteger_initialize(void)
 	iMethodFor(ShortInteger, gChangeValue, ShortInteger_im_gChangeValue);
 	iMethodFor(ShortInteger, gLongValue, ShortInteger_im_gLongValue);
 	iMethodFor(ShortInteger, gChangeCharValue, ShortInteger_im_gChangeCharValue);
+
+#undef	ShortInteger_c
+	PUBLISH_CLASS(ShortInteger_c, ShortInteger_cp);
+#define	ShortInteger_c	ShortInteger_cp
 
 	ENABLE_THREADER;
 

@@ -43,8 +43,11 @@
 
 object	Memory_c;
 
+object	Memory_cp;
+#define	Memory_c	Memory_cp
 
-#line 48 "Memory.c"
+
+#line 51 "Memory.c"
 typedef struct  _Memory_iv_t  {
 	unsigned iSize;
 	void * iPtr;
@@ -100,7 +103,7 @@ imeth objrtn Memory_im_gDeepCopy(object self)
 } 
 
 
-#line 104 "Memory.c"
+#line 107 "Memory.c"
 
 objrtn	Memory_initialize(void)
 {
@@ -131,6 +134,10 @@ objrtn	Memory_initialize(void)
 	iMethodFor(Memory, gDeepDispose, Memory_im_gDispose);
 	iMethodFor(Memory, gResize, Memory_im_gResize);
 	iMethodFor(Memory, gDeepCopy, Memory_im_gDeepCopy);
+
+#undef	Memory_c
+	PUBLISH_CLASS(Memory_c, Memory_cp);
+#define	Memory_c	Memory_cp
 
 	ENABLE_THREADER;
 

@@ -46,8 +46,11 @@
 
 object	WeakPointer_c;
 
+object	WeakPointer_cp;
+#define	WeakPointer_c	WeakPointer_cp
 
-#line 51 "WeakPointer.c"
+
+#line 54 "WeakPointer.c"
 typedef struct  _WeakPointer_iv_t  {
 	object iVal;
 	long iObjSN;
@@ -136,7 +139,7 @@ imeth objrtn WeakPointer_im_gStringRepValue(object self)
 } 
 
 
-#line 140 "WeakPointer.c"
+#line 143 "WeakPointer.c"
 
 objrtn	WeakPointer_initialize(void)
 {
@@ -167,6 +170,10 @@ objrtn	WeakPointer_initialize(void)
 	iMethodFor(WeakPointer, gHash, WeakPointer_im_gHash);
 	iMethodFor(WeakPointer, gChangeValue, WeakPointer_im_gChangeValue);
 	iMethodFor(WeakPointer, gDeepDispose, WeakPointer_im_gDeepDispose);
+
+#undef	WeakPointer_c
+	PUBLISH_CLASS(WeakPointer_c, WeakPointer_cp);
+#define	WeakPointer_c	WeakPointer_cp
 
 	ENABLE_THREADER;
 

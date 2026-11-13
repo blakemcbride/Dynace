@@ -45,8 +45,11 @@
 
 object	UnsignedShortInteger_c;
 
+object	UnsignedShortInteger_cp;
+#define	UnsignedShortInteger_c	UnsignedShortInteger_cp
 
-#line 50 "UnsignedShortInteger.c"
+
+#line 53 "UnsignedShortInteger.c"
 typedef struct  _UnsignedShortInteger_iv_t  {
 	unsigned short int iVal;
 }	UnsignedShortInteger_iv_t;
@@ -159,7 +162,7 @@ imeth objrtn UnsignedShortInteger_im_gChangeDoubleValue(object self, double val)
 } 
 
 
-#line 163 "UnsignedShortInteger.c"
+#line 166 "UnsignedShortInteger.c"
 
 objrtn	UnsignedShortInteger_initialize(void)
 {
@@ -203,6 +206,10 @@ objrtn	UnsignedShortInteger_initialize(void)
 	iMethodFor(UnsignedShortInteger, gChangeValue, UnsignedShortInteger_im_gChangeValue);
 	iMethodFor(UnsignedShortInteger, gLongValue, UnsignedShortInteger_im_gLongValue);
 	iMethodFor(UnsignedShortInteger, gChangeCharValue, UnsignedShortInteger_im_gChangeCharValue);
+
+#undef	UnsignedShortInteger_c
+	PUBLISH_CLASS(UnsignedShortInteger_c, UnsignedShortInteger_cp);
+#define	UnsignedShortInteger_c	UnsignedShortInteger_cp
 
 	ENABLE_THREADER;
 

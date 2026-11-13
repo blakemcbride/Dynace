@@ -46,8 +46,11 @@
 
 object	Pointer_c;
 
+object	Pointer_cp;
+#define	Pointer_c	Pointer_cp
 
-#line 51 "Pointer.c"
+
+#line 54 "Pointer.c"
 typedef struct  _Pointer_iv_t  {
 	void * iVal;
 }	Pointer_iv_t;
@@ -111,7 +114,7 @@ imeth objrtn Pointer_im_gStringRepValue(object self)
 } 
 
 
-#line 115 "Pointer.c"
+#line 118 "Pointer.c"
 
 objrtn	Pointer_initialize(void)
 {
@@ -140,6 +143,10 @@ objrtn	Pointer_initialize(void)
 	iMethodFor(Pointer, gHash, Pointer_im_gHash);
 	iMethodFor(Pointer, gChangeValue, Pointer_im_gChangeValue);
 	iMethodFor(Pointer, gDeepDispose, Pointer_im_gDeepDispose);
+
+#undef	Pointer_c
+	PUBLISH_CLASS(Pointer_c, Pointer_cp);
+#define	Pointer_c	Pointer_cp
 
 	ENABLE_THREADER;
 

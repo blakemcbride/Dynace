@@ -52,8 +52,11 @@
 
 object	BTreeNode_c;
 
+object	BTreeNode_cp;
+#define	BTreeNode_c	BTreeNode_cp
 
-#line 57 "BTreeNode.c"
+
+#line 60 "BTreeNode.c"
 typedef struct  _BTreeNode_iv_t  {
 	int iUsed;
 	int iType;
@@ -64,7 +67,7 @@ typedef struct  _BTreeNode_iv_t  {
 }	BTreeNode_iv_t;
 
 
-#line 68 "BTreeNode.c"
+#line 71 "BTreeNode.c"
 typedef struct  _BTreeNode_cv_t  {
 	object cData;
 }	BTreeNode_cv_t;
@@ -547,7 +550,7 @@ imeth objrtn BTreeNode_im_gPrintValue(object self, object stream)
 } 
 
 
-#line 551 "BTreeNode.c"
+#line 554 "BTreeNode.c"
 
 objrtn	BTreeNode_initialize(void)
 {
@@ -585,6 +588,10 @@ objrtn	BTreeNode_initialize(void)
 	iMethodFor(BTreeNode, gPrintValue, BTreeNode_im_gPrintValue);
 
 	BTreeNode_cv = GetCVs(BTreeNode);
+
+#undef	BTreeNode_c
+	PUBLISH_CLASS(BTreeNode_c, BTreeNode_cp);
+#define	BTreeNode_c	BTreeNode_cp
 
 	ENABLE_THREADER;
 

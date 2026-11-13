@@ -43,8 +43,11 @@
 
 object	BufferedTempFile_c;
 
+object	BufferedTempFile_cp;
+#define	BufferedTempFile_c	BufferedTempFile_cp
 
-#line 48 "BufferedTempFile.c"
+
+#line 51 "BufferedTempFile.c"
 typedef struct  _BufferedTempFile_iv_t  {
 	char * iBuffer;
 	int iBufSize;
@@ -266,7 +269,7 @@ imeth int BufferedTempFile_im_gFlush(object self)
 } 
 
 
-#line 270 "BufferedTempFile.c"
+#line 273 "BufferedTempFile.c"
 
 objrtn	BufferedTempFile_initialize(void)
 {
@@ -304,6 +307,10 @@ objrtn	BufferedTempFile_initialize(void)
 	iMethodFor(BufferedTempFile, gGCDispose, BufferedTempFile_im_gGCDispose);
 	iMethodFor(BufferedTempFile, gDeepDispose, BufferedTempFile_im_gDispose);
 	iMethodFor(BufferedTempFile, gRead, BufferedTempFile_im_gRead);
+
+#undef	BufferedTempFile_c
+	PUBLISH_CLASS(BufferedTempFile_c, BufferedTempFile_cp);
+#define	BufferedTempFile_c	BufferedTempFile_cp
 
 	ENABLE_THREADER;
 

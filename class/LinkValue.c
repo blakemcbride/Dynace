@@ -43,8 +43,11 @@
 
 object	LinkValue_c;
 
+object	LinkValue_cp;
+#define	LinkValue_c	LinkValue_cp
 
-#line 48 "LinkValue.c"
+
+#line 51 "LinkValue.c"
 typedef struct  _LinkValue_iv_t  {
 	object iValue;
 }	LinkValue_iv_t;
@@ -110,7 +113,7 @@ imeth objrtn LinkValue_im_gStringRep(object self)
 } 
 
 
-#line 114 "LinkValue.c"
+#line 117 "LinkValue.c"
 
 objrtn	LinkValue_initialize(void)
 {
@@ -145,6 +148,10 @@ objrtn	LinkValue_initialize(void)
 	iMethodFor(LinkValue, gDeepDispose, LinkValue_im_gDeepDispose);
 	iMethodFor(LinkValue, gStringRep, LinkValue_im_gStringRep);
 	iMethodFor(LinkValue, gDeepCopy, LinkValue_im_gDeepCopy);
+
+#undef	LinkValue_c
+	PUBLISH_CLASS(LinkValue_c, LinkValue_cp);
+#define	LinkValue_c	LinkValue_cp
 
 	ENABLE_THREADER;
 

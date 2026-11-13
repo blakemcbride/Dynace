@@ -43,8 +43,11 @@
 
 object	Restart_c;
 
+object	Restart_cp;
+#define	Restart_c	Restart_cp
 
-#line 48 "Restart.c"
+
+#line 51 "Restart.c"
 typedef struct  _Restart_iv_t  {
 	object iCond;
 }	Restart_iv_t;
@@ -72,7 +75,7 @@ cvmeth objrtn Restart_cvm_vNew(object self, va_list _rest_)
 	return init(oSuper(Restart_c, gNew, self)(self), cond); 
 } 
 
-#line 76 "Restart.c"
+#line 79 "Restart.c"
 
 static	objrtn	Restart_cfm_vNew(object self, ...)
 {
@@ -105,7 +108,7 @@ imeth objrtn Restart_im_gValue(object self)
 } 
 
 
-#line 109 "Restart.c"
+#line 112 "Restart.c"
 
 objrtn	Restart_initialize(void)
 {
@@ -132,6 +135,10 @@ objrtn	Restart_initialize(void)
 	iMethodFor(Restart, gCopy, Restart_im_gCopy);
 	iMethodFor(Restart, gDeepDispose, Restart_im_gDeepDispose);
 	iMethodFor(Restart, gDeepCopy, Restart_im_gCopy);
+
+#undef	Restart_c
+	PUBLISH_CLASS(Restart_c, Restart_cp);
+#define	Restart_c	Restart_cp
 
 	ENABLE_THREADER;
 

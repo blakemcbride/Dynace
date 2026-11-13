@@ -66,8 +66,11 @@
 
 object	FindFile_c;
 
+object	FindFile_cp;
+#define	FindFile_c	FindFile_cp
 
-#line 71 "FindFile.c"
+
+#line 74 "FindFile.c"
 typedef struct  _FindFile_iv_t  {
 	object iFileName;
 	unsigned iAttributes;
@@ -270,7 +273,7 @@ imeth unsigned FindFile_im_gAttributes(object self)
 } 
 
 
-#line 274 "FindFile.c"
+#line 277 "FindFile.c"
 
 objrtn	FindFile_initialize(void)
 {
@@ -301,6 +304,10 @@ objrtn	FindFile_initialize(void)
 	iMethodFor(FindFile, gName, FindFile_im_gName);
 	iMethodFor(FindFile, gGCDispose, FindFile_im_gGCDispose);
 	iMethodFor(FindFile, gDeepDispose, FindFile_im_gDispose);
+
+#undef	FindFile_c
+	PUBLISH_CLASS(FindFile_c, FindFile_cp);
+#define	FindFile_c	FindFile_cp
 
 	ENABLE_THREADER;
 

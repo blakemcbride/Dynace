@@ -56,8 +56,11 @@
 
 object	String_c;
 
+object	String_cp;
+#define	String_c	String_cp
 
-#line 61 "String.c"
+
+#line 64 "String.c"
 typedef struct  _String_iv_t  {
 	char * iStr;
 	int iSize;
@@ -69,7 +72,7 @@ typedef struct  _String_iv_t  {
 }	String_iv_t;
 
 
-#line 73 "String.c"
+#line 76 "String.c"
 typedef struct  _String_cv_t  {
 	unsigned char cMaskVal [ MASK_MAX ];
 	int ( * cMaskFun [ MASK_MAX ] ) ( char );
@@ -690,7 +693,7 @@ cmeth objrtn String_cm_vSprintf(object self, char *fmt, va_list _rest_)
 	return obj; 
 } 
 
-#line 694 "String.c"
+#line 697 "String.c"
 
 static	objrtn	String_cfm_vSprintf(object self, char *fmt, ...)
 {
@@ -778,7 +781,7 @@ imeth objrtn String_im_vBuild(object self, char *f, va_list _rest_)
 		return self; 
 } 
 
-#line 782 "String.c"
+#line 785 "String.c"
 
 static	objrtn	String_ifm_vBuild(object self, char *f, ...)
 {
@@ -842,7 +845,7 @@ cmeth objrtn String_cm_vBuild(object self, char *f, va_list _rest_)
 	return newObj; 
 } 
 
-#line 846 "String.c"
+#line 849 "String.c"
 
 static	objrtn	String_cfm_vBuild(object self, char *f, ...)
 {
@@ -1344,7 +1347,7 @@ imeth int String_im_gBufferSize(object self)
 } 
 
 
-#line 1348 "String.c"
+#line 1351 "String.c"
 
 objrtn	String_initialize(void)
 {
@@ -1431,6 +1434,10 @@ objrtn	String_initialize(void)
 	String_cv = GetCVs(String);
 
 	class_init();
+
+#undef	String_c
+	PUBLISH_CLASS(String_c, String_cp);
+#define	String_c	String_cp
 
 	ENABLE_THREADER;
 

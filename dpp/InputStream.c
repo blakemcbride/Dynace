@@ -67,8 +67,11 @@
 
 object	InputStream_c;
 
+object	InputStream_cp;
+#define	InputStream_c	InputStream_cp
 
-#line 72 "InputStream.c"
+
+#line 75 "InputStream.c"
 typedef struct  _InputStream_iv_t  {
 	object iStream;
 	long iLine;
@@ -274,7 +277,7 @@ imeth objrtn InputStream_im_gNextToken(object self)
 } 
 
 
-#line 278 "InputStream.c"
+#line 281 "InputStream.c"
 
 objrtn	InputStream_initialize(void)
 {
@@ -303,6 +306,10 @@ objrtn	InputStream_initialize(void)
 	iMethodFor(InputStream, gLineHasColon, InputStream_im_gLineHasColon);
 	iMethodFor(InputStream, gNextToken, InputStream_im_gNextToken);
 	iMethodFor(InputStream, gDeepDispose, InputStream_im_gDispose);
+
+#undef	InputStream_c
+	PUBLISH_CLASS(InputStream_c, InputStream_cp);
+#define	InputStream_c	InputStream_cp
 
 	ENABLE_THREADER;
 

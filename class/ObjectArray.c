@@ -45,6 +45,9 @@
 
 object	ObjectArray_c;
 
+object	ObjectArray_cp;
+#define	ObjectArray_c	ObjectArray_cp
+
 
 #line 41 "ObjectArray.d"
 #define TYPE object 
@@ -55,7 +58,7 @@ static gIndex_t _index;
 
 cvmeth objrtn ObjectArray_cvm_vNew(object self, va_list _rest_)
 { 
-	unsigned rank = va_arg(_rest_, unsigned);
+	unsigned rank = va_arg(_rest_, unsigned) ;
 
 #line 49 "ObjectArray.d"
 	static gNewArray_t cnew = NULL; 
@@ -65,7 +68,7 @@ cvmeth objrtn ObjectArray_cvm_vNew(object self, va_list _rest_)
 	return cnew(self, AT_OBJ, rank, _rest_); 
 } 
 
-#line 69 "ObjectArray.c"
+#line 72 "ObjectArray.c"
 
 static	objrtn	ObjectArray_cfm_vNew(object self, ...)
 {
@@ -85,7 +88,7 @@ ivmeth objrtn ObjectArray_ivm_vValue(object self, va_list _rest_)
 	return *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 89 "ObjectArray.c"
+#line 92 "ObjectArray.c"
 
 static	objrtn	ObjectArray_ifm_vValue(object self, ...)
 {
@@ -101,13 +104,13 @@ static	objrtn	ObjectArray_ifm_vValue(object self, ...)
 
 #line 61 "ObjectArray.d"
 ivmeth objrtn ObjectArray_ivm_vChangeValue(object self, va_list _rest_)
-{ object val = va_arg(_rest_, object);
+{ object val = va_arg(_rest_, object) ;
 	ChkArgNul(val, 2); 
 	*((TYPE *) _index(self, _rest_)) = val; 
 	return self; 
 } 
 
-#line 111 "ObjectArray.c"
+#line 114 "ObjectArray.c"
 
 static	objrtn	ObjectArray_ifm_vChangeValue(object self, ...)
 {
@@ -126,7 +129,7 @@ static void init_class(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 130 "ObjectArray.c"
+#line 133 "ObjectArray.c"
 
 objrtn	ObjectArray_initialize(void)
 {
@@ -159,6 +162,10 @@ objrtn	ObjectArray_initialize(void)
 	ivMethodFor(ObjectArray, vChangeValue, ObjectArray_ivm_vChangeValue, ObjectArray_ifm_vChangeValue);
 
 	init_class();
+
+#undef	ObjectArray_c
+	PUBLISH_CLASS(ObjectArray_c, ObjectArray_cp);
+#define	ObjectArray_c	ObjectArray_cp
 
 	ENABLE_THREADER;
 

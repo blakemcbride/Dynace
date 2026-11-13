@@ -48,8 +48,11 @@
 
 object	Set_c;
 
+object	Set_cp;
+#define	Set_c	Set_cp
 
-#line 53 "Set.c"
+
+#line 56 "Set.c"
 typedef struct  _Set_iv_t  {
 	int iSize;
 	int iNelm;
@@ -58,7 +61,7 @@ typedef struct  _Set_iv_t  {
 }	Set_iv_t;
 
 
-#line 62 "Set.c"
+#line 65 "Set.c"
 typedef struct  _Set_cv_t  {
 	NODE FNODES;
 	CRITICALSECTION cCS;
@@ -632,7 +635,7 @@ static void class_init(void)
 	INITIALIZECRITICALSECTION(Set_cv->cCS); 
 } 
 
-#line 636 "Set.c"
+#line 639 "Set.c"
 
 objrtn	Set_initialize(void)
 {
@@ -685,6 +688,10 @@ objrtn	Set_initialize(void)
 	Set_cv = GetCVs(Set);
 
 	class_init();
+
+#undef	Set_c
+	PUBLISH_CLASS(Set_c, Set_cp);
+#define	Set_c	Set_cp
 
 	ENABLE_THREADER;
 

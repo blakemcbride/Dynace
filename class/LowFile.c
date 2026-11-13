@@ -72,15 +72,18 @@
 
 object	LowFile_c;
 
+object	LowFile_cp;
+#define	LowFile_c	LowFile_cp
 
-#line 77 "LowFile.c"
+
+#line 80 "LowFile.c"
 typedef struct  _LowFile_iv_t  {
 	object iName;
 	int iHandle;
 }	LowFile_iv_t;
 
 
-#line 84 "LowFile.c"
+#line 87 "LowFile.c"
 typedef struct  _LowFile_cv_t  {
 	ifun cMoreHandles;
 }	LowFile_cv_t;
@@ -349,7 +352,7 @@ imeth int LowFile_im_gUnLock(object self, unsigned long start, unsigned long len
 	} 
 
 
-#line 353 "LowFile.c"
+#line 356 "LowFile.c"
 
 objrtn	LowFile_initialize(void)
 {
@@ -399,6 +402,10 @@ objrtn	LowFile_initialize(void)
 	iMethodFor(LowFile, gLock, LowFile_im_gLock);
 
 	LowFile_cv = GetCVs(LowFile);
+
+#undef	LowFile_c
+	PUBLISH_CLASS(LowFile_c, LowFile_cp);
+#define	LowFile_c	LowFile_cp
 
 	ENABLE_THREADER;
 

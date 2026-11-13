@@ -45,8 +45,11 @@
 
 object	SetSequence_c;
 
+object	SetSequence_cp;
+#define	SetSequence_c	SetSequence_cp
 
-#line 50 "SetSequence.c"
+
+#line 53 "SetSequence.c"
 typedef struct  _SetSequence_iv_t  {
 	int iTabidx;
 	int iSize;
@@ -86,7 +89,7 @@ imeth objrtn SetSequence_im_gNext(object self)
 } 
 
 
-#line 90 "SetSequence.c"
+#line 93 "SetSequence.c"
 
 objrtn	SetSequence_initialize(void)
 {
@@ -116,6 +119,10 @@ objrtn	SetSequence_initialize(void)
 	SetSequence_c = gNewClass(Class, "SetSequence", sizeof(SetSequence_iv_t), 0, Sequence, END);
 	cMethodFor(SetSequence, gNewSetSeq, SetSequence_cm_gNewSetSeq);
 	iMethodFor(SetSequence, gNext, SetSequence_im_gNext);
+
+#undef	SetSequence_c
+	PUBLISH_CLASS(SetSequence_c, SetSequence_cp);
+#define	SetSequence_c	SetSequence_cp
 
 	ENABLE_THREADER;
 

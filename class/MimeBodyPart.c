@@ -53,8 +53,11 @@
 
 object	MimeBodyPart_c;
 
+object	MimeBodyPart_cp;
+#define	MimeBodyPart_c	MimeBodyPart_cp
 
-#line 58 "MimeBodyPart.c"
+
+#line 61 "MimeBodyPart.c"
 typedef struct  _MimeBodyPart_iv_t  {
 	object iStr;
 	object iHeaders;
@@ -163,7 +166,7 @@ PMETHOD void resetString(object self, object *pobj, char *initValue)
 	*pobj = gNewWithStr(String, initValue ? initValue : ""); 
 } 
 
-#line 167 "MimeBodyPart.c"
+#line 170 "MimeBodyPart.c"
 
 objrtn	MimeBodyPart_initialize(void)
 {
@@ -193,6 +196,10 @@ objrtn	MimeBodyPart_initialize(void)
 	iMethodFor(MimeBodyPart, gDeepDispose, MimeBodyPart_im_gDispose);
 	iMethodFor(MimeBodyPart, gStringValue, MimeBodyPart_im_gStringValue);
 	iMethodFor(MimeBodyPart, gAddHeader, MimeBodyPart_im_gAddHeader);
+
+#undef	MimeBodyPart_c
+	PUBLISH_CLASS(MimeBodyPart_c, MimeBodyPart_cp);
+#define	MimeBodyPart_c	MimeBodyPart_cp
 
 	ENABLE_THREADER;
 

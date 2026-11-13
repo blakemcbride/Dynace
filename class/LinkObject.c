@@ -43,6 +43,9 @@
 
 object	LinkObject_c;
 
+object	LinkObject_cp;
+#define	LinkObject_c	LinkObject_cp
+
 
 #line 35 "LinkObject.d"
 #define FIRST gNext 
@@ -58,7 +61,7 @@ cvmeth objrtn LinkObject_cvm_vMakeList(object self, va_list _rest_)
 	return lst; 
 } 
 
-#line 62 "LinkObject.c"
+#line 65 "LinkObject.c"
 
 static	objrtn	LinkObject_cfm_vMakeList(object self, ...)
 {
@@ -88,7 +91,7 @@ ivmeth objrtn LinkObject_ivm_vGetValues(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 92 "LinkObject.c"
+#line 95 "LinkObject.c"
 
 static	objrtn	LinkObject_ifm_vGetValues(object self, ...)
 {
@@ -170,7 +173,7 @@ imeth objrtn LinkObject_im_gNth(object self, int idx)
 } 
 
 
-#line 174 "LinkObject.c"
+#line 177 "LinkObject.c"
 
 objrtn	LinkObject_initialize(void)
 {
@@ -209,6 +212,10 @@ objrtn	LinkObject_initialize(void)
 	iMethodFor(LinkObject, gSequenceLinks, LinkObject_im_gSequenceLinks);
 	iMethodFor(LinkObject, gAddLast, LinkObject_im_gAddLast);
 	iMethodFor(LinkObject, gNth, LinkObject_im_gNth);
+
+#undef	LinkObject_c
+	PUBLISH_CLASS(LinkObject_c, LinkObject_cp);
+#define	LinkObject_c	LinkObject_cp
 
 	ENABLE_THREADER;
 

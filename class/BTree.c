@@ -43,8 +43,11 @@
 
 object	BTree_c;
 
+object	BTree_cp;
+#define	BTree_c	BTree_cp
 
-#line 48 "BTree.c"
+
+#line 51 "BTree.c"
 typedef struct  _BTree_iv_t  {
 	object iNodes;
 	long iNum;
@@ -263,7 +266,7 @@ imeth objrtn BTree_im_gPrint(object self, object stream)
 } 
 
 
-#line 267 "BTree.c"
+#line 270 "BTree.c"
 
 objrtn	BTree_initialize(void)
 {
@@ -306,6 +309,10 @@ objrtn	BTree_initialize(void)
 	iMethodFor(BTree, gAddValue, BTree_im_gAddValue);
 	iMethodFor(BTree, gDeepDispose, BTree_im_gDeepDispose);
 	iMethodFor(BTree, gFindNext, BTree_im_gFindNext);
+
+#undef	BTree_c
+	PUBLISH_CLASS(BTree_c, BTree_cp);
+#define	BTree_c	BTree_cp
 
 	ENABLE_THREADER;
 

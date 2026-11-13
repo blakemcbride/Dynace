@@ -170,8 +170,11 @@ typedef int SSL_CTX;
 
 object	Socket_c;
 
+object	Socket_cp;
+#define	Socket_c	Socket_cp
 
-#line 175 "Socket.c"
+
+#line 178 "Socket.c"
 typedef struct  _Socket_iv_t  {
 	G_SOCKET iFP;
 	struct sockaddr_in iAddress;
@@ -184,7 +187,7 @@ typedef struct  _Socket_iv_t  {
 }	Socket_iv_t;
 
 
-#line 188 "Socket.c"
+#line 191 "Socket.c"
 typedef struct  _Socket_cv_t  {
 	int cNumbInstances;
 	int cError;
@@ -1943,7 +1946,7 @@ static int verify_callback(int ok, X509_STORE_CTX *ctx)
 #endif 
 
 
-#line 1947 "Socket.c"
+#line 1950 "Socket.c"
 
 objrtn	Socket_initialize(void)
 {
@@ -2003,6 +2006,10 @@ objrtn	Socket_initialize(void)
 	iMethodFor(Socket, gSendStr, Socket_im_gSendStr);
 
 	Socket_cv = GetCVs(Socket);
+
+#undef	Socket_c
+	PUBLISH_CLASS(Socket_c, Socket_cp);
+#define	Socket_c	Socket_cp
 
 	ENABLE_THREADER;
 

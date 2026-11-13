@@ -43,6 +43,9 @@
 
 object	IntegerDictionary_c;
 
+object	IntegerDictionary_cp;
+#define	IntegerDictionary_c	IntegerDictionary_cp
+
 
 #line 38 "IntegerDictionary.d"
 #include "set1.h" 
@@ -111,7 +114,7 @@ static void init_class(void)
 	Lookup = imcPointer(Set, gLookup); 
 } 
 
-#line 115 "IntegerDictionary.c"
+#line 118 "IntegerDictionary.c"
 
 objrtn	IntegerDictionary_initialize(void)
 {
@@ -151,6 +154,10 @@ objrtn	IntegerDictionary_initialize(void)
 	iMethodFor(IntegerDictionary, gFindAddInt, IntegerDictionary_im_gFindAddInt);
 
 	init_class();
+
+#undef	IntegerDictionary_c
+	PUBLISH_CLASS(IntegerDictionary_c, IntegerDictionary_cp);
+#define	IntegerDictionary_c	IntegerDictionary_cp
 
 	ENABLE_THREADER;
 

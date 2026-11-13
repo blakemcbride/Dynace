@@ -43,8 +43,11 @@
 
 object	Time_c;
 
+object	Time_cp;
+#define	Time_c	Time_cp
 
-#line 48 "Time.c"
+
+#line 51 "Time.c"
 typedef struct  _Time_iv_t  {
 	long iVal;
 }	Time_iv_t;
@@ -480,7 +483,7 @@ imeth long Time_im_gDifference(object self, object tm)
 } 
 
 
-#line 484 "Time.c"
+#line 487 "Time.c"
 
 objrtn	Time_initialize(void)
 {
@@ -527,6 +530,10 @@ objrtn	Time_initialize(void)
 	iMethodFor(Time, gChangeValue, Time_im_gChangeValue);
 	iMethodFor(Time, gLongValue, Time_im_gLongValue);
 	iMethodFor(Time, gTimeStringRepValue, Time_im_gStringRepValue);
+
+#undef	Time_c
+	PUBLISH_CLASS(Time_c, Time_cp);
+#define	Time_c	Time_cp
 
 	ENABLE_THREADER;
 

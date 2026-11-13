@@ -43,6 +43,9 @@
 
 object	Warning_c;
 
+object	Warning_cp;
+#define	Warning_c	Warning_cp
+
 
 
 #line 34 "Warning.d"
@@ -52,7 +55,7 @@ imeth objrtn Warning_im_gDefaultRestart(object self)
 } 
 
 
-#line 56 "Warning.c"
+#line 59 "Warning.c"
 
 objrtn	Warning_initialize(void)
 {
@@ -81,6 +84,10 @@ objrtn	Warning_initialize(void)
 	}
 	Warning_c = gNewClass(Class, "Warning", 0, 0, Condition, END);
 	iMethodFor(Warning, gDefaultRestart, Warning_im_gDefaultRestart);
+
+#undef	Warning_c
+	PUBLISH_CLASS(Warning_c, Warning_cp);
+#define	Warning_c	Warning_cp
 
 	ENABLE_THREADER;
 

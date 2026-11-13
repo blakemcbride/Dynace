@@ -45,8 +45,11 @@
 
 object	Character_c;
 
+object	Character_cp;
+#define	Character_c	Character_cp
 
-#line 50 "Character.c"
+
+#line 53 "Character.c"
 typedef struct  _Character_iv_t  {
 	char iVal;
 }	Character_iv_t;
@@ -168,7 +171,7 @@ imeth int Character_im_gCompare(object self, object obj)
 } 
 
 
-#line 172 "Character.c"
+#line 175 "Character.c"
 
 objrtn	Character_initialize(void)
 {
@@ -213,6 +216,10 @@ objrtn	Character_initialize(void)
 	iMethodFor(Character, gLongValue, Character_im_gLongValue);
 	iMethodFor(Character, gFormatChar, Character_im_gFormatChar);
 	iMethodFor(Character, gChangeCharValue, Character_im_gChangeCharValue);
+
+#undef	Character_c
+	PUBLISH_CLASS(Character_c, Character_cp);
+#define	Character_c	Character_cp
 
 	ENABLE_THREADER;
 

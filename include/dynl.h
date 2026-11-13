@@ -184,6 +184,21 @@ typedef unsigned long  INT_PTR;
 	#define	LEAVECRITICALSECTION(cs)	USE(cs)
 #endif
 
+/*  A class pointer (X_c) is stored only after its X_initialize has fully
+    built the class, and the class macros in generics.h read it with
+    CLASS_LOAD.  Under native threads the pair is a release store and an
+    acquire load, so a thread that sees the pointer also sees the class.  */
+#if defined(NATIVE_THREADS)  &&  (defined(__GNUC__)  ||  defined(__clang__))
+#define	CLASS_LOAD(v)		__atomic_load_n(&(v), __ATOMIC_ACQUIRE)
+#define	PUBLISH_CLASS(v, c)	__atomic_store_n(&(v), (c), __ATOMIC_RELEASE)
+#elif defined(NATIVE_THREADS)  &&  defined(_MSC_VER)
+#define	CLASS_LOAD(v)		(*(object volatile *) &(v))
+#define	PUBLISH_CLASS(v, c)	(MemoryBarrier(), (v) = (c))
+#else
+#define	CLASS_LOAD(v)		(v)
+#define	PUBLISH_CLASS(v, c)	((v) = (c))
+#endif
+
 #include "findfile.h"
 
 #ifdef	__cplusplus

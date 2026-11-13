@@ -43,8 +43,11 @@
 
 object	MultipartMime_c;
 
+object	MultipartMime_cp;
+#define	MultipartMime_c	MultipartMime_cp
 
-#line 48 "MultipartMime.c"
+
+#line 51 "MultipartMime.c"
 typedef struct  _MultipartMime_iv_t  {
 	object iBodyParts;
 	object iStr;
@@ -247,7 +250,7 @@ PMETHOD void resetString(object self, object *pobj, char *initValue)
 	*pobj = gNewWithStr(String, initValue ? initValue : ""); 
 } 
 
-#line 251 "MultipartMime.c"
+#line 254 "MultipartMime.c"
 
 objrtn	MultipartMime_initialize(void)
 {
@@ -278,6 +281,10 @@ objrtn	MultipartMime_initialize(void)
 	iMethodFor(MultipartMime, gGetBoundaryString, MultipartMime_im_gGetBoundaryString);
 	iMethodFor(MultipartMime, gDeepDispose, MultipartMime_im_gDispose);
 	iMethodFor(MultipartMime, gStringValue, MultipartMime_im_gStringValue);
+
+#undef	MultipartMime_c
+	PUBLISH_CLASS(MultipartMime_c, MultipartMime_cp);
+#define	MultipartMime_c	MultipartMime_cp
 
 	ENABLE_THREADER;
 

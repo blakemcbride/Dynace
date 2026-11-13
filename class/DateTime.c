@@ -57,6 +57,9 @@
 
 object	DateTime_c;
 
+object	DateTime_cp;
+#define	DateTime_c	DateTime_cp
+
 
 #line 41 "DateTime.d"
 static short *Timemark(short int *v) 
@@ -342,7 +345,7 @@ imeth objrtn DateTime_im_gFormatDateTime(object self, char *dtbuf, char *tmbuf)
 } 
 
 
-#line 346 "DateTime.c"
+#line 349 "DateTime.c"
 
 objrtn	DateTime_initialize(void)
 {
@@ -392,6 +395,10 @@ objrtn	DateTime_initialize(void)
 	iMethodFor(DateTime, gHash, DateTime_im_gHash);
 	iMethodFor(DateTime, gChangeValue, DateTime_im_gChangeValue);
 	iMethodFor(DateTime, gValidDateTime, DateTime_im_gValidDateTime);
+
+#undef	DateTime_c
+	PUBLISH_CLASS(DateTime_c, DateTime_cp);
+#define	DateTime_c	DateTime_cp
 
 	ENABLE_THREADER;
 

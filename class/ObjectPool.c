@@ -43,14 +43,17 @@
 
 object	ObjectPool_c;
 
+object	ObjectPool_cp;
+#define	ObjectPool_c	ObjectPool_cp
 
-#line 48 "ObjectPool.c"
+
+#line 51 "ObjectPool.c"
 typedef struct  _ObjectPool_iv_t  {
 	object iObjects;
 }	ObjectPool_iv_t;
 
 
-#line 54 "ObjectPool.c"
+#line 57 "ObjectPool.c"
 typedef struct  _ObjectPool_cv_t  {
 	object cPools;
 	object cCurrentPool;
@@ -181,7 +184,7 @@ cmeth objrtn ObjectPool_cm_gRemoveFromPool(object self, object obj)
 	return gRemoveFromPool(ObjectPool_cv->cCurrentPool, obj); 
 } 
 
-#line 185 "ObjectPool.c"
+#line 188 "ObjectPool.c"
 
 objrtn	ObjectPool_initialize(void)
 {
@@ -218,6 +221,10 @@ objrtn	ObjectPool_initialize(void)
 	iMethodFor(ObjectPool, gDisposeObject, ObjectPool_im_gDisposeObject);
 
 	ObjectPool_cv = GetCVs(ObjectPool);
+
+#undef	ObjectPool_c
+	PUBLISH_CLASS(ObjectPool_c, ObjectPool_cp);
+#define	ObjectPool_c	ObjectPool_cp
 
 	ENABLE_THREADER;
 

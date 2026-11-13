@@ -43,8 +43,11 @@
 
 object	LinkObjectSequence_c;
 
+object	LinkObjectSequence_cp;
+#define	LinkObjectSequence_c	LinkObjectSequence_cp
 
-#line 48 "LinkObjectSequence.c"
+
+#line 51 "LinkObjectSequence.c"
 typedef struct  _LinkObjectSequence_iv_t  {
 	object iNext;
 }	LinkObjectSequence_iv_t;
@@ -75,7 +78,7 @@ imeth objrtn LinkObjectSequence_im_gNext(object self)
 } 
 
 
-#line 79 "LinkObjectSequence.c"
+#line 82 "LinkObjectSequence.c"
 
 objrtn	LinkObjectSequence_initialize(void)
 {
@@ -105,6 +108,10 @@ objrtn	LinkObjectSequence_initialize(void)
 	LinkObjectSequence_c = gNewClass(Class, "LinkObjectSequence", sizeof(LinkObjectSequence_iv_t), 0, Sequence, END);
 	cMethodFor(LinkObjectSequence, gNewWithObj, LinkObjectSequence_cm_gNewWithObj);
 	iMethodFor(LinkObjectSequence, gNext, LinkObjectSequence_im_gNext);
+
+#undef	LinkObjectSequence_c
+	PUBLISH_CLASS(LinkObjectSequence_c, LinkObjectSequence_cp);
+#define	LinkObjectSequence_c	LinkObjectSequence_cp
 
 	ENABLE_THREADER;
 

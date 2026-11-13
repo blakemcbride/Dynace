@@ -43,6 +43,9 @@
 
 object	Constant_c;
 
+object	Constant_cp;
+#define	Constant_c	Constant_cp
+
 
 
 #line 36 "Constant.d"
@@ -63,7 +66,7 @@ imeth int Constant_im_gEqual(object self, object obj)
 } 
 
 
-#line 67 "Constant.c"
+#line 70 "Constant.c"
 
 objrtn	Constant_initialize(void)
 {
@@ -91,6 +94,10 @@ objrtn	Constant_initialize(void)
 	iMethodFor(Constant, gCopy, Constant_im_gCopy);
 	iMethodFor(Constant, gDeepDispose, Constant_im_gDispose);
 	iMethodFor(Constant, gDeepCopy, Constant_im_gCopy);
+
+#undef	Constant_c
+	PUBLISH_CLASS(Constant_c, Constant_cp);
+#define	Constant_c	Constant_cp
 
 	ENABLE_THREADER;
 

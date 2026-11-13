@@ -83,8 +83,11 @@
 
 object	File_c;
 
+object	File_cp;
+#define	File_c	File_cp
 
-#line 88 "File.c"
+
+#line 91 "File.c"
 typedef struct  _File_iv_t  {
 	object iName;
 	FILE * iFP;
@@ -93,7 +96,7 @@ typedef struct  _File_iv_t  {
 }	File_iv_t;
 
 
-#line 97 "File.c"
+#line 100 "File.c"
 typedef struct  _File_cv_t  {
 	unsigned int cNumTempFiles;
 	char cTempSubDir [ 32 ];
@@ -400,7 +403,7 @@ static void class_init(void)
 	File_cv->cProcessID = 0L; 
 } 
 
-#line 404 "File.c"
+#line 407 "File.c"
 
 objrtn	File_initialize(void)
 {
@@ -453,6 +456,10 @@ objrtn	File_initialize(void)
 	File_cv = GetCVs(File);
 
 	class_init();
+
+#undef	File_c
+	PUBLISH_CLASS(File_c, File_cp);
+#define	File_c	File_cp
 
 	ENABLE_THREADER;
 

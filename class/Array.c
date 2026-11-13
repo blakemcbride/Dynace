@@ -62,8 +62,11 @@
 
 object	Array_c;
 
+object	Array_cp;
+#define	Array_c	Array_cp
 
-#line 67 "Array.c"
+
+#line 70 "Array.c"
 typedef struct  _Array_iv_t  {
 	char iType;
 	unsigned iRank;
@@ -277,7 +280,7 @@ ivmeth int Array_ivm_vBitValue(object self, va_list _rest_)
 	return !!BIT_VAL(iv->iArray, offset); 
 } 
 
-#line 281 "Array.c"
+#line 284 "Array.c"
 
 static	int	Array_ifm_vBitValue(object self, ...)
 {
@@ -318,7 +321,7 @@ ivmeth objrtn Array_ivm_vChangeBitValue(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 322 "Array.c"
+#line 325 "Array.c"
 
 static	objrtn	Array_ifm_vChangeBitValue(object self, ...)
 {
@@ -418,7 +421,7 @@ ivmeth objrtn Array_ivm_vReshape(object self, va_list _rest_)
 	return self; 
 } 
 
-#line 422 "Array.c"
+#line 425 "Array.c"
 
 static	objrtn	Array_ifm_vReshape(object self, ...)
 {
@@ -848,7 +851,7 @@ cmeth objrtn Array_cm_gIndexOrigin(object self, int n)
 	return self; 
 } 
 
-#line 852 "Array.c"
+#line 855 "Array.c"
 
 objrtn	Array_initialize(void)
 {
@@ -890,6 +893,10 @@ objrtn	Array_initialize(void)
 	iMethodFor(Array, gIndex, Array_im_gIndex);
 	iMethodFor(Array, gStringRep, Array_im_gStringRep);
 	iMethodFor(Array, gDeepCopy, Array_im_gDeepCopy);
+
+#undef	Array_c
+	PUBLISH_CLASS(Array_c, Array_cp);
+#define	Array_c	Array_cp
 
 	ENABLE_THREADER;
 

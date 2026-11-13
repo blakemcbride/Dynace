@@ -43,8 +43,11 @@
 
 object	Date_c;
 
+object	Date_cp;
+#define	Date_c	Date_cp
 
-#line 48 "Date.c"
+
+#line 51 "Date.c"
 typedef struct  _Date_cv_t  {
 	int cFixType;
 }	Date_cv_t;
@@ -614,7 +617,7 @@ cmeth int Date_cm_gFixInvalidDate(object self, int mode)
 	return pm; 
 } 
 
-#line 618 "Date.c"
+#line 621 "Date.c"
 
 objrtn	Date_initialize(void)
 {
@@ -664,6 +667,10 @@ objrtn	Date_initialize(void)
 	Date_cv = GetCVs(Date);
 
 	init_class();
+
+#undef	Date_c
+	PUBLISH_CLASS(Date_c, Date_cp);
+#define	Date_c	Date_cp
 
 	ENABLE_THREADER;
 

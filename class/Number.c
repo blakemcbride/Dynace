@@ -46,6 +46,9 @@
 
 object	Number_c;
 
+object	Number_cp;
+#define	Number_c	Number_cp
+
 
 #line 40 "Number.d"
 static double Round(double n, int p) 
@@ -291,7 +294,7 @@ imeth int Number_im_gCompare(object self, object obj)
 } 
 
 
-#line 295 "Number.c"
+#line 298 "Number.c"
 
 objrtn	Number_initialize(void)
 {
@@ -315,6 +318,10 @@ objrtn	Number_initialize(void)
 	Number_c = gNewClass(Class, "Number", 0, 0, END);
 	iMethodFor(Number, gCompare, Number_im_gCompare);
 	iMethodFor(Number, gFormatNumber, Number_im_gFormatNumber);
+
+#undef	Number_c
+	PUBLISH_CLASS(Number_c, Number_cp);
+#define	Number_c	Number_cp
 
 	ENABLE_THREADER;
 

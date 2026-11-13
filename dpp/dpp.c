@@ -2246,7 +2246,7 @@ make_h(object	classes,
 
 	for (val=gFindFirst(classes, &key) ; val ; val=gFindNext(classes, &key)) {
 		name = gStringValue(key);
-		vPrintf(fobj, "#define\t%s\t(%s_c ? %s_c : %s_initialize())\n", name, name, name, name);
+		vPrintf(fobj, "#define\t%s\t(CLASS_LOAD(%s_c) ? %s_c : %s_initialize())\n", name, name, name, name);
 	}
 	gPuts(fobj, "\n\n\n");
 
@@ -4627,6 +4627,20 @@ pp_gen_head(object	sobj,
 	vPrintf(sobj, "extern\t");
 	gUseStream(sobj, 0);
 	vPrintf(sobj, "object\t%s_c;\n\n", cname);
+#ifndef	DBI
+	if (!NoInitialize)  {
+		/*  %s_c is published only when %s_initialize has finished
+		    building the class, so other native threads never see a
+		    half-built class.  Until then, code in this file (including
+		    the initializer and the class's init function) uses the
+		    private pointer.  */
+		gUseStream(sobj, 2);
+		vPrintf(sobj, "extern\t");
+		gUseStream(sobj, 0);
+		vPrintf(sobj, "object\t%s_cp;\n", cname);
+		vPrintf(sobj, "#define\t%s_c\t%s_cp\n\n", cname, cname);
+	}
+#endif
 	if (gSize(idecls))
 		if (Create_iv)
 			vPrintf(sobj, "#include \"%s\"\n\n", new_ext(file, "iv"));
@@ -4838,6 +4852,11 @@ pp_gen_initmethod(object  sobj,
 	if (!sup) {
 		if (gSize(init))
 			vPrintf(sobj, "\t%s();\n\n", gStringValue(init));
+
+		/*  publish the finished class (see pp_gen_head)  */
+		vPrintf(sobj, "#undef\t%s_c\n", cname);
+		vPrintf(sobj, "\tPUBLISH_CLASS(%s_c, %s_cp);\n", cname, cname);
+		vPrintf(sobj, "#define\t%s_c\t%s_cp\n\n", cname, cname);
 
 		gPuts(sobj, "\tENABLE_THREADER;\n\n");
 		gPuts(sobj, "\tLEAVECRITICALSECTION(cs);\n\n");

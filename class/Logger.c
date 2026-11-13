@@ -81,8 +81,11 @@
 
 object	Logger_c;
 
+object	Logger_cp;
+#define	Logger_c	Logger_cp
 
-#line 86 "Logger.c"
+
+#line 89 "Logger.c"
 typedef struct  _Logger_iv_t  {
 	char iLogFileName [ 1024 ];
 	int iMode;
@@ -331,7 +334,7 @@ static int hasNewline(char *s)
 	return *s == '\n'; 
 } 
 
-#line 335 "Logger.c"
+#line 338 "Logger.c"
 
 objrtn	Logger_initialize(void)
 {
@@ -364,6 +367,10 @@ objrtn	Logger_initialize(void)
 	iMethodFor(Logger, gGetLogLevel, Logger_im_gGetLogLevel);
 	iMethodFor(Logger, gSetLogMode, Logger_im_gSetLogMode);
 	iMethodFor(Logger, gSetLogLevel, Logger_im_gSetLogLevel);
+
+#undef	Logger_c
+	PUBLISH_CLASS(Logger_c, Logger_cp);
+#define	Logger_c	Logger_cp
 
 	ENABLE_THREADER;
 

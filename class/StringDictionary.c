@@ -43,6 +43,9 @@
 
 object	StringDictionary_c;
 
+object	StringDictionary_cp;
+#define	StringDictionary_c	StringDictionary_cp
+
 
 #line 37 "StringDictionary.d"
 #include "set1.h" 
@@ -107,7 +110,7 @@ static void init_class(void)
 	Lookup = imcPointer(Set, gLookup); 
 } 
 
-#line 111 "StringDictionary.c"
+#line 114 "StringDictionary.c"
 
 objrtn	StringDictionary_initialize(void)
 {
@@ -147,6 +150,10 @@ objrtn	StringDictionary_initialize(void)
 	iMethodFor(StringDictionary, gDeepDisposeStr, StringDictionary_im_gDeepDisposeStr);
 
 	init_class();
+
+#undef	StringDictionary_c
+	PUBLISH_CLASS(StringDictionary_c, StringDictionary_cp);
+#define	StringDictionary_c	StringDictionary_cp
 
 	ENABLE_THREADER;
 

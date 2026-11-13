@@ -43,6 +43,9 @@
 
 object	SeriousCondition_c;
 
+object	SeriousCondition_cp;
+#define	SeriousCondition_c	SeriousCondition_cp
+
 
 
 #line 34 "SeriousCondition.d"
@@ -52,7 +55,7 @@ imeth objrtn SeriousCondition_im_gDefaultRestart(object self)
 } 
 
 
-#line 56 "SeriousCondition.c"
+#line 59 "SeriousCondition.c"
 
 objrtn	SeriousCondition_initialize(void)
 {
@@ -81,6 +84,10 @@ objrtn	SeriousCondition_initialize(void)
 	}
 	SeriousCondition_c = gNewClass(Class, "SeriousCondition", 0, 0, Condition, END);
 	iMethodFor(SeriousCondition, gDefaultRestart, SeriousCondition_im_gDefaultRestart);
+
+#undef	SeriousCondition_c
+	PUBLISH_CLASS(SeriousCondition_c, SeriousCondition_cp);
+#define	SeriousCondition_c	SeriousCondition_cp
 
 	ENABLE_THREADER;
 

@@ -43,6 +43,9 @@
 
 object	Condition_c;
 
+object	Condition_cp;
+#define	Condition_c	Condition_cp
+
 
 
 #line 35 "Condition.d"
@@ -60,7 +63,7 @@ imeth objrtn Condition_im_gDefaultRestart(object self)
 } 
 
 
-#line 64 "Condition.c"
+#line 67 "Condition.c"
 
 objrtn	Condition_initialize(void)
 {
@@ -84,6 +87,10 @@ objrtn	Condition_initialize(void)
 	Condition_c = gNewClass(Class, "Condition", 0, 0, END);
 	iMethodFor(Condition, gSignal, Condition_im_gSignal);
 	iMethodFor(Condition, gDefaultRestart, Condition_im_gDefaultRestart);
+
+#undef	Condition_c
+	PUBLISH_CLASS(Condition_c, Condition_cp);
+#define	Condition_c	Condition_cp
 
 	ENABLE_THREADER;
 

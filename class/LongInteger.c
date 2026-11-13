@@ -45,8 +45,11 @@
 
 object	LongInteger_c;
 
+object	LongInteger_cp;
+#define	LongInteger_c	LongInteger_cp
 
-#line 50 "LongInteger.c"
+
+#line 53 "LongInteger.c"
 typedef struct  _LongInteger_iv_t  {
 	long iVal;
 }	LongInteger_iv_t;
@@ -159,7 +162,7 @@ imeth objrtn LongInteger_im_gChangeDoubleValue(object self, double val)
 } 
 
 
-#line 163 "LongInteger.c"
+#line 166 "LongInteger.c"
 
 objrtn	LongInteger_initialize(void)
 {
@@ -203,6 +206,10 @@ objrtn	LongInteger_initialize(void)
 	iMethodFor(LongInteger, gChangeValue, LongInteger_im_gChangeValue);
 	iMethodFor(LongInteger, gLongValue, LongInteger_im_gLongValue);
 	iMethodFor(LongInteger, gChangeCharValue, LongInteger_im_gChangeCharValue);
+
+#undef	LongInteger_c
+	PUBLISH_CLASS(LongInteger_c, LongInteger_cp);
+#define	LongInteger_c	LongInteger_cp
 
 	ENABLE_THREADER;
 

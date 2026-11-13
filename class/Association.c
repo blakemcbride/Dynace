@@ -43,9 +43,12 @@
 
 object	Association_c;
 
+object	Association_cp;
+#define	Association_c	Association_cp
 
 
-#line 49 "Association.c"
+
+#line 52 "Association.c"
 
 objrtn	Association_initialize(void)
 {
@@ -67,6 +70,10 @@ objrtn	Association_initialize(void)
 	}
 	INHIBIT_THREADER;
 	Association_c = gNewClass(Class, "Association", 0, 0, END);
+
+#undef	Association_c
+	PUBLISH_CLASS(Association_c, Association_cp);
+#define	Association_c	Association_cp
 
 	ENABLE_THREADER;
 

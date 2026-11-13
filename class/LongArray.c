@@ -45,6 +45,9 @@
 
 object	LongArray_c;
 
+object	LongArray_cp;
+#define	LongArray_c	LongArray_cp
+
 
 #line 40 "LongArray.d"
 #define TYPE long 
@@ -55,7 +58,7 @@ static gIndex_t _index;
 
 cvmeth objrtn LongArray_cvm_vNew(object self, va_list _rest_)
 { 
-	unsigned rank = va_arg(_rest_, unsigned);
+	unsigned rank = va_arg(_rest_, unsigned) ;
 
 #line 48 "LongArray.d"
 	static gNewArray_t cnew = NULL; 
@@ -65,7 +68,7 @@ cvmeth objrtn LongArray_cvm_vNew(object self, va_list _rest_)
 	return cnew(self, AT_LONG, rank, _rest_); 
 } 
 
-#line 69 "LongArray.c"
+#line 72 "LongArray.c"
 
 static	objrtn	LongArray_cfm_vNew(object self, ...)
 {
@@ -85,7 +88,7 @@ ivmeth char LongArray_ivm_vCharValue(object self, va_list _rest_)
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 89 "LongArray.c"
+#line 92 "LongArray.c"
 
 static	char	LongArray_ifm_vCharValue(object self, ...)
 {
@@ -105,7 +108,7 @@ ivmeth short LongArray_ivm_vShortValue(object self, va_list _rest_)
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 109 "LongArray.c"
+#line 112 "LongArray.c"
 
 static	short	LongArray_ifm_vShortValue(object self, ...)
 {
@@ -125,7 +128,7 @@ ivmeth unsigned short LongArray_ivm_vUnsignedShortValue(object self, va_list _re
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 129 "LongArray.c"
+#line 132 "LongArray.c"
 
 static	unsigned short	LongArray_ifm_vUnsignedShortValue(object self, ...)
 {
@@ -145,7 +148,7 @@ ivmeth long LongArray_ivm_vLongValue(object self, va_list _rest_)
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 149 "LongArray.c"
+#line 152 "LongArray.c"
 
 static	long	LongArray_ifm_vLongValue(object self, ...)
 {
@@ -165,7 +168,7 @@ ivmeth double LongArray_ivm_vDoubleValue(object self, va_list _rest_)
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 169 "LongArray.c"
+#line 172 "LongArray.c"
 
 static	double	LongArray_ifm_vDoubleValue(object self, ...)
 {
@@ -181,13 +184,13 @@ static	double	LongArray_ifm_vDoubleValue(object self, ...)
 
 #line 80 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeValue(object self, va_list _rest_)
-{ object val = va_arg(_rest_, object);
+{ object val = va_arg(_rest_, object) ;
 	ChkArg(val, 2); 
 	*((TYPE *) _index(self, _rest_)) = gLongValue(val); 
 	return self; 
 } 
 
-#line 191 "LongArray.c"
+#line 194 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeValue(object self, ...)
 {
@@ -203,12 +206,12 @@ static	objrtn	LongArray_ifm_vChangeValue(object self, ...)
 
 #line 87 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeCharValue(object self, va_list _rest_)
-{ int val = va_arg(_rest_, int);
+{ int val = va_arg(_rest_, int) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 212 "LongArray.c"
+#line 215 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeCharValue(object self, ...)
 {
@@ -224,12 +227,12 @@ static	objrtn	LongArray_ifm_vChangeCharValue(object self, ...)
 
 #line 93 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeShortValue(object self, va_list _rest_)
-{ int val = va_arg(_rest_, int);
+{ int val = va_arg(_rest_, int) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 233 "LongArray.c"
+#line 236 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeShortValue(object self, ...)
 {
@@ -245,12 +248,12 @@ static	objrtn	LongArray_ifm_vChangeShortValue(object self, ...)
 
 #line 99 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeUShortValue(object self, va_list _rest_)
-{ unsigned val = va_arg(_rest_, unsigned);
+{ unsigned val = va_arg(_rest_, unsigned) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 254 "LongArray.c"
+#line 257 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeUShortValue(object self, ...)
 {
@@ -266,12 +269,12 @@ static	objrtn	LongArray_ifm_vChangeUShortValue(object self, ...)
 
 #line 105 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeLongValue(object self, va_list _rest_)
-{ long val = va_arg(_rest_, long);
+{ long val = va_arg(_rest_, long) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 275 "LongArray.c"
+#line 278 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeLongValue(object self, ...)
 {
@@ -287,12 +290,12 @@ static	objrtn	LongArray_ifm_vChangeLongValue(object self, ...)
 
 #line 111 "LongArray.d"
 ivmeth objrtn LongArray_ivm_vChangeDoubleValue(object self, va_list _rest_)
-{ double val = va_arg(_rest_, double);
+{ double val = va_arg(_rest_, double) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 296 "LongArray.c"
+#line 299 "LongArray.c"
 
 static	objrtn	LongArray_ifm_vChangeDoubleValue(object self, ...)
 {
@@ -311,7 +314,7 @@ static void class_init(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 315 "LongArray.c"
+#line 318 "LongArray.c"
 
 objrtn	LongArray_initialize(void)
 {
@@ -353,6 +356,10 @@ objrtn	LongArray_initialize(void)
 	ivMethodFor(LongArray, vShortValue, LongArray_ivm_vShortValue, LongArray_ifm_vShortValue);
 
 	class_init();
+
+#undef	LongArray_c
+	PUBLISH_CLASS(LongArray_c, LongArray_cp);
+#define	LongArray_c	LongArray_cp
 
 	ENABLE_THREADER;
 

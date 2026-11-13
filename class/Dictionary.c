@@ -43,6 +43,9 @@
 
 object	Dictionary_c;
 
+object	Dictionary_cp;
+#define	Dictionary_c	Dictionary_cp
+
 
 #line 39 "Dictionary.d"
 #include "set1.h" 
@@ -117,7 +120,7 @@ static void init_class(void)
 	Lookup = imcPointer(Set, gLookup); 
 } 
 
-#line 121 "Dictionary.c"
+#line 124 "Dictionary.c"
 
 objrtn	Dictionary_initialize(void)
 {
@@ -157,6 +160,10 @@ objrtn	Dictionary_initialize(void)
 	iMethodFor(Dictionary, gFindValue, Dictionary_im_gFindValue);
 
 	init_class();
+
+#undef	Dictionary_c
+	PUBLISH_CLASS(Dictionary_c, Dictionary_cp);
+#define	Dictionary_c	Dictionary_cp
 
 	ENABLE_THREADER;
 

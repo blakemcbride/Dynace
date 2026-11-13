@@ -43,9 +43,12 @@
 
 object	Sequence_c;
 
+object	Sequence_cp;
+#define	Sequence_c	Sequence_cp
 
 
-#line 49 "Sequence.c"
+
+#line 52 "Sequence.c"
 
 objrtn	Sequence_initialize(void)
 {
@@ -67,6 +70,10 @@ objrtn	Sequence_initialize(void)
 	}
 	INHIBIT_THREADER;
 	Sequence_c = gNewClass(Class, "Sequence", 0, 0, END);
+
+#undef	Sequence_c
+	PUBLISH_CLASS(Sequence_c, Sequence_cp);
+#define	Sequence_c	Sequence_cp
 
 	ENABLE_THREADER;
 

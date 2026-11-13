@@ -43,9 +43,12 @@
 
 object	SimpleRestart_c;
 
+object	SimpleRestart_cp;
+#define	SimpleRestart_c	SimpleRestart_cp
 
 
-#line 49 "SimpleRestart.c"
+
+#line 52 "SimpleRestart.c"
 
 objrtn	SimpleRestart_initialize(void)
 {
@@ -73,6 +76,10 @@ objrtn	SimpleRestart_initialize(void)
 		return SimpleRestart_c;
 	}
 	SimpleRestart_c = gNewClass(Class, "SimpleRestart", 0, 0, Restart, END);
+
+#undef	SimpleRestart_c
+	PUBLISH_CLASS(SimpleRestart_c, SimpleRestart_cp);
+#define	SimpleRestart_c	SimpleRestart_cp
 
 	ENABLE_THREADER;
 

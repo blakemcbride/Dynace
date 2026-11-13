@@ -43,8 +43,11 @@
 
 object	LookupKey_c;
 
+object	LookupKey_cp;
+#define	LookupKey_c	LookupKey_cp
 
-#line 48 "LookupKey.c"
+
+#line 51 "LookupKey.c"
 typedef struct  _LookupKey_iv_t  {
 	object iKey;
 }	LookupKey_iv_t;
@@ -120,7 +123,7 @@ imeth int LookupKey_im_gCompare(object self, object arg)
 } 
 
 
-#line 124 "LookupKey.c"
+#line 127 "LookupKey.c"
 
 objrtn	LookupKey_initialize(void)
 {
@@ -156,6 +159,10 @@ objrtn	LookupKey_initialize(void)
 	iMethodFor(LookupKey, gHash, LookupKey_im_gHash);
 	iMethodFor(LookupKey, gDeepDispose, LookupKey_im_gDeepDispose);
 	iMethodFor(LookupKey, gDeepCopy, LookupKey_im_gDeepCopy);
+
+#undef	LookupKey_c
+	PUBLISH_CLASS(LookupKey_c, LookupKey_cp);
+#define	LookupKey_c	LookupKey_cp
 
 	ENABLE_THREADER;
 

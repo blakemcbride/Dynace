@@ -43,8 +43,11 @@
 
 object	LinkList_c;
 
+object	LinkList_cp;
+#define	LinkList_c	LinkList_cp
 
-#line 48 "LinkList.c"
+
+#line 51 "LinkList.c"
 typedef struct  _LinkList_iv_t  {
 	int iNelm;
 	CRITICALSECTION iCS;
@@ -308,7 +311,7 @@ imeth objrtn LinkList_im_gLeaveCriticalSection(object self)
 } 
 
 
-#line 312 "LinkList.c"
+#line 315 "LinkList.c"
 
 objrtn	LinkList_initialize(void)
 {
@@ -360,6 +363,10 @@ objrtn	LinkList_initialize(void)
 	iMethodFor(LinkList, gIncNelm, LinkList_im_gIncNelm);
 	iMethodFor(LinkList, gAddLast, LinkList_im_gAddLast);
 	iMethodFor(LinkList, gDeepCopy, LinkList_im_gDeepCopy);
+
+#undef	LinkList_c
+	PUBLISH_CLASS(LinkList_c, LinkList_cp);
+#define	LinkList_c	LinkList_cp
 
 	ENABLE_THREADER;
 

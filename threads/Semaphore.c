@@ -43,8 +43,11 @@
 
 object	Semaphore_c;
 
+object	Semaphore_cp;
+#define	Semaphore_c	Semaphore_cp
 
-#line 48 "Semaphore.c"
+
+#line 51 "Semaphore.c"
 typedef struct  _Semaphore_iv_t  {
 	object iObj;
 	char * iName;
@@ -55,7 +58,7 @@ typedef struct  _Semaphore_iv_t  {
 }	Semaphore_iv_t;
 
 
-#line 59 "Semaphore.c"
+#line 62 "Semaphore.c"
 typedef struct  _Semaphore_cv_t  {
 	struct _Semaphore_iv_t * cMsl;
 }	Semaphore_cv_t;
@@ -240,7 +243,7 @@ imeth objrtn Semaphore_im_gCopy(object self)
 } 
 
 
-#line 244 "Semaphore.c"
+#line 247 "Semaphore.c"
 
 objrtn	Semaphore_initialize(void)
 {
@@ -277,6 +280,10 @@ objrtn	Semaphore_initialize(void)
 	iMethodFor(Semaphore, gWaitFor, Semaphore_im_gWaitFor);
 
 	Semaphore_cv = GetCVs(Semaphore);
+
+#undef	Semaphore_c
+	PUBLISH_CLASS(Semaphore_c, Semaphore_cp);
+#define	Semaphore_c	Semaphore_cp
 
 	ENABLE_THREADER;
 

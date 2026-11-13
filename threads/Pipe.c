@@ -43,8 +43,11 @@
 
 object	Pipe_c;
 
+object	Pipe_cp;
+#define	Pipe_c	Pipe_cp
 
-#line 48 "Pipe.c"
+
+#line 51 "Pipe.c"
 typedef struct  _Pipe_iv_t  {
 	object iObj;
 	char * iName;
@@ -60,7 +63,7 @@ typedef struct  _Pipe_iv_t  {
 }	Pipe_iv_t;
 
 
-#line 64 "Pipe.c"
+#line 67 "Pipe.c"
 typedef struct  _Pipe_cv_t  {
 	struct _Pipe_iv_t * cMpl;
 }	Pipe_cv_t;
@@ -360,7 +363,7 @@ imeth int Pipe_im_gEndOfStream(object self)
 } 
 
 
-#line 364 "Pipe.c"
+#line 367 "Pipe.c"
 
 objrtn	Pipe_initialize(void)
 {
@@ -407,6 +410,10 @@ objrtn	Pipe_initialize(void)
 	iMethodFor(Pipe, gMode, Pipe_im_gMode);
 
 	Pipe_cv = GetCVs(Pipe);
+
+#undef	Pipe_c
+	PUBLISH_CLASS(Pipe_c, Pipe_cp);
+#define	Pipe_c	Pipe_cp
 
 	ENABLE_THREADER;
 

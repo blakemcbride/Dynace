@@ -43,9 +43,12 @@
 
 object	Error_c;
 
+object	Error_cp;
+#define	Error_c	Error_cp
 
 
-#line 49 "Error.c"
+
+#line 52 "Error.c"
 
 objrtn	Error_initialize(void)
 {
@@ -73,6 +76,10 @@ objrtn	Error_initialize(void)
 		return Error_c;
 	}
 	Error_c = gNewClass(Class, "Error", 0, 0, SeriousCondition, END);
+
+#undef	Error_c
+	PUBLISH_CLASS(Error_c, Error_cp);
+#define	Error_c	Error_cp
 
 	ENABLE_THREADER;
 

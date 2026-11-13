@@ -45,6 +45,9 @@
 
 object	UnsignedShortArray_c;
 
+object	UnsignedShortArray_cp;
+#define	UnsignedShortArray_c	UnsignedShortArray_cp
+
 
 #line 40 "UnsignedShortArray.d"
 #define TYPE unsigned short 
@@ -55,7 +58,7 @@ static gIndex_t _index;
 
 cvmeth objrtn UnsignedShortArray_cvm_vNew(object self, va_list _rest_)
 { 
-	unsigned rank = va_arg(_rest_, unsigned);
+	unsigned rank = va_arg(_rest_, unsigned) ;
 
 #line 48 "UnsignedShortArray.d"
 	static gNewArray_t cnew = NULL; 
@@ -65,7 +68,7 @@ cvmeth objrtn UnsignedShortArray_cvm_vNew(object self, va_list _rest_)
 	return cnew(self, AT_USHT, rank, _rest_); 
 } 
 
-#line 69 "UnsignedShortArray.c"
+#line 72 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_cfm_vNew(object self, ...)
 {
@@ -85,7 +88,7 @@ ivmeth char UnsignedShortArray_ivm_vCharValue(object self, va_list _rest_)
 	return (char) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 89 "UnsignedShortArray.c"
+#line 92 "UnsignedShortArray.c"
 
 static	char	UnsignedShortArray_ifm_vCharValue(object self, ...)
 {
@@ -105,7 +108,7 @@ ivmeth short UnsignedShortArray_ivm_vShortValue(object self, va_list _rest_)
 	return (short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 109 "UnsignedShortArray.c"
+#line 112 "UnsignedShortArray.c"
 
 static	short	UnsignedShortArray_ifm_vShortValue(object self, ...)
 {
@@ -125,7 +128,7 @@ ivmeth unsigned short UnsignedShortArray_ivm_vUnsignedShortValue(object self, va
 	return (unsigned short) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 129 "UnsignedShortArray.c"
+#line 132 "UnsignedShortArray.c"
 
 static	unsigned short	UnsignedShortArray_ifm_vUnsignedShortValue(object self, ...)
 {
@@ -145,7 +148,7 @@ ivmeth long UnsignedShortArray_ivm_vLongValue(object self, va_list _rest_)
 	return (long) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 149 "UnsignedShortArray.c"
+#line 152 "UnsignedShortArray.c"
 
 static	long	UnsignedShortArray_ifm_vLongValue(object self, ...)
 {
@@ -165,7 +168,7 @@ ivmeth double UnsignedShortArray_ivm_vDoubleValue(object self, va_list _rest_)
 	return (double) *((TYPE *) _index(self, _rest_)); 
 } 
 
-#line 169 "UnsignedShortArray.c"
+#line 172 "UnsignedShortArray.c"
 
 static	double	UnsignedShortArray_ifm_vDoubleValue(object self, ...)
 {
@@ -181,13 +184,13 @@ static	double	UnsignedShortArray_ifm_vDoubleValue(object self, ...)
 
 #line 80 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeValue(object self, va_list _rest_)
-{ object val = va_arg(_rest_, object);
+{ object val = va_arg(_rest_, object) ;
 	ChkArg(val, 2); 
 	*((TYPE *) _index(self, _rest_)) = gUnsignedShortValue(val); 
 	return self; 
 } 
 
-#line 191 "UnsignedShortArray.c"
+#line 194 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeValue(object self, ...)
 {
@@ -203,12 +206,12 @@ static	objrtn	UnsignedShortArray_ifm_vChangeValue(object self, ...)
 
 #line 87 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeCharValue(object self, va_list _rest_)
-{ int val = va_arg(_rest_, int);
+{ int val = va_arg(_rest_, int) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 212 "UnsignedShortArray.c"
+#line 215 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeCharValue(object self, ...)
 {
@@ -224,12 +227,12 @@ static	objrtn	UnsignedShortArray_ifm_vChangeCharValue(object self, ...)
 
 #line 93 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeShortValue(object self, va_list _rest_)
-{ int val = va_arg(_rest_, int);
+{ int val = va_arg(_rest_, int) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 233 "UnsignedShortArray.c"
+#line 236 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeShortValue(object self, ...)
 {
@@ -245,12 +248,12 @@ static	objrtn	UnsignedShortArray_ifm_vChangeShortValue(object self, ...)
 
 #line 99 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeUShortValue(object self, va_list _rest_)
-{ unsigned val = va_arg(_rest_, unsigned);
+{ unsigned val = va_arg(_rest_, unsigned) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 254 "UnsignedShortArray.c"
+#line 257 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeUShortValue(object self, ...)
 {
@@ -266,12 +269,12 @@ static	objrtn	UnsignedShortArray_ifm_vChangeUShortValue(object self, ...)
 
 #line 105 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeLongValue(object self, va_list _rest_)
-{ long val = va_arg(_rest_, long);
+{ long val = va_arg(_rest_, long) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 275 "UnsignedShortArray.c"
+#line 278 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeLongValue(object self, ...)
 {
@@ -287,12 +290,12 @@ static	objrtn	UnsignedShortArray_ifm_vChangeLongValue(object self, ...)
 
 #line 111 "UnsignedShortArray.d"
 ivmeth objrtn UnsignedShortArray_ivm_vChangeDoubleValue(object self, va_list _rest_)
-{ double val = va_arg(_rest_, double);
+{ double val = va_arg(_rest_, double) ;
 	*((TYPE *) _index(self, _rest_)) = (TYPE) val; 
 	return self; 
 } 
 
-#line 296 "UnsignedShortArray.c"
+#line 299 "UnsignedShortArray.c"
 
 static	objrtn	UnsignedShortArray_ifm_vChangeDoubleValue(object self, ...)
 {
@@ -311,7 +314,7 @@ static void init_class(void)
 	_index = imcPointer(Array, gIndex); 
 } 
 
-#line 315 "UnsignedShortArray.c"
+#line 318 "UnsignedShortArray.c"
 
 objrtn	UnsignedShortArray_initialize(void)
 {
@@ -353,6 +356,10 @@ objrtn	UnsignedShortArray_initialize(void)
 	ivMethodFor(UnsignedShortArray, vShortValue, UnsignedShortArray_ivm_vShortValue, UnsignedShortArray_ifm_vShortValue);
 
 	init_class();
+
+#undef	UnsignedShortArray_c
+	PUBLISH_CLASS(UnsignedShortArray_c, UnsignedShortArray_cp);
+#define	UnsignedShortArray_c	UnsignedShortArray_cp
 
 	ENABLE_THREADER;
 

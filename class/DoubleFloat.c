@@ -45,8 +45,11 @@
 
 object	DoubleFloat_c;
 
+object	DoubleFloat_cp;
+#define	DoubleFloat_c	DoubleFloat_cp
 
-#line 50 "DoubleFloat.c"
+
+#line 53 "DoubleFloat.c"
 typedef struct  _DoubleFloat_iv_t  {
 	double iVal;
 }	DoubleFloat_iv_t;
@@ -193,7 +196,7 @@ imeth int DoubleFloat_im_gCompare(object self, object obj)
 } 
 
 
-#line 197 "DoubleFloat.c"
+#line 200 "DoubleFloat.c"
 
 objrtn	DoubleFloat_initialize(void)
 {
@@ -239,6 +242,10 @@ objrtn	DoubleFloat_initialize(void)
 	iMethodFor(DoubleFloat, gChangeValue, DoubleFloat_im_gChangeValue);
 	iMethodFor(DoubleFloat, gLongValue, DoubleFloat_im_gLongValue);
 	iMethodFor(DoubleFloat, gChangeCharValue, DoubleFloat_im_gChangeCharValue);
+
+#undef	DoubleFloat_c
+	PUBLISH_CLASS(DoubleFloat_c, DoubleFloat_cp);
+#define	DoubleFloat_c	DoubleFloat_cp
 
 	ENABLE_THREADER;
 

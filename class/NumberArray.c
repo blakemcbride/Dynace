@@ -43,9 +43,12 @@
 
 object	NumberArray_c;
 
+object	NumberArray_cp;
+#define	NumberArray_c	NumberArray_cp
 
 
-#line 49 "NumberArray.c"
+
+#line 52 "NumberArray.c"
 
 objrtn	NumberArray_initialize(void)
 {
@@ -73,6 +76,10 @@ objrtn	NumberArray_initialize(void)
 		return NumberArray_c;
 	}
 	NumberArray_c = gNewClass(Class, "NumberArray", 0, 0, Array, END);
+
+#undef	NumberArray_c
+	PUBLISH_CLASS(NumberArray_c, NumberArray_cp);
+#define	NumberArray_c	NumberArray_cp
 
 	ENABLE_THREADER;
 
