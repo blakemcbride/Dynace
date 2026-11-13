@@ -394,12 +394,14 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
     address so a pointer can be validated with a binary search.  The blocks are
     not assumed to be contiguous; the memory between them may not be mapped.
 
-    chk_ptr is called so much that even a critical section call becomes prohibitively
-    expensive, so readers take no lock.  Writers never modify a published table.
-    They build a new one, publish it with a single pointer store and retire the old
-    one.  Green threads only switch at YIELD so a retired table may be freed at once.
-    With native threads another thread may still be searching it, so it is freed
-    after two more garbage collections.  */
+    Writers never modify a published table.  They build a new one, publish it
+    with a single pointer store and free the old one at once.  chk_ptr is called
+    so much that even a critical section call becomes prohibitively expensive, so
+    it first looks in a cache of recently found blocks.  With green threads (which
+    only switch at YIELD) it then searches the table without a lock.  With native
+    threads a miss searches the table under PTR_CS, which writers hold while they
+    replace and free a table, and each thread has its own cache holding copies of
+    block bounds, so no reader ever touches a freed table.  */
 
 typedef	struct	{
 	char	*beg;
@@ -408,38 +410,45 @@ typedef	struct	{
 
 typedef	struct  _mbt  {
 	long	n;
-	struct	_mbt	*next;		/*  retired list link  */
 	MBLK_t	blk[1];
 }	MBT_t;
 
 static	MBT_t	* volatile MBT = NULL;	/*  Master memory block table		*/
-#ifdef	NATIVE_THREADS
-static	MBT_t	*MBT_retired = NULL;	/*  retired since the last GC		*/
-static	MBT_t	*MBT_retired_prev = NULL;	/*  retired before the last GC	*/
-#endif
 
 static	CRITICALSECTION   PTR_CS;
 
 /*  Cache of recently found blocks, indexed by address, so most checks skip the
-    binary search.  Entries point into the current table, so the cache is cleared
-    whenever the table is replaced and at each garbage collection (retired tables
-    outlive two collections, see above).  */
+    binary search.  It is cleared whenever the table is replaced.  */
 
 #define	BLK_CACHE_SHIFT	10
 #define	BLK_CACHE_SIZE	1024
 #define	BLK_CACHE_IDX(p)	(((uintptr_t)(p) >> BLK_CACHE_SHIFT) & (BLK_CACHE_SIZE - 1))
 
-static	MBLK_t	* volatile BlkCache[BLK_CACHE_SIZE];
-
 #ifdef	NATIVE_THREADS
-#if defined(__GNUC__)  ||  defined(__clang__)
-#define	FULL_FENCE()	__atomic_thread_fence(__ATOMIC_SEQ_CST)
-#elif defined(_MSC_VER)
-#define	FULL_FENCE()	MemoryBarrier()
+
+/*  Each thread caches copies of block bounds tagged with the generation of the
+    table they came from.  Replacing the table bumps MBT_gen, which invalidates
+    every thread's entries at once.  Generation 0 is never current.  */
+
+typedef	struct	{
+	char	*beg;
+	char	*end;
+	uintptr_t	gen;
+}	BLKC_t;
+
+static	THREAD_LOCAL	BLKC_t	BlkCache[BLK_CACHE_SIZE];
+static	volatile uintptr_t	MBT_gen = 1;
+
+LOCAL	void	clear_blk_cache(void)
+{
+	MBT_gen++;		/*  PTR_CS is held  */
+	if (!MBT_gen)
+		MBT_gen = 1;
+}
+
 #else
-#define	FULL_FENCE()
-#endif
-#endif
+
+static	MBLK_t	*BlkCache[BLK_CACHE_SIZE];
 
 LOCAL	void	clear_blk_cache(void)
 {
@@ -448,6 +457,8 @@ LOCAL	void	clear_blk_cache(void)
 	for (i=0 ; i < BLK_CACHE_SIZE ; i++)
 		BlkCache[i] = NULL;
 }
+
+#endif
 
 #ifdef	HEAP_HAS_HOLES
 LOCAL	void	*real_calloc(size_t n, size_t s);
@@ -475,18 +486,6 @@ LOCAL	_INLINE_  long	find_blk(MBT_t *t, char *p)
 	return lo;
 }
 
-#ifdef	NATIVE_THREADS
-LOCAL	void	free_mbt_list(MBT_t *t)
-{
-	MBT_t	*n;
-
-	for ( ; t ; t = n) {
-		n = t->next;
-		real_free(t);
-	}
-}
-#endif
-
 LOCAL	void	add_ptr(char *p, size_t len)
 {
 	MBT_t	*ot, *nt;
@@ -512,20 +511,14 @@ LOCAL	void	add_ptr(char *p, size_t len)
 	LEAVECRITICALSECTION(PTR_CS);
 }
 
-/*  publish a new table and retire the old one; PTR_CS must be held  */
+/*  publish a new table and free the old one; PTR_CS must be held  */
 
 LOCAL	void	replace_mbt(MBT_t *ot, MBT_t *nt)
 {
 	MBT = nt;
 	clear_blk_cache();
-	if (ot) {
-#ifdef	NATIVE_THREADS
-		ot->next = MBT_retired;
-		MBT_retired = ot;
-#else
+	if (ot)
 		real_free(ot);
-#endif
-	}
 }
 
 #ifndef	HEAP_HAS_HOLES
@@ -558,24 +551,37 @@ LOCAL	void	del_ptr(char *p)
 
 #endif
 
-/*  called at the end of each garbage collection  */
+/*  true if p..p+len lies entirely within one allocated block  */
 
-LOCAL	void	free_retired_mbt(void)
-{
-	clear_blk_cache();
 #ifdef	NATIVE_THREADS
-	MBT_t	*t;
 
+LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
+{
+	BLKC_t	*c;
+	MBT_t	*t;
+	long	i;
+	int	r = 0;
+
+	if (MISALIGNED(p))
+		return 0;
+	c = &BlkCache[BLK_CACHE_IDX(p)];
+	if (c->gen == MBT_gen  &&  p >= c->beg  &&  p + len <= c->end)
+		return 1;
 	ENTERCRITICALSECTION(PTR_CS);
-	t = MBT_retired_prev;
-	MBT_retired_prev = MBT_retired;
-	MBT_retired = NULL;
+	if (t = MBT)  {
+		i = find_blk(t, p);
+		if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
+			c->beg = t->blk[i].beg;
+			c->end = t->blk[i].end;
+			c->gen = MBT_gen;
+			r = 1;
+		}
+	}
 	LEAVECRITICALSECTION(PTR_CS);
-	free_mbt_list(t);
-#endif
+	return r;
 }
 
-/*  true if p..p+len lies entirely within one allocated block  */
+#else
 
 LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 {
@@ -593,30 +599,28 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	i = find_blk(t, p);
 	if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
 		BlkCache[BLK_CACHE_IDX(p)] = &t->blk[i];
-#ifdef	NATIVE_THREADS
-		/*  If the table was replaced while we searched it, the writer may
-		    have cleared the cache before our store.  Don't leave an entry
-		    pointing into the retired table.  */
-		FULL_FENCE();
-		if (t != MBT)
-			BlkCache[BLK_CACHE_IDX(p)] = NULL;
-#endif
 		return 1;
 	}
 	return 0;
 }
 
+#endif
+
 #ifdef	HEAP_HAS_HOLES
 
 int	_gc_chk_ptr(char *p, unsigned len)  /*  used by the GC to determine if a RANGE of memory OVERLAPS an allocated region  */
 {
-	MBT_t	*t = MBT;
+	MBT_t	*t;
 	long	i;
+	int	r = 0;
 
-	if (!t)
-		return 0;
-	i = find_blk(t, p);
-	return i < t->n  &&  t->blk[i].beg < p + len;
+	ENTERCRITICALSECTION(PTR_CS);	/*  writers free replaced tables  */
+	if (t = MBT)  {
+		i = find_blk(t, p);
+		r = i < t->n  &&  t->blk[i].beg < p + len;
+	}
+	LEAVECRITICALSECTION(PTR_CS);
+	return r;
 }
 
 void	*_Dynace_getpage(long len)
@@ -2613,9 +2617,6 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 			(*(void(*)(object))cv->markfun)(c);
 	}
 	gc_sweep();
-#ifndef	SEGMENTED_MEMORY
-	free_retired_mbt();
-#endif
 #endif  /*  !BOEHM_GC  */
 	get_mem_stats();
 	NGC++;
