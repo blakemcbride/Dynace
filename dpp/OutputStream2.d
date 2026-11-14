@@ -100,25 +100,33 @@ imeth	object	gDispose, gDeepDispose ()
 
 imeth	gPut(tkn)
 {
-	if (iS1  &&  (!iUse  ||  iUse == 1))
+	int	to1 = iS1  &&  (!iUse  ||  iUse == 1);
+	int	to2 = iS2  &&  (!iUse  ||  iUse == 2);
+	object	tkn2 = NULL;
+
+	/*  stream 1 may dispose or flush tkn, so stream 2's copy is made first  */
+	if (to2)
+		tkn2 = to1 ? gCopy(tkn) : tkn;
+	if (to1)
 		gPut(iS1, tkn);
-	if (iS2  &&  (!iUse  ||  iUse == 2))
-		if (iUse == 2)
-			gPut(iS2, tkn);
-		else
-			gPut(iS2, gCopy(tkn));
+	if (to2)
+		gPut(iS2, tkn2);
 	return self;
 }
 
 imeth	gPutm(tkn)
 {
-	if (iS1  &&  (!iUse  ||  iUse == 1))
+	int	to1 = iS1  &&  (!iUse  ||  iUse == 1);
+	int	to2 = iS2  &&  (!iUse  ||  iUse == 2);
+	object	tkn2 = NULL;
+
+	/*  stream 1 may dispose or flush tkn, so stream 2's copy is made first  */
+	if (to2)
+		tkn2 = to1 ? gCopy(tkn) : tkn;
+	if (to1)
 		gPutm(iS1, tkn);
-	if (iS2  &&  (!iUse  ||  iUse == 2))
-		if (iUse == 2)
-			gPutm(iS2, tkn);
-		else
-			gPutm(iS2, gCopy(tkn));
+	if (to2)
+		gPutm(iS2, tkn2);
 	return self;
 }
 

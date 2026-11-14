@@ -121,25 +121,33 @@ imeth objrtn OutputStream2_im_gDispose(object self)
 
 imeth objrtn OutputStream2_im_gPut(object self, object tkn)
 { OutputStream2_iv_t *iv = GetIVs(OutputStream2, self);
-	if (iv->iS1 && (!iv->iUse || iv->iUse == 1)) 
+	int to1 = iv->iS1 && (!iv->iUse || iv->iUse == 1); 
+	int to2 = iv->iS2 && (!iv->iUse || iv->iUse == 2); 
+	object tkn2 = NULL; 
+
+
+	if (to2) 
+		tkn2 = to1 ? gCopy(tkn) : tkn; 
+	if (to1) 
 		gPut(iv->iS1, tkn); 
-	if (iv->iS2 && (!iv->iUse || iv->iUse == 2)) 
-		if (iv->iUse == 2) 
-		gPut(iv->iS2, tkn); 
-	else 
-		gPut(iv->iS2, gCopy(tkn)); 
+	if (to2) 
+		gPut(iv->iS2, tkn2); 
 	return self; 
 } 
 
 imeth objrtn OutputStream2_im_gPutm(object self, object tkn)
 { OutputStream2_iv_t *iv = GetIVs(OutputStream2, self);
-	if (iv->iS1 && (!iv->iUse || iv->iUse == 1)) 
+	int to1 = iv->iS1 && (!iv->iUse || iv->iUse == 1); 
+	int to2 = iv->iS2 && (!iv->iUse || iv->iUse == 2); 
+	object tkn2 = NULL; 
+
+
+	if (to2) 
+		tkn2 = to1 ? gCopy(tkn) : tkn; 
+	if (to1) 
 		gPutm(iv->iS1, tkn); 
-	if (iv->iS2 && (!iv->iUse || iv->iUse == 2)) 
-		if (iv->iUse == 2) 
-		gPutm(iv->iS2, tkn); 
-	else 
-		gPutm(iv->iS2, gCopy(tkn)); 
+	if (to2) 
+		gPutm(iv->iS2, tkn2); 
 	return self; 
 } 
 
@@ -181,7 +189,7 @@ imeth int OutputStream2_im_vPrintf(object self, char *fmt, va_list _rest_)
 	return r; 
 } 
 
-#line 185 "OutputStream2.c"
+#line 193 "OutputStream2.c"
 
 static	int	OutputStream2_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -195,7 +203,7 @@ static	int	OutputStream2_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 163 "OutputStream2.d"
+#line 171 "OutputStream2.d"
 imeth objrtn OutputStream2_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream2_iv_t *iv = GetIVs(OutputStream2, self);
 	if (iv->iS1 && (!iv->iUse || iv->iUse == 1)) 
@@ -233,7 +241,7 @@ imeth objrtn OutputStream2_im_gForceLineDirective(object self)
 } 
 
 
-#line 237 "OutputStream2.c"
+#line 245 "OutputStream2.c"
 
 objrtn	OutputStream2_initialize(void)
 {
