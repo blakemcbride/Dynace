@@ -392,10 +392,24 @@ extern	void	_start_threader(char *stkpos), _start_thread(void);
 #define YIELD	if (!_tick_count  &&  !_no_context_switch)  (*__dynace_yield)()
 #endif
 
+/*  On 64-bit Windows, longjmp unwinds the stack with RtlUnwindEx when the
+    jmp_buf's Frame field is set, which MSVC's and MinGW's setjmp do.  The
+    threader jumps between threads' saved stacks, so the frames in between
+    aren't the target's callers (or were just overwritten) and the unwinder
+    would walk garbage.  With Frame cleared, longjmp just restores the
+    registers.  */
+#ifdef	_WIN64
+#define	_DYNACE_NO_UNWIND(jb)	(((_JUMP_BUFFER *) (jb))->Frame = 0)
+#else
+#define	_DYNACE_NO_UNWIND(jb)	((void) 0)
+#endif
+
 #define StartThreader(x)		\
 	_start_threader((char *) &x);	\
 	if (setjmp(_t_start))		\
-		_start_thread()
+		_start_thread();	\
+	else				\
+		_DYNACE_NO_UNWIND(_t_start)
 
 
 /*  End of thread specific stuff  */

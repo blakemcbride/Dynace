@@ -42,7 +42,7 @@ defclass  Thread  {
 	object		iObj;		/*  pointer to thread object  */
 	char		*iName;
 	int		(*iFun)(void *);
-	jmp_buf		iRtn;
+	char		iRtnSpace[sizeof(jmp_buf) + 16];	/*  holds the jmp_buf; see RTN  */
 	char		*iStack_buf;	/*  save buffer for thread stack  */
 	char		*iStack_location;  /*  ending real stack position  */
 	intptr_t	iStack_buf_size;/*  size of stack_buf		*/
@@ -527,6 +527,12 @@ imeth	gRelease : Release (object self, int yld)
 	return self;
 }
 
+/*  A thread's resume point.  64-bit Windows needs a 16-byte aligned
+    jmp_buf (setjmp stores the xmm registers with movdqa), and an object's
+    instance variables are only 8-byte aligned, so the jmp_buf is placed at
+    the first 16-byte boundary in iRtnSpace.  */
+#define	RTN(t)	(*(jmp_buf *) (((uintptr_t) (t)->iRtnSpace + 15) & ~(uintptr_t) 15))
+
 /*  Thread switching copies each thread's part of the C stack (from the
     threader's starting position down to the switch point) to and from a
     buffer.  The saved region must include all of _dynace_yield's frame, so its
@@ -595,7 +601,7 @@ static	void	restore_stack(ivType *t)
 	asm("t 3");	/*  flush out registers */
 #endif
 	stack_copy(t->iStack_location, t->iStack_buf, t->iStack_size);
-	longjmp(t->iRtn, 1);
+	longjmp(RTN(t), 1);
 }
 
 NO_SANITIZE_ADDRESS
@@ -637,13 +643,14 @@ static	void	_dynace_yield(void)
 
 		/*  save return address  */
 
-		if (setjmp(cCt->iRtn))  {
+		if (setjmp(RTN(cCt)))  {
 
 			/*  resumed by restore_stack, stack already restored  */
 
 			_tick_count = NTICKS;
 			return;	
 		}
+		_DYNACE_NO_UNWIND(RTN(cCt));	/*  see dynl.h  */
 	}
 
 	/*  choose next thread  */
@@ -658,7 +665,7 @@ static	void	_dynace_yield(void)
 	else if (cCt->iStack_size)
 		restore_stack(cCt);
 	else
-		longjmp(cCt->iRtn, 1);
+		longjmp(RTN(cCt), 1);
 }
 
 cmeth	gFindStr, <vFind> (object self, char *name)

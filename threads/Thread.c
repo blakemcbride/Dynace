@@ -64,7 +64,7 @@ typedef struct  _Thread_iv_t  {
 	object iObj;
 	char * iName;
 	int ( * iFun ) ( void * );
-	jmp_buf iRtn;
+	char iRtnSpace [ sizeof ( jmp_buf ) + 16 ];
 	char * iStack_buf;
 	char * iStack_location;
 	intptr_t iStack_buf_size;
@@ -544,41 +544,44 @@ PMETHOD objrtn Release(object self, int yld)
 	return self; 
 } 
 
-#line 541 "Thread.d"
+#line 534 "Thread.d"
+#define RTN(t) (*(jmp_buf *) (((uintptr_t) (t)->iRtnSpace + 15) & ~(uintptr_t) 15)) 
+
+#line 547 "Thread.d"
 #if defined(__has_attribute) 
 #if __has_attribute(no_sanitize_address) 
 #define NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address)) 
 #endif 
 
 
-#line 545 "Thread.d"
+#line 551 "Thread.d"
 #endif 
 
 
-#line 546 "Thread.d"
+#line 552 "Thread.d"
 #ifndef NO_SANITIZE_ADDRESS 
 #define NO_SANITIZE_ADDRESS 
 #endif 
 
 
-#line 550 "Thread.d"
+#line 556 "Thread.d"
 #if defined(__has_feature) 
 #if __has_feature(address_sanitizer) 
 #define ASAN_BUILD 
 #endif 
 
 
-#line 554 "Thread.d"
+#line 560 "Thread.d"
 #endif 
 
 
-#line 555 "Thread.d"
+#line 561 "Thread.d"
 #ifdef __SANITIZE_ADDRESS__ 
 #define ASAN_BUILD 
 #endif 
 
 
-#line 559 "Thread.d"
+#line 565 "Thread.d"
 #ifdef ASAN_BUILD 
 NO_SANITIZE_ADDRESS 
 	static void stack_copy(char *to, char *from, intptr_t n) 
@@ -591,12 +594,12 @@ NO_SANITIZE_ADDRESS
 #else 
 
 
-#line 569 "Thread.d"
+#line 575 "Thread.d"
 #define stack_copy(to, from, n) memcpy((to), (from), (size_t)(n)) 
 #endif 
 
 
-#line 572 "Thread.d"
+#line 578 "Thread.d"
 static void stack_mark(char **p) 
 { 
 	void * volatile c; 
@@ -624,9 +627,9 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 597 "Thread.d"
+#line 603 "Thread.d"
 	stack_copy(t->iStack_location, t->iStack_buf, t->iStack_size); 
-	longjmp(t->iRtn, 1); 
+	longjmp(RTN(t), 1); 
 } 
 
 NO_SANITIZE_ADDRESS 
@@ -645,7 +648,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 615 "Thread.d"
+#line 621 "Thread.d"
 		(*stack_mark_fp)(&mark); 
 #ifdef sparc 
 
@@ -653,7 +656,7 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 620 "Thread.d"
+#line 626 "Thread.d"
 		Thread_cv->cCt->iNo_switch = _no_context_switch; 
 		Thread_cv->cCt->iStack_location = mark; 
 		if ((Thread_cv->cCt->iStack_size = Thread_cv->cTs_stkpos - Thread_cv->cCt->iStack_location) < 0) 
@@ -671,19 +674,20 @@ NO_SANITIZE_ADDRESS
 #endif 
 
 
-#line 635 "Thread.d"
+#line 641 "Thread.d"
 			stack_copy(Thread_cv->cCt->iStack_buf, Thread_cv->cCt->iStack_location, Thread_cv->cCt->iStack_size); 
 		} 
 
 
 
-		if (setjmp(Thread_cv->cCt->iRtn)) { 
+		if (setjmp(RTN(Thread_cv->cCt))) { 
 
 
 
 			_tick_count = NTICKS; 
 			return; 
 		} 
+		_DYNACE_NO_UNWIND(RTN(Thread_cv->cCt)); 
 	} 
 
 
@@ -698,7 +702,7 @@ NO_SANITIZE_ADDRESS
 	else if (Thread_cv->cCt->iStack_size) 
 		restore_stack(Thread_cv->cCt); 
 	else 
-		longjmp(Thread_cv->cCt->iRtn, 1); 
+		longjmp(RTN(Thread_cv->cCt), 1); 
 } 
 
 cmeth objrtn Thread_cm_gFindStr(object self, char *name)
@@ -726,7 +730,7 @@ cmeth objrtn Thread_cm_gFindStr(object self, char *name)
 #endif 
 
 
-#line 687 "Thread.d"
+#line 694 "Thread.d"
 } 
 
 imeth int Thread_im_gIntValue(object self)
@@ -978,7 +982,7 @@ int getch(void)
 #else 
 
 
-#line 937 "Thread.d"
+#line 944 "Thread.d"
 #include <sys/select.h> 
 #include <unistd.h> 
 #include <errno.h> 
@@ -996,7 +1000,7 @@ int kbhit(void)
 	return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0; 
 } 
 
-#line 959 "Thread.d"
+#line 966 "Thread.d"
 int getch(void) 
 { 
 	unsigned char c; 
@@ -1009,11 +1013,11 @@ int getch(void)
 #endif 
 
 
-#line 970 "Thread.d"
+#line 977 "Thread.d"
 #endif 
 
 
-#line 972 "Thread.d"
+#line 979 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -1031,7 +1035,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 1035 "Thread.c"
+#line 1039 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {
