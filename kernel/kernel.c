@@ -259,6 +259,7 @@ typedef	struct	_thread_rec  {
 	char	*top;			/*  top of the thread's stack	*/
 	char	* volatile sp;		/*  its stack pointer while stopped  */
 	volatile int	stop_req;	/*  the GC has asked it to stop	*/
+	void	* volatile hazard;	/*  method cache it is reading	*/
 #ifdef	_WIN32
 	HANDLE	h;
 #else
@@ -377,7 +378,6 @@ LOCAL	void dispose_boehm_gc(object obj, void *p);
 
 #if	!DPP_FASTWIDE  &&  !defined(NO_CACHE)
 LOCAL	void create_cache(int rows,int cols);
-LOCAL	void free_cache(void);
 LOCAL	void rebuild_class_indexes(void);
 LOCAL	void rebuild_generic_indexes(void);
 LOCAL	objrtn Dynace_cm_gResizeMethodCache(object self,int classes,int generics);
@@ -1329,12 +1329,17 @@ typedef	struct	_element  {
 typedef	struct	_cache  {
 	int	rows;		/*  generics	*/
 	int	cols;		/*  classes	*/
+	unsigned	size;	/*  rows * cols	*/
 	element	**table;
 	int	used;
 	int	chains;
+	struct	_cache	*next;	/*  retired caches  */
 }	cache;
 
 static	cache	*method_cache;
+#ifdef	NATIVE_THREADS
+static	cache	*Retired_caches;	/*  replaced, maybe still being read (MC_CS)  */
+#endif
 
 static	CRITICALSECTION	MC_CS;
 
@@ -1349,28 +1354,88 @@ static	CRITICALSECTION	MC_CS;
 #define	CACHE_STORE(p, v)	((p) = (v))
 #endif
 
+/*  gResizeMethodCache publishes a complete new cache, and then changes the
+    class and generic indexes.  Until it is done a reader may combine indexes
+    meant for different tables, so under native threads _FindMethod checks
+    the position against the cache it loaded.  A wrong bucket only means a
+    miss, since every entry is matched on class and generic.  */
+#ifdef	NATIVE_THREADS
+#define	CACHE_POS_OK(c, pos)	((unsigned) (pos) < (c)->size)
+#else
+#define	CACHE_POS_OK(c, pos)	1
+#endif
+
 LOCAL	void	create_cache(int rows, int cols)
 {
-	method_cache = Tcalloc(cache);
-	method_cache->table = Tncalloc(element *, rows * cols);
-	method_cache->rows = rows;
-	method_cache->cols = cols;
+	cache	*c = Tcalloc(cache);
+
+	c->table = Tncalloc(element *, rows * cols);
+	c->rows = rows;
+	c->cols = cols;
+	c->size = (unsigned) rows * (unsigned) cols;
+	CACHE_STORE(method_cache, c);
 }
 
-LOCAL	void	free_cache(void)
+LOCAL	void	free_cache(cache *c)
 {
-	int	i, n;
+	unsigned	i;
 	element	*e, *ne;
 
-	n = method_cache->rows * method_cache->cols;
-	for (i=0 ; i != n ; ++i)
-		for (e=method_cache->table[i] ; e ; e=ne)  {
+	for (i=0 ; i != c->size ; ++i)
+		for (e=c->table[i] ; e ; e=ne)  {
 			ne = e->next;
 			free(e);
 		}
-	free(method_cache->table);
-	free(method_cache);
+	free(c->table);
+	free(c);
 }
+
+#ifdef	NATIVE_THREADS
+
+/*  Free the retired caches no thread can still be reading (MC_CS held).
+    _FindMethod stores the cache it reads in its thread's hazard pointer and
+    then checks that the cache is still current.  Every thread registers
+    before it first reads the cache, and one that registers after this sees
+    the new cache.  Stopping the other threads makes their hazard pointers
+    visible, and a cache none of them holds is unreachable once they resume.
+    The caches are freed after the world restarts, since a stopped thread may
+    hold the malloc lock.  Without a thread registry they are kept.  */
+
+LOCAL	void	free_retired_caches(void)
+{
+#ifdef	STOP_THE_WORLD
+	cache	*c, **pc, *dead = NULL;
+	ThreadRec	*r;
+
+	if (!Retired_caches  ||  !Stw_ready)
+		return;
+	ENTERCRITICALSECTION(THR_CS);
+	if (Threads  &&  (Threads != MyThread  ||  Threads->next))  {
+		stop_world();
+		for (pc=&Retired_caches ; c = *pc ; )  {
+			for (r=Threads ; r  &&  r->hazard != (void *) c ; r=r->next);
+			if (r)
+				pc = &c->next;
+			else  {
+				*pc = c->next;
+				c->next = dead;
+				dead = c;
+			}
+		}
+		start_world();
+	}  else  {
+		dead = Retired_caches;
+		Retired_caches = NULL;
+	}
+	LEAVECRITICALSECTION(THR_CS);
+	while (c = dead)  {
+		dead = c->next;
+		free_cache(c);
+	}
+#endif
+}
+
+#endif
 
 LOCAL	void	rebuild_class_indexes(void)
 {
@@ -1403,14 +1468,26 @@ cmeth	objrtn	Dynace_cm_gResizeMethodCache(object self, int classes, int generics
 	if (classes < 1  ||  generics < 1  ||  classes > INT_MAX / generics)
 		gError(self, "gResizeMethodCache: invalid cache size.\n");
 	/*  The indexes must change together with the table.  Lock order is
-	    MGL_CS, MCL_CS, MC_CS.  */
+	    MGL_CS, MCL_CS, MC_CS, THR_CS.  */
 	ENTERCRITICALSECTION(MGL_CS);
 	ENTERCRITICALSECTION(MCL_CS);
 	ENTERCRITICALSECTION(MC_CS);
-	free_cache();
-	create_cache(Crows = generics, Ccols = classes);
-	rebuild_generic_indexes();
-	rebuild_class_indexes();
+	{
+		cache	*old = method_cache;
+
+		create_cache(Crows = generics, Ccols = classes);
+		rebuild_generic_indexes();
+		rebuild_class_indexes();
+#ifdef	NATIVE_THREADS
+		/*  other threads may still be reading the old cache without a
+		    lock, so it is freed only once none can be  */
+		old->next = Retired_caches;
+		Retired_caches = old;
+		free_retired_caches();
+#else
+		free_cache(old);
+#endif
+	}
 	LEAVECRITICALSECTION(MC_CS);
 	LEAVECRITICALSECTION(MCL_CS);
 	LEAVECRITICALSECTION(MGL_CS);
@@ -1576,16 +1653,46 @@ ofun	_FindMethod(object i, object generic)
 	    As an alternative I am making sure that the writes/updates are atomic but that they are done
 	    such that a critical section in the reads should not be necessary.  */
 /*	ENTERCRITICALSECTION(MC_CS);    */
-	for (e=CACHE_LOAD(method_cache->table[cache_entry(giv->cache_idx, civ->cache_idx)]) ; e ; e=e->next)
-		if (e->cls == cls  &&  e->generic == generic  &&  e->level == 1)  {
-			volatile  ofun	meth;
+	{
+		cache	*mc = CACHE_LOAD(method_cache);
+		int	pos;
+		ofun	meth = NULL;
+#ifdef	STOP_THE_WORLD
+		ThreadRec	*me = MyThread;
+		cache	*cur;
 
-			if (TRACES > DYNACE_TRACE_OFF)
-				tracefn(i, giv, e->meth);
-			meth = e->miv->meth;
+		/*  see free_retired_caches  */
+		if (me)
+			for (;;)  {
+				me->hazard = (void *) mc;
+				COMPILER_BARRIER();
+				if ((cur = CACHE_LOAD(method_cache)) == mc)
+					break;
+				mc = cur;
+			}
+#endif
+		pos = cache_entry(giv->cache_idx, civ->cache_idx);
+		if (CACHE_POS_OK(mc, pos))
+			for (e=CACHE_LOAD(mc->table[pos]) ; e ; e=e->next)
+				if (e->cls == cls  &&  e->generic == generic  &&  e->level == 1)  {
+					meth = e->miv->meth;
+					mo = e->meth;
+					break;
+				}
+#ifdef	STOP_THE_WORLD
+		if (me)  {
+			COMPILER_BARRIER();
+			me->hazard = NULL;
+		}
+#endif
+		/*  e is only tested: its cache may be freed once the hazard is cleared  */
+		if (e)  {
+			if (TRACES > DYNACE_TRACE_OFF)	/*  may dispatch  */
+				tracefn(i, giv, mo);
 /*			LEAVECRITICALSECTION(MC_CS);  */
 			return meth;
 		}
+	}
 #endif
 	
 	/*  find it the hard way   */
@@ -3424,6 +3531,14 @@ LOCAL	void	stop_world(void)
 			continue;
 #ifdef	_WIN32
 		r->stop_req = SuspendThread(r->h) != (DWORD) -1;
+		if (r->stop_req)  {
+			CONTEXT	ctx;
+
+			/*  waits until the suspension has taken effect  */
+			memset(&ctx, 0, sizeof ctx);
+			ctx.ContextFlags = CONTEXT_CONTROL;
+			GetThreadContext(r->h, &ctx);
+		}
 #else
 		r->stop_req = 1;
 		if (pthread_kill(r->tid, DYNACE_GC_SIGNAL))
