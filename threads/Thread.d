@@ -447,6 +447,17 @@ cmeth	gNewThread, <vNew> (object self, char *name, ifun fun, int priority, void 
 	return obj;
 }
 
+static	ivType	*Starter;	/*  the thread that called StartThreader  */
+
+/*  The frames above cTs_stkpos belong to the thread that started the threader
+    but are shared by every thread's stack, so the exception handler search of
+    any other thread stops there.  */
+
+static	char	*handler_top(void)
+{
+	return cCt  &&  cCt != Starter ? cTs_stkpos : NULL;
+}
+
 void	_start_threader(char *stkpos)
 {
 	object	t;
@@ -464,6 +475,8 @@ void	_start_threader(char *stkpos)
 	cCpq = cMpq;
 
 	cTs_stkpos = stkpos;
+	Starter = cCt;
+	__dynace_handler_top = handler_top;
 
 	_start_timer();
 }

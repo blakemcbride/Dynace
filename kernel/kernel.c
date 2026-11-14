@@ -175,8 +175,10 @@ long	_SIG2;
 
 #if	defined(__WATCOMC__)  &&  defined(__cplusplus)
 extern	"C"	void	(*__dynace_yield)(void) = NULL;
+extern	"C"	char	*(*__dynace_handler_top)(void) = NULL;
 #else
 void	(*__dynace_yield)(void) = NULL;
+char	*(*__dynace_handler_top)(void) = NULL;	/*  set by the green threader  */
 #endif
 
 
@@ -2938,7 +2940,14 @@ object	_catchKind(object *condp, object cls)
 NO_SANITIZE_ADDRESS
 LOCAL	HandlerCtx	*find_handler(char *cp)
 {
-	char	*top = STACK_TOP();	/*  NULL if unknown: scan until found  */
+	char	*top = NULL;
+
+	/*  A green thread other than the one that started the threader must not
+	    reach the part of main's frame that all threads share.  */
+	if (__dynace_handler_top)
+		top = (*__dynace_handler_top)();
+	if (!top)
+		top = STACK_TOP();	/*  NULL if unknown: scan until found  */
 
 	for (cp += sizeof(long) ; !top  ||  cp + 2 * sizeof(long) <= top ; cp += sizeof(long))
 		if (((long *) cp)[0] == _SIG1  &&  ((long *) cp)[1] == _SIG2)

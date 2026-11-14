@@ -380,6 +380,7 @@ extern	int	_no_context_switch;
 extern	jmp_buf	_t_start;
 
 extern	void	(*__dynace_yield)(void);
+extern	char	*(*__dynace_handler_top)(void);
 extern	void	_start_threader(char *stkpos), _start_thread(void);
 
 #define INHIBIT_THREADER	_no_context_switch++
