@@ -708,6 +708,18 @@ static	void	touch_all(object argList)
 	}
 }
 
+/*  the file name without its directory  */
+
+static	char	*file_part(char *path)
+{
+	char	*p;
+
+	for (p=path ; *p ; p++)
+		if (*p == '/'  ||  *p == '\\'  ||  *p == ':')
+			path = p + 1;
+	return path;
+}
+
 static	void	make_macro_name(char *to, size_t n, char *from)
 {
 	char	*f;
@@ -4665,7 +4677,9 @@ pp_gen_head(object	sobj,
 #endif
 	if (gSize(idecls))
 		if (Create_iv)
-			vPrintf(sobj, "#include \"%s\"\n\n", new_ext(file, "iv"));
+			/*  the .iv file is written next to the .c file, so the
+			    #include must not repeat the directory  */
+			vPrintf(sobj, "#include \"%s\"\n\n", file_part(new_ext(file, "iv")));
 		else  {
 			gTLineDirective(sobj);
 			vPrintf(sobj, "typedef struct  _%s_iv_t  {\n", cname);
@@ -4675,7 +4689,7 @@ pp_gen_head(object	sobj,
 		}
 	if (gSize(cdecls))  {
 		if (Create_cv)
-			vPrintf(sobj, "#include \"%s\"\n\n", new_ext(file, "cv"));
+			vPrintf(sobj, "#include \"%s\"\n\n", file_part(new_ext(file, "cv")));
 		else  {
 			gTLineDirective(sobj);
 			vPrintf(sobj, "typedef struct  _%s_cv_t  {\n", cname);
