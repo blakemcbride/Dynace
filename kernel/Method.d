@@ -55,12 +55,21 @@ imeth	ofun	gFunction()
 	return meth;
 }	
 
+extern	void	_Dynace_method_changed(object);
+
+/*  Super calls, gFindMethod and imcPointer use fmeth.  A method without
+    variable arguments has the same function in both, so both change.  A
+    vararg method's fixed-argument version (fmeth) is left alone.  */
+
 imeth	ofun	gChangeFunction(ofun fun)
 {
 	ofun	org;
 
 	org = meth;
 	meth = fun;
+	if (fmeth == org)
+		fmeth = fun;
+	_Dynace_method_changed(generic);
 	return org;
 }	
 

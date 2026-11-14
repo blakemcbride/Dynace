@@ -65,12 +65,18 @@ imeth ofun Method_im_gFunction(object self)
 	return iv->meth; 
 } 
 
+extern void _Dynace_method_changed(object); 
+
+#line 64 "Method.d"
 imeth ofun Method_im_gChangeFunction(object self, ofun fun)
 { Method_iv_t *iv = GetIVs(Method, self);
 	ofun org; 
 
 	org = iv->meth; 
 	iv->meth = fun; 
+	if (iv->fmeth == org) 
+		iv->fmeth = fun; 
+	_Dynace_method_changed(iv->generic); 
 	return org; 
 } 
 

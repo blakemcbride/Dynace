@@ -595,6 +595,9 @@ inline	void	gInvalidObject(object self, int argn, object arg1);
 extern	void	(*gInvalidObject)(object self, int argn, object arg1);
 #endif
 
+/*  _FindMethod fills the method pointer slot, except while tracing is on,
+    so a traced call always reaches it.  */
+
 #ifndef	SMALL_FW
 
 #define FW_GENERIC(g) 						\
@@ -605,13 +608,13 @@ extern	void	(*gInvalidObject)(object self, int argn, object arg1);
 	}							\
 	YIELD;							\
 	if (!(_meth_ = MethodPointer(g, self)))			\
-		MethodPointer(g, self) = _meth_ = _FindMethod(self, Generic(g))
+		_meth_ = _FindMethod(self, Generic(g))
 
 #else
 
 #define FW_GENERIC(g) 						\
 	if (!(_meth_ = MethodPointer(g, self)))			\
-		MethodPointer(g, self) = _meth_ = _FindMethod(self, Generic(g))
+		_meth_ = _FindMethod(self, Generic(g))
 
 #endif	
 

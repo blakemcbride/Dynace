@@ -1705,6 +1705,12 @@ ofun	_FindMethod(object i, object generic)
 		cache_add(giv->cache_idx, civ->cache_idx, generic, cls, 1, mo);
 		LEAVECRITICALSECTION(MC_CS);
 #endif
+#if	DPP_FASTWIDE
+		/*  the slot FW_GENERIC dispatches through; it stays empty while
+		    tracing is on so every call is traced  */
+		if (TRACES <= DYNACE_TRACE_OFF)
+			giv->mc[civ->id] = miv->meth;
+#endif
 		if (TRACES > DYNACE_TRACE_OFF)
 			tracefn(i, giv, mo);
 
@@ -3140,17 +3146,55 @@ imeth	int	Behavior_im_gInstanceSize(object self)
 	return SCIV(self)->effective_iv_size;
 }
 
+#if	DPP_FASTWIDE
+
+/*  empty a generic's method pointer table (all of them if g is NULL), so
+    FW_GENERIC goes through _FindMethod again  */
+
+LOCAL	void	clear_method_pointers(object g)
+{
+	GenericFunction_iv_t	*giv;
+	int	n, all = !g;
+
+	ENTERCRITICALSECTION(MGL_CS);
+	for (g = all ? MGL : g ; g ; g = all ? giv->next : NULL)  {
+		giv = (GenericFunction_iv_t *) (g+1);
+		for (n=NUM_CLASSES ; n-- ; )
+			giv->mc[n] = NULL;
+	}
+	LEAVECRITICALSECTION(MGL_CS);
+}
+
+#endif
+
 cmeth	int	Dynace_cm_gTrace(object self, int mode)
 {
 	int	pmode = TRACES;
 	USE(self);
 	TRACES = mode;
+#if	DPP_FASTWIDE
+	if (mode > DYNACE_TRACE_OFF)
+		clear_method_pointers(NULL);
+#endif
 	return pmode;
+}
+
+/*  Called by Method::gChangeFunction.  Under FASTWIDE the generic's method
+    pointer table may hold the old function for any class that dispatched
+    through it.  */
+
+void	_Dynace_method_changed(object generic)
+{
+#if	DPP_FASTWIDE
+	clear_method_pointers(generic);
+#else
+	USE(generic);
+#endif
 }
 
 LOCAL	void	init_critical_sections(void)
 {
-#if defined(NATIVE_THREADS) &&  defined(__unix__)
+#if defined(NATIVE_THREADS) &&  !defined(_WIN32)
 	pthread_mutexattr_init(&_mutex_attr);
 	pthread_mutexattr_settype(&_mutex_attr, PTHREAD_MUTEX_RECURSIVE);
 #endif
