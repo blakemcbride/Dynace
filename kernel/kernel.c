@@ -56,7 +56,7 @@
 
 /*  #define	NO_CACHE  */
 
-#if defined(NATIVE_THREADS) &&  defined(__unix__)
+#if defined(NATIVE_THREADS) &&  !defined(_WIN32)
 pthread_mutexattr_t _mutex_attr;
 #endif
 

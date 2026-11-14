@@ -161,7 +161,7 @@ typedef unsigned long  INT_PTR;
 #define	NULLOBJ	((object)0)
 
 #ifdef	NATIVE_THREADS
-#ifdef  __unix__
+#ifndef	_WIN32		/*  POSIX threads (macOS does not define __unix__)  */
 	#include <pthread.h>
 	typedef pthread_mutex_t			CRITICALSECTION;
 	extern pthread_mutexattr_t _mutex_attr;
