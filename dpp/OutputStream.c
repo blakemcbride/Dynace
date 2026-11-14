@@ -108,19 +108,39 @@ cmeth objrtn OutputStream_cm_gNew(object self)
 	return gShouldNotImplement(self, "gNew"); 
 } 
 
+
+
+
+static object line_name(char *name) 
+{ 
+	char *buf, *p; 
+	object s; 
+
+	if (!name) 
+		return gNewWithStr(String, name); 
+	p = buf = Tnalloc(char, 2*strlen(name)+1); 
+	for ( ; *name ; *p++ = *name++) 
+		if (*name == '\\' || *name == '"') 
+		*p++ = '\\'; 
+	*p = '\0'; 
+	s = gNewWithStr(String, buf); 
+	free(buf); 
+	return s; 
+} 
+
 cmeth objrtn OutputStream_cm_gNewWithStrStr(object self, char *file, char *ifile)
 { 
 	object obj = oSuper(OutputStream_c, gNew, self)(self); 
 	ivType *iv = ivPtr(obj); 
-	iv->iSFile = gNewWithStr(String, ifile); 
-	iv->iTFile = gNewWithStr(String, file); 
+	iv->iSFile = line_name(ifile); 
+	iv->iTFile = line_name(file); 
 #if !defined(unix) && 0 
 	gToLower(iv->iSFile); 
 	gToLower(iv->iTFile); 
 #endif 
 
 
-#line 98 "OutputStream.d"
+#line 118 "OutputStream.d"
 	iv->iStream = file ? open_file(file, WMODE, 0) : (object) NULL; 
 	iv->iOutputList = gNew(LinkList); 
 	iv->iRLine = iv->iOLine = 1L; 
@@ -165,7 +185,7 @@ static int do_var_sub(ivType *iv)
 
 #ifdef CONVERT_SUPER 
 
-#line 146 "OutputStream.d"
+#line 166 "OutputStream.d"
 static objrtn make_arg(object frst, object lst, int *simple) 
 { 
 	object arg; 
@@ -187,7 +207,7 @@ static objrtn make_arg(object frst, object lst, int *simple)
 	return arg; 
 } 
 
-#line 171 "OutputStream.d"
+#line 191 "OutputStream.d"
 #define OUTT(t) if (tkn) gAddBefore(tkn, t); else gAddLast(iv->iOutputList, t) 
 
 
@@ -392,7 +412,7 @@ static int convert_super(ivType *iv)
 #endif 
 
 
-#line 376 "OutputStream.d"
+#line 396 "OutputStream.d"
 imeth int OutputStream_im_gFlush(object self)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	int i, pp, endif; 
@@ -410,7 +430,7 @@ imeth int OutputStream_im_gFlush(object self)
 #endif 
 
 
-#line 392 "OutputStream.d"
+#line 412 "OutputStream.d"
 		tkn = gFirst(iv->iOutputList); 
 	if (tkn && iv->iILine && iv->iOLine != iv->iILine) 
 		if (iv->iILine > iv->iOLine && iv->iILine < iv->iOLine+5) 
@@ -486,7 +506,7 @@ imeth objrtn OutputStream_im_gFlushm(object self)
 #endif 
 
 
-#line 466 "OutputStream.d"
+#line 486 "OutputStream.d"
 		for (tkn=gFirst(iv->iOutputList) ; tkn ; tkn=gFirst(iv->iOutputList)) { 
 		iv->iILine = gLineNumber(tkn); 
 		if (iv->iILine && iv->iOLine != iv->iILine) { 
@@ -647,7 +667,7 @@ imeth int OutputStream_im_vPrintf(object self, char *fmt, va_list _rest_)
 	return r; 
 } 
 
-#line 651 "OutputStream.c"
+#line 671 "OutputStream.c"
 
 static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -661,7 +681,7 @@ static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 626 "OutputStream.d"
+#line 646 "OutputStream.d"
 imeth objrtn OutputStream_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	if (iv->iCName != cname) 
@@ -705,7 +725,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 709 "OutputStream.c"
+#line 729 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {

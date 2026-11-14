@@ -85,12 +85,32 @@ cmeth	gNew()
 	return gShouldNotImplement(self, "gNew");
 }
 
+/*  a file name as it goes between the quotes of a #line directive, with
+    \ and " escaped (a Windows path such as src\util\Bs.d)  */
+
+static	object	line_name(char *name)
+{
+	char	*buf, *p;
+	object	s;
+
+	if (!name)
+		return gNewWithStr(String, name);
+	p = buf = Tnalloc(char, 2*strlen(name)+1);
+	for ( ; *name ; *p++ = *name++)
+		if (*name == '\\'  ||  *name == '"')
+			*p++ = '\\';
+	*p = '\0';
+	s = gNewWithStr(String, buf);
+	free(buf);
+	return s;
+}
+
 cmeth	gNewWithStrStr(char *file, char *ifile)
 {
 	object	obj = gNew(super);
 	ivType	*iv = ivPtr(obj);
-	iSFile = gNewWithStr(String, ifile);
-	iTFile = gNewWithStr(String, file);
+	iSFile = line_name(ifile);
+	iTFile = line_name(file);
 #if	!defined(unix)  &&  0
 	gToLower(iSFile);
 	gToLower(iTFile);
