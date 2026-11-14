@@ -27,14 +27,14 @@
 */
 
 
-#if defined(NATIVE_THREADS)  &&  defined(__linux__)  &&  !defined(_GNU_SOURCE)
+#if (defined(__linux__)  ||  defined(__CYGWIN__))  &&  !defined(_GNU_SOURCE)
 #define _GNU_SOURCE	/*  pthread_getattr_np  */
 #endif
 
 #include "generics.h"
 
-#if defined(_M_IX86) || defined(_M_X64)   //  32 or 64 bit Windows
-#include <windows.h>   // needed for GC
+#if defined(_WIN32)   //  32 or 64 bit Windows (MSVC or MinGW)
+#include <windows.h>   // needed for GC and the stack bounds
 #endif
 
 #include <string.h>
@@ -3073,11 +3073,104 @@ LOCAL	void	init_critical_sections(void)
 #endif
 }
 
-#if defined(__APPLE__)
+/*  Where the stack top comes from:
+	Windows (MSVC, MinGW)		the TEB
+	macOS				pthread_get_stackaddr_np
+	glibc				__libc_stack_end in the initial thread,
+					otherwise pthread_getattr_np
+	musl, bionic, Cygwin		pthread_getattr_np
+	FreeBSD, NetBSD, DragonFly	pthread_attr_get_np
+	OpenBSD				pthread_stackseg_np
+	Solaris				thr_stksegment
+    The BSD calls live in the pthread library, so they are used only with
+    native threads, and so is pthread_getattr_np before glibc 2.34.  */
+
+#if defined(_WIN32)
+#elif defined(__APPLE__)
 #include <pthread.h>
 #elif defined(__linux__)  &&  defined(__GLIBC__)
+#include <unistd.h>
+#include <sys/syscall.h>
 extern	void	*__libc_stack_end;
+#if defined(NATIVE_THREADS)  ||  __GLIBC_PREREQ(2, 34)
+#include <pthread.h>
+#define	STACK_GETATTR_NP
 #endif
+#elif defined(__linux__)  ||  defined(__CYGWIN__)
+#include <pthread.h>
+#define	STACK_GETATTR_NP
+#elif (defined(__FreeBSD__)  ||  defined(__DragonFly__)  ||  defined(__NetBSD__))  &&  defined(NATIVE_THREADS)
+#include <pthread.h>
+#ifndef	__NetBSD__
+#include <pthread_np.h>
+#endif
+#define	STACK_ATTR_GET_NP
+#elif defined(__OpenBSD__)  &&  defined(NATIVE_THREADS)
+#include <pthread.h>
+#include <pthread_np.h>
+#define	STACK_STACKSEG_NP
+#elif defined(__sun)
+#include <thread.h>
+#include <signal.h>
+#define	STACK_THR_STKSEGMENT
+#endif
+
+/*  The top (highest address) of the calling thread's stack, backed off one
+    pointer so a scan never reads past it, or NULL if it can't be found.  */
+
+LOCAL	char	*os_stack_top(void)
+{
+	char	*top = NULL;
+
+#if	defined(_WIN32)
+	top = (char *) ((NT_TIB *) NtCurrentTeb())->StackBase;
+#elif defined(__APPLE__)
+	top = (char *) pthread_get_stackaddr_np(pthread_self());
+#else
+#if	defined(__linux__)  &&  defined(__GLIBC__)
+	/*  __libc_stack_end bounds only the initial thread's stack  */
+	if (syscall(SYS_gettid) == getpid())
+		top = (char *) __libc_stack_end;
+#endif
+#if	defined(STACK_GETATTR_NP)  ||  defined(STACK_ATTR_GET_NP)
+	if (!top)  {
+		pthread_attr_t	attr;
+		void	*addr;
+		size_t	size;
+		int	r;
+
+#ifdef	STACK_GETATTR_NP
+		r = pthread_getattr_np(pthread_self(), &attr);
+#else
+		if (!(r = pthread_attr_init(&attr))  &&  (r = pthread_attr_get_np(pthread_self(), &attr)))
+			pthread_attr_destroy(&attr);
+#endif
+		if (!r)  {
+			if (!pthread_attr_getstack(&attr, &addr, &size))
+				top = (char *) addr + size;
+			pthread_attr_destroy(&attr);
+		}
+	}
+#elif	defined(STACK_STACKSEG_NP)
+	{
+		stack_t	ss;
+
+		if (!pthread_stackseg_np(pthread_self(), &ss))
+			top = (char *) ss.ss_sp;	/*  the top, not the base  */
+	}
+#elif	defined(STACK_THR_STKSEGMENT)
+	{
+		stack_t	ss;
+
+		if (!thr_stksegment(&ss))
+			top = (char *) ss.ss_sp;	/*  the top, not the base  */
+	}
+#endif
+#endif
+	if (top)
+		top -= sizeof(char *);
+	return top;
+}
 
 /*  The stack beginning passed to InitDynace (normally &argc) only covers the
     part of main's frame below that variable.  The compiler is free to keep
@@ -3087,18 +3180,8 @@ extern	void	*__libc_stack_end;
 
 LOCAL	char	*stack_beginning(void *sb)
 {
-	char	*top = NULL;
+	char	*top = os_stack_top();
 
-#if	defined(_M_IX86) || defined(_M_X64)
-	top = (char *) ((NT_TIB *) NtCurrentTeb())->StackBase;
-#elif defined(__APPLE__)
-	top = (char *) pthread_get_stackaddr_np(pthread_self());
-#elif defined(__linux__)  &&  defined(__GLIBC__)
-	top = (char *) __libc_stack_end;
-#endif
-	/*  back off one pointer so the mark loop never reads past the end  */
-	if (top)
-		top -= sizeof(char *);
 	return top > (char *) sb ? top : (char *) sb;
 }
 
@@ -3108,27 +3191,7 @@ LOCAL	char	*stack_beginning(void *sb)
 
 LOCAL	char	*thread_stack_top(void)
 {
-	char	*top = NULL;
-
-#if	defined(_M_IX86) || defined(_M_X64)
-	top = (char *) ((NT_TIB *) NtCurrentTeb())->StackBase;
-#elif defined(__APPLE__)
-	top = (char *) pthread_get_stackaddr_np(pthread_self());
-#elif defined(__linux__)  &&  defined(__GLIBC__)
-	pthread_attr_t	attr;
-	void	*addr;
-	size_t	size;
-
-	if (!pthread_getattr_np(pthread_self(), &attr))  {
-		if (!pthread_attr_getstack(&attr, &addr, &size))
-			top = (char *) addr + size;
-		pthread_attr_destroy(&attr);
-	}
-#endif
-	/*  back off one pointer so the mark loop never reads past the end  */
-	if (top)
-		top -= sizeof(char *);
-	return ThreadStackTop = top;
+	return ThreadStackTop = os_stack_top();
 }
 
 #endif
