@@ -508,7 +508,8 @@ imeth	int	gIsVarArg()
 
 imeth	char	*gLastArg()
 {
-	return iLastArg && !iVararg ? gStringValue(iLastArg) : "self";
+	/*  an exception generic is declared (object self, ...)  */
+	return iLastArg && !iVararg && !iException ? gStringValue(iLastArg) : "self";
 }
 
 imeth	gException()

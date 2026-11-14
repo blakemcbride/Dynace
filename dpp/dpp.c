@@ -4307,7 +4307,8 @@ addto_generics(object smethods,		/*  source methods  		*/
 		gn = gKey(obj);
 		/*  Without strategy 1 an exception generic hands its arguments to
 		    the method as a va_list, which only a vararg method accepts.  */
-		if (Strategy != 1  &&  (NoProto  ||  gFind(exceptions, gn))  &&  !gIsVarArg(mproto))  {
+		if (Strategy != 1  &&  (NoProto  ||  gFind(exceptions, gn))  &&
+		    (!gIsVarArg(mproto)  ||  strne(gLastArg(mproto), "self")))  {
 			ErrorCode = 1;
 			vPrintf(stdoutStream, "Method %s of exception generic %s must be ivmeth/cvmeth unless using strategy 1.\n",
 				trunc_mname(mname), gname);

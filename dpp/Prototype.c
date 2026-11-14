@@ -532,7 +532,8 @@ imeth int Prototype_im_gIsVarArg(object self)
 
 imeth char * Prototype_im_gLastArg(object self)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
-	return iv->iLastArg && !iv->iVararg ? gStringValue(iv->iLastArg) : "self"; 
+
+	return iv->iLastArg && !iv->iVararg && !iv->iException ? gStringValue(iv->iLastArg) : "self"; 
 } 
 
 imeth objrtn Prototype_im_gException(object self)
@@ -547,7 +548,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 551 "Prototype.c"
+#line 552 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {
