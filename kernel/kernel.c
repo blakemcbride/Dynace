@@ -144,6 +144,19 @@ typedef	struct	memory_range  {
 #define	NO_SANITIZE_ADDRESS
 #endif
 
+/*  An address on the real stack below the caller's frame, to start a scan
+    of the caller's stack.  Under AddressSanitizer a local whose address is
+    taken may live on a separate "fake stack", so &local can't be used.  */
+#if	defined(__GNUC__)  ||  defined(__clang__)
+static	__attribute__((noinline))	char	*stack_here(void)
+{
+	return (char *) __builtin_frame_address(0);
+}
+#define	STACK_HERE(v)	stack_here()
+#else
+#define	STACK_HERE(v)	((char *) &(v))
+#endif
+
 //#define     ENABLE_CHECK_FREE_LIST   // for debugging
 
 int	_CheckObjects_ = 1;		/*  turn object checking on/off  */
@@ -189,7 +202,7 @@ static	CRITICALSECTION  MML_CS;
 static	CRITICALSECTION  GMR_CS;
 static	CRITICALSECTION	 GC_CS;
 static	CRITICALSECTION	 CMU_CS;	/*  used for CMU & ObjectSN	*/
-static	int	In_GC;			/*  avoid use of slow GC_CS 	*/
+static	int	GC_running;		/*  a gGC is in progress (GC_CS held)  */
 
 /*  The top (highest address) of the current thread's stack.  StackBeg only
     bounds the main thread's stack; with native threads each thread finds its
@@ -205,6 +218,78 @@ static	char	*thread_stack_top(void);
 #define	STACK_TOP()	(ThreadStackTop ? ThreadStackTop : thread_stack_top())
 #else
 #define	STACK_TOP()	StackBeg
+#endif
+
+/*  With native threads gGC stops every other thread that runs Dynace code
+    while it marks.  A thread registers itself the first time it dispatches or
+    allocates (or by calling DynaceRegisterThread) and is removed when it
+    exits.  On POSIX systems a registered thread is stopped by a signal
+    (DYNACE_GC_SIGNAL) whose handler waits until the GC is done marking, so
+    a registered thread must not block that signal.  On Windows it is
+    suspended.  */
+#if	defined(NATIVE_THREADS)  &&  !defined(BOEHM_GC)  &&  !defined(SEGMENTED_MEMORY)  &&  \
+	(defined(_WIN32)  ||  defined(__unix__)  ||  defined(__APPLE__))
+#define	STOP_THE_WORLD
+#endif
+
+#ifdef	STOP_THE_WORLD
+
+#ifdef	_WIN32
+#include <windows.h>
+#else
+#include <pthread.h>
+#include <signal.h>
+#include <setjmp.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#ifndef	DYNACE_GC_SIGNAL
+#ifdef	SIGPWR
+#define	DYNACE_GC_SIGNAL	SIGPWR
+#else
+#define	DYNACE_GC_SIGNAL	SIGXCPU
+#endif
+#endif
+#endif
+
+typedef	struct	_thread_rec  {
+	struct	_thread_rec	*next;
+	char	*top;			/*  top of the thread's stack	*/
+	char	* volatile sp;		/*  its stack pointer while stopped  */
+	volatile int	stop_req;	/*  the GC has asked it to stop	*/
+#ifdef	_WIN32
+	HANDLE	h;
+#else
+	pthread_t	tid;
+#endif
+}	ThreadRec;
+
+static	ThreadRec	*Threads;	/*  registered threads (THR_CS)	*/
+static	CRITICALSECTION	 THR_CS;
+static	THREAD_LOCAL	ThreadRec	*MyThread;
+static	volatile int	World_stopped;
+static	int	Stw_ready;		/*  InitKernel has set things up  */
+
+LOCAL	void	register_thread(void);
+LOCAL	void	init_stop_the_world(void);
+LOCAL	int	unscannable_thread(void);
+LOCAL	void	stop_world(void);
+LOCAL	void	mark_threads(void);
+LOCAL	void	start_world(void);
+#define	REGISTER_THREAD()	do { if (!MyThread  &&  Stw_ready) register_thread(); } while (0)
+
+#else
+#define	REGISTER_THREAD()	do { } while (0)
+#endif
+
+/*  Keeps the compiler from reordering stores across it, for structures the
+    GC walks while other threads are stopped at arbitrary instructions.  */
+#if	defined(NATIVE_THREADS)  &&  (defined(__GNUC__)  ||  defined(__clang__))
+#define	COMPILER_BARRIER()	__asm__ __volatile__("" ::: "memory")
+#elif	defined(NATIVE_THREADS)  &&  defined(_MSC_VER)
+#define	COMPILER_BARRIER()	MemoryBarrier()
+#else
+#define	COMPILER_BARRIER()
 #endif
 
 
@@ -276,7 +361,8 @@ LOCAL	objrtn Object_im_gDispose(object self);
 LOCAL	void Dynace_cm_gMarkObject(object self,object obj);
 LOCAL	void Dynace_cm_gMarkRange(object self,char _HUGE_ **from ,char _HUGE_ **to );
 LOCAL	void rebuild_free_list(Behavior_iv_t *cv,int is);
-LOCAL	void gc_sweep(void);
+LOCAL	void doom_unmarked(void);
+LOCAL	void dispose_doomed(void);
 LOCAL	void get_mem_stats(void);
 LOCAL	objrtn Dynace_cm_gGC(object self);
 LOCAL	void *Dynace_cm_gRegisterMemory(object self,void *beg,long size);
@@ -565,12 +651,12 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	if (MISALIGNED(p))
 		return 0;
 	c = &BlkCache[BLK_CACHE_IDX(p)];
-	if (c->gen == MBT_gen  &&  p >= c->beg  &&  p + len <= c->end)
+	if (c->gen == MBT_gen  &&  p >= c->beg  &&  p <= c->end - len)
 		return 1;
 	ENTERCRITICALSECTION(PTR_CS);
 	if (t = MBT)  {
 		i = find_blk(t, p);
-		if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
+		if (i < t->n  &&  p >= t->blk[i].beg  &&  p <= t->blk[i].end - len)  {
 			c->beg = t->blk[i].beg;
 			c->end = t->blk[i].end;
 			c->gen = MBT_gen;
@@ -592,12 +678,12 @@ LOCAL	 _INLINE_  int	chk_ptr(char *p, unsigned len)
 	if (MISALIGNED(p))
 		return 0;
 	b = BlkCache[BLK_CACHE_IDX(p)];
-	if (b  &&  p >= b->beg  &&  p + len <= b->end)
+	if (b  &&  p >= b->beg  &&  p <= b->end - len)
 		return 1;
 	if (!(t = MBT))
 		return 0;
 	i = find_blk(t, p);
-	if (i < t->n  &&  p >= t->blk[i].beg  &&  p + len <= t->blk[i].end)  {
+	if (i < t->n  &&  p >= t->blk[i].beg  &&  p <= t->blk[i].end - len)  {
 		BlkCache[BLK_CACHE_IDX(p)] = &t->blk[i];
 		return 1;
 	}
@@ -781,10 +867,6 @@ LOCAL	void	extend_storage(Behavior_iv_t *cv)
 #if	defined(SEGMENTED_MEMORY)  ||  !defined(HEAP_HAS_HOLES)
 	add_ptr((char *) ib, ts);
 #endif
-	ib->next = cv->ib;
-	cv->ib = ib;
-	cv->nib++;
-	cv->nai += cv->nipib;
 	fl = (free_list *) (ib + 1);
 	for (i=0 ; i != cv->nipib ; ++i)  {
               int     sz;
@@ -806,6 +888,13 @@ LOCAL	void	extend_storage(Behavior_iv_t *cv)
 		cv->fl = fl;
 		fl = (free_list *) ((char *) fl + is);
 	}
+	/*  a GC may walk cv->ib while this thread is stopped, so link the block
+	    only once it is complete  */
+	ib->next = cv->ib;
+	COMPILER_BARRIER();
+	cv->ib = ib;
+	cv->nib++;
+	cv->nai += cv->nipib;
 }
 
 #endif
@@ -885,6 +974,7 @@ imeth	objrtn	Behavior_im_gNew(object self)
 	object	instance;
 	Behavior_iv_t	*cv = SCIV(self);
 
+	REGISTER_THREAD();
 	ENTERCRITICALSECTION(cv->cs);
 #ifdef	BOEHM_GC
 	instance = (object) Tncalloc(char, cv->effective_iv_size);
@@ -1072,12 +1162,16 @@ cmeth	objrtn	Class_cm_gGetAll(object self)
 	object clslist = gNew(LinkObject);
 
 	USE(self);
+	/*  Classes are only ever prepended to MCL, so the list from a snapshot of
+	    its head can be walked without the lock.  Dispatching while holding
+	    MCL_CS could deadlock with a GC.  */
 	ENTERCRITICALSECTION(MCL_CS);
-	for (c=MCL ; c ; c = cv->next)  {
+	c = MCL;
+	LEAVECRITICALSECTION(MCL_CS);
+	for ( ; c ; c = cv->next)  {
 		cv = SCIV(c);
 		gAddLast(clslist, c);
 	}
-	LEAVECRITICALSECTION(MCL_CS);
 	return clslist;
 }
 
@@ -1307,7 +1401,7 @@ cmeth	objrtn	Dynace_cm_gResizeMethodCache(object self, int classes, int generics
 	if (classes < 1  ||  generics < 1  ||  classes > INT_MAX / generics)
 		gError(self, "gResizeMethodCache: invalid cache size.\n");
 	/*  The indexes must change together with the table.  Lock order is
-	    MGL_CS, MCL_CS, MC_CS (the GC sweep holds MCL_CS while dispatching).  */
+	    MGL_CS, MCL_CS, MC_CS.  */
 	ENTERCRITICALSECTION(MGL_CS);
 	ENTERCRITICALSECTION(MCL_CS);
 	ENTERCRITICALSECTION(MC_CS);
@@ -1453,10 +1547,7 @@ ofun	_FindMethod(object i, object generic)
 	object	mo;   	/*  method object found  */
 	object	cls;	/*  The class where the search should start	*/
 
-	if (In_GC) {
-		ENTERCRITICALSECTION(GC_CS);  /*  just wait here until GC done  */
-		LEAVECRITICALSECTION(GC_CS);
-	}
+	REGISTER_THREAD();
 
 	/*  shouldn't have to check generic because _FindMethod is used by
 	    macros which set the argument  */
@@ -1538,10 +1629,7 @@ ofun	_FindMethod2(object cls, object generic, int lev)
 	/*  no argument checking done because this function should be called
 	    by macros which should use correct parameters  */
 
-	if (In_GC) {
-		ENTERCRITICALSECTION(GC_CS);  /*  just wait here until GC done  */
-		LEAVECRITICALSECTION(GC_CS);
-	}
+	REGISTER_THREAD();
 
 	/*  check cache  */
 
@@ -1940,11 +2028,15 @@ imeth	objrtn	Object_im_gDispose(object self)
 		self->tag = (OBJ_FREE | ALLOC_STACK);
 		return NULL;
 	}
-	if (self->tag & OBJ_FREE)
-		return NULL;
-	self->tag = (OBJ_FREE | ALLOC_HEAP);
 	cv = SCIV(ClassOf(self));
+	/*  The GC rebuilds free lists from the tags under cv->cs, so a FREE
+	    tag must never be seen before the object is on the free list.  */
 	ENTERCRITICALSECTION(cv->cs);
+	if (self->tag & OBJ_FREE)  {
+		LEAVECRITICALSECTION(cv->cs);
+		return NULL;
+	}
+	self->tag = (OBJ_FREE | ALLOC_HEAP);
 #ifndef	BOEHM_GC
 #ifdef	ENABLE_CHECK_FREE_LIST
 	{
@@ -1989,7 +2081,7 @@ cmeth	void	Dynace_cm_gMarkObject(object self, object obj)
 	USE(self);
  recurse:
 	obj->tag = OBJ_MARKED | (ALLOC_MASK & obj->tag);
-	if (ClassOf(obj) == WeakPointer) {
+	if (ClassOf(obj) == WeakPointer_c) {	/*  not the macro: it may initialize the class  */
 		sz = 0;
 		goto pop_recursion;
 	}
@@ -2110,6 +2202,7 @@ LOCAL	long	count_instances(object cls)
 	long	num = 0L;
 	char	*p;
 
+	ENTERCRITICALSECTION(cv->cs);	/*  the GC frees blocks under it  */
 	if (ib = cv->ib)
 		is =  cv->effective_iv_size;
 	while (ib)  {
@@ -2122,6 +2215,7 @@ LOCAL	long	count_instances(object cls)
 		}
 		ib = ib->next;
 	}
+	LEAVECRITICALSECTION(cv->cs);
 	return num;
 }
 
@@ -2135,12 +2229,13 @@ cmeth	object	Dynace_cm_gDumpObjects(object self, char *file, int type)
 	fp = fopen(file, "w");
 	if (!fp)
 		return NULL;
-	ENTERCRITICALSECTION(MCL_CS);
-	for (c=MCL ; c ; c=SCIV(c)->next)
+	ENTERCRITICALSECTION(MCL_CS);	/*  see Class_cm_gGetAll  */
+	c = MCL;
+	LEAVECRITICALSECTION(MCL_CS);
+	for ( ; c ; c=SCIV(c)->next)
 		if (type  ||  (!IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction))
 			if (num = count_instances(c))
 				fprintf(fp, "%s\t%ld\n", SCIV(c)->name, num);
-	LEAVECRITICALSECTION(MCL_CS);
 	fclose(fp);
 #endif
 	return self;
@@ -2153,8 +2248,10 @@ cmeth	object	Dynace_cm_gDumpObjectsString(object self, int type)
 	long	num;
 
 	sd = gNewWithInt(StringDictionary, 201);
-	ENTERCRITICALSECTION(MCL_CS);
-	for (c=MCL ; c ; c=SCIV(c)->next)
+	ENTERCRITICALSECTION(MCL_CS);	/*  see Class_cm_gGetAll  */
+	c = MCL;
+	LEAVECRITICALSECTION(MCL_CS);
+	for ( ; c ; c=SCIV(c)->next)
 		if (type  ||  (!IsaMetaClass(c)  &&  c != MetaClass  &&  c != Method  &&  c != GenericFunction)) {
 			num = count_instances(c);
 			if (!strcmp(SCIV(c)->name, "StringDictionary"))
@@ -2162,7 +2259,6 @@ cmeth	object	Dynace_cm_gDumpObjectsString(object self, int type)
 			if (num)
 				gAddStr(sd, SCIV(c)->name, gNewWithLong(LongInteger, num));
 		}
-	LEAVECRITICALSECTION(MCL_CS);
 	if (val = gFindValueStr(sd, "LongInteger"))
 		gChangeLongValue(val, count_instances(LongInteger) - gSize(sd));
 	if (val = gFindValueStr(sd, "StringAssociation"))
@@ -2278,69 +2374,133 @@ LOCAL	void	rebuild_free_list(Behavior_iv_t *cv, int is)
 	}
 }
 
-LOCAL	void	gc_sweep(void)
+/*  The sweep runs in two passes.  doom_unmarked runs while every other
+    thread is stopped: it turns the marked objects back into ordinary ones and
+    tags the unreachable ones DOOMED (OBJ_MARKED with siz DOOMED_SIZ, which
+    marking never produces).  A doomed object still passes IsObj, so a
+    gGCDispose method may use another doomed object, but its serial number is
+    cleared so a WeakPointer no longer returns it.  dispose_doomed then runs
+    with the other threads going again, since gGCDispose methods may need
+    locks they hold.  No thread can reach a doomed object, so only the GC
+    touches it.  */
+
+#define	DOOMED_SIZ	0xFFFF
+#define	IS_DOOMED(obj)	(((obj)->tag & OBJ_MASK) == OBJ_MARKED  &&  (obj)->siz == DOOMED_SIZ)
+
+LOCAL	void	doom_unmarked(void)
 {
 	object	c, obj;
 	Behavior_iv_t	*cv;
 	instance_block	*ib;
-	instance_block	*pib=NULL;	/*  previous instance block  */
-	instance_block	*nib;		/*  next instance block  */
-	int	is=0, n;
-	int	f;	/*  the number of free objects in a block  */
-	int	rfl;	/*  rebuild free list			*/
+	int	is, n;
 	char	*p;
-	gGCDispose_t	dfun=NULL;	/*  dispose function		*/
 
-	ENTERCRITICALSECTION(MCL_CS);
 	MetaClass_c->tag = (OBJ_USED | ALLOC_HEAP);  /*  MetaClass not in any storage bin */
 	for (c=MCL ; c ; c=cv->next)  {
 		cv = SCIV(c);
-		rfl = 0;
-		if (ib = cv->ib)  {
-			dfun = imcPointer(c, gGCDispose);
-			is =  cv->effective_iv_size;
-			pib = NULL;
-		}
-		while (ib)  {
+		is = cv->effective_iv_size;
+		for (ib=cv->ib ; ib ; ib=ib->next)  {
 			p = (char *) (ib + 1);
-			for (f=n=0 ; n++ != cv->nipib ; )  {
+			for (n=0 ; n++ != cv->nipib ; p += is)  {
 				obj = (object) p;
-				if (obj->tag & OBJ_USED)  {
-					if (!cv->ncg)  {
-						(*(object(*)(object))dfun)(obj);
-						/*  gGCDispose may decline (Constant, a busy Pipe)  */
-						if (obj->tag & OBJ_FREE)
-							++f;
-					}
-				}  else if (obj->tag & OBJ_MARKED) {
+				if (obj->tag & OBJ_MARKED)  {
 					obj->tag = OBJ_USED | (ALLOC_MASK & obj->tag);
 					obj->siz = 0;
-				}  else  /*  already free  */
-					++f;
-				p += is;
-			}
-			if (f == cv->nipib)  {  /*  all objs freed  */
-				if (pib)
-					pib->next = nib = ib->next;
-				else
-					cv->ib = nib = ib->next;
-#if	!defined(SEGMENTED_MEMORY)  &&  !defined(HEAP_HAS_HOLES)
-				del_ptr((char *) ib);
-#endif
-				free(ib);
-				ib = nib;
-				cv->nib--;
-				cv->nai -= cv->nipib;
-				rfl = 1;
-			}  else  {
-				pib = ib;
-				ib = ib->next;
+				} else if ((obj->tag & OBJ_USED)  &&  !cv->ncg)  {
+					obj->tag = OBJ_MARKED | (ALLOC_MASK & obj->tag);
+					obj->siz = DOOMED_SIZ;
+					obj->sn = 0;
+				}
 			}
 		}
-		if (rfl)
-			rebuild_free_list(cv, is);
 	}
+}
+
+/*  free the blocks whose objects are all free  */
+
+LOCAL	void	reclaim_blocks(Behavior_iv_t *cv)
+{
+	instance_block	*ib;
+	instance_block	*pib = NULL;	/*  previous instance block  */
+	instance_block	*nib;		/*  next instance block  */
+	int	is = cv->effective_iv_size, n;
+	int	f;	/*  the number of free objects in a block  */
+	int	rfl = 0;	/*  rebuild free list		*/
+	char	*p;
+
+	ENTERCRITICALSECTION(cv->cs);
+	for (ib=cv->ib ; ib ; )  {
+		p = (char *) (ib + 1);
+		for (f=n=0 ; n++ != cv->nipib ; p += is)
+			if (((object) p)->tag & OBJ_FREE)
+				++f;
+		if (f == cv->nipib)  {
+			if (pib)
+				pib->next = nib = ib->next;
+			else
+				cv->ib = nib = ib->next;
+#if	!defined(SEGMENTED_MEMORY)  &&  !defined(HEAP_HAS_HOLES)
+			del_ptr((char *) ib);
+#endif
+			free(ib);
+			ib = nib;
+			cv->nib--;
+			cv->nai -= cv->nipib;
+			rfl = 1;
+		}  else  {
+			pib = ib;
+			ib = ib->next;
+		}
+	}
+	if (rfl)
+		rebuild_free_list(cv, is);
+	LEAVECRITICALSECTION(cv->cs);
+}
+
+LOCAL	void	dispose_doomed(void)
+{
+	object	c, mcl, obj;
+	Behavior_iv_t	*cv;
+	instance_block	*ib;
+	int	is, n;
+	char	*p;
+	gGCDispose_t	dfun;	/*  dispose function		*/
+
+	/*  Classes are only prepended to MCL and blocks are only prepended to
+	    cv->ib (only the GC removes them), so both lists can be walked from a
+	    snapshot of their heads.  Newer blocks hold no doomed objects.  */
+	ENTERCRITICALSECTION(MCL_CS);
+	mcl = MCL;
 	LEAVECRITICALSECTION(MCL_CS);
+	for (c=mcl ; c ; c=cv->next)  {
+		cv = SCIV(c);
+		if (cv->ncg)
+			continue;
+		ENTERCRITICALSECTION(cv->cs);
+		ib = cv->ib;
+		LEAVECRITICALSECTION(cv->cs);
+		is = cv->effective_iv_size;
+		dfun = NULL;
+		for ( ; ib ; ib=ib->next)  {
+			p = (char *) (ib + 1);
+			for (n=0 ; n++ != cv->nipib ; p += is)  {
+				obj = (object) p;
+				/*  an earlier gGCDispose may have disposed it already  */
+				if (!IS_DOOMED(obj))
+					continue;
+				if (!dfun)
+					dfun = imcPointer(c, gGCDispose);
+				obj->tag = OBJ_USED | (ALLOC_MASK & obj->tag);
+				obj->siz = 0;
+				/*  gGCDispose may decline (Constant, a busy Pipe)  */
+				(*(object(*)(object))dfun)(obj);
+			}
+		}
+	}
+	for (c=mcl ; c ; c=cv->next)  {
+		cv = SCIV(c);
+		reclaim_blocks(cv);
+	}
 }
 
 LOCAL	void	mark_non_collecting_classes(void)
@@ -2398,7 +2558,6 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 {
 #ifdef	BOEHM_GC
 	ENTERCRITICALSECTION(GC_CS);
-	In_GC++;
 	INHIBIT_THREADER;
 	GC_gcollect();
 #else
@@ -2410,21 +2569,48 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 
 	if (!top)
 		gError(Dynace_c, "\nDynace: gGC can't locate this thread's stack.\n");
-	In_GC++;
+	REGISTER_THREAD();
 	ENTERCRITICALSECTION(GC_CS);
+	if (GC_running)  {	/*  called from a gGCDispose method  */
+		LEAVECRITICALSECTION(GC_CS);
+		return self;
+	}
+	GC_running = 1;
 	INHIBIT_THREADER;
+
+	/*  Take every lock that marking and doom_unmarked need before stopping
+	    the other threads, so none of them can be stopped holding one.
+	    Marking never dispatches or allocates.  */
+	ENTERCRITICALSECTION(MCL_CS);
+	ENTERCRITICALSECTION(GMR_CS);
+#ifndef	SEGMENTED_MEMORY
+	ENTERCRITICALSECTION(PTR_CS);
+#endif
+#ifdef	STOP_THE_WORLD
+	ENTERCRITICALSECTION(THR_CS);
+	if (unscannable_thread())  {
+		LEAVECRITICALSECTION(THR_CS);
+#ifndef	SEGMENTED_MEMORY
+		LEAVECRITICALSECTION(PTR_CS);
+#endif
+		LEAVECRITICALSECTION(GMR_CS);
+		LEAVECRITICALSECTION(MCL_CS);
+		GC_running = 0;
+		ENABLE_THREADER;
+		LEAVECRITICALSECTION(GC_CS);
+		gError(Dynace_c, "\nDynace: gGC can't locate another thread's stack.\n");
+	}
+	stop_world();
+#endif
 
 #if	0  &&  defined(WIN32)
 	/* There is no portable way to do this.  Therefore, you have to mark global variables manually.  */
 	_register_global_memory();
 #endif
 
-	/*  With native threads only the calling thread's stack is scanned and
-	    other threads keep running, so objects referenced only from another
-	    thread's stack or registers are not protected.  Collect only when
-	    other threads hold no such references (or run with GBA == -1 and
-	    call gGC explicitly at a safe point).  */
-	Dynace_cm_gMarkRange(Dynace_c, (char _HUGE_ **) &self, (char _HUGE_ **) top);
+	/*  With native threads every other registered thread is now stopped;
+	    mark_threads scans their stacks and registers.  */
+	Dynace_cm_gMarkRange(Dynace_c, (char _HUGE_ **) STACK_HERE(self), (char _HUGE_ **) top);
 	Dynace_cm_gMarkObject(Dynace_c, MCL);
 	Dynace_cm_gMarkObject(Dynace_c, MGL);
 	Dynace_cm_gMarkObject(Dynace_c, MML);
@@ -2616,12 +2802,25 @@ cmeth	objrtn	Dynace_cm_gGC(object self)
 		if (cv->markfun)
 			(*(void(*)(object))cv->markfun)(c);
 	}
-	gc_sweep();
+#ifdef	STOP_THE_WORLD
+	mark_threads();
+#endif
+	doom_unmarked();
+#ifdef	STOP_THE_WORLD
+	start_world();
+	LEAVECRITICALSECTION(THR_CS);
+#endif
+#ifndef	SEGMENTED_MEMORY
+	LEAVECRITICALSECTION(PTR_CS);
+#endif
+	LEAVECRITICALSECTION(GMR_CS);
+	LEAVECRITICALSECTION(MCL_CS);
+	dispose_doomed();
 #endif  /*  !BOEHM_GC  */
 	get_mem_stats();
 	NGC++;
 	ENABLE_THREADER;
-	In_GC--;
+	GC_running = 0;
 	LEAVECRITICALSECTION(GC_CS);
 	return self;
 }
@@ -2849,6 +3048,9 @@ LOCAL	void	init_critical_sections(void)
 	INITIALIZECRITICALSECTION(GMR_CS);
 	INITIALIZECRITICALSECTION(GC_CS);
 	INITIALIZECRITICALSECTION(CMU_CS);
+#ifdef	STOP_THE_WORLD
+	INITIALIZECRITICALSECTION(THR_CS);
+#endif
 #ifdef	SEGMENTED_MEMORY
 	INITIALIZECRITICALSECTION(MSL_CS);
 #elif	!defined(BOEHM_GC)
@@ -2922,6 +3124,324 @@ LOCAL	char	*thread_stack_top(void)
 
 #endif
 
+#ifdef	STOP_THE_WORLD
+
+/*  remove an exiting thread  */
+
+LOCAL	void	unregister_thread(void *p)
+{
+	ThreadRec	*r = (ThreadRec *) p, **pp;
+
+	if (!r)
+		return;
+	ENTERCRITICALSECTION(THR_CS);
+	for (pp=&Threads ; *pp ; pp=&(*pp)->next)
+		if (*pp == r)  {
+			*pp = r->next;
+			break;
+		}
+	LEAVECRITICALSECTION(THR_CS);
+	if (MyThread == r)
+		MyThread = NULL;
+#ifdef	_WIN32
+	CloseHandle(r->h);
+#endif
+	real_free(r);
+}
+
+#ifdef	_WIN32
+
+static	DWORD	FlsIdx = FLS_OUT_OF_INDEXES;
+
+LOCAL	VOID	WINAPI	fls_unregister(PVOID p)
+{
+	unregister_thread(p);
+}
+
+#else
+
+static	pthread_key_t	ThreadKey;
+static	int	GC_ack[2], GC_resume[2];	/*  pipes  */
+static	int	Nstopped;		/*  threads stop_world stopped  */
+
+LOCAL	void	stw_fatal(const char *msg)
+{
+	ssize_t	r = write(2, msg, strlen(msg));
+
+	USE(r);
+	abort();
+}
+
+LOCAL	void	stw_write(int fd)
+{
+	char	c = 0;
+	ssize_t	n;
+
+	while ((n = write(fd, &c, 1)) != 1)
+		if (n < 0  &&  errno != EINTR)
+			stw_fatal("\nDynace: GC thread stop pipe write failed.\n");
+}
+
+LOCAL	void	stw_read(int fd)
+{
+	char	c;
+	ssize_t	n;
+
+	while ((n = read(fd, &c, 1)) != 1)
+		if (n == 0  ||  errno != EINTR)
+			stw_fatal("\nDynace: GC thread stop pipe read failed.\n");
+}
+
+LOCAL	int	stw_pipes(void)
+{
+	int	i;
+
+	if (pipe(GC_ack)  ||  pipe(GC_resume))
+		return -1;
+	for (i=0 ; i < 2 ; i++)  {
+		fcntl(GC_ack[i], F_SETFD, FD_CLOEXEC);
+		fcntl(GC_resume[i], F_SETFD, FD_CLOEXEC);
+	}
+	return 0;
+}
+
+/*  Runs in each thread the GC stops.  The interrupted registers are saved
+    in the signal frame, which is on the thread's stack above sp.  The second
+    acknowledgement tells the GC this thread is done with its record and its
+    resume byte, so the next GC can't be confused by a slow thread.  */
+
+LOCAL	void	stop_handler(int sig)
+{
+	int	e = errno;
+	ThreadRec	*r;
+	jmp_buf	jb;
+
+	USE(sig);
+	if (!World_stopped)
+		return;
+	for (r=Threads ; r  &&  !pthread_equal(r->tid, pthread_self()) ; r=r->next);
+	if (!r  ||  !r->stop_req)
+		return;
+	r->stop_req = 0;
+	setjmp(jb);		/*  spill callee-saved registers too  */
+	r->sp = STACK_HERE(jb);
+	stw_write(GC_ack[1]);
+	stw_read(GC_resume[0]);
+	r->sp = NULL;
+	stw_write(GC_ack[1]);
+	errno = e;
+}
+
+/*  After a fork only the forking thread exists.  The pipes are shared with
+    the parent, so the child gets its own.  THR_CS is held across the fork so
+    the registry is consistent.  */
+
+LOCAL	void	atfork_prepare(void)
+{
+	ENTERCRITICALSECTION(THR_CS);
+}
+
+LOCAL	void	atfork_parent(void)
+{
+	LEAVECRITICALSECTION(THR_CS);
+}
+
+LOCAL	void	atfork_child(void)
+{
+	Threads = MyThread;
+	if (MyThread)  {
+		MyThread->next = NULL;
+		MyThread->tid = pthread_self();
+	}
+	close(GC_ack[0]);
+	close(GC_ack[1]);
+	close(GC_resume[0]);
+	close(GC_resume[1]);
+	if (stw_pipes())
+		Stw_ready = 0;
+	/*  THR_CS is recursive, so it belongs to the parent's thread id and
+	    can't be unlocked here  */
+	INITIALIZECRITICALSECTION(THR_CS);
+}
+
+#endif
+
+LOCAL	void	init_stop_the_world(void)
+{
+#ifdef	_WIN32
+	if ((FlsIdx = FlsAlloc(fls_unregister)) == FLS_OUT_OF_INDEXES)
+		return;
+#else
+	struct	sigaction	sa;
+
+	if (pthread_key_create(&ThreadKey, unregister_thread)  ||  stw_pipes())
+		return;
+	memset(&sa, 0, sizeof sa);
+	sa.sa_handler = stop_handler;
+	sa.sa_flags = SA_RESTART;
+	sigfillset(&sa.sa_mask);
+	sigdelset(&sa.sa_mask, SIGSEGV);
+	sigdelset(&sa.sa_mask, SIGBUS);
+	sigdelset(&sa.sa_mask, SIGILL);
+	sigdelset(&sa.sa_mask, SIGFPE);
+	sigdelset(&sa.sa_mask, SIGABRT);
+	if (sigaction(DYNACE_GC_SIGNAL, &sa, NULL))
+		return;
+	pthread_atfork(atfork_prepare, atfork_parent, atfork_child);
+#endif
+	Stw_ready = 1;
+	register_thread();
+}
+
+/*  Out of memory just leaves the thread unregistered (gError would recurse
+    through dispatch).  */
+
+LOCAL	void	register_thread(void)
+{
+	ThreadRec	*r;
+
+	if (!(r = (ThreadRec *) real_calloc(1, sizeof(ThreadRec))))
+		return;
+	r->top = STACK_TOP();
+#ifdef	_WIN32
+	if (!DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(),
+			     &r->h, 0, FALSE, DUPLICATE_SAME_ACCESS))  {
+		real_free(r);
+		return;
+	}
+#else
+	r->tid = pthread_self();
+#endif
+	ENTERCRITICALSECTION(THR_CS);
+	r->next = Threads;
+	Threads = r;
+	MyThread = r;
+	LEAVECRITICALSECTION(THR_CS);
+#ifdef	_WIN32
+	FlsSetValue(FlsIdx, r);
+#else
+	pthread_setspecific(ThreadKey, r);
+#endif
+}
+
+/*  true if some other registered thread's stack can't be located  */
+
+LOCAL	int	unscannable_thread(void)
+{
+	ThreadRec	*r;
+
+	for (r=Threads ; r ; r=r->next)
+		if (r != MyThread  &&  !r->top)
+			return 1;
+	return 0;
+}
+
+/*  The GC holds THR_CS from here through start_world.  */
+
+LOCAL	void	stop_world(void)
+{
+	ThreadRec	*r;
+#ifndef	_WIN32
+	int	n;
+#endif
+
+	World_stopped = 1;
+	for (r=Threads ; r ; r=r->next)  {
+		r->sp = NULL;
+		if (r == MyThread)
+			continue;
+#ifdef	_WIN32
+		r->stop_req = SuspendThread(r->h) != (DWORD) -1;
+#else
+		r->stop_req = 1;
+		if (pthread_kill(r->tid, DYNACE_GC_SIGNAL))
+			r->stop_req = 0;
+		else
+			Nstopped++;
+#endif
+	}
+#ifndef	_WIN32
+	for (n=Nstopped ; n-- ; )
+		stw_read(GC_ack[0]);
+#endif
+}
+
+LOCAL	void	mark_threads(void)
+{
+	ThreadRec	*r;
+	char	*sp;
+
+	for (r=Threads ; r ; r=r->next)  {
+		if (r == MyThread)
+			continue;
+#ifdef	_WIN32
+		if (!r->stop_req)
+			continue;
+		{
+			CONTEXT	ctx;
+
+			memset(&ctx, 0, sizeof ctx);
+			ctx.ContextFlags = CONTEXT_INTEGER | CONTEXT_CONTROL;
+			/*  also waits until the suspension has taken effect  */
+			if (!GetThreadContext(r->h, &ctx))
+				continue;
+#define MARK_CTX(x)  if (IsObj((object)(x))  &&  ((object)(x))->tag & OBJ_USED) \
+				Dynace_cm_gMarkObject(Dynace_c, (object)(x))
+#ifdef	_WIN64
+			sp = (char *) ctx.Rsp;
+			MARK_CTX(ctx.Rax); MARK_CTX(ctx.Rbx); MARK_CTX(ctx.Rcx); MARK_CTX(ctx.Rdx);
+			MARK_CTX(ctx.Rsi); MARK_CTX(ctx.Rdi); MARK_CTX(ctx.Rbp);
+			MARK_CTX(ctx.R8);  MARK_CTX(ctx.R9);  MARK_CTX(ctx.R10); MARK_CTX(ctx.R11);
+			MARK_CTX(ctx.R12); MARK_CTX(ctx.R13); MARK_CTX(ctx.R14); MARK_CTX(ctx.R15);
+#else
+			sp = (char *) ctx.Esp;
+			MARK_CTX(ctx.Eax); MARK_CTX(ctx.Ebx); MARK_CTX(ctx.Ecx); MARK_CTX(ctx.Edx);
+			MARK_CTX(ctx.Esi); MARK_CTX(ctx.Edi); MARK_CTX(ctx.Ebp);
+#endif
+#undef	MARK_CTX
+		}
+#else
+		if (!(sp = r->sp))
+			continue;
+#endif
+		/*  a thread running on some other stack can't be scanned  */
+		if (sp < r->top)
+			Dynace_cm_gMarkRange(Dynace_c, (char _HUGE_ **) sp, (char _HUGE_ **) r->top);
+	}
+}
+
+LOCAL	void	start_world(void)
+{
+#ifdef	_WIN32
+	ThreadRec	*r;
+
+	for (r=Threads ; r ; r=r->next)  {
+		if (r != MyThread  &&  r->stop_req)
+			ResumeThread(r->h);
+		r->stop_req = 0;
+	}
+#else
+	int	n;
+
+	for (n=Nstopped ; n-- ; )
+		stw_write(GC_resume[1]);
+	for (n=Nstopped ; n-- ; )
+		stw_read(GC_ack[0]);
+	Nstopped = 0;
+#endif
+	World_stopped = 0;
+}
+
+#endif	/*  STOP_THE_WORLD  */
+
+/*  Lets a native thread register before it holds object references that
+    exist only in its own variables (any dispatch or gNew registers it too).  */
+
+void	DynaceRegisterThread(void)
+{
+	REGISTER_THREAD();
+}
+
 void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 {
 	Behavior_iv_t	*cv;
@@ -2939,6 +3459,9 @@ void	InitKernel(void *sb, int nc)  /*  stack beginning, # of classes  */
 	StackBeg = stack_beginning(sb);
 #ifdef	NATIVE_THREADS
 	ThreadStackTop = StackBeg;
+#endif
+#ifdef	STOP_THE_WORLD
+	init_stop_the_world();
 #endif
 
 	NUM_CLASSES = nc;

@@ -212,6 +212,15 @@ is done, you would use the environment-supplied method of creating and using
 threads.  In other words, don't use Dynace's cooperative threads to create and
 manage threads.  Use the native mechanisms.  Dynace will be native thread safe.
 
+The garbage collector (gGC) stops every other thread that has used Dynace
+while it marks, so objects referenced only from another thread's variables are
+safe.  A thread is registered on its first Dynace call; a new thread that is
+handed object references before making any Dynace call should first call
+DynaceRegisterThread().  On Unix the threads are stopped with a signal (SIGPWR
+by default; compile with -DDYNACE_GC_SIGNAL=n to change it).  Registered
+threads must not block that signal, and it can cut short a sleep, select or
+poll in another thread.
+
 ================================================================================
 
 Dispatch strategy (STRAT): use the default, -S2

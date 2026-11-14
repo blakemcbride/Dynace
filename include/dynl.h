@@ -233,6 +233,7 @@ ofun	_FindMethod2(object, object, int);
 objrtn	_jumpToMethod(ofun f);
 void	*GetIVptr(object, object);
 int	IsObj(object);
+void	DynaceRegisterThread(void);
 void	InitGenerics(void);
 void	_IC_exec(object *);
 
