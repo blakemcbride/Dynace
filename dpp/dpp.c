@@ -3588,8 +3588,10 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 	vPrintf(sobj, "\nstatic\t%s\t%s(object self, ...)\n{\n",
 		rtn = gStringValue(gReturnType(prototype)),
 		olmname);
+	/*  Each parameter is a local initialized in its declaration (it may be
+	    const), inside a block opened after va_start.  */
 	if (gSize(gParameters(prototype)) > 1)  {
-		gPuts(sobj, "\tva_list\t_rest_;\n");
+		gPuts(sobj, "\tva_list\t_rest_;\n\tva_start(_rest_, self);\n\t{\n");
 
 		aseq = gSequence(avar);
 		while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
@@ -3597,18 +3599,7 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 				vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
 				if (*tdef)
 					vPrintf(sobj, "\t%s\n", tdef);
-				vPrintf(sobj, "\t%s;\n", dcl);
-			}
-		gPuts(sobj, "\tva_start(_rest_, self);\n");
-		pseq = gSequence(pvar);
-		vseq = gSequence(vvar);
-		aseq = gSequence(avar);
-		i = 0;
-		while (pnxt = gNext(pseq), vnxt = gNext(vseq), anxt = gNext(aseq))
-			if (i++  &&  strne(t=gStringValue(pnxt), "..."))  {
-				vararg_decl(gStringValue(anxt), gStringValue(vnxt), tdef, dcl, rhs);
-				vPrintf(sobj, "\t%s = %s;\n",
-					gStringValue(vnxt), rhs);
+				vPrintf(sobj, "\t%s = %s;\n", dcl, rhs);
 			}
 		gPuts(sobj, "\tva_end(_rest_);\n");
 	}  else  {
@@ -3620,7 +3611,7 @@ generate_fixed_arg_vmeth2(char 		*olmname,
 	else
 		vPrintf(sobj, "\treturn %s(", mname);
 	gPrintVars(prototype, sobj);
-	gPuts(sobj, ");\n}\n\n");
+	gPuts(sobj, gSize(gParameters(prototype)) > 1 ? ");\n\t}\n}\n\n" : ");\n}\n\n");
 }
 
 static	void
