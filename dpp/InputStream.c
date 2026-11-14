@@ -252,19 +252,12 @@ imeth objrtn InputStream_im_gNextToken(object self)
 		if (*iv->iPtr) 
 			*w++ = *iv->iPtr++; 
 	} else if (isdigit(*iv->iPtr) || *iv->iPtr == '.' && isdigit(iv->iPtr[1])) { 
-		int hex; 
 
-		if (hex = (*iv->iPtr == '0' && (iv->iPtr[1] == 'x' || iv->iPtr[1] == 'X'))) { 
-			*w++ = *iv->iPtr++; 
-			*w++ = *iv->iPtr++; 
-		} 
-		while ((hex ? isxdigit(*iv->iPtr) : isdigit(*iv->iPtr)) || *iv->iPtr == '.' || *iv->iPtr == 'e' || *iv->iPtr == 'E' 
-			|| ((*iv->iPtr=='-' || *iv->iPtr=='+') && 
-			(iv->iPtr[-1] == 'e' || iv->iPtr[-1] == 'E')) ) 
-			*w++ = *iv->iPtr++; 
-		if (*iv->iPtr == 'u' || *iv->iPtr == 'U' || *iv->iPtr == 'l' || *iv->iPtr == 'L') 
-			*w++ = *iv->iPtr++; 
-		if (*iv->iPtr == 'u' || *iv->iPtr == 'U' || *iv->iPtr == 'l' || *iv->iPtr == 'L') 
+
+		*w++ = *iv->iPtr++; 
+		while (isalnum(*iv->iPtr) || *iv->iPtr == '_' || *iv->iPtr == '.' || 
+			(*iv->iPtr == '-' || *iv->iPtr == '+') && strchr("eEpP", iv->iPtr[-1]) || 
+			*iv->iPtr == '\'' && isalnum(iv->iPtr[-1]) && (isalnum(iv->iPtr[1]) || iv->iPtr[1] == '_')) 
 			*w++ = *iv->iPtr++; 
 	} else 
 		*w++ = *iv->iPtr++; 
@@ -277,7 +270,7 @@ imeth objrtn InputStream_im_gNextToken(object self)
 } 
 
 
-#line 281 "InputStream.c"
+#line 274 "InputStream.c"
 
 objrtn	InputStream_initialize(void)
 {

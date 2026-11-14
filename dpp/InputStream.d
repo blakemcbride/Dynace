@@ -227,19 +227,12 @@ imeth	gNextToken()
 			if (*iPtr)
 				*w++ = *iPtr++;
 		} else if (isdigit(*iPtr)  ||  *iPtr == '.'  &&  isdigit(iPtr[1]))  {
-			int	hex;
-
-			if (hex = (*iPtr == '0'  &&  (iPtr[1] == 'x'  ||  iPtr[1] == 'X')))  {
-				*w++ = *iPtr++;
-				*w++ = *iPtr++;
-			}
-			while ((hex ? isxdigit(*iPtr) : isdigit(*iPtr))  ||  *iPtr == '.'  ||  *iPtr == 'e'  ||  *iPtr == 'E'
-			       ||  ((*iPtr=='-' ||  *iPtr=='+')  &&
-				    (iPtr[-1] == 'e'  ||  iPtr[-1] == 'E')) )
-				*w++ = *iPtr++;
-			if (*iPtr == 'u'  ||  *iPtr == 'U'  ||  *iPtr == 'l'  ||  *iPtr == 'L')
-				*w++ = *iPtr++;
-			if (*iPtr == 'u'  ||  *iPtr == 'U'  ||  *iPtr == 'l'  ||  *iPtr == 'L')
+			/*  a C preprocessing number: any suffix, exponent sign and
+			    digit separator belong to it (1.5f, 1ULL, 0x1p-3, 1'000)  */
+			*w++ = *iPtr++;
+			while (isalnum(*iPtr)  ||  *iPtr == '_'  ||  *iPtr == '.'  ||
+			       (*iPtr == '-'  ||  *iPtr == '+')  &&  strchr("eEpP", iPtr[-1])  ||
+			       *iPtr == '\''  &&  isalnum(iPtr[-1])  &&  (isalnum(iPtr[1])  ||  iPtr[1] == '_'))
 				*w++ = *iPtr++;
 		} else
 			*w++ = *iPtr++;
