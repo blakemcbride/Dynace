@@ -1604,6 +1604,8 @@ static	int	isGUID(object proto)
 	
 	if (streq(gStringValue(gReturnType(proto)), "GUID"))
 		return 1;
+	if (!gPrototype(proto))	/*  read from a header (-e, -N, -d): no argument types  */
+		return 0;
 	for (seq=gSequence(gPrototype(proto)), gNext(seq) ; to = gNext(seq) ; )
 		if (streq(gStringValue(to), "GUID")) {
 			ret = 1;
