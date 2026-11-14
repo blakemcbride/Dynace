@@ -515,7 +515,11 @@ imeth objrtn OutputStream_im_gFlushm(object self)
 			gPuts(iv->iStream, " "); 
 		gPuts(iv->iStream, p); 
 		iv->iPllc = c = *p; 
-		if (c == '(') 
+
+
+		if (p[1]) 
+			; 
+		else if (c == '(') 
 			iv->iParenLevel++; 
 		else if (c == ')') { 
 			if (iv->iParenLevel) 
@@ -553,7 +557,9 @@ imeth objrtn OutputStream_im_gDispose(object self)
 
 imeth objrtn OutputStream_im_gPut(object self, object tkn)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
-	char c = *gStringValue(tkn); 
+	char *p = gStringValue(tkn); 
+	char c = *p; 
+	char k = p[1] ? 0 : c; 
 	long ln = gLineNumber(tkn); 
 
 	if (!iv->iStream) { 
@@ -571,14 +577,14 @@ imeth objrtn OutputStream_im_gPut(object self, object tkn)
 	gAddLast(iv->iOutputList, tkn); 
 	if (!ln && (!iv->iParenLevel && c == ';' || c == '}' || c == '{' || c == ':')) 
 		gFlush(self); 
-	if (c == '(') 
+	if (k == '(') 
 		iv->iParenLevel++; 
-	else if (c == ')') { 
+	else if (k == ')') { 
 		if (iv->iParenLevel) 
 			iv->iParenLevel--; 
-	} else if (c == '{') 
+	} else if (k == '{') 
 		iv->iBraceLevel++; 
-	else if (c == '}') { 
+	else if (k == '}') { 
 		if (iv->iBraceLevel) 
 			iv->iBraceLevel--; 
 	} 
@@ -641,7 +647,7 @@ imeth int OutputStream_im_vPrintf(object self, char *fmt, va_list _rest_)
 	return r; 
 } 
 
-#line 645 "OutputStream.c"
+#line 651 "OutputStream.c"
 
 static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 {
@@ -655,7 +661,7 @@ static	int	OutputStream_ifm_vPrintf(object self, char *fmt, ...)
 
 
 
-#line 620 "OutputStream.d"
+#line 626 "OutputStream.d"
 imeth objrtn OutputStream_im_gSetOSVars(object self, object cname, object cvs, object ivs)
 { OutputStream_iv_t *iv = GetIVs(OutputStream, self);
 	if (iv->iCName != cname) 
@@ -699,7 +705,7 @@ imeth objrtn OutputStream_im_gForceLineDirective(object self)
 } 
 
 
-#line 703 "OutputStream.c"
+#line 709 "OutputStream.c"
 
 objrtn	OutputStream_initialize(void)
 {

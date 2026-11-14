@@ -491,7 +491,11 @@ imeth	gFlushm()
 			gPuts(iStream, " ");
 		gPuts(iStream, p);
 		iPllc = c = *p;
-		if (c == '(')
+		/*  only a single-character token can open or close a level; a
+		    generated token like "(char) va_arg(_rest_, int)" is balanced  */
+		if (p[1])
+			;
+		else if (c == '(')
 			iParenLevel++;
 		else if (c == ')')  {
 			if (iParenLevel)
@@ -529,7 +533,9 @@ imeth	object	gDispose, gDeepDispose ()
 
 imeth	gPut(tkn)
 {
-	char	c = *gStringValue(tkn);
+	char	*p = gStringValue(tkn);
+	char	c = *p;
+	char	k = p[1] ? 0 : c;	/*  single-character token; see gFlushm  */
 	long	ln = gLineNumber(tkn);
 
 	if (!iStream)  {
@@ -547,14 +553,14 @@ imeth	gPut(tkn)
 	gAddLast(iOutputList, tkn);
 	if (!ln  &&  (!iParenLevel  &&  c == ';'  ||  c == '}'  ||  c == '{'  ||  c == ':'))
 		gFlush(self);
-	if (c == '(')
+	if (k == '(')
 		iParenLevel++;
-	else if (c == ')')  {
+	else if (k == ')')  {
 		if (iParenLevel)
 			iParenLevel--;
-	} else if (c == '{')
+	} else if (k == '{')
 		iBraceLevel++;
-	else if (c == '}')  {
+	else if (k == '}')  {
 		if (iBraceLevel)
 			iBraceLevel--;
 	}
