@@ -33,7 +33,7 @@
 
 #include "dpp.h"
 
-#define MAXBUF		4096
+#define MAXBUF		4096	/*  initial line buffer size; it grows as needed  */
 #define MAXWORDSZ	256
 
 
@@ -52,6 +52,7 @@ defclass InputStream  {
 	iStream;
 	long	iLine;
 	char	*iBuf;
+	int	iBufSz;		/*  allocated size of iBuf	*/
 	char	*iPtr;		
 };
 
@@ -75,7 +76,7 @@ cmeth	gNewWithStr(char *file)
 	obj = gNew(super);
 	iv = ivPtr(obj);
 	iStream = s;
-	iBuf = Tnalloc(char, MAXBUF);
+	iBuf = Tnalloc(char, iBufSz=MAXBUF);
 	*iBuf = '\0';
 	iPtr = iBuf;
 	return obj;
@@ -94,30 +95,43 @@ imeth	object	gGCDispose()
 	return gGCDispose(super);
 }
 
+/*  Read one whole physical line into iBuf at offset at, growing iBuf as
+    needed.  Returns the length of iBuf's contents, or -1 at end of file.  */
+
+static	int	read_line(ivType *iv, int at)
+{
+	int	len = at;
+
+	while (1)  {
+		if (iBufSz - len < 128)
+			iBuf = Tnrealloc(char, iBufSz*=2, iBuf);
+		if (!gGets(iStream, iBuf+len, iBufSz-len))
+			return len > at ? len : -1;
+		len += (int)strlen(iBuf+len);
+		if (len  &&  iBuf[len-1] == '\n')
+			return len;
+	}
+}
+
 /*  get a line - append continuation lines  */
 
 static	int	get_line(ivType *iv)
 {
-	char	*tbuf;
-	int	something = 0, i;
+	int	something = 0, len = 0, n, i;
 
-	tbuf = iBuf;
-	*tbuf = '\0';
-	while (1)  {
-		if (!gGets(iStream, tbuf, MAXBUF-(int)strlen(iBuf)))
-			break;
+	*iBuf = '\0';
+	while ((n = read_line(iv, len)) >= 0)  {
 		iLine++;
 		something = 1;
-		i = (int)strlen(tbuf) - 1;
-		while (i >= 0  &&  (tbuf[i] == '\n' ||  tbuf[i] == '\r'))
-			i--;
-		if (i < 0  ||  tbuf[i] != '\\')  {
-			tbuf[i+1] = '\0';
+		for (i=n-1 ; i >= len  &&  (iBuf[i] == '\n' ||  iBuf[i] == '\r') ; i--);
+		if (i < len  ||  iBuf[i] != '\\')  {
+			iBuf[i+1] = '\0';
 			break;
 		}
-		tbuf[i] = '\0';
-		tbuf += i;
+		iBuf[i] = '\0';
+		len = i;
 	}
+	iPtr = iBuf;	/*  iBuf may have moved  */
 	return something;  /*  0=eof  */
 }
 
@@ -173,11 +187,15 @@ imeth	int	gLineHasColon()
 
 imeth	gNextToken()
 {
-	char	*w, token[MAXBUF];	/*  a token can be as long as the line (e.g. a string literal)  */
+	char	*w, sbuf[256], *token = sbuf;	/*  a token can be as long as the line (e.g. a string literal)  */
 	int	i;
+	size_t	n;
+	object	tkn;
 
 	if (!next_token(iv))
 		return NULL;
+	if ((n = strlen(iPtr)) >= sizeof sbuf)
+		token = Tnalloc(char, n+1);
 	w = token;
 	if (istart2(*iPtr)) {		/*  is identifier  */
 		*w++ = *iPtr++;
@@ -241,7 +259,10 @@ imeth	gNextToken()
 	i = isspace(*iPtr)  ||  !*iPtr  ||
 		iPtr[0] == '/'  &&  iPtr[1] == '*'  ||
 		iPtr[0] == '/'  &&  iPtr[1] == '/';
-	return gNewToken(Token, token, iLine, i);
+	tkn = gNewToken(Token, token, iLine, i);
+	if (token != sbuf)
+		free(token);
+	return tkn;
 }
 
 

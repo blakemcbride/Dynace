@@ -76,11 +76,12 @@ typedef struct  _InputStream_iv_t  {
 	object iStream;
 	long iLine;
 	char * iBuf;
+	int iBufSz;
 	char * iPtr;
 }	InputStream_iv_t;
 
 
-#line 59 "InputStream.d"
+#line 60 "InputStream.d"
 extern objrtn open_file(char *file,char *mode, int real_quiet); 
 
 
@@ -100,7 +101,7 @@ cmeth objrtn InputStream_cm_gNewWithStr(object self, char *file)
 	obj = oSuper(InputStream_c, gNew, self)(self); 
 	iv = ivPtr(obj); 
 	iv->iStream = s; 
-	iv->iBuf = Tnalloc(char, MAXBUF); 
+	iv->iBuf = Tnalloc(char, iv->iBufSz=MAXBUF); 
 	*iv->iBuf = '\0'; 
 	iv->iPtr = iv->iBuf; 
 	return obj; 
@@ -121,28 +122,41 @@ imeth objrtn InputStream_im_gGCDispose(object self)
 
 
 
+
+static int read_line(ivType *iv, int at) 
+{ 
+	int len = at; 
+
+	while (1) { 
+		if (iv->iBufSz - len < 128) 
+			iv->iBuf = Tnrealloc(char, iv->iBufSz*=2, iv->iBuf); 
+		if (!gGets(iv->iStream, iv->iBuf+len, iv->iBufSz-len)) 
+			return len > at ? len : -1; 
+		len += (int)strlen(iv->iBuf+len); 
+		if (len && iv->iBuf[len-1] == '\n') 
+			return len; 
+	} 
+} 
+
+
+
 static int get_line(ivType *iv) 
 { 
-	char *tbuf; 
-	int something = 0, i; 
+	int something = 0, len = 0, n, i; 
 
-	tbuf = iv->iBuf; 
-	*tbuf = '\0'; 
-	while (1) { 
-		if (!gGets(iv->iStream, tbuf, MAXBUF-(int)strlen(iv->iBuf))) 
-			break; 
+	*iv->iBuf = '\0'; 
+	while ((n = read_line(iv, len)) >= 0) { 
 		iv->iLine++; 
 		something = 1; 
-		i = (int)strlen(tbuf) - 1; 
-		while (i >= 0 && (tbuf[i] == '\n' || tbuf[i] == '\r')) 
-			i--; 
-		if (i < 0 || tbuf[i] != '\\') { 
-			tbuf[i+1] = '\0'; 
+		for (i=n-1 ; i >= len && (iv->iBuf[i] == '\n' || iv->iBuf[i] == '\r') ; i--); 
+		if (i < len || iv->iBuf[i] != '\\') { 
+			iv->iBuf[i+1] = '\0'; 
 			break; 
 		} 
-		tbuf[i] = '\0'; 
-		tbuf += i; 
+		iv->iBuf[i] = '\0'; 
+		len = i; 
 	} 
+	iv->iPtr = iv->iBuf; 
 	return something; 
 } 
 
@@ -198,11 +212,15 @@ imeth int InputStream_im_gLineHasColon(object self)
 
 imeth objrtn InputStream_im_gNextToken(object self)
 { InputStream_iv_t *iv = GetIVs(InputStream, self);
-	char *w, token[MAXBUF]; 
+	char *w, sbuf[256], *token = sbuf; 
 	int i; 
+	size_t n; 
+	object tkn; 
 
 	if (!next_token(iv)) 
 		return NULL; 
+	if ((n = strlen(iv->iPtr)) >= sizeof sbuf) 
+		token = Tnalloc(char, n+1); 
 	w = token; 
 	if (istart2(*iv->iPtr)) { 
 		*w++ = *iv->iPtr++; 
@@ -266,11 +284,14 @@ imeth objrtn InputStream_im_gNextToken(object self)
 	i = isspace(*iv->iPtr) || !*iv->iPtr || 
 		iv->iPtr[0] == '/' && iv->iPtr[1] == '*' || 
 		iv->iPtr[0] == '/' && iv->iPtr[1] == '/'; 
-	return gNewToken(Token, token, iv->iLine, i); 
+	tkn = gNewToken(Token, token, iv->iLine, i); 
+	if (token != sbuf) 
+		free(token); 
+	return tkn; 
 } 
 
 
-#line 274 "InputStream.c"
+#line 295 "InputStream.c"
 
 objrtn	InputStream_initialize(void)
 {
