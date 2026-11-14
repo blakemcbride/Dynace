@@ -3436,7 +3436,15 @@ static	int	is_promoted(const char *type, int *isfloat)
 		"char", "signed char", "unsigned char",
 		"short", "short int", "signed short", "signed short int",
 		"unsigned short", "unsigned short int",
-		"_Bool", "bool", "float", NULL
+		"_Bool", "bool", "float",
+		/*  common typedefs of those (<stdint.h>, <uchar.h>, Windows, ODBC)  */
+		"int8_t", "uint8_t", "int16_t", "uint16_t",
+		"int_least8_t", "uint_least8_t", "int_least16_t", "uint_least16_t",
+		"int_fast8_t", "uint_fast8_t", "char8_t", "char16_t", "wchar_t",
+		"BYTE", "WORD", "CHAR", "UCHAR", "SHORT", "USHORT", "BOOLEAN",
+		"WCHAR", "TCHAR", "SWORD", "UWORD", "RETCODE",
+		"SQLCHAR", "SQLSCHAR", "SQLSMALLINT", "SQLUSMALLINT", "SQLRETURN",
+		NULL
 	};
 	char	norm[VDSZ], word[VDSZ];
 	const char	*p = type;
@@ -3468,26 +3476,47 @@ static	int	is_promoted(const char *type, int *isfloat)
 	return 0;
 }
 
+/*  The position of parameter name var in its declaration: the first
+    whole-word occurrence that isn't a struct, union or enum tag (as in
+    "struct tm *tm").  */
+
+static	int	is_tag_keyword(const char *w, size_t n)
+{
+	return n == 6  &&  !strncmp(w, "struct", 6)  ||
+		n == 5  &&  !strncmp(w, "union", 5)  ||
+		n == 4  &&  !strncmp(w, "enum", 4);
+}
+
+static	const char	*find_decl_name(const char *decl, const char *var)
+{
+	const char	*p, *e, *prev = NULL;	/*  the preceding word, if adjacent  */
+	size_t	vl = strlen(var), pl = 0;
+
+	for (p=decl ; *p ; )
+		if (istart(*p))  {
+			for (e=p ; irest(*e) ; e++);
+			if ((size_t)(e - p) == vl  &&  !strncmp(p, var, vl)  &&  !(prev  &&  is_tag_keyword(prev, pl)))
+				return p;
+			prev = p;
+			pl = (size_t)(e - p);
+			p = e;
+		} else  {
+			if (*p != ' '  &&  *p != '\t')
+				prev = NULL;
+			p++;
+		}
+	return NULL;
+}
+
 static	void	vararg_decl(const char *decl, const char *var, char *tdef, char *dcl, char *rhs)
 {
-	const char	*p, *vp = NULL, *e;
+	const char	*p, *vp, *e;
 	char	type[VDSZ], tname[VDSZ];
 	size_t	vl = strlen(var);
 	int	depth, isfloat;
 
 	*tdef = '\0';
-	/*  find the parameter name in its declaration  */
-	for (p=decl ; *p ; )
-		if (istart(*p))  {
-			for (e=p ; irest(*e) ; e++);
-			if ((size_t)(e - p) == vl  &&  !strncmp(p, var, vl))  {
-				vp = p;
-				break;
-			}
-			p = e;
-		} else
-			p++;
-	if (!vp)  {
+	if (!(vp = find_decl_name(decl, var)))  {
 		sfmt(dcl, VDSZ, "%s", decl);
 		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", decl);
 		return;
@@ -3512,10 +3541,7 @@ static	void	vararg_decl(const char *decl, const char *var, char *tdef, char *dcl
 		sfmt(dcl, VDSZ, "%s", decl);
 
 	/*  locate the name again in the (possibly rewritten) declaration  */
-	vp = strstr(dcl, var);
-	while (vp  &&  ((vp > dcl  &&  irest(vp[-1]))  ||  irest(vp[vl])))
-		vp = strstr(vp + 1, var);
-	if (!vp)  {
+	if (!(vp = find_decl_name(dcl, var)))  {
 		sfmt(rhs, VDSZ, "va_arg(_rest_, %s)", dcl);
 		return;
 	}
