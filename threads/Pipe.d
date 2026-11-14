@@ -39,6 +39,8 @@ defclass  Pipe : Stream  {
 	char	*iRptr;	/*  read pointer (where next byte will be)	*/
 	object	iRblk;	/*  thread on read block			*/
 	object	iWblk;	/*  thread on write block			*/
+	unsigned long	iRblkSN;	/*  their serial numbers		*/
+	unsigned long	iWblkSN;
 	int	iRblock;/*  block reads when buffer empty		*/
 	int	iWblock;/*  block writes when buffer full		*/
 	struct _Pipe_iv_t	*iNext;
@@ -78,11 +80,35 @@ cmeth	gNew()
 	return Pipe_New(self, NULL, 128);
 }
 
+/*  A thread that was killed or disposed while blocked on the pipe never
+    clears its iRblk/iWblk.  blocker returns the thread in *tp, or forgets it
+    (and returns NULL) once it is done, freed, or its memory holds another
+    object.  */
+
+static	object	blocker(object *tp, unsigned long sn)
+{
+	object	t = *tp;
+
+	if (t  &&  (!IsObj(t)  ||  gObjectSerialNumber(t) != sn  ||  gState(t) == DONE_THREAD))
+		*tp = t = NULL;
+	return t;
+}
+
+/*  block the current thread on the pipe until another thread releases it  */
+
+static	void	hold_on(object *tp, unsigned long *snp)
+{
+	*tp = gFindStr(Thread, NULL);
+	*snp = gObjectSerialNumber(*tp);
+	gHold(*tp); /*  does a yield  */
+	*tp = NULL;
+}
+
 imeth	int	gWrite(object self, char *buf, unsigned sz)
 {
 	int	room, rroom, bytes, w=0;
 	
-	if (iWblk)
+	if (blocker(&iWblk, iWblkSN))
 		return 0;
 	if (sz > INT_MAX)
 		sz = INT_MAX;
@@ -111,7 +137,7 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 			buf += bytes;
 			sz -= bytes;
 			w += bytes;
-			if (iRblk)
+			if (blocker(&iRblk, iRblkSN))
 				gRelease(iRblk, 0);
 		}
 		/*  the following line is needed because the above release might have cause
@@ -119,9 +145,7 @@ imeth	int	gWrite(object self, char *buf, unsigned sz)
 		INHIBIT_THREADER;  /*  so the reader can't run between the check and the hold  */
 		room = (int)(iBufsiz - (iWptr - iRptr));
 		if (sz  &&  !room  &&  iWblock)  { /*  there is more - block  */
-			iWblk = gFindStr(Thread, NULL);
-			gHold(iWblk); /*  does a yield  */
-			iWblk = NULL;
+			hold_on(&iWblk, &iWblkSN);
 		}
 		ENABLE_THREADER;
 		if (!iWblock)
@@ -136,7 +160,7 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 	int	bg;	/*  bytes to get	*/
 	int	tr=0;	/*  total bytes read	*/
 	
-	if (iRblk)
+	if (blocker(&iRblk, iRblkSN))
 		return 0;
 	if (sz > INT_MAX)
 		sz = INT_MAX;
@@ -149,16 +173,14 @@ imeth	int	gRead(object self, char *buf, unsigned sz)
 			iRptr += bg;
 			sz -= bg;
 			tr += bg;
-			if (iWblk)
+			if (blocker(&iWblk, iWblkSN))
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
 		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
-			iRblk = gFindStr(Thread, NULL);
-			gHold(iRblk); /*  does a yield  */
-			iRblk = NULL;
+			hold_on(&iRblk, &iRblkSN);
 		}
 		ENABLE_THREADER;
 		if (!iRblock)
@@ -174,7 +196,7 @@ imeth	char	*gGets(object self, char *buf, int sz)
 	int	tr=0;	/*  total bytes read	*/
 	char	*start = buf;
 	
-	if (!(iWptr - iRptr) && !iRblock  ||  iRblk  ||  sz <= 0)
+	if (!(iWptr - iRptr) && !iRblock  ||  blocker(&iRblk, iRblkSN)  ||  sz <= 0)
 		return NULL;
 	if (sz-- == 1)  {
 		*buf = '\0';
@@ -191,16 +213,14 @@ imeth	char	*gGets(object self, char *buf, int sz)
 			iRptr += bg;
 			sz -= bg;
 			tr += bg;
-			if (iWblk)
+			if (blocker(&iWblk, iWblkSN))
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
 		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
-			iRblk = gFindStr(Thread, NULL);
-			gHold(iRblk); /*  does a yield  */
-			iRblk = NULL;
+			hold_on(&iRblk, &iRblkSN);
 		}
 		ENABLE_THREADER;
 		if (!iRblock)
@@ -214,7 +234,7 @@ imeth	object	gDispose, gGCDispose, gDeepDispose (object self)
 {
 	ivType	*t, *pt;
 
-	if (iRblk  ||  iWblk)
+	if (blocker(&iRblk, iRblkSN)  ||  blocker(&iWblk, iWblkSN))
 		return NULL;
 	for (t=cMpl, pt=NULL ; t ; pt=t, t=t->iNext)
 		if (t == iv)  {
@@ -295,7 +315,7 @@ imeth	long	gAdvance(object self, long sz)
 	int	bg;	/*  bytes to get	*/
 	long	tr=0;	/*  total bytes read	*/
 	
-	if (iRblk  ||  sz <= 0)
+	if (blocker(&iRblk, iRblkSN)  ||  sz <= 0)
 		return 0;
 	while (sz)  {
 		ba = (int)(iWptr - iRptr);
@@ -304,16 +324,14 @@ imeth	long	gAdvance(object self, long sz)
 			iRptr += bg;
 			sz -= bg;
 			tr += bg;
-			if (iWblk)
+			if (blocker(&iWblk, iWblkSN))
 				gRelease(iWblk, 0);
 		}
 /*  the following line is needed because the above release may add bytes */
 		INHIBIT_THREADER;  /*  so the writer can't run between the check and the hold  */
 		ba = (int)(iWptr - iRptr);
 		if (sz  &&  !ba  &&  iRblock)  {
-			iRblk = gFindStr(Thread, NULL);
-			gHold(iRblk); /*  does a yield  */
-			iRblk = NULL;
+			hold_on(&iRblk, &iRblkSN);
 		}
 		ENABLE_THREADER;
 		if (!iRblock)
