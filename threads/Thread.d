@@ -927,10 +927,16 @@ int	kbhit(void)
 	return 0;
 }
 
+int	getch(void)
+{
+	return getchar();
+}
+
 #else
 
 #include <sys/select.h>
 #include <unistd.h>
+#include <errno.h>
 
 /*  true if input is ready on stdin (a whole line when the terminal is line buffered)  */
 
@@ -945,12 +951,21 @@ int	kbhit(void)
 	return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
 }
 
-#endif
+/*  Read one byte straight from fd 0.  Going through stdio would leave the
+    rest of the line in stdin's buffer, where kbhit() can't see it, so a
+    thread waiting for the next key would be held until more input
+    arrived.  */
 
 int	getch(void)
 {
-	return getchar();
+	unsigned char	c;
+	ssize_t		n;
+
+	while ((n = read(STDIN_FILENO, &c, 1)) < 0  &&  errno == EINTR);
+	return n == 1 ? c : EOF;
 }
+
+#endif
 
 #endif
 

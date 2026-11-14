@@ -970,12 +970,18 @@ int kbhit(void)
 	return 0; 
 } 
 
+int getch(void) 
+{ 
+	return getchar(); 
+} 
+
 #else 
 
 
-#line 932 "Thread.d"
+#line 937 "Thread.d"
 #include <sys/select.h> 
 #include <unistd.h> 
+#include <errno.h> 
 
 
 
@@ -990,19 +996,24 @@ int kbhit(void)
 	return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0; 
 } 
 
-#endif 
-
-
-#line 950 "Thread.d"
+#line 959 "Thread.d"
 int getch(void) 
 { 
-	return getchar(); 
+	unsigned char c; 
+	ssize_t n; 
+
+	while ((n = read(STDIN_FILENO, &c, 1)) < 0 && errno == EINTR); 
+	return n == 1 ? c : EOF; 
 } 
 
 #endif 
 
 
-#line 957 "Thread.d"
+#line 970 "Thread.d"
+#endif 
+
+
+#line 972 "Thread.d"
 imeth objrtn Thread_im_gCopy(object self)
 { 
 	return gShouldNotImplement(self, "Copy/DeepCopy"); 
@@ -1020,7 +1031,7 @@ static void init_class(void)
 	gMarkingMethod(CLASS, (ofun) MarkThreadStacks); 
 } 
 
-#line 1024 "Thread.c"
+#line 1035 "Thread.c"
 
 objrtn	Thread_initialize(void)
 {
