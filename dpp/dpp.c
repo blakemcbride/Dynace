@@ -184,7 +184,7 @@ static	char *gettype(char *s,char *w);
 static	void compress(char *f);
 static  void pp_gen_head(object sobj, object className,object idecls,object cdecls,object ivars,object cvars, char *file);
 static	void pp_gen_initmethod(object  sobj,object superClasses,object  init,object  isgenerics,object  csgenerics,object ismethods, object csmethods, object  ivars,object  cvars, object className, int sup);
-static	void pp_body(char *p, object fobj,object sobj,int mclass, object tkn, int convert, object prototype);
+static	void pp_body(char *p, object fobj,object sobj,int mclass, object tkn, int convert, object prototype, int va_body);
 static  int touch(char *f);
 static	void	touch_all(object argList);
 static	void	copyright(object fobj);
@@ -3885,7 +3885,7 @@ pp_method(object  tkn,
 
 		/*  process method body  */
 
-		pp_body(p, fobj, sobj, mclass, tkn, vararg, prototype);
+		pp_body(p, fobj, sobj, mclass, tkn, vararg, prototype, Strategy == 1);
 		if (Strategy != 1)  {
 			if (prototype  &&  gIsVarArg(prototype))  {
 				if (vararg)
@@ -3971,16 +3971,18 @@ pp_local_method(object  tkn,
 		args = pp_make_arg_list(fobj, &old, ivars, cvars, 0);
 
 		gSetArgs(prototype, args);
-		gPrintMethArgs(prototype, sobj, Strategy, 0);
+		/*  a private method is called directly, so it keeps a ... parameter
+		    under every strategy and its body gets va_start and va_end  */
+		gPrintMethArgs(prototype, sobj, 1, 0);
 
 		if (tkn = gNextToken(fobj))
 			p = gStringValue(tkn);
 
-		DEEPDISPOSE(prototype);
-
 		/*  process method body  */
 
-		pp_body(p, fobj, sobj, mclass, tkn, 0, NULL);
+		pp_body(p, fobj, sobj, mclass, tkn, 0, prototype, 1);
+
+		DEEPDISPOSE(prototype);
 
 	} else
 /*		pp_body(p, fobj, sobj, 0, tkn, 0, NULL);  */
@@ -4044,16 +4046,17 @@ static	void	expand_get_args(object	prototype,
 
 /*  process between braces  */
 
-/*  Strategy 1 methods receive their variable arguments as a real "...", so the
-    va_list _rest_ that strategy 2 passes in must be built in the method.
-    Returns the name of the argument before "...", or NULL if there is none.  */
+/*  Strategy 1 methods, and private methods under every strategy, receive
+    their variable arguments as a real "...", so the va_list _rest_ that
+    strategy 2 passes in must be built in the method.  Returns the name of
+    the argument before "...", or NULL if there is none.  */
 
 static	char	*s1_rest_arg(object prototype)
 {
 	object	pseq, vseq, pnxt, vnxt;
 	char	*last = NULL;
 
-	if (Strategy != 1  ||  !prototype)
+	if (!prototype)
 		return NULL;
 	if (!(pseq = gPrototype(prototype))  ||  !(vseq = gParameters(prototype)))
 		return NULL;
@@ -4164,7 +4167,8 @@ pp_body(char	*p,
 	int     mclass,   /*  1=instance,  2=class method  0=neither */
 	object	tkn,
 	int	convert,  /*  1=decode GET_ARGS		*/
-	object	prototype)
+	object	prototype,
+	int	va_body)  /*  1=the body calls va_start/va_end for a ... parameter  */
 {
 	int	bracelevel = 1;
 	char	*rest_arg;
@@ -4188,7 +4192,7 @@ pp_body(char	*p,
 	}
 	if (convert  &&  Strategy != 1  &&  prototype)
 		expand_get_args(prototype, mclass, sobj);
-	if (rest_arg = s1_rest_arg(prototype))  {
+	if (rest_arg = va_body ? s1_rest_arg(prototype) : NULL)  {
 		/*  the method body goes in an inner block so its declarations stay first  */
 		put_text(sobj, mclass, "va_list", 1);
 		put_text(sobj, mclass, "_rest_", 0);
@@ -4537,7 +4541,7 @@ preprocess(object	classes,
 				gPut(sobj, gNewToken(Token, "public", 0L, 0));
 			if (priv)
 				gPut(sobj, gNewToken(Token, "private", 0L, 0));
-			pp_body(p, fobj, sobj, 0, tkn, 0, NULL);
+			pp_body(p, fobj, sobj, 0, tkn, 0, NULL, 0);
 			pub = priv = 0;
 		}
 	}
