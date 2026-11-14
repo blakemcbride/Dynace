@@ -3061,9 +3061,9 @@ read_src(object classes,
 			src_generic(fobj, isgenerics);
 		else if (streq(tkn, "cMethod"))
 			src_generic(fobj, csgenerics);
-		else if (streq(tkn, "iMethodFor"))
-			src_generic2(fobj, isgenerics);
-		else if (streq(tkn, "cMethodFor"))
+		else if (streq(tkn, "iMethodFor")  ||  streq(tkn, "ivMethodFor"))
+			src_generic2(fobj, isgenerics);	/*  the v forms add a fixed-arg function  */
+		else if (streq(tkn, "cMethodFor")  ||  streq(tkn, "cvMethodFor"))
 			src_generic2(fobj, csgenerics);
 		else if (*initmeth  &&  streq(tkn, initmeth))
 			SeeCode = 1;
@@ -3285,6 +3285,18 @@ pp_make_arg_list(object	fobj,
 	return args;
 }
 
+/*  In a .c file dpp generated under strategies 2-4, a method's trailing
+    ... has become va_list _rest_.  Turn it back so the generic gets the
+    method's real signature.  */
+
+static	void	rest_to_ellipsis(object args)
+{
+	object	last = gSize(args) ? gLast(args) : NULL;
+
+	if (last  &&  streq(gStringValue(last), "va_list _rest_"))
+		gChangeStrValue(last, "...");
+}
+
 static	void	src_method(object fobj, object methods, int vararg)
 {
 	char	type[1024], mname[NAMESZ], *tkn;
@@ -3297,6 +3309,7 @@ static	void	src_method(object fobj, object methods, int vararg)
 			if (!gFindStr(methods, mname))  {
 				prototype = gNewWithStrStr(Prototype, mname, type);
 				args = make_arg_list(fobj, &old, &va);
+				rest_to_ellipsis(args);
 				if (!old)
 					gSetArgs(prototype, args);
 				else
