@@ -120,7 +120,10 @@ static void remove_variable(char *buf, char *var)
 	register int i, vi = -1; 
 	int fp; 
 
-	for (fp=i=0 ; buf[i] && !fp ; i++) 
+
+
+
+	for (fp=i=0 ; buf[i] && buf[i] != '[' && buf[i] != '=' && !fp ; i++) 
 		if (buf[i] == '(') 
 		fp = 1; 
 
@@ -311,7 +314,7 @@ static void print_args(ivType *iv, object ar)
 #endif 
 
 
-#line 294 "Prototype.d"
+#line 297 "Prototype.d"
 imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 { Prototype_iv_t *iv = GetIVs(Prototype, self);
 	if (iv->iArgs) 
@@ -329,7 +332,7 @@ imeth objrtn Prototype_im_gSetArgs(object self, object ar)
 	print_args(iv, iv->iProto); 
 #endif 
 
-#line 310 "Prototype.d"
+#line 313 "Prototype.d"
 		return self; 
 } 
 
@@ -384,7 +387,7 @@ imeth int Prototype_im_gMatchNoError(object self, object mproto)
 #endif 
 
 
-#line 363 "Prototype.d"
+#line 366 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) 
 		return 0; 
 
@@ -427,7 +430,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 #endif 
 
 
-#line 404 "Prototype.d"
+#line 407 "Prototype.d"
 		if (gCompare(miv->iRtn, iv->iRtn)) { 
 		error = 1; 
 		vPrintf(stdoutStream, "Method %s and generic %s have different return types\n", 
@@ -473,7 +476,7 @@ imeth int Prototype_im_gMatch(object self, object mproto)
 				gStringValue(iv->iName)); 
 			break; 
 		} 
-#line 453 "Prototype.d"
+#line 456 "Prototype.d"
 		if (gCompare(marg, garg)) { 
 			error = 1; 
 			vPrintf(stdoutStream, "Method %s and generic %s have different argument types (%d)\n", 
@@ -548,7 +551,7 @@ imeth int Prototype_im_gHasInputArg(object self)
 } 
 
 
-#line 552 "Prototype.c"
+#line 555 "Prototype.c"
 
 objrtn	Prototype_initialize(void)
 {

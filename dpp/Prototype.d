@@ -101,7 +101,10 @@ static	void	remove_variable(char *buf, char *var)
 	register int	i, vi = -1;
 	int	fp;  //  declaration is a function pointer
 
-	for (fp=i=0 ; buf[i] &&  !fp ; i++)
+	/*  a ( before any array dimension or default value starts a function
+	    pointer (or pointer to array) declarator; one inside a dimension,
+	    as in char buf[sizeof(int)], does not  */
+	for (fp=i=0 ; buf[i]  &&  buf[i] != '['  &&  buf[i] != '='  &&  !fp ; i++)
 		if (buf[i] == '(')
 			fp = 1;
 
