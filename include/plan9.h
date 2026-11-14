@@ -18,4 +18,14 @@ int	rename(char *from, char *to);
 void	exit(int n);
 int	mkdir(char *dir);
 
+/*  Plan 9 has no errno.  These are set only by mkdir above, which File.d
+    tests for EEXIST.  */
+extern	int	errno;
+#ifndef	EIO
+#define	EIO	5	/*  same values in plan9.c  */
+#endif
+#ifndef	EEXIST
+#define	EEXIST	17
+#endif
+
 #endif

@@ -50,7 +50,9 @@
 #endif
 
 #include <string.h>
+#ifndef	PLAN9			/*  plan9.h declares errno  */
 #include <errno.h>
+#endif
 
 defclass  File : Stream  {
 	iName;

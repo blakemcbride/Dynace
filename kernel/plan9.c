@@ -8,7 +8,15 @@ static	void	split(char *, char **, char **);
 static	int	samefile(char *, char *);
 static	int	mv(char *from, char *todir, char *toelem);
 static	int	copy1(int fdf, int fdt, char *from, char *to);
-static	void	hardremove(char *);
+static	int	hardremove(char *);
+
+int	errno;		/*  set only by the functions here (see plan9.h)  */
+#ifndef	EIO
+#define	EIO	5	/*  same values in plan9.h  */
+#endif
+#ifndef	EEXIST
+#define	EEXIST	17
+#endif
 
 int	unlink(char *file)
 {
@@ -26,35 +34,42 @@ void	exit(int n)
 }
 
 
+/*  rename, adapted from mv(1).  Returns 0, or -1 if it fails.  split()
+    cuts its argument, so it works on copies and the caller's strings are
+    left alone.  */
+
 int	rename(char *from, char *to)
 {
-	int failed;
 	Dir *dirto, *dirfrom;
 	char *todir, *toelem;
+	char fbuf[4096], tbuf[4096];
 
-	if ((dirto = dirstat(to)) != nil && (dirto->mode&DMDIR)) {
-		if ((dirfrom = dirstat(from)) !=nil && (dirfrom->mode & DMDIR))
-			split(to, &todir, &toelem);
+	if (strlen(from) >= sizeof fbuf  ||  strlen(to) >= sizeof tbuf)
+		return -1;
+	strcpy(fbuf, from);
+	strcpy(tbuf, to);
+	if ((dirto = dirstat(tbuf)) != nil && (dirto->mode&DMDIR)) {
+		if ((dirfrom = dirstat(fbuf)) !=nil && (dirfrom->mode & DMDIR))
+			split(tbuf, &todir, &toelem);
 		else	{
-			todir = to;
+			todir = tbuf;
 			toelem = 0;	/* toelem will be fromelem */
 		}
+		free(dirfrom);
 	} else
-		split(to, &todir, &toelem);
-	failed = 0;
-	if (mv(from, todir, toelem) < 0)
-		failed++;
-	if (failed)
-		return 1;
-	return 0;
+		split(tbuf, &todir, &toelem);
+	free(dirto);
+	return mv(fbuf, todir, toelem) < 0 ? -1 : 0;
 }
+
+/*  from is cut by split(), so the caller passes a copy  */
 
 static	int	mv(char *from, char *todir, char *toelem)
 {
 	Dir *dirb, *dirt, null;
-	char toname[4096], fromname[4096];
-	int fdf, fdt, i, j;
-	int stat;
+	char toname[4096], fromname[4096], oldname[4096], oldelem[64];
+	int fdf, fdt, i, j, aside = 0;
+	int stat = -1;
 	char *fromdir, *fromelem;
 
 	dirb = dirstat(from);
@@ -69,12 +84,12 @@ static	int	mv(char *from, char *todir, char *toelem)
 	i = strlen(toelem);
 	if(i==0){
 		fprint(2, "mv: null last name element moving %s\n", fromname);
-		return -1;
+		goto out;
 	}
 	j = strlen(todir);
 	if(i + j + 2 > sizeof toname){
 		fprint(2, "mv: path too big (max %d): %s/%s\n", sizeof toname, todir, toelem);
-		return -1;
+		goto out;
 	}
 	memmove(toname, todir, j);
 	toname[j] = '/';
@@ -83,20 +98,53 @@ static	int	mv(char *from, char *todir, char *toelem)
 	if(samefile(fromdir, todir)){
 		if(samefile(fromname, toname)){
 			fprint(2, "mv: %s and %s are the same\n", fromname, toname);
-			return -1;
+			goto out;
 		}
+		/*  wstat can't rename onto an existing name, so an existing
+		    target is renamed aside first and put back if the rename
+		    fails, rather than removed before it is known to work  */
 		dirt = dirstat(toname);
 		if(dirt != nil){
 			free(dirt);
-			hardremove(toname);
+			snprint(oldelem, sizeof oldelem, ".mv%d.old", getpid());
+			if(j + strlen(oldelem) + 2 > sizeof oldname){
+				fprint(2, "mv: path too big (max %d): %s/%s\n", sizeof oldname, todir, oldelem);
+				goto out;
+			}
+			snprint(oldname, sizeof oldname, "%s/%s", todir, oldelem);
+			nulldir(&null);
+			null.name = oldelem;
+			if(dirwstat(toname, &null) < 0){
+				fprint(2, "mv: can't move %s aside: %r\n", toname);
+				goto out;
+			}
+			aside = 1;
 		}
 		nulldir(&null);
 		null.name = toelem;
-		if(dirwstat(fromname, &null) >= 0)
-			return 0;
+		if(dirwstat(fromname, &null) >= 0){
+			if(aside  &&  hardremove(oldname) < 0){
+				/*  a non-empty directory: undo both renames, as
+				    POSIX rename fails  */
+				nulldir(&null);
+				null.name = fromelem;
+				dirwstat(toname, &null);
+				nulldir(&null);
+				null.name = toelem;
+				dirwstat(oldname, &null);
+				goto out;
+			}
+			stat = 0;
+			goto out;
+		}
+		if(aside){
+			nulldir(&null);
+			null.name = toelem;
+			dirwstat(oldname, &null);
+		}
 		if(dirb->mode & DMDIR){
 			fprint(2, "mv: can't rename directory %s: %r\n", fromname);
-			return -1;
+			goto out;
 		}
 	}
 	/*
@@ -104,22 +152,25 @@ static	int	mv(char *from, char *todir, char *toelem)
 	 */
 	if(dirb->mode & DMDIR){
 		fprint(2, "mv: %s is a directory, not copied to %s\n", fromname, toname);
-		return -1;
+		goto out;
 	}
 	fdf = open(fromname, OREAD);
 	if(fdf < 0){
 		fprint(2, "mv: can't open %s: %r\n", fromname);
-		return -1;
+		goto out;
 	}
 	dirt = dirstat(toname);
-	if(dirt != nil && (dirt->mode & DMAPPEND))
-		hardremove(toname);	/* because create() won't truncate file */
+	if(dirt != nil && (dirt->mode & DMAPPEND)  &&  hardremove(toname) < 0){	/* because create() won't truncate file */
+		free(dirt);
+		close(fdf);
+		goto out;
+	}
 	free(dirt);
 	fdt = create(toname, OWRITE, dirb->mode);
 	if(fdt < 0){
 		fprint(2, "mv: can't create %s: %r\n", toname);
 		close(fdf);
-		return -1;
+		goto out;
 	}
 	if ((stat = copy1(fdf, fdt, fromname, toname)) != -1) {
 		nulldir(&null);
@@ -128,13 +179,13 @@ static	int	mv(char *from, char *todir, char *toelem)
 		dirfwstat(fdt, &null);	/* ignore errors; e.g. user none always fails */
 		if (remove(fromname) < 0) {
 			fprint(2, "mv: can't remove %s: %r\n", fromname);
-			close(fdf);
-			close(fdt);
-			return -1;
+			stat = -1;
 		}
 	}
 	close(fdf);
 	close(fdt);
+ out:
+	free(dirb);
 	return stat;
 }
 
@@ -200,24 +251,33 @@ samefile(char *a, char *b)
 	return ret;
 }
 
-static	void	hardremove(char *a)
+/*  Returns -1 if a can't be removed (mv(1) exits instead).  */
+
+static	int	hardremove(char *a)
 {
 	if(remove(a) == -1){
 		fprint(2, "mv: can't remove %s: %r\n", a);
-		exits("mv");
+		return -1;
 	}
 	do; while(remove(a) != -1);
+	return 0;
 }
+
+/*  POSIX results: 0, or -1 with errno EEXIST or EIO  */
 
 int	mkdir(char *dir)
 {
 	int f;
 
-	if (access(dir, 0) == AEXIST)
-		return 1;
+	if (access(dir, 0) == AEXIST)  {
+		errno = EEXIST;
+		return -1;
+	}
 	f = create(dir, OREAD, DMDIR | 0777L);
-	if (f < 0) 
-		return 2;
+	if (f < 0)  {
+		errno = EIO;
+		return -1;
+	}
 	close(f);
 	return 0;
 }

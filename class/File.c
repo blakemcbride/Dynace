@@ -74,7 +74,10 @@
 
 #line 52 "File.d"
 #include <string.h> 
+#ifndef PLAN9 
 #include <errno.h> 
+#endif 
+
 
 #define	CLASS	File_c
 #define	ivType	File_iv_t
@@ -87,7 +90,7 @@ object	File_cp;
 #define	File_c	File_cp
 
 
-#line 91 "File.c"
+#line 94 "File.c"
 typedef struct  _File_iv_t  {
 	object iName;
 	FILE * iFP;
@@ -96,7 +99,7 @@ typedef struct  _File_iv_t  {
 }	File_iv_t;
 
 
-#line 100 "File.c"
+#line 103 "File.c"
 typedef struct  _File_cv_t  {
 	unsigned int cNumTempFiles;
 	char cTempSubDir [ 32 ];
@@ -107,18 +110,18 @@ typedef struct  _File_cv_t  {
 static	File_cv_t	*File_cv;
 
 
-#line 69 "File.d"
+#line 71 "File.d"
 #if defined(unix) || defined(__APPLE__) || defined(__minix) || defined(__HAIKU__) 
 #define MKDIR(d) mkdir(d, 0777) 
 #else 
 
 
-#line 72 "File.d"
+#line 74 "File.d"
 #define MKDIR(d) mkdir(d) 
 #endif 
 
 
-#line 75 "File.d"
+#line 77 "File.d"
 cmeth objrtn File_cm_gNew(object self)
 { 
 	return gShouldNotImplement(self, "gNew"); 
@@ -191,12 +194,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 145 "File.d"
+#line 147 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 147 "File.d"
+#line 149 "File.d"
 		} 
 
 
@@ -211,12 +214,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 159 "File.d"
+#line 161 "File.d"
 			strcat(tp, "\\"); 
 #endif 
 
 
-#line 161 "File.d"
+#line 163 "File.d"
 		} 
 
 
@@ -226,12 +229,12 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 168 "File.d"
+#line 170 "File.d"
 		File_cv->cProcessID = time(NULL); 
 #endif 
 
 
-#line 179 "File.d"
+#line 181 "File.d"
 		sprintf(File_cv->cTempFileDir, "%s%u", tp, (unsigned) File_cv->cProcessID); 
 		while (MKDIR(File_cv->cTempFileDir)) { 
 			if (errno != EEXIST) { 
@@ -247,13 +250,13 @@ cmeth objrtn File_cm_gOpenTempFile(object self)
 #else 
 
 
-#line 192 "File.d"
+#line 194 "File.d"
 	sprintf(file, "%s\\%u-%u.tmp", File_cv->cTempFileDir, (unsigned) File_cv->cProcessID, ++tfn); 
 	obj = gOpenFile(self, file, "w+b"); 
 #endif 
 
 
-#line 195 "File.d"
+#line 197 "File.d"
 	if (obj) { 
 		File_cv->cNumTempFiles++; 
 		return set_temp(obj); 
@@ -347,7 +350,7 @@ imeth long File_im_gLength(object self)
 	return r ? -1L : sb.st_size; 
 #else 
 
-#line 287 "File.d"
+#line 289 "File.d"
 		long sav = ftell(iv->iFP); 
 	long len; 
 
@@ -357,7 +360,7 @@ imeth long File_im_gLength(object self)
 	return len; 
 #endif 
 
-#line 295 "File.d"
+#line 297 "File.d"
 	} 
 
 imeth char * File_im_gName(object self)
@@ -403,7 +406,7 @@ static void class_init(void)
 	File_cv->cProcessID = 0L; 
 } 
 
-#line 407 "File.c"
+#line 410 "File.c"
 
 objrtn	File_initialize(void)
 {
