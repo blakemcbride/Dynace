@@ -51,9 +51,9 @@ static	void __interrupt __far newtimer();
 extern "C"  {
 #endif
 #ifdef TEST
-int	_tick_count=10000;
+volatile int	_tick_count=10000;
 #else
-extern	int	_tick_count;
+extern	volatile int	_tick_count;
 #endif
 #ifdef	__cplusplus
 }

@@ -375,7 +375,7 @@ extern	CRITICALSECTION  _CI_CS_;	/*  used during class initialization  */
 
 #define DEFAULT_PRIORITY	100
 
-extern	int	_tick_count;
+extern	volatile int	_tick_count;	/*  changed by a timer signal or callback  */
 extern	int	_no_context_switch;
 extern	jmp_buf	_t_start;
 

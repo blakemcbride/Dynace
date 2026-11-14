@@ -165,7 +165,7 @@ object	_LastGeneric_ = NULL;		/*  last generic function called  */
 
 int	_no_context_switch = 0;   /*  if set inhibits all context switching */
 
-int	_tick_count = 1;
+volatile int	_tick_count = 1;	/*  decremented by the timer signal or callback  */
 
 CRITICALSECTION  _CI_CS_;		/*  used during class initialization  */
 
